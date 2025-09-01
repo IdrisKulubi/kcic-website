@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { ArrowRight, Leaf, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
   KEYBOARD_KEYS, 
@@ -13,9 +12,9 @@ import {
   focusUtils, 
   touchTargetUtils, 
   colorUtils,
-  landmarkUtils,
-  motionUtils
+  landmarkUtils
 } from '@/lib/accessibility';
+import Image from 'next/image';
 
 interface NavItem {
   label: string;
@@ -86,41 +85,41 @@ export function Navbar() {
   };
 
   return (
-    <motion.div
+    <div
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out',
         isScrolled
           ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
           : 'bg-transparent'
       )}
-      initial={motionUtils.prefersReducedMotion() ? {} : { y: -100 }}
-      animate={motionUtils.prefersReducedMotion() ? {} : { y: 0 }}
-      transition={motionUtils.prefersReducedMotion() ? {} : { duration: 0.6, ease: 'easeOut' }}
     >
       <nav 
         {...landmarkUtils.getNavigationProps('Main navigation')}
-        className="container mx-auto px-4 sm:px-6 lg:px-8"
+        className="w-full px-4"
       >
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link
-            href="/"
-            className={cn(
-              "flex items-center space-x-2 rounded-md p-1",
-              colorUtils.getFocusRingClasses(),
-              touchTargetUtils.getTouchClasses()
-            )}
-            aria-label="KCIC - Kenya Climate Innovation Centre - Go to homepage"
-            onKeyDown={(e) => handleKeyDown(e, '/')}
-          >
-            <div className="text-2xl font-bold text-gradient-climate">
-              KCIC
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center">
+            <div className="flex-shrink-2">
+              <Link 
+                href="/"
+                className="flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-lg"
+                aria-label="KCIC - Kenya Climate Innovation Centre - Go to homepage"
+                onKeyDown={(e) => handleKeyDown(e, '/')}
+              >
+                <Image
+                  src="/images/hero/KCIC logo.png"
+                  alt="KCIC logo"
+                  className="h-12 sm:h-10 w-auto object-contain"
+                  width={120}
+                  height={120}
+                />
+              </Link>
             </div>
-          </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8" role="menubar">
-            {navItems.map((item, index) => (
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -128,6 +127,8 @@ export function Navbar() {
                 className={cn(
                   'relative text-sm font-medium transition-colors duration-200',
                   'hover:text-climate-green focus:text-climate-green',
+                  'after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-climate-green',
+                  'after:transition-all after:duration-200 hover:after:w-full',
                   colorUtils.getFocusRingClasses(),
                   'rounded-md px-2 py-1',
                   touchTargetUtils.getTouchClasses(),
@@ -136,53 +137,29 @@ export function Navbar() {
                 onKeyDown={(e) => handleKeyDown(e, item.href)}
                 aria-label={`Navigate to ${item.label} page`}
               >
-                <motion.span
-                  initial={motionUtils.prefersReducedMotion() ? {} : { opacity: 0, y: -10 }}
-                  animate={motionUtils.prefersReducedMotion() ? {} : { opacity: 1, y: 0 }}
-                  transition={motionUtils.prefersReducedMotion() ? {} : { delay: index * 0.1, duration: 0.3 }}
-                >
-                  {item.label}
-                </motion.span>
-                
-                {/* Hover underline effect */}
-                {!motionUtils.prefersReducedMotion() && (
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-climate-green"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.2 }}
-                    aria-hidden="true"
-                  />
-                )}
+                {item.label}
               </Link>
             ))}
           </div>
 
           {/* CTA Button - Desktop */}
           <div className="hidden lg:block">
-            <motion.div
-              initial={motionUtils.prefersReducedMotion() ? {} : { opacity: 0, scale: 0.9 }}
-              animate={motionUtils.prefersReducedMotion() ? {} : { opacity: 1, scale: 1 }}
-              transition={motionUtils.prefersReducedMotion() ? {} : { delay: 0.3, duration: 0.3 }}
+            <Button
+              asChild
+              className={cn(
+                'bg-climate-green hover:bg-climate-green-dark text-white',
+                colorUtils.getFocusRingClasses(),
+                touchTargetUtils.getTouchClasses(),
+                'transition-all duration-200 hover:scale-105'
+              )}
             >
-              <Button
-                asChild
-                className={cn(
-                  'bg-climate-green hover:bg-climate-green-dark text-white',
-                  colorUtils.getFocusRingClasses(),
-                  touchTargetUtils.getTouchClasses(),
-                  'transition-all duration-200',
-                  !motionUtils.prefersReducedMotion() && 'hover:scale-105'
-                )}
+              <Link 
+                href="/programs"
+                aria-label="Join Our Programs - Apply to participate in KCIC programmes"
               >
-                <Link 
-                  href="/programs"
-                  aria-label="Join Our Programs - Apply to participate in KCIC programmes"
-                >
-                  Join Our Programs
-                </Link>
-              </Button>
-            </motion.div>
+                Join Our Programs
+              </Link>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -198,33 +175,45 @@ export function Navbar() {
                   variant="ghost"
                   size="icon"
                   className={cn(
+                    'relative rounded-xl p-3',
+                    'bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm',
+                    'border border-white/20 dark:border-gray-800/20',
+                    'hover:bg-white/20 dark:hover:bg-gray-800/20',
+                    'transition-all duration-300 hover:scale-105',
                     colorUtils.getFocusRingClasses(),
                     touchTargetUtils.getTouchClasses(),
-                    isScrolled ? 'text-foreground' : 'text-white'
+                    isScrolled 
+                      ? 'text-gray-700 dark:text-gray-200' 
+                      : 'text-white'
                   )}
                   aria-label={isMobileMenuOpen ? ARIA_LABELS.closeMenu : ARIA_LABELS.openMenu}
                   aria-expanded={isMobileMenuOpen}
                   aria-controls="mobile-menu"
                 >
-                  <Menu className="h-6 w-6" aria-hidden="true" />
+                  {isMobileMenuOpen ? (
+                    <X className="h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <Menu className="h-6 w-6" aria-hidden="true" />
+                  )}
                 </Button>
               </SheetTrigger>
               
               <SheetContent 
                 ref={mobileMenuRef}
                 side="right" 
-                className="w-[280px] sm:w-[320px] bg-background/95 backdrop-blur-md"
+                className="w-[300px] sm:w-[350px] bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl border-l border-white/20 dark:border-gray-800/20"
                 id="mobile-menu"
                 onKeyDown={handleMobileMenuKeyDown}
                 aria-label="Mobile navigation menu"
               >
                 <div className="flex flex-col h-full">
                   {/* Mobile Menu Header */}
-                  <div className="flex items-center justify-between pb-6 border-b border-border">
+                  <div className="flex items-center justify-between pb-6 border-b border-white/20 dark:border-gray-800/20">
                     <Link
                       href="/"
                       className={cn(
-                        "text-2xl font-bold text-gradient-climate rounded-md p-1",
+                        "flex items-center space-x-3 rounded-xl p-2 group",
+                        "hover:bg-white/10 dark:hover:bg-gray-800/10 transition-colors duration-200",
                         colorUtils.getFocusRingClasses(),
                         touchTargetUtils.getTouchClasses()
                       )}
@@ -232,68 +221,84 @@ export function Navbar() {
                       onKeyDown={(e) => handleKeyDown(e, '/')}
                       aria-label="KCIC - Kenya Climate Innovation Centre - Go to homepage"
                     >
-                      KCIC
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-climate-green to-climate-blue">
+                        <Leaf className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="text-xl font-bold text-climate-green dark:text-climate-green-light">
+                          KCIC
+                        </div>
+                        <div className="text-xs font-medium text-climate-blue dark:text-climate-blue-light">
+                          Climate Innovation
+                        </div>
+                      </div>
                     </Link>
                   </div>
 
                   {/* Mobile Navigation Links */}
                   <nav className="flex-1 py-6" role="menu" aria-label="Mobile navigation">
-                    <ul className="space-y-4" role="none">
-                      {navItems.map((item, index) => (
-                        <motion.li
-                          key={item.href}
-                          role="none"
-                          initial={motionUtils.prefersReducedMotion() ? {} : { opacity: 0, x: -20 }}
-                          animate={motionUtils.prefersReducedMotion() ? {} : { opacity: 1, x: 0 }}
-                          transition={motionUtils.prefersReducedMotion() ? {} : { delay: index * 0.1, duration: 0.3 }}
-                        >
+                    <ul className="space-y-3" role="none">
+                      {navItems.map((item) => (
+                        <li key={item.href} role="none">
                           <Link
                             href={item.href}
                             role="menuitem"
                             className={cn(
-                              'block text-lg font-medium py-4 px-4 rounded-lg',
+                              'group relative block text-lg font-medium py-4 px-6 rounded-xl',
+                              'bg-white/5 dark:bg-gray-800/5 backdrop-blur-sm',
+                              'border border-white/10 dark:border-gray-800/10',
+                              'hover:bg-gradient-to-r hover:from-climate-green/20 hover:to-climate-blue/20',
+                              'hover:border-climate-green/30 hover:text-climate-green',
+                              'focus:bg-gradient-to-r focus:from-climate-green/20 focus:to-climate-blue/20',
+                              'focus:border-climate-green/30 focus:text-climate-green',
+                              'after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0',
+                              'after:bg-gradient-to-r after:from-climate-green after:to-climate-blue',
+                              'after:transition-all after:duration-300 hover:after:w-full',
+                              'transition-all duration-300',
+                              'text-gray-700 dark:text-gray-200',
                               touchTargetUtils.getTouchClasses(),
-                              'flex items-center',
-                              'hover:bg-climate-green/10 hover:text-climate-green',
-                              'focus:bg-climate-green/10 focus:text-climate-green',
-                              colorUtils.getFocusRingClasses(),
-                              'transition-all duration-200'
+                              colorUtils.getFocusRingClasses()
                             )}
                             onClick={handleMobileLinkClick}
                             onKeyDown={(e) => handleKeyDown(e, item.href)}
                             aria-label={`Navigate to ${item.label} page`}
                           >
-                            {item.label}
+                            <div className="flex items-center justify-between">
+                              <span>{item.label}</span>
+                              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                            </div>
                           </Link>
-                        </motion.li>
+                        </li>
                       ))}
                     </ul>
                   </nav>
 
                   {/* Mobile CTA Button */}
-                  <div className="pt-6 border-t border-border">
-                    <motion.div
-                      initial={motionUtils.prefersReducedMotion() ? {} : { opacity: 0, y: 20 }}
-                      animate={motionUtils.prefersReducedMotion() ? {} : { opacity: 1, y: 0 }}
-                      transition={motionUtils.prefersReducedMotion() ? {} : { delay: 0.4, duration: 0.3 }}
+                  <div className="pt-6 border-t border-white/20 dark:border-gray-800/20">
+                    <Button
+                      asChild
+                      className={cn(
+                        "w-full group relative overflow-hidden",
+                        "bg-gradient-to-r from-climate-green to-climate-blue",
+                        "hover:from-climate-green-dark hover:to-climate-blue-dark",
+                        "text-white font-semibold py-4 rounded-xl",
+                        "shadow-lg shadow-climate-green/25",
+                        "border border-white/20 backdrop-blur-sm",
+                        "transition-all duration-300",
+                        colorUtils.getFocusRingClasses(),
+                        touchTargetUtils.getTouchClasses()
+                      )}
+                      onClick={handleMobileLinkClick}
                     >
-                      <Button
-                        asChild
-                        className={cn(
-                          "w-full bg-climate-green hover:bg-climate-green-dark text-white",
-                          colorUtils.getFocusRingClasses(),
-                          touchTargetUtils.getTouchClasses()
-                        )}
-                        onClick={handleMobileLinkClick}
+                      <Link 
+                        href="/programs"
+                        aria-label="Join Our Programs - Apply to participate in KCIC programmes"
+                        className="flex items-center justify-center space-x-2"
                       >
-                        <Link 
-                          href="/programs"
-                          aria-label="Join Our Programs - Apply to participate in KCIC programmes"
-                        >
-                          Join Our Programs
-                        </Link>
-                      </Button>
-                    </motion.div>
+                        <span>Join Our Programs</span>
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </SheetContent>
@@ -301,6 +306,6 @@ export function Navbar() {
           </div>
         </div>
       </nav>
-    </motion.div>
+    </div>
   );
 }

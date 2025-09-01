@@ -79,7 +79,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Climate-inspired color palette */
+  /* Climate-inspired color palette - Enhanced */
   --climate-green: oklch(0.647 0.176 162.4);
   --climate-green-light: oklch(0.747 0.156 162.4);
   --climate-green-dark: oklch(0.547 0.196 162.4);
@@ -89,24 +89,55 @@
   --climate-yellow: oklch(0.747 0.176 85.4);
   --climate-yellow-light: oklch(0.847 0.156 85.4);
   --climate-yellow-dark: oklch(0.647 0.196 85.4);
+  
+  /* Additional sustainable colors */
+  --climate-forest: oklch(0.447 0.196 150.4);
+  --climate-ocean: oklch(0.547 0.176 210.4);
+  --climate-earth: oklch(0.447 0.176 60.4);
+  --climate-sky: oklch(0.747 0.156 250.4);
 
-  /* Gradient combinations */
+  /* Gradient combinations - Enhanced */
   --hero-gradient: linear-gradient(135deg, var(--climate-green), var(--climate-blue));
   --stats-gradient: linear-gradient(45deg, var(--climate-blue), var(--climate-yellow));
   --cta-gradient: linear-gradient(90deg, var(--climate-green), var(--climate-blue));
+  --sustainability-gradient: linear-gradient(135deg, var(--climate-forest), var(--climate-ocean), var(--climate-sky));
+  --earth-gradient: radial-gradient(circle, var(--climate-blue), var(--climate-green), var(--climate-earth));
 
-  /* Glass morphism effects */
+  /* Enhanced Glass morphism effects */
   --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-bg-strong: rgba(255, 255, 255, 0.15);
   --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-backdrop: blur(10px);
+  --glass-border-strong: rgba(255, 255, 255, 0.3);
+  --glass-backdrop: blur(12px);
+  --glass-backdrop-strong: blur(20px);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-strong: 0 16px 64px rgba(0, 0, 0, 0.2);
 
-  /* Animation variables */
-  --animation-duration-fast: 0.3s;
-  --animation-duration-normal: 0.6s;
-  --animation-duration-slow: 1s;
+  /* Animation variables - Enhanced */
+  --animation-duration-fast: 0.2s;
+  --animation-duration-normal: 0.4s;
+  --animation-duration-slow: 0.8s;
+  --animation-duration-slower: 1.2s;
   --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Typography enhancements */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Spacing system */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
 }
 
 .dark {
@@ -142,7 +173,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* Dark mode climate colors - slightly adjusted for better contrast */
+  /* Dark mode climate colors - Enhanced */
   --climate-green: oklch(0.697 0.156 162.4);
   --climate-green-light: oklch(0.797 0.136 162.4);
   --climate-green-dark: oklch(0.597 0.176 162.4);
@@ -152,11 +183,20 @@
   --climate-yellow: oklch(0.797 0.156 85.4);
   --climate-yellow-light: oklch(0.897 0.136 85.4);
   --climate-yellow-dark: oklch(0.697 0.176 85.4);
+  
+  /* Additional sustainable colors - Dark mode */
+  --climate-forest: oklch(0.497 0.176 150.4);
+  --climate-ocean: oklch(0.597 0.156 210.4);
+  --climate-earth: oklch(0.497 0.156 60.4);
+  --climate-sky: oklch(0.797 0.136 250.4);
 
-  /* Dark mode glass morphism */
+  /* Dark mode glass morphism - Enhanced */
   --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.15);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-shadow-strong: 0 16px 64px rgba(0, 0, 0, 0.5);
 }
 
 @layer base {
@@ -169,7 +209,7 @@
 }
 
 @layer utilities {
-  /* Glass morphism utilities */
+  /* Enhanced Glass morphism utilities */
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
@@ -177,7 +217,28 @@
     box-shadow: var(--glass-shadow);
   }
 
-  /* Climate gradient utilities */
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    border: 1px solid var(--glass-border-strong);
+    backdrop-filter: var(--glass-backdrop-strong);
+    box-shadow: var(--glass-shadow-strong);
+  }
+
+  .glass-navbar {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px) saturate(150%);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Enhanced gradient utilities */
   .bg-hero-gradient {
     background: var(--hero-gradient);
   }
@@ -190,9 +251,47 @@
     background: var(--cta-gradient);
   }
 
-  /* Animation delay utilities */
+  .bg-sustainability-gradient {
+    background: var(--sustainability-gradient);
+  }
+
+  .bg-earth-gradient {
+    background: var(--earth-gradient);
+  }
+
+  /* Enhanced text gradient utilities */
+  .text-gradient-climate {
+    background: linear-gradient(135deg, var(--climate-green), var(--climate-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-sustainability {
+    background: var(--sustainability-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-warm {
+    background: linear-gradient(135deg, var(--climate-yellow), var(--climate-earth));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Enhanced animation utilities */
+  .animate-delay-75 {
+    animation-delay: 75ms;
+  }
+
   .animate-delay-100 {
     animation-delay: 100ms;
+  }
+
+  .animate-delay-150 {
+    animation-delay: 150ms;
   }
 
   .animate-delay-200 {
@@ -207,20 +306,82 @@
     animation-delay: 500ms;
   }
 
-  /* Hover tilt effect */
+  .animate-delay-700 {
+    animation-delay: 700ms;
+  }
+
+  .animate-delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Pulse glow animation */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 30px rgba(16, 185, 129, 0.6); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Rotate slow animation */
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 20s linear infinite;
+  }
+
+  /* Enhanced hover effects */
   .hover-tilt {
-    transition: transform var(--animation-duration-fast) var(--animation-easing);
+    transition: transform var(--animation-duration-normal) var(--animation-easing);
   }
 
   .hover-tilt:hover {
     transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.02);
   }
 
-  /* Scroll reveal utilities */
+  .hover-lift {
+    transition: transform var(--animation-duration-fast) var(--animation-easing-spring);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+
+  .hover-glow {
+    transition: all var(--animation-duration-normal) var(--animation-easing);
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 40px rgba(16, 185, 129, 0.4);
+  }
+
+  .hover-scale {
+    transition: transform var(--animation-duration-fast) var(--animation-easing);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Enhanced scroll reveal utilities */
   .scroll-reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all var(--animation-duration-normal) var(--animation-easing);
+    transform: translateY(40px);
+    transition: all var(--animation-duration-slow) var(--animation-easing);
   }
 
   .scroll-reveal.revealed {
@@ -228,7 +389,40 @@
     transform: translateY(0);
   }
 
-  /* Text gradient utilities */
+  .scroll-reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all var(--animation-duration-slow) var(--animation-easing);
+  }
+
+  .scroll-reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all var(--animation-duration-slow) var(--animation-easing);
+  }
+
+  .scroll-reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all var(--animation-duration-slow) var(--animation-easing);
+  }
+
+  .scroll-reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Enhanced text gradient utilities */
   .text-gradient-climate {
     background: linear-gradient(135deg, var(--climate-green), var(--climate-blue));
     -webkit-background-clip: text;
@@ -236,7 +430,137 @@
     background-clip: text;
   }
 
-  /* Custom scrollbar */
+  .text-gradient-sustainability {
+    background: var(--sustainability-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-warm {
+    background: linear-gradient(135deg, var(--climate-yellow), var(--climate-earth));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Interactive button styles */
+  .btn-climate-primary {
+    background: linear-gradient(135deg, var(--climate-green), var(--climate-blue));
+    border: 2px solid transparent;
+    color: white;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    transition: all var(--animation-duration-normal) var(--animation-easing);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-climate-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-climate-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--climate-green-light), var(--climate-blue-light));
+    opacity: 0;
+    transition: opacity var(--animation-duration-normal);
+  }
+
+  .btn-climate-primary:hover::before {
+    opacity: 1;
+  }
+
+  .btn-climate-secondary {
+    background: transparent;
+    border: 2px solid var(--climate-green);
+    color: var(--climate-green);
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    transition: all var(--animation-duration-normal) var(--animation-easing);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-climate-secondary:hover {
+    background: var(--climate-green);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+  }
+
+  /* Enhanced sustainability theme utilities */
+  .climate-shadow-green {
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+  }
+
+  .climate-shadow-blue {
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+  }
+
+  .climate-border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, var(--climate-green), var(--climate-blue)) border-box;
+  }
+
+  .sustainability-pattern {
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(16, 185, 129, 0.1) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  .eco-glow {
+    position: relative;
+  }
+
+  .eco-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--climate-green), var(--climate-blue), var(--climate-yellow));
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity var(--animation-duration-normal);
+    z-index: -1;
+    filter: blur(8px);
+  }
+
+  .eco-glow:hover::before {
+    opacity: 0.3;
+  }
+
+  /* Nature-inspired animations */
+  @keyframes leaf-sway {
+    0%, 100% { transform: rotate(-2deg) translateX(0px); }
+    50% { transform: rotate(2deg) translateX(2px); }
+  }
+
+  .animate-leaf-sway {
+    animation: leaf-sway 4s ease-in-out infinite;
+  }
+
+  @keyframes wave-flow {
+    0%, 100% { transform: translateX(0px) scaleX(1); }
+    50% { transform: translateX(10px) scaleX(1.1); }
+  }
+
+  .animate-wave-flow {
+    animation: wave-flow 6s ease-in-out infinite;
+  }
+
+  @keyframes sun-rays {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.05); }
+  }
+
+  .animate-sun-rays {
+    animation: sun-rays 8s linear infinite;
+  }
   .custom-scrollbar::-webkit-scrollbar {
     height: 6px;
   }
@@ -285,7 +609,7 @@
     scroll-behavior: smooth;
   }
 
-  /* Mobile-specific optimizations */
+  /* Enhanced responsive utilities */
   @media (max-width: 640px) {
     .mobile-padding {
       padding-left: 1rem;
@@ -300,12 +624,45 @@
     .mobile-spacing-sm {
       margin-bottom: 1rem;
     }
+
+    .mobile-hero-padding {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .mobile-glass-subtle {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+    }
   }
 
-  /* Tablet-specific optimizations */
+  /* Enhanced tablet optimizations */
   @media (min-width: 641px) and (max-width: 1024px) {
     .tablet-grid-2 {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tablet-hero-spacing {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .tablet-glass-medium {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+    }
+  }
+
+  /* Large screen optimizations */
+  @media (min-width: 1025px) {
+    .desktop-hero-spacing {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .desktop-glass-strong {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
     }
   }
 
