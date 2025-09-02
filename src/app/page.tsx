@@ -150,25 +150,7 @@ export default function Home() {
           </div>
         </ScrollReveal>
 
-        {/* Programmes Section with creative layout and staggered animations */}
-        <ScrollReveal direction="up" threshold={0.1} delay={0.2}>
-          <LazySection className="programmes-section relative">
-            <div className="relative py-8 sm:py-12">
-              {/* Decorative background elements */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-1/4 -left-32 w-64 h-64 bg-climate-green/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-climate-blue/10 rounded-full blur-3xl" />
-              </div>
-              <section 
-                {...landmarkUtils.getRegionProps('Our programmes')}
-                aria-labelledby="programmes-heading"
-                className="relative z-10"
-              >
-                <ProgrammesSection />
-              </section>
-            </div>
-          </LazySection>
-        </ScrollReveal>
+        
 
         {/* Latest News Section with horizontal scrolling and reveal animation */}
         <ScrollReveal direction="left" threshold={0.1} delay={0.1}>
