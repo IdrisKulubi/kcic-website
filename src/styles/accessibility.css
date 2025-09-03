@@ -10,7 +10,7 @@
 
 /* Apply font scaling to all text elements */
 .accessibility-enhanced {
-  font-size: calc(1rem * var(--accessibility-font-scale));
+  font-size: calc(1.1rem * var(--accessibility-font-scale));
   line-height: var(--accessibility-line-height);
   letter-spacing: var(--accessibility-letter-spacing);
   text-align: var(--accessibility-text-align);
@@ -62,16 +62,16 @@ h5 { font-size: calc(1.125rem * var(--accessibility-font-scale)); }
 h6 { font-size: calc(1rem * var(--accessibility-font-scale)); }
 
 /* Text size utilities that respect accessibility scaling */
-.text-xs { font-size: calc(0.75rem * var(--accessibility-font-scale)); }
-.text-sm { font-size: calc(0.875rem * var(--accessibility-font-scale)); }
-.text-base { font-size: calc(1rem * var(--accessibility-font-scale)); }
-.text-lg { font-size: calc(1.125rem * var(--accessibility-font-scale)); }
-.text-xl { font-size: calc(1.25rem * var(--accessibility-font-scale)); }
-.text-2xl { font-size: calc(1.5rem * var(--accessibility-font-scale)); }
-.text-3xl { font-size: calc(1.875rem * var(--accessibility-font-scale)); }
-.text-4xl { font-size: calc(2.25rem * var(--accessibility-font-scale)); }
-.text-5xl { font-size: calc(3rem * var(--accessibility-font-scale)); }
-.text-6xl { font-size: calc(3.75rem * var(--accessibility-font-scale)); }
+.text-xs { font-size: calc(0.8rem * var(--accessibility-font-scale)); }
+.text-sm { font-size: calc(0.9rem * var(--accessibility-font-scale)); }
+.text-base { font-size: calc(1.1rem * var(--accessibility-font-scale)); }
+.text-lg { font-size: calc(1.2rem * var(--accessibility-font-scale)); }
+.text-xl { font-size: calc(1.35rem * var(--accessibility-font-scale)); }
+.text-2xl { font-size: calc(1.6rem * var(--accessibility-font-scale)); }
+.text-3xl { font-size: calc(2rem * var(--accessibility-font-scale)); }
+.text-4xl { font-size: calc(2.4rem * var(--accessibility-font-scale)); }
+.text-5xl { font-size: calc(3.2rem * var(--accessibility-font-scale)); }
+.text-6xl { font-size: calc(4rem * var(--accessibility-font-scale)); }
 
 /* High contrast mode */
 .accessibility-high-contrast {

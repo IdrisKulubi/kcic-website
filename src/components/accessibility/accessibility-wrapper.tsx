@@ -5,7 +5,6 @@ import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { cn } from "@/lib/utils";
 import { JSX } from "react/jsx-runtime";
 
-
 interface AccessibilityWrapperProps {
   children: React.ReactNode;
   as?: keyof JSX.IntrinsicElements;

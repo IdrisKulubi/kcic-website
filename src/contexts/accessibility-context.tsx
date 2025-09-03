@@ -4,12 +4,12 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 
 // Font size scale options
 export const FONT_SCALES = {
-  xs: { scale: 0.8, label: 'Extra Small', value: 'xs' },
-  sm: { scale: 0.9, label: 'Small', value: 'sm' },
+  xs: { scale: 0.85, label: 'Extra Small', value: 'xs' },
+  sm: { scale: 0.95, label: 'Small', value: 'sm' },
   base: { scale: 1.0, label: 'Normal', value: 'base' },
-  lg: { scale: 1.1, label: 'Large', value: 'lg' },
-  xl: { scale: 1.25, label: 'Extra Large', value: 'xl' },
-  '2xl': { scale: 1.5, label: 'Double Large', value: '2xl' },
+  lg: { scale: 1.15, label: 'Large', value: 'lg' },
+  xl: { scale: 1.3, label: 'Extra Large', value: 'xl' },
+  '2xl': { scale: 1.6, label: 'Double Large', value: '2xl' },
 } as const;
 
 // Line height options
@@ -70,8 +70,8 @@ interface AccessibilityContextType {
 }
 
 const defaultSettings: AccessibilitySettings = {
-  fontSize: 'base',
-  lineHeight: 'normal',
+  fontSize: 'lg',
+  lineHeight: 'relaxed',
   letterSpacing: 'normal',
   textAlignment: 'left',
   highContrast: false,
