@@ -1,14 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
+import { cn } from "@/lib/utils";
+import { JSX } from "react/jsx-runtime";
+
 
 interface AccessibilityWrapperProps {
   children: React.ReactNode;
   as?: keyof JSX.IntrinsicElements;
   className?: string;
-  type?: 'heading' | 'body' | 'interactive' | 'form' | 'container';
+  type?: "heading" | "body" | "interactive" | "form" | "container";
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   preserveAnimations?: boolean;
   [key: string]: unknown;
@@ -20,9 +22,9 @@ interface AccessibilityWrapperProps {
  */
 export function AccessibilityWrapper({
   children,
-  as: Component = 'div',
+  as: Component = "div",
   className,
-  type = 'container',
+  type = "container",
   headingLevel = 1,
   preserveAnimations = false,
   ...props
@@ -39,15 +41,15 @@ export function AccessibilityWrapper({
   // Get appropriate classes based on type
   const getTypeClasses = () => {
     switch (type) {
-      case 'heading':
+      case "heading":
         return getHeadingClasses(headingLevel);
-      case 'body':
+      case "body":
         return getBodyTextClasses();
-      case 'interactive':
+      case "interactive":
         return getInteractiveClasses();
-      case 'form':
+      case "form":
         return getFormClasses();
-      case 'container':
+      case "container":
       default:
         return getContainerClasses();
     }
@@ -56,7 +58,7 @@ export function AccessibilityWrapper({
   // Handle animation classes
   const processClassName = (originalClassName?: string) => {
     if (!originalClassName) return getTypeClasses();
-    
+
     if (!preserveAnimations && shouldDisableAnimations()) {
       // Remove animation classes if animations should be disabled
       const animationClassPatterns = [
@@ -68,24 +70,27 @@ export function AccessibilityWrapper({
         /hover:translate-\w+/g,
         /hover:rotate-\w+/g,
       ];
-      
+
       let processedClassName = originalClassName;
-      animationClassPatterns.forEach(pattern => {
-        processedClassName = processedClassName.replace(pattern, '');
+      animationClassPatterns.forEach((pattern) => {
+        processedClassName = processedClassName.replace(pattern, "");
       });
-      
+
       return cn(getTypeClasses(), processedClassName);
     }
-    
+
     return cn(getTypeClasses(), originalClassName);
   };
 
   const finalClassName = processClassName(className);
 
+  // Type assertion to fix TypeScript issue with dynamic components
+  const DynamicComponent = Component as React.ElementType;
+
   return (
-    <Component className={finalClassName} {...props}>
+    <DynamicComponent className={finalClassName} {...props}>
       {children}
-    </Component>
+    </DynamicComponent>
   );
 }
 
@@ -105,7 +110,7 @@ export function AccessibleHeading({
   [key: string]: unknown;
 }) {
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
-  
+
   return (
     <AccessibilityWrapper
       as={HeadingTag}
@@ -122,7 +127,7 @@ export function AccessibleHeading({
 export function AccessibleText({
   children,
   className,
-  as = 'p',
+  as = "p",
   ...props
 }: {
   children: React.ReactNode;
@@ -131,12 +136,7 @@ export function AccessibleText({
   [key: string]: unknown;
 }) {
   return (
-    <AccessibilityWrapper
-      as={as}
-      type="body"
-      className={className}
-      {...props}
-    >
+    <AccessibilityWrapper as={as} type="body" className={className} {...props}>
       {children}
     </AccessibilityWrapper>
   );
@@ -190,7 +190,7 @@ export function AccessibleLink({
 export function AccessibleContainer({
   children,
   className,
-  as = 'div',
+  as = "div",
   ...props
 }: {
   children: React.ReactNode;
