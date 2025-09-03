@@ -1,0 +1,435 @@
+/* Accessibility Enhancement Styles */
+
+/* Font scaling system */
+:root {
+  --accessibility-font-scale: 1;
+  --accessibility-line-height: 1.4;
+  --accessibility-letter-spacing: 0em;
+  --accessibility-text-align: left;
+}
+
+/* Apply font scaling to all text elements */
+.accessibility-enhanced {
+  font-size: calc(1rem * var(--accessibility-font-scale));
+  line-height: var(--accessibility-line-height);
+  letter-spacing: var(--accessibility-letter-spacing);
+  text-align: var(--accessibility-text-align);
+}
+
+/* Font size classes */
+.accessibility-font-xs { --accessibility-font-scale: 0.8; }
+.accessibility-font-sm { --accessibility-font-scale: 0.9; }
+.accessibility-font-base { --accessibility-font-scale: 1.0; }
+.accessibility-font-lg { --accessibility-font-scale: 1.1; }
+.accessibility-font-xl { --accessibility-font-scale: 1.25; }
+.accessibility-font-2xl { --accessibility-font-scale: 1.5; }
+
+/* Line height classes */
+.accessibility-line-height-tight { --accessibility-line-height: 1.2; }
+.accessibility-line-height-normal { --accessibility-line-height: 1.4; }
+.accessibility-line-height-relaxed { --accessibility-line-height: 1.6; }
+.accessibility-line-height-loose { --accessibility-line-height: 1.8; }
+
+/* Letter spacing classes */
+.accessibility-letter-spacing-tight { --accessibility-letter-spacing: -0.025em; }
+.accessibility-letter-spacing-normal { --accessibility-letter-spacing: 0em; }
+.accessibility-letter-spacing-wide { --accessibility-letter-spacing: 0.025em; }
+.accessibility-letter-spacing-wider { --accessibility-letter-spacing: 0.05em; }
+
+/* Text alignment classes */
+.accessibility-text-left { --accessibility-text-align: left; }
+.accessibility-text-center { --accessibility-text-align: center; }
+.accessibility-text-right { --accessibility-text-align: right; }
+.accessibility-text-justify { --accessibility-text-align: justify; }
+
+/* Apply accessibility enhancements to all text elements */
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button,
+input, textarea, select,
+label, li, td, th {
+  font-size: calc(1em * var(--accessibility-font-scale));
+  line-height: var(--accessibility-line-height);
+  letter-spacing: var(--accessibility-letter-spacing);
+}
+
+/* Preserve heading hierarchy while scaling */
+h1 { font-size: calc(2.25rem * var(--accessibility-font-scale)); }
+h2 { font-size: calc(1.875rem * var(--accessibility-font-scale)); }
+h3 { font-size: calc(1.5rem * var(--accessibility-font-scale)); }
+h4 { font-size: calc(1.25rem * var(--accessibility-font-scale)); }
+h5 { font-size: calc(1.125rem * var(--accessibility-font-scale)); }
+h6 { font-size: calc(1rem * var(--accessibility-font-scale)); }
+
+/* Text size utilities that respect accessibility scaling */
+.text-xs { font-size: calc(0.75rem * var(--accessibility-font-scale)); }
+.text-sm { font-size: calc(0.875rem * var(--accessibility-font-scale)); }
+.text-base { font-size: calc(1rem * var(--accessibility-font-scale)); }
+.text-lg { font-size: calc(1.125rem * var(--accessibility-font-scale)); }
+.text-xl { font-size: calc(1.25rem * var(--accessibility-font-scale)); }
+.text-2xl { font-size: calc(1.5rem * var(--accessibility-font-scale)); }
+.text-3xl { font-size: calc(1.875rem * var(--accessibility-font-scale)); }
+.text-4xl { font-size: calc(2.25rem * var(--accessibility-font-scale)); }
+.text-5xl { font-size: calc(3rem * var(--accessibility-font-scale)); }
+.text-6xl { font-size: calc(3.75rem * var(--accessibility-font-scale)); }
+
+/* High contrast mode */
+.accessibility-high-contrast {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #111111;
+  --card-foreground: #ffffff;
+  --popover: #111111;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #333333;
+  --secondary-foreground: #ffffff;
+  --muted: #222222;
+  --muted-foreground: #cccccc;
+  --accent: #444444;
+  --accent-foreground: #ffffff;
+  --border: #555555;
+  --input: #333333;
+  --ring: #ffffff;
+  
+  /* High contrast climate colors */
+  --climate-green: #00ff00;
+  --climate-blue: #0099ff;
+  --climate-yellow: #ffff00;
+}
+
+.accessibility-high-contrast * {
+  border-color: #555555 !important;
+}
+
+.accessibility-high-contrast a {
+  color: #00ccff !important;
+  text-decoration: underline !important;
+}
+
+.accessibility-high-contrast button {
+  border: 2px solid #ffffff !important;
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+.accessibility-high-contrast button:hover {
+  background-color: #555555 !important;
+}
+
+.accessibility-high-contrast .bg-climate-green {
+  background-color: #00ff00 !important;
+  color: #000000 !important;
+}
+
+.accessibility-high-contrast .text-climate-green {
+  color: #00ff00 !important;
+}
+
+/* Enhanced focus indicators */
+.accessibility-enhanced-focus *:focus,
+.accessibility-enhanced-focus *:focus-visible {
+  outline: 3px solid #00ff00 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(0, 255, 0, 0.3) !important;
+}
+
+.accessibility-enhanced-focus button:focus,
+.accessibility-enhanced-focus a:focus,
+.accessibility-enhanced-focus input:focus,
+.accessibility-enhanced-focus textarea:focus,
+.accessibility-enhanced-focus select:focus {
+  outline: 3px solid #00ff00 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(0, 255, 0, 0.3) !important;
+  background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+/* Readable font family */
+.accessibility-readable-font,
+.accessibility-readable-font * {
+  font-family: 'Arial', 'Helvetica', sans-serif !important;
+}
+
+/* Hide images */
+.accessibility-hide-images img,
+.accessibility-hide-images [role="img"],
+.accessibility-hide-images .bg-cover,
+.accessibility-hide-images .bg-contain,
+.accessibility-hide-images video {
+  display: none !important;
+}
+
+.accessibility-hide-images::before {
+  content: '[Image hidden for accessibility]';
+  display: inline-block;
+  padding: 0.5rem;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* Reduced motion */
+.accessibility-reduced-motion,
+.accessibility-reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Pause animations */
+.accessibility-pause-animations * {
+  animation-play-state: paused !important;
+}
+
+.accessibility-pause-animations video {
+  pointer-events: none;
+}
+
+.accessibility-pause-animations video::after {
+  content: 'Video paused for accessibility';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  z-index: 10;
+}
+
+/* Text alignment utilities that work with accessibility settings */
+.accessibility-text-align-left { text-align: left !important; }
+.accessibility-text-align-center { text-align: center !important; }
+.accessibility-text-align-right { text-align: right !important; }
+.accessibility-text-align-justify { text-align: justify !important; }
+
+/* Ensure minimum touch targets remain accessible */
+.accessibility-enhanced button,
+.accessibility-enhanced a[role="button"],
+.accessibility-enhanced input[type="button"],
+.accessibility-enhanced input[type="submit"],
+.accessibility-enhanced input[type="reset"] {
+  min-height: calc(44px * var(--accessibility-font-scale));
+  min-width: calc(44px * var(--accessibility-font-scale));
+  padding: calc(0.5rem * var(--accessibility-font-scale)) calc(1rem * var(--accessibility-font-scale));
+}
+
+/* Scale form elements appropriately */
+.accessibility-enhanced input,
+.accessibility-enhanced textarea,
+.accessibility-enhanced select {
+  font-size: calc(1rem * var(--accessibility-font-scale));
+  padding: calc(0.5rem * var(--accessibility-font-scale));
+  line-height: var(--accessibility-line-height);
+}
+
+/* Scale spacing for better readability */
+.accessibility-enhanced p {
+  margin-bottom: calc(1rem * var(--accessibility-font-scale));
+}
+
+.accessibility-enhanced h1,
+.accessibility-enhanced h2,
+.accessibility-enhanced h3,
+.accessibility-enhanced h4,
+.accessibility-enhanced h5,
+.accessibility-enhanced h6 {
+  margin-bottom: calc(0.5rem * var(--accessibility-font-scale));
+  margin-top: calc(1rem * var(--accessibility-font-scale));
+}
+
+/* Ensure lists are properly spaced */
+.accessibility-enhanced ul,
+.accessibility-enhanced ol {
+  padding-left: calc(1.5rem * var(--accessibility-font-scale));
+}
+
+.accessibility-enhanced li {
+  margin-bottom: calc(0.25rem * var(--accessibility-font-scale));
+}
+
+/* Scale card and container padding */
+.accessibility-enhanced .card,
+.accessibility-enhanced .p-4,
+.accessibility-enhanced .p-6,
+.accessibility-enhanced .p-8 {
+  padding: calc(1rem * var(--accessibility-font-scale));
+}
+
+/* Ensure proper contrast for text on backgrounds */
+.accessibility-high-contrast .text-white\/90,
+.accessibility-high-contrast .text-slate-300,
+.accessibility-high-contrast .text-muted-foreground {
+  color: #ffffff !important;
+}
+
+.accessibility-high-contrast .bg-black\/50 {
+  background-color: #000000 !important;
+}
+
+.accessibility-high-contrast .bg-white\/10 {
+  background-color: #333333 !important;
+}
+
+/* Improve visibility of glass morphism elements in high contrast */
+.accessibility-high-contrast .glass,
+.accessibility-high-contrast .glass-card,
+.accessibility-high-contrast .glass-navbar {
+  background-color: #222222 !important;
+  border: 2px solid #ffffff !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure gradients are visible in high contrast mode */
+.accessibility-high-contrast .bg-hero-gradient,
+.accessibility-high-contrast .bg-stats-gradient,
+.accessibility-high-contrast .bg-cta-gradient {
+  background: linear-gradient(135deg, #ffffff, #cccccc) !important;
+  color: #000000 !important;
+}
+
+/* Make sure interactive elements are clearly distinguishable */
+.accessibility-high-contrast button:hover,
+.accessibility-high-contrast a:hover {
+  background-color: #666666 !important;
+  color: #ffffff !important;
+}
+
+/* Responsive accessibility adjustments */
+@media (max-width: 640px) {
+  .accessibility-enhanced {
+    --accessibility-font-scale: calc(var(--accessibility-font-scale) * 0.9);
+  }
+  
+  .accessibility-enhanced button,
+  .accessibility-enhanced a[role="button"] {
+    min-height: calc(48px * var(--accessibility-font-scale));
+    min-width: calc(48px * var(--accessibility-font-scale));
+  }
+}
+
+/* Print styles for accessibility */
+@media print {
+  .accessibility-enhanced {
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+  
+  .accessibility-enhanced h1 { font-size: 18pt !important; }
+  .accessibility-enhanced h2 { font-size: 16pt !important; }
+  .accessibility-enhanced h3 { font-size: 14pt !important; }
+  .accessibility-enhanced h4 { font-size: 12pt !important; }
+  .accessibility-enhanced h5 { font-size: 11pt !important; }
+  .accessibility-enhanced h6 { font-size: 10pt !important; }
+}
+
+/* Ensure accessibility button is always visible */
+.accessibility-button,
+.accessibility-floating-button {
+  position: fixed !important;
+  bottom: 1.5rem !important;
+  right: 1.5rem !important;
+  z-index: 9999 !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background-color: #10B981 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+}
+
+.accessibility-floating-button:hover {
+  transform: scale(1.1) !important;
+  background-color: #059669 !important;
+}
+
+/* Screen reader improvements */
+.accessibility-enhanced .sr-only:focus,
+.accessibility-enhanced .sr-only:active {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.5rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border: 2px solid var(--climate-green) !important;
+  border-radius: 0.25rem !important;
+  font-size: calc(1rem * var(--accessibility-font-scale)) !important;
+}
+
+/* Custom scrollbar for accessibility panel */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Mobile accessibility panel improvements */
+@media (max-width: 640px) {
+  .accessibility-panel-mobile {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    left: 0.5rem !important;
+    width: calc(100vw - 1rem) !important;
+    max-height: 95vh !important;
+  }
+  
+  .accessibility-panel-content {
+    padding: 0.75rem !important;
+  }
+  
+  .accessibility-panel-header {
+    padding: 0.75rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+/* Ensure touch targets are accessible on mobile */
+@media (max-width: 768px) {
+  .accessibility-panel button,
+  .accessibility-panel .slider {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  .accessibility-panel .grid button {
+    min-height: 40px !important;
+    padding: 0.5rem !important;
+  }
+}

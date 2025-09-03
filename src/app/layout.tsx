@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/themes/theme-provider";
+import { AccessibilityProvider } from "@/contexts/accessibility-context";
 import { Navbar } from "@/components/layout";
 import { skipLinkUtils, landmarkUtils } from "@/lib/accessibility";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
+import { AccessibilityPanel, AccessibilityButton } from "@/components/accessibility";
+import { SimpleAccessibilityButton } from "@/components/accessibility/simple-accessibility-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -186,37 +189,43 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased accessibility-enhanced`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* Skip to main content link for keyboard users */}
-          <a
-            {...skipLinkUtils.getSkipLinkProps('main-content')}
+        <AccessibilityProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
           >
-            Skip to main content
-          </a>
+            {/* Skip to main content link for keyboard users */}
+            <a
+              {...skipLinkUtils.getSkipLinkProps('main-content')}
+            >
+              Skip to main content
+            </a>
 
-          {/* Header landmark */}
-          <header {...landmarkUtils.getBannerProps()}>
-            <Navbar />
-          </header>
+            {/* Header landmark */}
+            <header {...landmarkUtils.getBannerProps()}>
+              <Navbar />
+            </header>
 
-          {/* Main content landmark */}
-          <main {...landmarkUtils.getMainProps()}>
-            {children}
-          </main>
-          
-          {/* Performance monitoring (development only) */}
-          <PerformanceMonitor />
-          
-          {/* Service worker registration (production only) */}
-          <ServiceWorkerRegistration />
-        </ThemeProvider>
+            {/* Main content landmark */}
+            <main {...landmarkUtils.getMainProps()}>
+              {children}
+            </main>
+            
+            {/* Accessibility Controls */}
+            <AccessibilityButton />
+            <AccessibilityPanel />
+            
+            {/* Performance monitoring (development only) */}
+            <PerformanceMonitor />
+            
+            {/* Service worker registration (production only) */}
+            <ServiceWorkerRegistration />
+          </ThemeProvider>
+        </AccessibilityProvider>
       </body>
     </html>
   );
