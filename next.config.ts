@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Allow remote partner logos
+    remotePatterns: [
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      { protocol: 'https', hostname: 'www.climate-kic.org' },
+      { protocol: 'https', hostname: 'strathmore.edu' },
+      { protocol: 'https', hostname: 'cdn.sida.se' },
+      { protocol: 'https', hostname: 'www.afdb.org' },
+    ],
   },
   
   // Performance optimizations

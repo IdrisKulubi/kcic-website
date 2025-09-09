@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/themes/theme-provider";
 import { skipLinkUtils, landmarkUtils } from "@/lib/accessibility";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
+import { AccessibilityProvider } from "@/contexts/accessibility-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -188,6 +189,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased accessibility-enhanced`}
       >
+        <AccessibilityProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -214,6 +216,7 @@ export default function RootLayout({
             {/* Service worker registration (production only) */}
             <ServiceWorkerRegistration />
           </ThemeProvider>
+          </AccessibilityProvider>
       </body>
     </html>
   );

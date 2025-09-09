@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Globe2, Users, Award, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export interface PartnerData {
   id: string;
@@ -96,46 +97,7 @@ export function PartnersSection({
           </div>
         </div>
 
-        {/* Featured Partners Grid */}
-        {featuredPartners.length > 0 && (
-          <div className="mb-20">
-            <div className="text-center mb-8">
-              <h3 
-                className="text-xl font-semibold text-gray-700"
-                style={{ fontFamily: typography.fonts.heading }}
-              >
-                Featured Partners
-              </h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-              {featuredPartners.map((partner, index) => (
-                <div
-                  key={partner.id}
-                  className={cn(
-                    "group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100",
-                    "hover:shadow-xl hover:border-green-200 transition-all duration-300",
-                    getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
-                  )}
-                  onMouseEnter={() => setHoveredPartner(partner.id)}
-                  onMouseLeave={() => setHoveredPartner(null)}
-                >
-                  <div className="relative h-20 flex items-center justify-center">
-                    <img 
-                      src={partner.logo || '/images/placeholder-logo.png'} 
-                      alt={partner.name}
-                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
-                    />
-                  </div>
-                  {hoveredPartner === partner.id && partner.description && (
-                    <div className="absolute -bottom-2 left-0 right-0 bg-gray-900 text-white text-xs p-2 rounded-lg z-10 shadow-lg">
-                      {partner.description}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+      
 
         {/* Category Tabs */}
         <div className="mb-12">
@@ -201,10 +163,12 @@ export function PartnersSection({
               >
                 {scrollPartners.map((partner, index) => (
                   <div key={`scroll-${index}`} className="flex-shrink-0">
-                    <img 
-                      src={partner.logo || '/images/placeholder-logo.png'} 
+                    <Image
+                      src={partner.logo || '/images/placeholder-logo.png'}
                       alt={partner.name}
                       className="h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                      width={100}
+                      height={100}
                     />
                   </div>
                 ))}
@@ -293,10 +257,13 @@ function PartnerGrid({ partners }: { partners: PartnerData[] }) {
           )}
         >
           <div className="relative h-16 flex items-center justify-center">
-            <img 
-              src={partner.logo || '/images/placeholder-logo.png'} 
+            <Image
+              src={partner.logo || '/images/placeholder-logo.png'}
               alt={partner.name}
               className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+              priority
+              width={100}
+              height={100}
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
