@@ -2,6 +2,7 @@ import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalHeroSection } from "@/components/sections/MinimalHeroSection";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
+import { PartnersSection, PartnerData } from "@/components/sections/PartnersSection";
 import Footer from "@/components/layout/Footer";
 import { homePageData } from "@/data/home";
 import { Metadata } from "next";
@@ -121,6 +122,113 @@ const targetsData = [
   },
 ];
 
+// Partners data
+const partnersData: PartnerData[] = [
+  // Donors
+  {
+    id: '1',
+    name: 'World Bank',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/World_Bank_logo.svg/200px-World_Bank_logo.svg.png',
+    category: 'donor',
+    description: 'Global development partner',
+    website: 'https://www.worldbank.org',
+    featured: true,
+  },
+  {
+    id: '2',
+    name: 'USAID',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/USAID-Identity.svg/200px-USAID-Identity.svg.png',
+    category: 'donor',
+    description: 'US Agency for International Development',
+    website: 'https://www.usaid.gov',
+    featured: true,
+  },
+  {
+    id: '3',
+    name: 'GIZ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/GIZ-logo.svg/200px-GIZ-logo.svg.png',
+    category: 'donor',
+    description: 'German development cooperation',
+    website: 'https://www.giz.de',
+    featured: true,
+  },
+  {
+    id: '4',
+    name: 'DFID',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/UK_aid_logo.svg/200px-UK_aid_logo.svg.png',
+    category: 'donor',
+    description: 'UK development assistance',
+    website: 'https://www.gov.uk',
+    featured: true,
+  },
+  // Partners
+  {
+    id: '5',
+    name: 'UNDP',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/UNDP_logo.svg/200px-UNDP_logo.svg.png',
+    category: 'partner',
+    description: 'UN Development Programme',
+    website: 'https://www.undp.org',
+    featured: true,
+  },
+  {
+    id: '6',
+    name: 'Climate-KIC',
+    logo: 'https://www.climate-kic.org/wp-content/themes/climate-kic/assets/img/logo.svg',
+    category: 'partner',
+    description: 'Europe\'s climate innovation initiative',
+    website: 'https://www.climate-kic.org',
+    featured: true,
+  },
+  {
+    id: '7',
+    name: 'Kenya Government',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/200px-Flag_of_Kenya.svg.png',
+    category: 'partner',
+    description: 'Government of Kenya',
+    website: 'https://www.kenya.go.ke',
+    featured: true,
+  },
+  {
+    id: '8',
+    name: 'Strathmore University',
+    logo: 'https://strathmore.edu/wp-content/uploads/2023/03/Strathmore_University_Logo.png',
+    category: 'collaborator',
+    description: 'Academic partner',
+    website: 'https://strathmore.edu',
+    featured: true,
+  },
+  // Additional partners
+  {
+    id: '9',
+    name: 'European Union',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/200px-Flag_of_Europe.svg.png',
+    category: 'donor',
+    website: 'https://europa.eu',
+  },
+  {
+    id: '10',
+    name: 'SIDA',
+    logo: 'https://cdn.sida.se/app/uploads/2020/10/13093627/sida-logo.svg',
+    category: 'donor',
+    website: 'https://www.sida.se',
+  },
+  {
+    id: '11',
+    name: 'AfDB',
+    logo: 'https://www.afdb.org/themes/afdb_theme/logo.svg',
+    category: 'supporter',
+    website: 'https://www.afdb.org',
+  },
+  {
+    id: '12',
+    name: 'UNEP',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/UNEP_logo.svg/200px-UNEP_logo.svg.png',
+    category: 'partner',
+    website: 'https://www.unep.org',
+  },
+];
+
 export default function HomePage() {
   return (
     <>
@@ -180,6 +288,9 @@ export default function HomePage() {
           stats={statsData} 
           targets={targetsData}
         />
+
+        {/* Partners Section */}
+        <PartnersSection partners={partnersData} />
 
         {/* Footer */}
         <Footer data={homePageData.footer} />

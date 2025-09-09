@@ -1,136 +1,307 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { PartnerData } from '@/data/home';
-import { ScrollReveal } from '@/components/animations';
-import { 
-  touchTargetUtils, 
-  colorUtils, 
-  motionUtils
-} from '@/lib/accessibility';
+import React, { useState, useRef, useEffect } from 'react';
+import { colors, typography } from '@/lib/design-system';
+import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Sparkles, Globe2, Users, Award, Building2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+export interface PartnerData {
+  id: string;
+  name: string;
+  logo: string;
+  category?: 'donor' | 'partner' | 'supporter' | 'collaborator';
+  description?: string;
+  website?: string;
+  featured?: boolean;
+}
 
 interface PartnersSectionProps {
   partners: PartnerData[];
+  title?: string;
+  subtitle?: string;
 }
 
-export function PartnersSection({ partners }: PartnersSectionProps) {
+export function PartnersSection({ 
+  partners, 
+  title = "Partners & Donors",
+  subtitle = "Collaborating with world-class organizations to accelerate climate innovation"
+}: PartnersSectionProps) {
+  const { getMotionSafeClasses } = useAccessibilityClasses();
   const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | string>('all');
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Duplicate partners array for seamless infinite scroll
-  const duplicatedPartners = [...partners, ...partners];
+  // Categorize partners
+  const categorizedPartners = partners.reduce((acc, partner) => {
+    const category = partner.category || 'supporter';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(partner);
+    return acc;
+  }, {} as Record<string, PartnerData[]>);
+
+  // Get featured partners
+  const featuredPartners = partners.filter(p => p.featured).slice(0, 8);
+  
+  // Filter partners by category
+  const displayPartners = selectedCategory === 'all' 
+    ? partners 
+    : categorizedPartners[selectedCategory] || [];
+
+  // Duplicate for infinite scroll
+  const scrollPartners = [...partners, ...partners, ...partners];
+
+  const categoryIcons = {
+    donor: <Award className="h-4 w-4" />,
+    partner: <Users className="h-4 w-4" />,
+    supporter: <Globe2 className="h-4 w-4" />,
+    collaborator: <Building2 className="h-4 w-4" />
+  };
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-br from-muted/30 to-background overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal>
-          <div className="text-center mb-12 sm:mb-16">
+    <section className="py-20 sm:py-32 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className={getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000')}>
+            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-green-50 to-cyan-50 text-green-700 border-green-200">
+              <Sparkles className="h-3 w-3 mr-1" />
+              Trusted by Industry Leaders
+            </Badge>
             <h2 
-              id="partners-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-gradient-climate"
+              className="font-bold mb-4"
+              style={{
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                fontFamily: typography.fonts.heading,
+                color: colors.secondary.gray[900],
+                lineHeight: typography.lineHeights.tight,
+              }}
             >
-              Our Partners
+              {title}
             </h2>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0">
-              Working together with leading organizations to drive climate innovation across Kenya and beyond
+            <p 
+              className="text-lg max-w-3xl mx-auto"
+              style={{
+                fontFamily: typography.fonts.body,
+                color: colors.secondary.gray[600],
+                lineHeight: typography.lineHeights.relaxed,
+              }}
+            >
+              {subtitle}
             </p>
           </div>
-        </ScrollReveal>
+        </div>
 
-        {/* Partners Marquee Container */}
-        <div className="relative" role="region" aria-label="Partner organizations">
-          {/* Gradient overlays for smooth fade effect */}
-          <div className="absolute left-0 top-0 w-16 sm:w-32 h-full bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" aria-hidden="true" />
-          <div className="absolute right-0 top-0 w-16 sm:w-32 h-full bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" aria-hidden="true" />
-          
-          {/* Marquee wrapper */}
-          <div className="flex overflow-hidden">
-            <div 
-              className={`flex ${!motionUtils.prefersReducedMotion() ? 'animate-marquee hover:pause-animation' : ''}`}
-              role="list"
-              aria-label="Partner organization logos"
-            >
-              {duplicatedPartners.map((partner, index) => (
+        {/* Featured Partners Grid */}
+        {featuredPartners.length > 0 && (
+          <div className="mb-20">
+            <div className="text-center mb-8">
+              <h3 
+                className="text-xl font-semibold text-gray-700"
+                style={{ fontFamily: typography.fonts.heading }}
+              >
+                Featured Partners
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+              {featuredPartners.map((partner, index) => (
                 <div
-                  key={`${partner.id}-${index}`}
-                  className="flex-shrink-0 mx-4 sm:mx-8 relative group"
+                  key={partner.id}
+                  className={cn(
+                    "group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100",
+                    "hover:shadow-xl hover:border-green-200 transition-all duration-300",
+                    getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
+                  )}
                   onMouseEnter={() => setHoveredPartner(partner.id)}
                   onMouseLeave={() => setHoveredPartner(null)}
-                  role="listitem"
                 >
-                  {/* Partner Logo */}
-                  <div 
-                    className={`w-24 h-16 sm:w-32 sm:h-20 md:w-40 md:h-24 relative flex items-center justify-center bg-white/80 dark:bg-gray-800/80 rounded-lg shadow-md transition-all duration-300 group-hover:shadow-xl ${!motionUtils.prefersReducedMotion() && 'group-hover:scale-105'} ${colorUtils.getFocusRingClasses()}`}
-                    tabIndex={0}
-                    role="img"
-                    aria-label={`${partner.name} - Partner organization`}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        if (partner.website) {
-                          window.open(partner.website, '_blank', 'noopener,noreferrer');
-                        }
-                      }
-                    }}
-                  >
-                    <Image
-                      src={partner.logo}
-                      alt=""
-                      fill
-                      className={`object-contain p-4 filter grayscale group-hover:grayscale-0 transition-all duration-300`}
-                      sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 160px"
+                  <div className="relative h-20 flex items-center justify-center">
+                    <img 
+                      src={partner.logo || '/images/placeholder-logo.png'} 
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
                     />
                   </div>
-
-                  {/* Hover Tooltip */}
-                  {hoveredPartner === partner.id && (
-                    <div 
-                      className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20"
-                      role="tooltip"
-                      aria-live="polite"
-                    >
-                      <div className="bg-foreground text-background px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap shadow-lg">
-                        {partner.name}
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-foreground" aria-hidden="true" />
-                      </div>
+                  {hoveredPartner === partner.id && partner.description && (
+                    <div className="absolute -bottom-2 left-0 right-0 bg-gray-900 text-white text-xs p-2 rounded-lg z-10 shadow-lg">
+                      {partner.description}
                     </div>
                   )}
                 </div>
               ))}
             </div>
           </div>
+        )}
+
+        {/* Category Tabs */}
+        <div className="mb-12">
+          <Tabs defaultValue="all" className="w-full">
+            <TabsList className="flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0">
+              <TabsTrigger 
+                value="all"
+                onClick={() => setSelectedCategory('all')}
+                className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
+              >
+                All ({partners.length})
+              </TabsTrigger>
+              {Object.entries(categorizedPartners).map(([category, items]) => (
+                <TabsTrigger 
+                  key={category}
+                  value={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
+                >
+                  <span className="flex items-center gap-2">
+                    {categoryIcons[category as keyof typeof categoryIcons]}
+                    {category.charAt(0).toUpperCase() + category.slice(1)}s ({items.length})
+                  </span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="all" className="mt-8">
+              <PartnerGrid partners={displayPartners} />
+            </TabsContent>
+            {Object.keys(categorizedPartners).map(category => (
+              <TabsContent key={category} value={category} className="mt-8">
+                <PartnerGrid partners={categorizedPartners[category]} />
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
 
-        {/* Call to Action */}
-        <ScrollReveal delay={0.2}>
-          <div className="text-center mt-12 sm:mt-16">
-            <p className="text-muted-foreground mb-4 sm:mb-6 px-4 sm:px-0">
-              Interested in partnering with us?
-            </p>
-            <a
-              href="/partnerships"
-              className={`inline-flex items-center px-6 py-3 bg-climate-green hover:bg-climate-green-dark text-white font-medium rounded-lg transition-colors duration-300 text-sm sm:text-base ${touchTargetUtils.getTouchClasses()} ${colorUtils.getFocusRingClasses()}`}
-              aria-label="Become a partner with KCIC - Learn about partnership opportunities"
-            >
-              Become a Partner
-              <svg
-                className="ml-2 w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
+        {/* Infinite Scroll Marquee */}
+        <div className="relative mt-20 py-12 border-y border-gray-100">
+          <div className="text-center mb-8">
+            <p className="text-sm text-gray-500 uppercase tracking-wider">All Partners</p>
           </div>
-        </ScrollReveal>
+          
+          <div className="relative overflow-hidden">
+            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+            
+            <div 
+              ref={scrollRef}
+              className="flex gap-12"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              <div 
+                className={cn(
+                  "flex gap-12 animate-scroll",
+                  isPaused && "animation-paused"
+                )}
+                style={{
+                  animation: 'scroll 40s linear infinite',
+                }}
+              >
+                {scrollPartners.map((partner, index) => (
+                  <div key={`scroll-${index}`} className="flex-shrink-0">
+                    <img 
+                      src={partner.logo || '/images/placeholder-logo.png'} 
+                      alt={partner.name}
+                      className="h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-20">
+          <div className="bg-gradient-to-br from-green-50 via-cyan-50 to-green-50 rounded-3xl p-12 text-center">
+            <h3 
+              className="font-bold mb-4"
+              style={{
+                fontSize: typography.sizes.heading.h3,
+                fontFamily: typography.fonts.heading,
+                color: colors.secondary.gray[900],
+              }}
+            >
+              Join Our Network
+            </h3>
+            <p 
+              className="text-lg mb-8 max-w-2xl mx-auto"
+              style={{
+                fontFamily: typography.fonts.body,
+                color: colors.secondary.gray[600],
+              }}
+            >
+              Partner with us to accelerate climate innovation and create lasting impact across Africa.
+            </p>
+            <Button
+              className="px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
+              style={{
+                background: colors.gradients.primary,
+                color: 'white',
+                fontFamily: typography.fonts.body,
+              }}
+              asChild
+            >
+              <a href="/contact">
+                Become a Partner
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-33.333%);
+          }
+        }
+        .animate-scroll {
+          animation: scroll 40s linear infinite;
+        }
+        .animation-paused {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
+  );
+}
+
+// Partner Grid Component
+function PartnerGrid({ partners }: { partners: PartnerData[] }) {
+  const { getMotionSafeClasses } = useAccessibilityClasses();
+  
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      {partners.map((partner, index) => (
+        <a
+          key={partner.id}
+          href={partner.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "group relative bg-white rounded-xl p-6 border border-gray-100",
+            "hover:border-gray-200 hover:shadow-lg transition-all duration-300",
+            "hover:-translate-y-1",
+            getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 50}`)
+          )}
+        >
+          <div className="relative h-16 flex items-center justify-center">
+            <img 
+              src={partner.logo || '/images/placeholder-logo.png'} 
+              alt={partner.name}
+              className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+        </a>
+      ))}
+    </div>
   );
 }

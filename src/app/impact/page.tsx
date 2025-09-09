@@ -161,7 +161,7 @@ export default function ImpactPage() {
             }}
           >
             Real results from our climate innovation programs across Kenya and Africa. 
-            See how we're driving sustainable change through entrepreneurship.
+            See how we&apos;re driving sustainable change through entrepreneurship.
           </p>
         </div>
       </section>

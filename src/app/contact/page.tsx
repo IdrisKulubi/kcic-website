@@ -103,8 +103,8 @@ export default function ContactPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Ready to join Kenya's climate innovation ecosystem? 
-            We're here to help you take the next step.
+            Ready to join Kenya&apos;s climate innovation ecosystem? 
+            We&apos;re here to help you take the next step.
           </p>
         </div>
       </section>

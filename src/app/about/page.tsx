@@ -54,7 +54,7 @@ export default function AboutPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            We are Kenya's leading climate innovation center, empowering entrepreneurs 
+            We are Kenya&apos;s leading climate innovation center, empowering entrepreneurs 
             to build sustainable solutions that drive green growth across Africa.
           </p>
         </div>
@@ -156,7 +156,7 @@ export default function AboutPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Building Africa's Climate Future
+            Building Africa&apos;s Climate Future
           </h2>
           <div className="space-y-8 text-left">
             <p 
@@ -167,7 +167,7 @@ export default function AboutPage() {
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              Founded as Kenya's premier climate innovation hub, KCIC has become 
+              Founded as Kenya&apos;s premier climate innovation hub, KCIC has become 
               the catalyst for transformative environmental solutions across East Africa. 
               We believe that innovation is the key to addressing climate challenges 
               while creating economic opportunities.
@@ -182,7 +182,7 @@ export default function AboutPage() {
             >
               Our comprehensive ecosystem supports entrepreneurs at every stage, 
               from early-stage ideation to market-ready solutions. Through strategic 
-              partnerships and targeted investments, we're building a sustainable 
+              partnerships and targeted investments, we&apos;re building a sustainable 
               future for Africa.
             </p>
           </div>
