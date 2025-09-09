@@ -2,6 +2,8 @@ import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalHeroSection } from "@/components/sections/MinimalHeroSection";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
+import Footer from "@/components/layout/Footer";
+import { homePageData } from "@/data/home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -161,16 +163,8 @@ export default function HomePage() {
         {/* Stats Section */}
         <MinimalStatsSection stats={statsData} />
 
-        {/* Simple Footer */}
-        <footer className="bg-gray-50 py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <p className="text-gray-600 text-sm">
-                © 2024 Kenya Climate Innovation Centre. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
+        {/* Footer */}
+        <Footer data={homePageData.footer} />
       </div>
     </>
   );
