@@ -2,13 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/themes/theme-provider";
-import { AccessibilityProvider } from "@/contexts/accessibility-context";
-import { Navbar } from "@/components/layout";
+// Removed global navbar - each page now uses MinimalNavbar
 import { skipLinkUtils, landmarkUtils } from "@/lib/accessibility";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
-import { AccessibilityPanel, AccessibilityButton } from "@/components/accessibility";
-import { SimpleAccessibilityButton } from "@/components/accessibility/simple-accessibility-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -191,7 +188,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased accessibility-enhanced`}
       >
-        <AccessibilityProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -205,19 +201,12 @@ export default function RootLayout({
               Skip to main content
             </a>
 
-            {/* Header landmark */}
-            <header {...landmarkUtils.getBannerProps()}>
-              <Navbar />
-            </header>
-
-            {/* Main content landmark */}
+            {/* Main content landmark - each page handles its own navigation */}
             <main {...landmarkUtils.getMainProps()}>
               {children}
             </main>
             
-            {/* Accessibility Controls */}
-            <AccessibilityButton />
-            <AccessibilityPanel />
+           
             
             {/* Performance monitoring (development only) */}
             <PerformanceMonitor />
@@ -225,7 +214,6 @@ export default function RootLayout({
             {/* Service worker registration (production only) */}
             <ServiceWorkerRegistration />
           </ThemeProvider>
-        </AccessibilityProvider>
       </body>
     </html>
   );
