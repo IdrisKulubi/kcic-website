@@ -32,7 +32,6 @@ export function PartnersSection({
   subtitle = "Collaborating with world-class organizations to accelerate climate innovation"
 }: PartnersSectionProps) {
   const { getMotionSafeClasses } = useAccessibilityClasses();
-  const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<'all' | string>('all');
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -45,8 +44,6 @@ export function PartnersSection({
     return acc;
   }, {} as Record<string, PartnerData[]>);
 
-  // Get featured partners
-  const featuredPartners = partners.filter(p => p.featured).slice(0, 8);
   
   // Filter partners by category
   const displayPartners = selectedCategory === 'all' 

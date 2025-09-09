@@ -2,9 +2,11 @@ import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalHeroSection } from "@/components/sections/MinimalHeroSection";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
+import { NewsSection } from "@/components/sections/NewsSection";
 import { PartnersSection, PartnerData } from "@/components/sections/PartnersSection";
 import Footer from "@/components/layout/Footer";
 import { homePageData } from "@/data/home";
+import { newsData } from "@/data/news";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -288,6 +290,9 @@ export default function HomePage() {
           stats={statsData} 
           targets={targetsData}
         />
+
+        {/* News Section */}
+        <NewsSection news={newsData} />
 
         {/* Partners Section */}
         <PartnersSection partners={partnersData} />

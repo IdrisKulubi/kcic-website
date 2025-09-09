@@ -1,0 +1,14 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#db2777;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg6)"/>
+  <circle cx="350" cy="280" r="40" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="450" cy="280" r="40" fill="rgba(255,255,255,0.2)"/>
+  <path d="M 350 320 Q 400 340 450 320" stroke="rgba(255,255,255,0.3)" stroke-width="3" fill="none"/>
+  <text x="400" y="380" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">WOMEN IN</text>
+  <text x="400" y="405" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">CLIMATE TECH</text>
+</svg>
