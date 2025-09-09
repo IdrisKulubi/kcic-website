@@ -30,24 +30,39 @@ const navData = {
 
 const mainStats = [
   {
-    value: '450',
-    suffix: '+',
-    label: 'SMEs Supported',
+    value: "450+",
+    description: "SMEs supported through our incubation and acceleration programs.",
   },
   {
-    value: '$25M',
-    suffix: '+',
-    label: 'Investment Mobilized',
+    value: "$25M+",
+    description: "Investment mobilized for climate-focused ventures.",
   },
   {
-    value: '2,500',
-    suffix: '+',
-    label: 'Jobs Created',
+    value: "2,500+",
+    description: "Green jobs created and supported in various sectors.",
   },
   {
-    value: '15',
-    suffix: '+',
-    label: 'Climate Solutions',
+    value: "15+",
+    description: "Innovative climate solutions deployed in the market.",
+  },
+];
+
+const targetStats = [
+  {
+    value: "1,000+",
+    description: "SMEs to be supported in our next phase of growth.",
+  },
+  {
+    value: "$50M+",
+    description: "To be mobilized to scale climate solutions.",
+  },
+  {
+    value: "5,000+",
+    description: "New green jobs to be created across the region.",
+  },
+  {
+    value: "30+",
+    description: "New climate technologies to be developed and launched.",
   },
 ];
 
@@ -152,7 +167,10 @@ export default function ImpactPage() {
       </section>
 
       {/* Main Stats */}
-      <MinimalStatsSection stats={mainStats} />
+      <MinimalStatsSection 
+        stats={mainStats} 
+        targets={targetStats}
+      />
 
       {/* Impact Areas */}
       <section className="py-20 bg-gray-50">
