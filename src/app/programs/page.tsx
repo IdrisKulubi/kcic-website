@@ -1,5 +1,6 @@
 import React from 'react';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
+import { navData } from '@/lib/navigation';
 import { Metadata } from 'next';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
@@ -8,23 +9,6 @@ import { ArrowRight, Lightbulb, TrendingUp, Handshake, Award } from 'lucide-reac
 export const metadata: Metadata = {
   title: 'Programs - KCIC Climate Innovation Support',
   description: 'Discover KCIC\'s comprehensive programs supporting climate entrepreneurs from ideation to scale-up across Kenya and Africa.',
-};
-
-const navData = {
-  logo: {
-    src: '/images/kcic-logo.png',
-    alt: 'KCIC Logo',
-  },
-  navigation: [
-    { label: 'About', href: '/about' },
-    { label: 'Programs', href: '/programs' },
-    { label: 'Impact', href: '/impact' },
-    { label: 'Contact', href: '/contact' },
-  ],
-  ctaButton: {
-    text: 'Apply Now',
-    href: '/apply',
-  },
 };
 
 const programs = [

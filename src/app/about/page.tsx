@@ -3,29 +3,13 @@ import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { Metadata } from "next";
 import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
+import { navData } from "@/lib/navigation";
 import { ArrowRight, Target, Users, Globe } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About KCIC - Leading Climate Innovation in Kenya",
   description:
     "Learn about Kenya Climate Innovation Centre's mission to accelerate green growth and support climate entrepreneurs across Africa.",
-};
-
-const navData = {
-  logo: {
-    src: "/images/kcic-logo.png",
-    alt: "KCIC Logo",
-  },
-  navigation: [
-    { label: "About", href: "/about" },
-    { label: "Programs", href: "/programs" },
-    { label: "Impact", href: "/impact" },
-    { label: "Contact", href: "/contact" },
-  ],
-  ctaButton: {
-    text: "Apply Now",
-    href: "/apply",
-  },
 };
 
 export default function AboutPage() {

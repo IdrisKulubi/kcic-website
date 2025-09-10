@@ -1,5 +1,6 @@
 import React from 'react';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
+import { navData } from '@/lib/navigation';
 import { Metadata } from 'next';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
@@ -10,23 +11,6 @@ import { CheckCircle, Upload, ArrowRight } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Apply to KCIC Programs - Start Your Climate Innovation Journey',
   description: 'Apply to Kenya Climate Innovation Centre programs. Join 450+ climate entrepreneurs building sustainable solutions across Africa.',
-};
-
-const navData = {
-  logo: {
-    src: '/images/kcic-logo.png',
-    alt: 'KCIC Logo',
-  },
-  navigation: [
-    { label: 'About', href: '/about' },
-    { label: 'Programs', href: '/programs' },
-    { label: 'Impact', href: '/impact' },
-    { label: 'Contact', href: '/contact' },
-  ],
-  ctaButton: {
-    text: 'Apply Now',
-    href: '/apply',
-  },
 };
 
 const applicationSteps = [
