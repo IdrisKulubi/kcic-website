@@ -1,4 +1,4 @@
-// Shared navigation data for all pages
+// Shared navigation data for all pages - Updated based on client feedback
 export const navData = {
   logo: {
     src: "/images/kcic-logo.png",
@@ -6,26 +6,26 @@ export const navData = {
   },
   navigation: [
     { 
-      label: "About", 
+      label: "About Us", 
       href: "/about",
       subItems: [
         { 
-          label: "About Us", 
-          href: "/about", 
+          label: "Who we are", 
+          href: "/about/who-we-are", 
           description: "Learn about our mission, vision, and impact in climate innovation",
           icon: "Building2"
         },
         { 
-          label: "Our Team", 
-          href: "/about/staff", 
+          label: "Our team", 
+          href: "/about/our-team", 
           description: "Meet the dedicated professionals driving climate solutions",
           icon: "Users"
         },
         { 
-          label: "Board of Directors", 
-          href: "/about/board", 
-          description: "Leadership and governance guiding our strategic direction",
-          icon: "Target"
+          label: "Policies and disclosures", 
+          href: "/about/policies-disclosures", 
+          description: "Transparency in governance and operational policies",
+          icon: "Shield"
         },
         { 
           label: "Procurement", 
@@ -33,38 +33,95 @@ export const navData = {
           description: "Transparent procurement policies and supplier opportunities",
           icon: "FileText"
         },
+        { 
+          label: "Careers", 
+          href: "/about/careers", 
+          description: "Join our team and help drive climate innovation",
+          icon: "Briefcase"
+        },
+        { 
+          label: "Contact us", 
+          href: "/about/contact-us", 
+          description: "Get in touch with our team",
+          icon: "Phone"
+        },
       ]
     },
     { 
-      label: "Programs", 
-      href: "/programs",
+      label: "How we work", 
+      href: "/how-we-work",
       subItems: [
         {
-          label: "Incubation Program",
-          href: "/programs/incubation",
-          description: "Early-stage support for climate innovation startups",
+          label: "Focus sectors",
+          href: "/how-we-work/focus-sectors",
+          description: "Key climate sectors we support and develop",
+          icon: "Target"
+        },
+        {
+          label: "Our Programmes", 
+          href: "/how-we-work/programmes",
+          description: "Comprehensive programs for climate entrepreneurs",
           icon: "Lightbulb"
         },
         {
-          label: "Acceleration Program", 
-          href: "/programs/acceleration",
-          description: "Scale-up support for growing climate ventures",
-          icon: "Target"
+          label: "Cross-Cutting Issues", 
+          href: "/how-we-work/cross-cutting-issues",
+          description: "Addressing systemic challenges across sectors",
+          icon: "Network"
         }
       ]
     },
-    { label: "Impact", href: "/impact" },
     { 
-      label: "Contact", 
-      href: "/contact",
+      label: "Impact", 
+      href: "/impact",
       subItems: [
         {
-          label: "Get in Touch",
-          href: "/contact",
-          description: "Reach out to our team for partnerships and inquiries",
-          icon: "Phone"
+          label: "Stories",
+          href: "/impact/stories",
+          description: "Success stories from our supported ventures",
+          icon: "BookOpen"
+        },
+        {
+          label: "Our Impact", 
+          href: "/impact/our-impact",
+          description: "Measurable outcomes and achievements",
+          icon: "TrendingUp"
         }
       ]
+    },
+    { 
+      label: "Newsroom", 
+      href: "/newsroom",
+      subItems: [
+        {
+          label: "Publications",
+          href: "/newsroom/publications",
+          description: "Research reports and industry insights",
+          icon: "FileText"
+        },
+        {
+          label: "Events",
+          href: "/newsroom/events",
+          description: "Upcoming and past events, conferences, and workshops",
+          icon: "Calendar"
+        },
+        {
+          label: "Press Release",
+          href: "/newsroom/press-release",
+          description: "Latest press releases and media coverage",
+          icon: "Megaphone"
+        },
+        {
+          label: "Fact sheets",
+          href: "/newsroom/fact-sheets",
+          description: "Key facts and figures about our work",
+          icon: "ClipboardList"
+        }
+      ]
+    },
+    { 
+      label: "FAQs", 
+      href: "/faqs"
     },
   ],
   ctaButton: {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, ChevronDown, Users, Building2, FileText, Target, Phone, Lightbulb } from 'lucide-react';
+import { Menu, X, ChevronDown, Users, Building2, FileText, Target, Phone, Lightbulb, Shield, Briefcase, Network, BookOpen, TrendingUp, Calendar, Megaphone, ClipboardList } from 'lucide-react';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,6 +41,14 @@ const iconMap = {
   Target,
   Phone,
   Lightbulb,
+  Shield,
+  Briefcase,
+  Network,
+  BookOpen,
+  TrendingUp,
+  Calendar,
+  Megaphone,
+  ClipboardList,
 };
 
 export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
