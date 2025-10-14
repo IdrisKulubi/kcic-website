@@ -1,14 +1,9 @@
+'use client';
+
 import React from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
-import { Users, Mail, Linkedin, Twitter, Phone, Award, MapPin, Calendar, Briefcase } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Our Team - About KCIC',
-  description: 'Meet the dedicated professionals, advisors, and leadership team driving climate innovation at KCIC. Our diverse team brings together expertise in entrepreneurship, technology, and sustainable development.',
-  keywords: ['KCIC team', 'climate innovation experts', 'leadership team', 'advisors', 'staff'],
-};
+import { Mail, Linkedin, Twitter, Award, Briefcase, Users } from 'lucide-react';
 
 // Sample team data - will be replaced with real data later
 const leadership = [
@@ -79,7 +74,7 @@ const staff = [
     name: 'James Kiprotich',
     position: 'Investment Manager',
     department: 'Finance & Investment',
-    bio: 'James manages KCIC\'s investment facilitation programs and maintains relationships with investor networks across Africa and internationally.',
+    bio: 'James manages KCIC&apos;s investment facilitation programs and maintains relationships with investor networks across Africa and internationally.',
     experience: '8+ years',
     education: 'MBA Finance, Strathmore Business School',
     image: '/images/team/james-kiprotich.jpg',
@@ -112,7 +107,7 @@ const staff = [
     name: 'Sarah Kimani',
     position: 'Communications Manager',
     department: 'Communications',
-    bio: 'Sarah manages KCIC\'s communications strategy, media relations, and stakeholder engagement initiatives.',
+    bio: 'Sarah manages KCIC&apos;s communications strategy, media relations, and stakeholder engagement initiatives.',
     experience: '6+ years',
     education: 'BA Communications, University of Nairobi',
     image: '/images/team/sarah-kimani.jpg',
@@ -123,7 +118,7 @@ const staff = [
     name: 'David Mwangi',
     position: 'Program Coordinator',
     department: 'Programs',
-    bio: 'David coordinates KCIC\'s incubation and acceleration programs, ensuring smooth operations and participant success.',
+    bio: 'David coordinates KCIC&apos;s incubation and acceleration programs, ensuring smooth operations and participant success.',
     experience: '5+ years',
     education: 'MSc Project Management, Kenyatta University',
     image: '/images/team/david-mwangi.jpg',
@@ -134,7 +129,7 @@ const staff = [
     name: 'Anne Waithira',
     position: 'Research Analyst',
     department: 'Research & Policy',
-    bio: 'Anne conducts market research, policy analysis, and impact assessment studies to inform KCIC\'s strategic direction.',
+    bio: 'Anne conducts market research, policy analysis, and impact assessment studies to inform KCIC&apos;s strategic direction.',
     experience: '4+ years',
     education: 'MSc Economics, University of Nairobi',
     image: '/images/team/anne-waithira.jpg',
@@ -171,8 +166,6 @@ const advisors = [
     image: '/images/team/wanjira-mathai.jpg'
   }
 ];
-
-const departments = ['All', 'Finance & Investment', 'Programs', 'Technical Support', 'Communications', 'Research & Policy'];
 
 export default function OurTeamPage() {
   return (
@@ -448,7 +441,7 @@ export default function OurTeamPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Join Our Team</h2>
               <p className="text-xl text-gray-600 mb-8">
                 Are you passionate about climate innovation and sustainable development? 
-                We're always looking for talented individuals to join our mission.
+                We&apos;re always looking for talented individuals to join our mission.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a

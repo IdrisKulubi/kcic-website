@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, Award, ArrowRight, Filter, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { Users, Award, ArrowRight, MapPin, Calendar, ExternalLink } from 'lucide-react';
 
 const stories = [
   {
@@ -264,7 +263,7 @@ export default function StoriesPage() {
                   {/* Quote */}
                   <div className="bg-green-50 rounded-lg p-4 mb-6">
                     <p className="text-green-800 italic text-sm leading-relaxed">
-                      "{story.quote}"
+                      &quot;{story.quote}&quot;
                     </p>
                     <p className="text-green-600 text-xs font-medium mt-2">- {story.founder}</p>
                   </div>

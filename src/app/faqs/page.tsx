@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, Search, MessageCircleQuestion } from 'lucide-react';
 
@@ -265,7 +264,7 @@ export default function FAQsPage() {
           >
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Still have questions?</h3>
             <p className="text-lg text-gray-600 mb-6">
-              Can't find the answer you're looking for? Our team is here to help.
+              Can&apos;t find the answer you&apos;re looking for? Our team is here to help.
             </p>
             <a
               href="/about/contact-us"

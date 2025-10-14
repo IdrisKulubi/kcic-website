@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
-import { Calendar, ExternalLink, Download, Filter, Search, Megaphone, Users, Award, TrendingUp, Eye } from 'lucide-react';
+import { Calendar, ExternalLink, Download, Search, Megaphone, Eye } from 'lucide-react';
 
 // Sample press release data - will be replaced with real data later
 const pressReleases = [

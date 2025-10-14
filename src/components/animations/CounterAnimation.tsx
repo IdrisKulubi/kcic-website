@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useSpring, useTransform, animate } from "framer-motion";
+import { motion, useMotionValue, animate, useSpring, useInView } from 'framer-motion';
 import { useEffect, useRef, useState, CSSProperties } from "react";
 import { ANIMATION_CONFIG } from "@/lib/animations";
 import { motionUtils, screenReaderUtils } from "@/lib/accessibility";
@@ -56,11 +56,11 @@ export default function CounterAnimation({
     stiffness: motionUtils.isLowPerformanceDevice() ? 100 : 50,
   });
   
-  // Transform with morphing effect
-  const displayed = useTransform(springValue, (latest) => {
-    const rounded = Math.round(latest);
-    return rounded.toLocaleString();
-  });
+  // Transform with morphing effect - unused but kept for future use
+  // const displayed = useTransform(springValue, (latest) => {
+  //   const rounded = Math.round(latest);
+  //   return rounded.toLocaleString();
+  // });
 
   // Enhanced animation with visual feedback
   useEffect(() => {

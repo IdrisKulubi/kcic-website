@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Accessibility } from 'lucide-react';
 
 export function SimpleAccessibilityButton() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible] = useState(true);
 
   const handleClick = () => {
     alert('Accessibility button clicked! The full panel will be available once the context is working.');

@@ -178,13 +178,13 @@ export const animationTesting = {
    */
   testAnimationSmoothness: (element: HTMLElement, duration: number = 1000): Promise<boolean> => {
     return new Promise((resolve) => {
-      let frameCount = 0;
+      // let frameCount = 0;
       const startTime = performance.now();
       let lastFrameTime = startTime;
       let droppedFrames = 0;
       
       const testAnimation = (currentTime: number) => {
-        frameCount++;
+        // frameCount++;
         
         // Check for dropped frames (> 16.67ms between frames for 60fps)
         if (currentTime - lastFrameTime > 20) {

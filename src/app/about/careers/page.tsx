@@ -2,10 +2,9 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
 import { 
-  Users, MapPin, Clock, Briefcase, Heart, Award, 
+  Users, MapPin, Briefcase, Heart, Award, 
   TrendingUp, Globe, Coffee, Laptop, Zap, Search,
   ArrowRight, ExternalLink, Mail, Calendar
 } from 'lucide-react';
@@ -217,7 +216,7 @@ export default function CareersPage() {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Why Work With Us?</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
-              Join a team that's passionate about creating positive change through climate innovation. 
+              Join a team that&apos;s passionate about creating positive change through climate innovation.
               We offer a dynamic, supportive environment where your work directly impacts communities across Africa.
             </p>
 

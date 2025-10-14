@@ -93,7 +93,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
         <div 
           className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-800')}`}
         >
-          {data.ctaButtons.map((button, index) => (
+          {data.ctaButtons.map((button) => (
             <Button
               key={button.text}
               size="lg"

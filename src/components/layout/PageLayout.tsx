@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { MinimalNavbar } from './MinimalNavbar';
 import Footer from './Footer';
 import { navData } from '@/lib/navigation';
@@ -43,9 +44,9 @@ export function PageLayout({
             >
               <ol className="flex items-center space-x-2 text-sm text-gray-600">
                 <li>
-                  <a href="/" className="hover:text-green-600 transition-colors duration-200">
+                  <Link href="/" className="hover:text-green-600 transition-colors duration-200">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 {breadcrumb.map((item, index) => (
                   <React.Fragment key={index}>
@@ -63,12 +64,12 @@ export function PageLayout({
                         />
                       </svg>
                       {item.href ? (
-                        <a 
+                        <Link 
                           href={item.href} 
                           className="hover:text-green-600 transition-colors duration-200"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       ) : (
                         <span className="text-gray-900 font-medium">{item.label}</span>
                       )}

@@ -1,14 +1,9 @@
+'use client';
+
 import React from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
 import { Lightbulb, Target, Users, TrendingUp, Clock, Award, ArrowRight, CheckCircle } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Our Programmes - How we work | KCIC',
-  description: 'Discover KCIC\'s comprehensive programmes supporting climate entrepreneurs from ideation to market success through incubation, acceleration, and specialized support.',
-  keywords: ['KCIC programmes', 'climate incubation', 'startup acceleration', 'climate entrepreneurship', 'business development'],
-};
 
 const programmes = [
   {
@@ -314,7 +309,7 @@ export default function ProgrammesPage() {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Application Process</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Ready to join our programme? Here's how to get started.
+              Ready to join our programme? Here&apos;s how to get started.
               </p>
             </motion.div>
 

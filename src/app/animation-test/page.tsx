@@ -23,7 +23,7 @@ import {
 export default function AnimationTestPage() {
   const [isClient, setIsClient] = useState(false);
   const [animationPreferences, setAnimationPreferences] = useState(animationRefinement.getPreferences());
-  const [, setTestResults] = useState<Record<string, unknown> | null>(null);
+  // const [, setTestResults] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     setIsClient(true);

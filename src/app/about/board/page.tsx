@@ -76,7 +76,7 @@ export default function BoardPage() {
               <div className="w-24 h-24 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-green-600 text-2xl font-bold">GN</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Grace Nyong'o</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Grace Nyong&apos;o</h3>
               <p className="text-green-600 font-medium mb-3">Board Member</p>
               <p className="text-gray-600 text-sm">
                 Social entrepreneur and advocate for women in climate innovation with 15+ years in sustainable development.

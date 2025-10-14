@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
-import { Download, Calendar, Eye, Filter, FileText, BarChart3, BookOpen, Users } from 'lucide-react';
+import { Download, Calendar, FileText, Eye, BookOpen } from 'lucide-react';
 
 const publications = [
   {

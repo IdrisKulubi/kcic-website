@@ -453,7 +453,7 @@ export type Animations = typeof animations;
 export type Effects = typeof effects;
 
 // Default export for convenience
-export default {
+const designSystem = {
   colors,
   typography,
   spacing,
@@ -464,3 +464,5 @@ export default {
   variants,
   colorUtils,
 };
+
+export default designSystem;

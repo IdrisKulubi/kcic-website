@@ -1,14 +1,9 @@
+'use client';
+
 import React from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
 import { Target, Eye, Heart, Award, Globe, Users } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Who we are - About KCIC',
-  description: 'Learn about Kenya Climate Innovation Centre\'s mission, vision, and our commitment to driving climate solutions across Kenya and Africa.',
-  keywords: ['KCIC mission', 'climate innovation Kenya', 'who we are', 'about us', 'vision mission'],
-};
 
 const values = [
   {
@@ -112,19 +107,19 @@ export default function WhoWeArePage() {
               <div className="max-w-4xl mx-auto">
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
                   Established in 2010, the Kenya Climate Innovation Centre (KCIC) was born from 
-                  the recognition that Kenya's greatest climate challenges could become its greatest 
+                  the recognition that Kenya&apos;s greatest climate challenges could become its greatest
                   opportunities for innovation and economic growth.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
                   Over the past decade, we have evolved from a pioneering initiative to a cornerstone 
-                  of Kenya's climate innovation ecosystem. Through strategic partnerships with 
+                  of Kenya&apos;s climate innovation ecosystem. Through strategic partnerships with
                   international donors, government institutions, and private sector leaders, we have 
                   created a comprehensive support system for climate entrepreneurs.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Today, KCIC stands as a testament to what's possible when innovation meets 
+                  Today, KCIC stands as a testament to what&apos;s possible when innovation meets
                   determination. With over 450 SMEs supported, $25M+ in investment mobilized, 
-                  and 2,500+ green jobs created, we continue to drive Kenya's transition to 
+                  and 2,500+ green jobs created, we continue to drive Kenya&apos;s transition to
                   a sustainable, climate-resilient future.
                 </p>
               </div>

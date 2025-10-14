@@ -14,7 +14,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ data }: HeroSectionProps) {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [, setIsVideoLoaded] = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

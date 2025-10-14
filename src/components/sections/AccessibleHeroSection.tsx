@@ -20,7 +20,7 @@ interface AccessibleHeroSectionProps {
 }
 
 export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [, setIsVideoLoaded] = useState(false);
   const { 
     getInteractiveClasses, 
     getImageClasses, 

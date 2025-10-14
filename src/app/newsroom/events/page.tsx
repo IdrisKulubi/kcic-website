@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Users, Clock, ExternalLink, ArrowRight, Filter, Search, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, ExternalLink, Search, ChevronRight } from 'lucide-react';
 
 // Sample event data - will be replaced with real data later
 const upcomingEvents = [
@@ -122,7 +121,7 @@ export default function EventsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
 
-  const filterEvents = (events: any[]) => {
+  const filterEvents = (events: typeof upcomingEvents | typeof pastEvents) => {
     return events.filter(event => {
       const matchesType = selectedType === 'All' || event.type === selectedType;
       const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;
@@ -218,12 +217,14 @@ export default function EventsPage() {
                       >
                         View Details
                       </button>
-                      <a
-                        href={event.registration}
-                        className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 text-center"
-                      >
-                        Register Now
-                      </a>
+                      {'registration' in event && (
+                        <a
+                          href={event.registration}
+                          className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 text-center"
+                        >
+                          Register Now
+                        </a>
+                      )}
                     </div>
 
                     {/* Expanded Details */}
@@ -235,24 +236,32 @@ export default function EventsPage() {
                         transition={{ duration: 0.3 }}
                         className="mt-6 pt-6 border-t border-gray-200"
                       >
-                        <h4 className="font-semibold text-gray-900 mb-3">Agenda</h4>
-                        <div className="space-y-2 mb-4">
-                          {event.agenda.map((item, i) => (
-                            <div key={i} className="flex items-center text-sm">
-                              <span className="font-medium text-green-600 w-16">{item.time}</span>
-                              <span className="text-gray-700">{item.activity}</span>
+                        {'agenda' in event && (
+                          <>
+                            <h4 className="font-semibold text-gray-900 mb-3">Agenda</h4>
+                            <div className="space-y-2 mb-4">
+                              {event.agenda.map((item, i) => (
+                                <div key={i} className="flex items-center text-sm">
+                                  <span className="font-medium text-green-600 w-16">{item.time}</span>
+                                  <span className="text-gray-700">{item.activity}</span>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
+                          </>
+                        )}
 
-                        <h4 className="font-semibold text-gray-900 mb-2">Speakers</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {event.speakers.map((speaker, i) => (
-                            <span key={i} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded">
-                              {speaker}
-                            </span>
-                          ))}
-                        </div>
+                        {'speakers' in event && (
+                          <>
+                            <h4 className="font-semibold text-gray-900 mb-2">Speakers</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {event.speakers.map((speaker, i) => (
+                                <span key={i} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded">
+                                  {speaker}
+                                </span>
+                              ))}
+                            </div>
+                          </>
+                        )}
                       </motion.div>
                     )}
                   </div>
@@ -380,8 +389,12 @@ export default function EventsPage() {
                     <div className="flex items-center text-xs text-gray-500 mb-2">
                       <Calendar className="w-3 h-3 mr-1" />
                       {new Date(event.date).toLocaleDateString()}
-                      <Clock className="w-3 h-3 ml-3 mr-1" />
-                      {event.time}
+                      {'time' in event && (
+                        <>
+                          <Clock className="w-3 h-3 ml-3 mr-1" />
+                          {event.time}
+                        </>
+                      )}
                     </div>
 
                     <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
@@ -407,13 +420,19 @@ export default function EventsPage() {
                       </div>
                     </div>
 
-                    <a
-                      href={event.registration}
-                      className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center text-sm"
-                    >
-                      Register Now
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
+                    {'registration' in event ? (
+                      <a
+                        href={event.registration}
+                        className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center text-sm"
+                      >
+                        Register Now
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </a>
+                    ) : (
+                      <div className="w-full bg-gray-200 text-gray-500 py-2 rounded-lg font-semibold text-sm flex items-center justify-center">
+                        Event Ended
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -465,17 +484,19 @@ export default function EventsPage() {
                         </div>
                       </div>
 
-                      <div className="mb-4">
-                        <h4 className="font-semibold text-gray-900 mb-2">Event Outcomes</h4>
-                        <ul className="space-y-1">
-                          {event.outcomes.map((outcome, i) => (
-                            <li key={i} className="flex items-center text-sm text-gray-600">
-                              <ChevronRight className="w-4 h-4 mr-2 text-green-600" />
-                              {outcome}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {'outcomes' in event && (
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-gray-900 mb-2">Event Outcomes</h4>
+                          <ul className="space-y-1">
+                            {event.outcomes.map((outcome, i) => (
+                              <li key={i} className="flex items-center text-sm text-gray-600">
+                                <ChevronRight className="w-4 h-4 mr-2 text-green-600" />
+                                {outcome}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
                       <button className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200 text-sm font-medium">
                         View Event Gallery
