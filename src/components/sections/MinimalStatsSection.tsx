@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface StatItem {
   value: string;
@@ -21,6 +23,32 @@ interface MinimalStatsSectionProps {
 
 export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps) {
   const { getMotionSafeClasses } = useAccessibilityClasses();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.fromTo(
+      sectionRef.current,
+      { opacity: 0, x: -120 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 90%',
+          end: 'top 70%',
+          once: true,
+          toggleActions: 'play none none none',
+          invalidateOnRefresh: true,
+        },
+      }
+    );
+    ScrollTrigger.refresh();
+  }, []);
 
   const renderStats = (data: StatItem[]) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -61,6 +89,7 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
   return (
     <section 
       id="impact-section"
+      ref={sectionRef}
       className="py-20 sm:py-32 bg-gray-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
