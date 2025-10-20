@@ -8,6 +8,7 @@ import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 interface SubNavItem {
   label: string;
@@ -224,6 +225,11 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
               ))}
             </div>
 
+            {/* Language Switcher */}
+            <div className="hidden md:block">
+              <LanguageSwitcher variant="compact" />
+            </div>
+
             {/* Desktop CTA Button */}
             <div className="hidden md:block">
               <Button
@@ -392,6 +398,11 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         )}
                       </motion.div>
                     ))}
+                  </div>
+                  
+                  {/* Mobile Language Switcher */}
+                  <div className="mt-6 px-6 pt-6 border-t border-gray-100">
+                    <LanguageSwitcher variant="mobile" />
                   </div>
                 </div>
 

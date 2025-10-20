@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "programs": "Programs", 
+    "impact": "Impact",
+    "newsroom": "Newsroom",
+    "contact": "Contact",
+    "apply": "Apply Now",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "hero": {
+    "title": "Empowering Climate Innovation in Kenya",
+    "subtitle": "Building a Sustainable Future",
+    "description": "We accelerate green growth through innovative climate solutions, supporting SMEs and creating lasting environmental impact across Africa.",
+    "stats": "Supporting 450+ SMEs • $25M+ Investment • 2500+ Jobs Created",
+    "cta": {
+      "programs": "Join Our Programs",
+      "learn": "Learn More"
+    }
+  },
+  "stats": {
+    "smes": "SMEs supported through our incubation and acceleration programs",
+    "investment": "Investment mobilized for climate-focused ventures", 
+    "jobs": "Green jobs created and supported in various sectors",
+    "solutions": "Innovative climate solutions deployed in the market"
+  },
+  "footer": {
+    "description": "Empowering climate innovation across Kenya and Africa",
+    "quickLinks": "Quick Links",
+    "programs": "Programs", 
+    "contact": "Contact Info",
+    "social": "Follow Us",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Try Again",
+    "readMore": "Read More",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "skipContent": "Skip to main content"
+  }
+}

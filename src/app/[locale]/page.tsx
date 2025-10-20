@@ -2,14 +2,12 @@
 
 import dynamic from 'next/dynamic';
 
-// Disable SSR for the HomePage component to avoid hydration issues
-const HomePage = dynamic(() => import('../components/HomePage'), {
+// Reuse the same HomePage used at the root, with SSR disabled for consistency
+const HomePage = dynamic(() => import('../../components/HomePage'), {
   ssr: false,
   loading: () => (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="text-lg font-medium text-gray-600">
-        Loading...
-      </div>
+      <div className="text-lg font-medium text-gray-600">Loading...</div>
     </div>
   )
 });

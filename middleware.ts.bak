@@ -1,0 +1,35 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Skip middleware for api routes and static files
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/images') ||
+    pathname.startsWith('/icons') ||
+    pathname.includes('.')
+  ) {
+    return;
+  }
+
+  // Handle French locale routes - redirect /fr and /fr/* to home for now
+  if (pathname === '/fr' || pathname.startsWith('/fr/')) {
+    // For now, redirect French users to the home page with a locale parameter
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    url.searchParams.set('locale', 'fr');
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    // Skip all internal paths (_next, api, images, etc.)
+    '/((?!api|_next/static|_next/image|images|favicon.ico|robots.txt|manifest.json|sw.js).*)',
+  ],
+};

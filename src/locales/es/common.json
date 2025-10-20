@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "programs": "Programas",
+    "impact": "Impacto",
+    "newsroom": "Sala de Prensa",
+    "contact": "Contacto",
+    "apply": "Aplicar Ahora",
+    "menu": "Menú",
+    "close": "Cerrar"
+  },
+  "hero": {
+    "title": "Potenciando la Innovación Climática en Kenia",
+    "subtitle": "Construyendo un Futuro Sostenible",
+    "description": "Aceleramos el crecimiento verde a través de soluciones climáticas innovadoras, apoyando a las PYME y creando un impacto ambiental duradero en toda África.",
+    "stats": "Apoyando 450+ PYME • $25M+ de Inversión • 2500+ Empleos Creados",
+    "cta": {
+      "programs": "Únete a Nuestros Programas",
+      "learn": "Saber Más"
+    }
+  },
+  "stats": {
+    "smes": "PYME apoyadas a través de nuestros programas de incubación y aceleración",
+    "investment": "Inversión movilizada para empresas enfocadas en el clima",
+    "jobs": "Empleos verdes creados y apoyados en varios sectores",
+    "solutions": "Soluciones climáticas innovadoras implementadas en el mercado"
+  },
+  "footer": {
+    "description": "Potenciando la innovación climática en Kenia y África",
+    "quickLinks": "Enlaces Rápidos",
+    "programs": "Programas",
+    "contact": "Información de Contacto",
+    "social": "Síguenos",
+    "rights": "Todos los derechos reservados"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "retry": "Intentar de Nuevo",
+    "readMore": "Leer Más",
+    "learnMore": "Saber Más",
+    "getStarted": "Comenzar",
+    "skipContent": "Ir al contenido principal"
+  }
+}

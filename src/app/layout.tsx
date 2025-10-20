@@ -93,8 +93,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://kenyacic.org",
     languages: {
-      'en-US': 'https://kenyacic.org',
-      'sw-KE': 'https://kenyacic.org/sw',
+      'en': 'https://kenyacic.org',
+      'fr': 'https://kenyacic.org/fr',
     },
   },
   category: 'Climate Innovation',
