@@ -6,120 +6,135 @@ import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
 import { navData } from "@/lib/navigation";
 import { ArrowRight, Leaf, Users, DollarSign, Building } from "lucide-react";
+import { getTranslations, LocaleCode } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Impact - KCIC Climate Innovation Results",
-  description:
-    "See the measurable impact of KCIC's climate innovation programs: 450+ SMEs supported, $25M+ investment mobilized, 2,500+ jobs created.",
-};
+export async function generateMetadata({ params }: { params: { locale: LocaleCode } }): Promise<Metadata> {
+  const translations = await getTranslations(params.locale, 'pages');
+  
+  return {
+    title: (translations.impact as any)?.meta?.title || 'Impact - KCIC',
+    description: (translations.impact as any)?.meta?.description || 'KCIC Impact',
+  };
+}
 
-const mainStats = [
-  {
-    value: "450+",
-    description:
-      "SMEs supported through our incubation and acceleration programs.",
-  },
-  {
-    value: "$25M+",
-    description: "Investment mobilized for climate-focused ventures.",
-  },
-  {
-    value: "2,500+",
-    description: "Green jobs created and supported in various sectors.",
-  },
-  {
-    value: "15+",
-    description: "Innovative climate solutions deployed in the market.",
-  },
-];
+export default async function ImpactPage({ params }: { params: { locale: LocaleCode } }) {
+  const commonTranslations = await getTranslations(params.locale, 'common');
+  const pagesTranslations = await getTranslations(params.locale, 'pages');
+  const translations = { ...commonTranslations, pages: pagesTranslations };
+  
+  const t = (key: string) => {
+    const keys = key.split('.');
+    let value: any = translations;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || key;
+  };
 
-const targetStats = [
-  {
-    value: "1,000+",
-    description: "SMEs to be supported in our next phase of growth.",
-  },
-  {
-    value: "$50M+",
-    description: "To be mobilized to scale climate solutions.",
-  },
-  {
-    value: "5,000+",
-    description: "New green jobs to be created across the region.",
-  },
-  {
-    value: "30+",
-    description: "New climate technologies to be developed and launched.",
-  },
-];
+  const mainStats = [
+    {
+      value: "450+",
+      description: t('pages.impact.mainStats.smes'),
+    },
+    {
+      value: "$25M+",
+      description: t('pages.impact.mainStats.investment'),
+    },
+    {
+      value: "2,500+",
+      description: t('pages.impact.mainStats.jobs'),
+    },
+    {
+      value: "15+",
+      description: t('pages.impact.mainStats.solutions'),
+    },
+  ];
 
-const impactAreas = [
-  {
-    icon: Leaf,
-    title: "Environmental Impact",
-    stats: [
-      { value: "2.5M", label: "Tons CO2 Reduced" },
-      { value: "500K", label: "People Reached" },
-      { value: "85%", label: "Renewable Energy" },
-    ],
-    color: colors.primary.green.DEFAULT,
-  },
-  {
-    icon: Users,
-    title: "Social Impact",
-    stats: [
-      { value: "2,500+", label: "Jobs Created" },
-      { value: "60%", label: "Women Entrepreneurs" },
-      { value: "25", label: "Counties Reached" },
-    ],
-    color: colors.primary.cyan.DEFAULT,
-  },
-  {
-    icon: DollarSign,
-    title: "Economic Impact",
-    stats: [
-      { value: "$25M+", label: "Investment Raised" },
-      { value: "$50M+", label: "Revenue Generated" },
-      { value: "3.2x", label: "ROI Average" },
-    ],
-    color: colors.primary.green.DEFAULT,
-  },
-  {
-    icon: Building,
-    title: "Innovation Impact",
-    stats: [
-      { value: "450+", label: "SMEs Supported" },
-      { value: "15+", label: "Sectors Covered" },
-      { value: "95%", label: "Success Rate" },
-    ],
-    color: colors.primary.cyan.DEFAULT,
-  },
-];
+  const targetStats = [
+    {
+      value: "1,000+",
+      description: t('pages.impact.targetStats.smes'),
+    },
+    {
+      value: "$50M+",
+      description: t('pages.impact.targetStats.investment'),
+    },
+    {
+      value: "5,000+",
+      description: t('pages.impact.targetStats.jobs'),
+    },
+    {
+      value: "30+",
+      description: t('pages.impact.targetStats.solutions'),
+    },
+  ];
 
-const successStories = [
-  {
-    company: "SolarTech Kenya",
-    sector: "Renewable Energy",
-    impact: "Providing clean energy to 50,000+ rural households",
-    funding: "$2.5M raised",
-    jobs: "150 jobs created",
-  },
-  {
-    company: "AgroClimate Solutions",
-    sector: "Climate-Smart Agriculture",
-    impact: "Supporting 10,000+ smallholder farmers",
-    funding: "$1.8M raised",
-    jobs: "200 jobs created",
-  },
-  {
-    company: "WaterTech Innovations",
-    sector: "Water Technology",
-    impact: "Clean water access for 25,000+ people",
-    funding: "$3.2M raised",
-    jobs: "120 jobs created",
-  },
-];
+  const impactAreas = [
+    {
+      icon: Leaf,
+      title: t('pages.impact.areas.environmental.title'),
+      stats: [
+        { value: "2.5M", label: t('pages.impact.areas.environmental.co2') },
+        { value: "500K", label: t('pages.impact.areas.environmental.people') },
+        { value: "85%", label: t('pages.impact.areas.environmental.renewable') },
+      ],
+      color: colors.primary.green.DEFAULT,
+    },
+    {
+      icon: Users,
+      title: t('pages.impact.areas.social.title'),
+      stats: [
+        { value: "2,500+", label: t('pages.impact.areas.social.jobs') },
+        { value: "60%", label: t('pages.impact.areas.social.women') },
+        { value: "25", label: t('pages.impact.areas.social.counties') },
+      ],
+      color: colors.primary.cyan.DEFAULT,
+    },
+    {
+      icon: DollarSign,
+      title: t('pages.impact.areas.economic.title'),
+      stats: [
+        { value: "$25M+", label: t('pages.impact.areas.economic.investment') },
+        { value: "$50M+", label: t('pages.impact.areas.economic.revenue') },
+        { value: "3.2x", label: t('pages.impact.areas.economic.roi') },
+      ],
+      color: colors.primary.green.DEFAULT,
+    },
+    {
+      icon: Building,
+      title: t('pages.impact.areas.innovation.title'),
+      stats: [
+        { value: "450+", label: t('pages.impact.areas.innovation.smes') },
+        { value: "15+", label: t('pages.impact.areas.innovation.sectors') },
+        { value: "95%", label: t('pages.impact.areas.innovation.success') },
+      ],
+      color: colors.primary.cyan.DEFAULT,
+    },
+  ];
 
-export default function ImpactPage() {
+  const successStories = [
+    {
+      company: t('pages.impact.stories.solartech.company'),
+      sector: t('pages.impact.stories.solartech.sector'),
+      impact: t('pages.impact.stories.solartech.impact'),
+      funding: t('pages.impact.stories.solartech.funding'),
+      jobs: t('pages.impact.stories.solartech.jobs'),
+    },
+    {
+      company: t('pages.impact.stories.agroclimate.company'),
+      sector: t('pages.impact.stories.agroclimate.sector'),
+      impact: t('pages.impact.stories.agroclimate.impact'),
+      funding: t('pages.impact.stories.agroclimate.funding'),
+      jobs: t('pages.impact.stories.agroclimate.jobs'),
+    },
+    {
+      company: t('pages.impact.stories.watertech.company'),
+      sector: t('pages.impact.stories.watertech.sector'),
+      impact: t('pages.impact.stories.watertech.impact'),
+      funding: t('pages.impact.stories.watertech.funding'),
+      jobs: t('pages.impact.stories.watertech.jobs'),
+    },
+  ];
   return (
     <div className="min-h-screen bg-white">
       <MinimalNavbar {...navData} />
@@ -136,7 +151,7 @@ export default function ImpactPage() {
               lineHeight: typography.lineHeights.tight,
             }}
           >
-            Measurable Climate Impact
+            {t('pages.impact.hero.title')}
           </h1>
           <p
             className="text-xl mb-12 max-w-3xl mx-auto"
@@ -146,9 +161,7 @@ export default function ImpactPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Real results from our climate innovation programs across Kenya and
-            Africa. See how we&apos;re driving sustainable change through
-            entrepreneurship.
+            {t('pages.impact.hero.description')}
           </p>
         </div>
       </section>
@@ -167,7 +180,7 @@ export default function ImpactPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Impact Across All Dimensions
+            {t('pages.impact.areas.title')}
           </h2>
 
           <div className="grid lg:grid-cols-2 gap-12">
@@ -234,7 +247,7 @@ export default function ImpactPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Success Stories
+            {t('pages.impact.stories.title')}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -271,13 +284,13 @@ export default function ImpactPage() {
 
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Funding:</span>
+                    <span className="text-sm text-gray-600">{t('pages.impact.stories.fundingLabel')}</span>
                     <span className="text-sm font-semibold">
                       {story.funding}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Jobs:</span>
+                    <span className="text-sm text-gray-600">{t('pages.impact.stories.jobsLabel')}</span>
                     <span className="text-sm font-semibold">{story.jobs}</span>
                   </div>
                 </div>
@@ -298,7 +311,7 @@ export default function ImpactPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Be Part of Our Impact Story
+            {t('pages.impact.cta.title')}
           </h2>
           <p
             className="text-lg mb-8 max-w-2xl mx-auto"
@@ -308,8 +321,7 @@ export default function ImpactPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Join hundreds of climate entrepreneurs who are creating measurable
-            environmental and social impact across Africa.
+            {t('pages.impact.cta.description')}
           </p>
 
           <Button
@@ -322,8 +334,8 @@ export default function ImpactPage() {
             }}
             asChild
           >
-            <a href="/programs" className="flex items-center space-x-2">
-              <span>Join Our Programs</span>
+            <a href={`/${params.locale}/programs`} className="flex items-center space-x-2">
+              <span>{t('pages.impact.cta.button')}</span>
               <ArrowRight className="h-5 w-5" />
             </a>
           </Button>
@@ -335,7 +347,7 @@ export default function ImpactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
+              {t('copyright')}
             </p>
           </div>
         </div>

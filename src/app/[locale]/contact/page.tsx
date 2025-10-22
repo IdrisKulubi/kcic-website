@@ -7,61 +7,77 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { navData } from "@/lib/navigation";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { getTranslations, LocaleCode } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Contact KCIC - Get in Touch with Our Team",
-  description:
-    "Contact Kenya Climate Innovation Centre. Reach out to learn about our programs, partnerships, or climate innovation opportunities.",
-};
+export async function generateMetadata({ params }: { params: { locale: LocaleCode } }): Promise<Metadata> {
+  const translations = await getTranslations(params.locale, 'pages');
+  
+  return {
+    title: (translations.contact as any)?.meta?.title || 'Contact - KCIC',
+    description: (translations.contact as any)?.meta?.description || 'Contact KCIC',
+  };
+}
 
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Visit Us",
-    details: [
-      "Kenya Climate Innovation Centre",
-      "Strathmore University Campus",
-      "Ole Sangale Road, Madaraka",
-      "Nairobi, Kenya",
-    ],
-    color: colors.primary.green.DEFAULT,
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    details: [
-      "+254 703 034 000",
-      "+254 703 034 001",
-      "Mon - Fri: 8:00 AM - 5:00 PM",
-      "EAT (UTC+3)",
-    ],
-    color: colors.primary.cyan.DEFAULT,
-  },
-  {
-    icon: Mail,
-    title: "Email Us",
-    details: [
-      "info@kenyacic.org",
-      "programs@kenyacic.org",
-      "partnerships@kenyacic.org",
-      "media@kenyacic.org",
-    ],
-    color: colors.primary.green.DEFAULT,
-  },
-  {
-    icon: Clock,
-    title: "Office Hours",
-    details: [
-      "Monday - Friday",
-      "8:00 AM - 5:00 PM",
-      "East Africa Time (EAT)",
-      "UTC+3",
-    ],
-    color: colors.primary.cyan.DEFAULT,
-  },
-];
+export default async function ContactPage({ params }: { params: { locale: LocaleCode } }) {
+  const commonTranslations = await getTranslations(params.locale, 'common');
+  const pagesTranslations = await getTranslations(params.locale, 'pages');
+  const translations = { ...commonTranslations, pages: pagesTranslations };
+  
+  const t = (key: string) => {
+    const keys = key.split('.');
+    let value: any = translations;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || key;
+  };
 
-export default function ContactPage() {
+  const contactInfo = [
+    {
+      icon: MapPin,
+      title: t('pages.contact.info.visit.title'),
+      details: [
+        t('pages.contact.info.visit.line1'),
+        t('pages.contact.info.visit.line2'),
+        t('pages.contact.info.visit.line3'),
+        t('pages.contact.info.visit.line4'),
+      ],
+      color: colors.primary.green.DEFAULT,
+    },
+    {
+      icon: Phone,
+      title: t('pages.contact.info.call.title'),
+      details: [
+        t('pages.contact.info.call.line1'),
+        t('pages.contact.info.call.line2'),
+        t('pages.contact.info.call.line3'),
+        t('pages.contact.info.call.line4'),
+      ],
+      color: colors.primary.cyan.DEFAULT,
+    },
+    {
+      icon: Mail,
+      title: t('pages.contact.info.email.title'),
+      details: [
+        t('pages.contact.info.email.line1'),
+        t('pages.contact.info.email.line2'),
+        t('pages.contact.info.email.line3'),
+        t('pages.contact.info.email.line4'),
+      ],
+      color: colors.primary.green.DEFAULT,
+    },
+    {
+      icon: Clock,
+      title: t('pages.contact.info.hours.title'),
+      details: [
+        t('pages.contact.info.hours.line1'),
+        t('pages.contact.info.hours.line2'),
+        t('pages.contact.info.hours.line3'),
+        t('pages.contact.info.hours.line4'),
+      ],
+      color: colors.primary.cyan.DEFAULT,
+    },
+  ];
   return (
     <div className="min-h-screen bg-white">
       <MinimalNavbar {...navData} />
@@ -78,7 +94,7 @@ export default function ContactPage() {
               lineHeight: typography.lineHeights.tight,
             }}
           >
-            Get in Touch
+            {t('pages.contact.hero.title')}
           </h1>
           <p
             className="text-xl mb-12 max-w-3xl mx-auto"
@@ -88,8 +104,7 @@ export default function ContactPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Ready to join Kenya&apos;s climate innovation ecosystem? We&apos;re
-            here to help you take the next step.
+            {t('pages.contact.hero.description')}
           </p>
         </div>
       </section>
@@ -108,26 +123,26 @@ export default function ContactPage() {
                   color: colors.secondary.gray[900],
                 }}
               >
-                Send Us a Message
+                {t('pages.contact.form.title')}
               </h2>
 
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      First Name
+                      {t('pages.contact.form.firstName')}
                     </label>
                     <Input
-                      placeholder="Your first name"
+                      placeholder={t('pages.contact.form.firstName')}
                       className="rounded-lg"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Last Name
+                      {t('pages.contact.form.lastName')}
                     </label>
                     <Input
-                      placeholder="Your last name"
+                      placeholder={t('pages.contact.form.lastName')}
                       className="rounded-lg"
                     />
                   </div>
@@ -135,44 +150,44 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Email Address
+                    {t('pages.contact.form.email')}
                   </label>
                   <Input
                     type="email"
-                    placeholder="your.email@example.com"
+                    placeholder={t('pages.contact.form.email')}
                     className="rounded-lg"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Organization
+                    {t('pages.contact.form.organization')}
                   </label>
                   <Input
-                    placeholder="Your organization (optional)"
+                    placeholder={t('pages.contact.form.organizationPlaceholder')}
                     className="rounded-lg"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Subject
+                    {t('pages.contact.form.subject')}
                   </label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>General Inquiry</option>
-                    <option>Program Application</option>
-                    <option>Partnership Opportunity</option>
-                    <option>Media & Press</option>
-                    <option>Technical Support</option>
+                    <option>{t('pages.contact.form.subjects.general')}</option>
+                    <option>{t('pages.contact.form.subjects.program')}</option>
+                    <option>{t('pages.contact.form.subjects.partnership')}</option>
+                    <option>{t('pages.contact.form.subjects.media')}</option>
+                    <option>{t('pages.contact.form.subjects.support')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Message
+                    {t('pages.contact.form.message')}
                   </label>
                   <Textarea
-                    placeholder="Tell us about your climate innovation or how we can help..."
+                    placeholder={t('pages.contact.form.messagePlaceholder')}
                     rows={6}
                     className="rounded-lg"
                   />
@@ -188,7 +203,7 @@ export default function ContactPage() {
                     border: "none",
                   }}
                 >
-                  Send Message
+                  {t('pages.contact.form.submit')}
                 </Button>
               </form>
             </div>
@@ -203,7 +218,7 @@ export default function ContactPage() {
                     className="bg-white rounded-2xl p-6 shadow-sm"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <IconComponent
                           className="h-6 w-6"
                           style={{ color: info.color }}
@@ -255,7 +270,7 @@ export default function ContactPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Find Us in Nairobi
+            {t('pages.contact.map.title')}
           </h2>
 
           {/* Placeholder for map - you would integrate with Google Maps or similar */}
@@ -272,7 +287,7 @@ export default function ContactPage() {
                   color: colors.secondary.gray[700],
                 }}
               >
-                Interactive Map Coming Soon
+                {t('pages.contact.map.placeholder')}
               </p>
               <p
                 className="text-sm mt-2"
@@ -281,7 +296,7 @@ export default function ContactPage() {
                   color: colors.secondary.gray[600],
                 }}
               >
-                Strathmore University Campus, Ole Sangale Road, Nairobi
+                {t('pages.contact.map.location')}
               </p>
             </div>
           </div>
@@ -299,7 +314,7 @@ export default function ContactPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Ready to Start Your Climate Journey?
+            {t('pages.contact.quickActions.title')}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -313,7 +328,7 @@ export default function ContactPage() {
               }}
               asChild
             >
-              <a href="/programs">Explore Our Programs</a>
+              <a href={`/${params.locale}/programs`}>{t('pages.contact.quickActions.programs')}</a>
             </Button>
 
             <Button
@@ -326,7 +341,7 @@ export default function ContactPage() {
               }}
               asChild
             >
-              <a href="/apply">Apply Now</a>
+              <a href={`/${params.locale}/apply`}>{t('pages.contact.quickActions.apply')}</a>
             </Button>
           </div>
         </div>
@@ -337,7 +352,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
+              {t('copyright')}
             </p>
           </div>
         </div>

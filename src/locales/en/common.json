@@ -1,46 +1,75 @@
 {
-  "navigation": {
-    "home": "Home",
-    "about": "About Us",
-    "programs": "Programs", 
-    "impact": "Impact",
-    "newsroom": "Newsroom",
-    "contact": "Contact",
-    "apply": "Apply Now",
-    "menu": "Menu",
-    "close": "Close"
-  },
-  "hero": {
-    "title": "Empowering Climate Innovation in Kenya",
-    "subtitle": "Building a Sustainable Future",
-    "description": "We accelerate green growth through innovative climate solutions, supporting SMEs and creating lasting environmental impact across Africa.",
-    "stats": "Supporting 450+ SMEs • $25M+ Investment • 2500+ Jobs Created",
-    "cta": {
-      "programs": "Join Our Programs",
-      "learn": "Learn More"
-    }
-  },
-  "stats": {
-    "smes": "SMEs supported through our incubation and acceleration programs",
-    "investment": "Investment mobilized for climate-focused ventures", 
-    "jobs": "Green jobs created and supported in various sectors",
-    "solutions": "Innovative climate solutions deployed in the market"
-  },
-  "footer": {
-    "description": "Empowering climate innovation across Kenya and Africa",
-    "quickLinks": "Quick Links",
-    "programs": "Programs", 
-    "contact": "Contact Info",
-    "social": "Follow Us",
-    "rights": "All rights reserved"
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "retry": "Try Again",
-    "readMore": "Read More",
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "finish": "Finish",
+    "confirm": "Confirm",
     "learnMore": "Learn More",
+    "readMore": "Read More",
     "getStarted": "Get Started",
-    "skipContent": "Skip to main content"
-  }
+    "apply": "Apply",
+    "download": "Download",
+    "upload": "Upload",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewAll": "View All",
+    "showMore": "Show More",
+    "showLess": "Show Less"
+  },
+  "status": {
+    "loading": "Loading...",
+    "success": "Success!",
+    "error": "An error occurred",
+    "warning": "Warning",
+    "info": "Information",
+    "pending": "Pending",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "messages": {
+    "noResults": "No results found",
+    "noData": "No data available",
+    "comingSoon": "Coming Soon",
+    "underConstruction": "Under Construction",
+    "pageNotFound": "Page Not Found",
+    "accessDenied": "Access Denied",
+    "sessionExpired": "Session Expired",
+    "tryAgain": "Please try again",
+    "contactSupport": "Contact Support"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleNavigation": "Toggle navigation",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "currentPage": "Current page",
+    "loading": "Loading content",
+    "externalLink": "Opens in new window"
+  },
+  "time": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "now": "Now",
+    "ago": "ago",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "weeks": "weeks",
+    "months": "months",
+    "years": "years"
+  },
+  "copyright": "© 2024 Kenya Climate Innovation Centre. All rights reserved."
 }

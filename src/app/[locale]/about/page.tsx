@@ -5,14 +5,38 @@ import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
 import { navData } from "@/lib/navigation";
 import { ArrowRight, Target, Users, Globe } from "lucide-react";
+import { getTranslations, LocaleCode } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "About KCIC - Leading Climate Innovation in Kenya",
-  description:
-    "Learn about Kenya Climate Innovation Centre's mission to accelerate green growth and support climate entrepreneurs across Africa.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: LocaleCode };
+}): Promise<Metadata> {
+  const translations = await getTranslations(params.locale, 'pages');
 
-export default function AboutPage() {
+  return {
+    title: (translations.about as any)?.meta?.title || 'About KCIC',
+    description: (translations.about as any)?.meta?.description || 'Learn about KCIC',
+  };
+}
+
+export default async function AboutPage({
+  params,
+}: {
+  params: { locale: LocaleCode };
+}) {
+  const commonTranslations = await getTranslations(params.locale, 'common');
+  const pagesTranslations = await getTranslations(params.locale, 'pages');
+  const translations = { ...commonTranslations, pages: pagesTranslations };
+  
+  const t = (key: string) => {
+    const keys = key.split(".");
+    let value: any = translations;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || key;
+  };
   return (
     <div className="min-h-screen bg-white">
       <MinimalNavbar {...navData} />
@@ -29,7 +53,7 @@ export default function AboutPage() {
               lineHeight: typography.lineHeights.tight,
             }}
           >
-            Accelerating Climate Innovation
+            {t("pages.about.hero.title")}
           </h1>
           <p
             className="text-xl mb-12 max-w-3xl mx-auto"
@@ -39,9 +63,7 @@ export default function AboutPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            We are Kenya&apos;s leading climate innovation center, empowering
-            entrepreneurs to build sustainable solutions that drive green growth
-            across Africa.
+            {t("pages.about.hero.description")}
           </p>
         </div>
       </section>
@@ -65,7 +87,7 @@ export default function AboutPage() {
                   color: colors.secondary.gray[900],
                 }}
               >
-                Our Mission
+                {t("pages.about.mission.title")}
               </h3>
               <p
                 style={{
@@ -74,9 +96,7 @@ export default function AboutPage() {
                   lineHeight: typography.lineHeights.relaxed,
                 }}
               >
-                To accelerate green growth by supporting climate entrepreneurs
-                and innovative solutions that create lasting environmental
-                impact.
+                {t("pages.about.mission.description")}
               </p>
             </div>
 
@@ -95,7 +115,7 @@ export default function AboutPage() {
                   color: colors.secondary.gray[900],
                 }}
               >
-                Our Approach
+                {t("pages.about.approach.title")}
               </h3>
               <p
                 style={{
@@ -104,9 +124,7 @@ export default function AboutPage() {
                   lineHeight: typography.lineHeights.relaxed,
                 }}
               >
-                We provide comprehensive support including funding, mentorship,
-                and market access to help climate innovations scale
-                successfully.
+                {t("pages.about.approach.description")}
               </p>
             </div>
 
@@ -125,7 +143,7 @@ export default function AboutPage() {
                   color: colors.secondary.gray[900],
                 }}
               >
-                Our Impact
+                {t("pages.about.impact.title")}
               </h3>
               <p
                 style={{
@@ -134,8 +152,7 @@ export default function AboutPage() {
                   lineHeight: typography.lineHeights.relaxed,
                 }}
               >
-                Supporting 450+ SMEs, mobilizing $25M+ in investment, and
-                creating 2,500+ jobs across the climate sector.
+                {t("pages.about.impact.description")}
               </p>
             </div>
           </div>
@@ -153,7 +170,7 @@ export default function AboutPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Building Africa&apos;s Climate Future
+            {t("pages.about.story.title")}
           </h2>
           <div className="space-y-8 text-left">
             <p
@@ -164,11 +181,7 @@ export default function AboutPage() {
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              Founded as Kenya&apos;s premier climate innovation hub, KCIC has
-              become the catalyst for transformative environmental solutions
-              across East Africa. We believe that innovation is the key to
-              addressing climate challenges while creating economic
-              opportunities.
+              {t("pages.about.story.paragraph1")}
             </p>
             <p
               className="text-lg"
@@ -178,10 +191,7 @@ export default function AboutPage() {
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              Our comprehensive ecosystem supports entrepreneurs at every stage,
-              from early-stage ideation to market-ready solutions. Through
-              strategic partnerships and targeted investments, we&apos;re
-              building a sustainable future for Africa.
+              {t("pages.about.story.paragraph2")}
             </p>
           </div>
 
@@ -196,8 +206,11 @@ export default function AboutPage() {
               }}
               asChild
             >
-              <a href="/programs" className="flex items-center space-x-2">
-                <span>Explore Our Programs</span>
+              <a
+                href={`/${params.locale}/programs`}
+                className="flex items-center space-x-2"
+              >
+                <span>{t("pages.about.cta")}</span>
                 <ArrowRight className="h-5 w-5" />
               </a>
             </Button>
@@ -209,9 +222,7 @@ export default function AboutPage() {
       <footer className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
-            </p>
+            <p className="text-gray-600 text-sm">{t("copyright")}</p>
           </div>
         </div>
       </footer>

@@ -1,46 +1,75 @@
 {
-  "navigation": {
-    "home": "Accueil",
-    "about": "À Propos",
-    "programs": "Programmes", 
-    "impact": "Impact",
-    "newsroom": "Actualités",
-    "contact": "Contact",
-    "apply": "Postuler Maintenant",
-    "menu": "Menu",
-    "close": "Fermer"
-  },
-  "hero": {
-    "title": "Autonomiser l'Innovation Climatique au Kenya",
-    "subtitle": "Construire un Avenir Durable",
-    "description": "Nous accélérons la croissance verte grâce à des solutions climatiques innovantes, en soutenant les PME et en créant un impact environnemental durable à travers l'Afrique.",
-    "stats": "Soutenir 450+ PME • 25M$+ d'Investissement • 2500+ Emplois Créés",
-    "cta": {
-      "programs": "Rejoindre Nos Programmes",
-      "learn": "En Savoir Plus"
-    }
-  },
-  "stats": {
-    "smes": "PME soutenues par nos programmes d'incubation et d'accélération",
-    "investment": "Investissement mobilisé pour les entreprises axées sur le climat", 
-    "jobs": "Emplois verts créés et soutenus dans divers secteurs",
-    "solutions": "Solutions climatiques innovantes déployées sur le marché"
-  },
-  "footer": {
-    "description": "Autonomiser l'innovation climatique à travers le Kenya et l'Afrique",
-    "quickLinks": "Liens Rapides",
-    "programs": "Programmes", 
-    "contact": "Informations de Contact",
-    "social": "Suivez-nous",
-    "rights": "Tous droits réservés"
-  },
-  "common": {
-    "loading": "Chargement...",
-    "error": "Une erreur s'est produite",
-    "retry": "Réessayer",
-    "readMore": "Lire Plus",
+  "buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "continue": "Continuer",
+    "finish": "Terminer",
+    "confirm": "Confirmer",
     "learnMore": "En Savoir Plus",
+    "readMore": "Lire Plus",
     "getStarted": "Commencer",
-    "skipContent": "Aller au contenu principal"
-  }
+    "apply": "Postuler",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "viewAll": "Voir Tout",
+    "showMore": "Afficher Plus",
+    "showLess": "Afficher Moins"
+  },
+  "status": {
+    "loading": "Chargement...",
+    "success": "Succès!",
+    "error": "Une erreur s'est produite",
+    "warning": "Avertissement",
+    "info": "Information",
+    "pending": "En Attente",
+    "completed": "Terminé",
+    "inProgress": "En Cours",
+    "failed": "Échoué",
+    "cancelled": "Annulé"
+  },
+  "messages": {
+    "noResults": "Aucun résultat trouvé",
+    "noData": "Aucune donnée disponible",
+    "comingSoon": "Bientôt Disponible",
+    "underConstruction": "En Construction",
+    "pageNotFound": "Page Non Trouvée",
+    "accessDenied": "Accès Refusé",
+    "sessionExpired": "Session Expirée",
+    "tryAgain": "Veuillez réessayer",
+    "contactSupport": "Contacter le Support"
+  },
+  "accessibility": {
+    "skipToContent": "Aller au contenu principal",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "toggleNavigation": "Basculer la navigation",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "currentPage": "Page actuelle",
+    "loading": "Chargement du contenu",
+    "externalLink": "S'ouvre dans une nouvelle fenêtre"
+  },
+  "time": {
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain",
+    "now": "Maintenant",
+    "ago": "il y a",
+    "minutes": "minutes",
+    "hours": "heures",
+    "days": "jours",
+    "weeks": "semaines",
+    "months": "mois",
+    "years": "ans"
+  },
+  "copyright": "© 2024 Centre d'Innovation Climatique du Kenya. Tous droits réservés."
 }

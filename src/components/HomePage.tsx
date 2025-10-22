@@ -13,7 +13,7 @@ import Footer from "@/components/layout/Footer";
 import { homePageData } from "@/data/home";
 import { newsData } from "@/data/news";
 import { navData } from "@/lib/navigation";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslation } from "@/lib/i18n.client";
 
 // Static data that doesn't need translation
 const partnersData: PartnerData[] = [
@@ -91,26 +91,6 @@ const partnersData: PartnerData[] = [
   },
 ];
 
-// Targets data for 2025
-const targetsData = [
-  {
-    value: "1,000+",
-    description: "SMEs to be supported in our next phase of growth.",
-  },
-  {
-    value: "$50M+",
-    description: "To be mobilized to scale climate solutions.",
-  },
-  {
-    value: "5,000+",
-    description: "New green jobs to be created across the region.",
-  },
-  {
-    value: "30+",
-    description: "New climate technologies to be developed and launched.",
-  },
-];
-
 export default function HomePage() {
   const { t, locale } = useTranslation();
 
@@ -158,6 +138,26 @@ export default function HomePage() {
     {
       value: "15+",
       description: t('stats.solutions'),
+    },
+  ];
+
+  // Create translated targets data
+  const translatedTargetsData = [
+    {
+      value: "1,000+",
+      description: t('pages.impact.targetStats.smes'),
+    },
+    {
+      value: "$50M+",
+      description: t('pages.impact.targetStats.investment'),
+    },
+    {
+      value: "5,000+",
+      description: t('pages.impact.targetStats.jobs'),
+    },
+    {
+      value: "30+",
+      description: t('pages.impact.targetStats.solutions'),
     },
   ];
 
@@ -214,7 +214,7 @@ export default function HomePage() {
         <MinimalHeroSection data={translatedHeroData} />
 
         {/* Stats Section */}
-        <MinimalStatsSection stats={translatedStatsData} targets={targetsData} />
+        <MinimalStatsSection stats={translatedStatsData} targets={translatedTargetsData} />
 
         {/* News Section */}
         <NewsSection news={newsData} />

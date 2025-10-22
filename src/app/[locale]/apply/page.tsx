@@ -7,48 +7,65 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle, Upload, ArrowRight } from 'lucide-react';
+import { getTranslations, LocaleCode } from '@/lib/i18n';
 
-export const metadata: Metadata = {
-  title: 'Apply to KCIC Programs - Start Your Climate Innovation Journey',
-  description: 'Apply to Kenya Climate Innovation Centre programs. Join 450+ climate entrepreneurs building sustainable solutions across Africa.',
-};
+export async function generateMetadata({ params }: { params: { locale: LocaleCode } }): Promise<Metadata> {
+  const translations = await getTranslations(params.locale, 'pages');
+  
+  return {
+    title: (translations.apply as any)?.meta?.title || 'Apply - KCIC',
+    description: (translations.apply as any)?.meta?.description || 'Apply to KCIC Programs',
+  };
+}
 
-const applicationSteps = [
-  {
-    step: 1,
-    title: 'Basic Information',
-    description: 'Tell us about yourself and your organization',
-    completed: false,
-  },
-  {
-    step: 2,
-    title: 'Climate Solution',
-    description: 'Describe your climate innovation or idea',
-    completed: false,
-  },
-  {
-    step: 3,
-    title: 'Business Model',
-    description: 'Explain your business approach and market',
-    completed: false,
-  },
-  {
-    step: 4,
-    title: 'Impact & Goals',
-    description: 'Share your expected environmental and social impact',
-    completed: false,
-  },
-];
+export default async function ApplyPage({ params }: { params: { locale: LocaleCode } }) {
+  const commonTranslations = await getTranslations(params.locale, 'common');
+  const pagesTranslations = await getTranslations(params.locale, 'pages');
+  const translations = { ...commonTranslations, pages: pagesTranslations };
+  
+  const t = (key: string) => {
+    const keys = key.split('.');
+    let value: any = translations;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || key;
+  };
 
-const programOptions = [
-  'Innovation Incubation (Early-stage)',
-  'Scale-Up Acceleration (Growth-stage)',
-  'Corporate Partnerships',
-  'Climate Awards',
-  'Not sure - need guidance',
-];
+  const applicationSteps = [
+    {
+      step: 1,
+      title: t('pages.apply.steps.step1.title'),
+      description: t('pages.apply.steps.step1.description'),
+      completed: false,
+    },
+    {
+      step: 2,
+      title: t('pages.apply.steps.step2.title'),
+      description: t('pages.apply.steps.step2.description'),
+      completed: false,
+    },
+    {
+      step: 3,
+      title: t('pages.apply.steps.step3.title'),
+      description: t('pages.apply.steps.step3.description'),
+      completed: false,
+    },
+    {
+      step: 4,
+      title: t('pages.apply.steps.step4.title'),
+      description: t('pages.apply.steps.step4.description'),
+      completed: false,
+    },
+  ];
 
-export default function ApplyPage() {
+  const programOptions = [
+    t('pages.apply.form.program.programs.incubation'),
+    t('pages.apply.form.program.programs.acceleration'),
+    t('pages.apply.form.program.programs.partnerships'),
+    t('pages.apply.form.program.programs.awards'),
+    t('pages.apply.form.program.programs.guidance'),
+  ];
   return (
     <div className="min-h-screen bg-white">
       <MinimalNavbar {...navData} />
@@ -65,7 +82,7 @@ export default function ApplyPage() {
               lineHeight: typography.lineHeights.tight,
             }}
           >
-            Apply to KCIC Programs
+            {t('pages.apply.hero.title')}
           </h1>
           <p 
             className="text-xl mb-12 max-w-3xl mx-auto"
@@ -75,8 +92,7 @@ export default function ApplyPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Join 450+ climate entrepreneurs building sustainable solutions across Africa. 
-            Start your application today.
+            {t('pages.apply.hero.description')}
           </p>
         </div>
       </section>
@@ -114,30 +130,30 @@ export default function ApplyPage() {
                 color: colors.secondary.gray[900],
               }}
             >
-              Step 1: Basic Information
+              {t('pages.apply.form.title')}
             </h2>
             
             <form className="space-y-8">
               {/* Personal Information */}
               <div>
-                <h3 className="font-semibold mb-4 text-gray-800">Personal Information</h3>
+                <h3 className="font-semibold mb-4 text-gray-800">{t('pages.apply.form.personal.title')}</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      First Name *
+                      {t('pages.apply.form.personal.firstName')} *
                     </label>
                     <Input 
-                      placeholder="Your first name"
+                      placeholder={t('pages.apply.form.personal.firstName')}
                       className="rounded-lg"
                       required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Last Name *
+                      {t('pages.apply.form.personal.lastName')} *
                     </label>
                     <Input 
-                      placeholder="Your last name"
+                      placeholder={t('pages.apply.form.personal.lastName')}
                       className="rounded-lg"
                       required
                     />
@@ -147,22 +163,22 @@ export default function ApplyPage() {
                 <div className="grid md:grid-cols-2 gap-4 mt-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Email Address *
+                      {t('pages.apply.form.personal.email')} *
                     </label>
                     <Input 
                       type="email"
-                      placeholder="your.email@example.com"
+                      placeholder={t('pages.apply.form.personal.email')}
                       className="rounded-lg"
                       required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Phone Number *
+                      {t('pages.apply.form.personal.phone')} *
                     </label>
                     <Input 
                       type="tel"
-                      placeholder="+254 700 000 000"
+                      placeholder={t('pages.apply.form.personal.phonePlaceholder')}
                       className="rounded-lg"
                       required
                     />
@@ -172,23 +188,23 @@ export default function ApplyPage() {
 
               {/* Organization Information */}
               <div>
-                <h3 className="font-semibold mb-4 text-gray-800">Organization Information</h3>
+                <h3 className="font-semibold mb-4 text-gray-800">{t('pages.apply.form.organization.title')}</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Organization Name
+                      {t('pages.apply.form.organization.name')}
                     </label>
                     <Input 
-                      placeholder="Your organization or startup name"
+                      placeholder={t('pages.apply.form.organization.namePlaceholder')}
                       className="rounded-lg"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Your Role
+                      {t('pages.apply.form.organization.role')}
                     </label>
                     <Input 
-                      placeholder="e.g., Founder, CEO, CTO"
+                      placeholder={t('pages.apply.form.organization.rolePlaceholder')}
                       className="rounded-lg"
                     />
                   </div>
@@ -196,28 +212,28 @@ export default function ApplyPage() {
                 
                 <div className="mt-4">
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Organization Stage
+                    {t('pages.apply.form.organization.stage')}
                   </label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>Select your current stage</option>
-                    <option>Idea Stage</option>
-                    <option>Prototype Development</option>
-                    <option>Early Revenue</option>
-                    <option>Growth Stage</option>
-                    <option>Established Business</option>
+                    <option>{t('pages.apply.form.organization.stagePlaceholder')}</option>
+                    <option>{t('pages.apply.form.organization.stages.idea')}</option>
+                    <option>{t('pages.apply.form.organization.stages.prototype')}</option>
+                    <option>{t('pages.apply.form.organization.stages.revenue')}</option>
+                    <option>{t('pages.apply.form.organization.stages.growth')}</option>
+                    <option>{t('pages.apply.form.organization.stages.established')}</option>
                   </select>
                 </div>
               </div>
 
               {/* Program Interest */}
               <div>
-                <h3 className="font-semibold mb-4 text-gray-800">Program Interest</h3>
+                <h3 className="font-semibold mb-4 text-gray-800">{t('pages.apply.form.program.title')}</h3>
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Which program are you interested in? *
+                    {t('pages.apply.form.program.interest')} *
                   </label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>Select a program</option>
+                    <option>{t('pages.apply.form.program.interestPlaceholder')}</option>
                     {programOptions.map((program, index) => (
                       <option key={index}>{program}</option>
                     ))}
@@ -226,30 +242,30 @@ export default function ApplyPage() {
                 
                 <div className="mt-4">
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    How did you hear about KCIC?
+                    {t('pages.apply.form.program.source')}
                   </label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>Select an option</option>
-                    <option>Website</option>
-                    <option>Social Media</option>
-                    <option>Partner Organization</option>
-                    <option>Event/Conference</option>
-                    <option>Referral</option>
-                    <option>Media/Press</option>
-                    <option>Other</option>
+                    <option>{t('pages.apply.form.program.sourcePlaceholder')}</option>
+                    <option>{t('pages.apply.form.program.sources.website')}</option>
+                    <option>{t('pages.apply.form.program.sources.social')}</option>
+                    <option>{t('pages.apply.form.program.sources.partner')}</option>
+                    <option>{t('pages.apply.form.program.sources.event')}</option>
+                    <option>{t('pages.apply.form.program.sources.referral')}</option>
+                    <option>{t('pages.apply.form.program.sources.media')}</option>
+                    <option>{t('pages.apply.form.program.sources.other')}</option>
                   </select>
                 </div>
               </div>
 
               {/* Climate Solution Overview */}
               <div>
-                <h3 className="font-semibold mb-4 text-gray-800">Climate Solution Overview</h3>
+                <h3 className="font-semibold mb-4 text-gray-800">{t('pages.apply.form.solution.title')}</h3>
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Briefly describe your climate solution or innovation *
+                    {t('pages.apply.form.solution.description')} *
                   </label>
                   <Textarea 
-                    placeholder="Provide a brief overview of your climate solution, the problem it solves, and how it works..."
+                    placeholder={t('pages.apply.form.solution.descriptionPlaceholder')}
                     rows={4}
                     className="rounded-lg"
                     required
@@ -258,41 +274,41 @@ export default function ApplyPage() {
                 
                 <div className="mt-4">
                   <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Climate Sector
+                    {t('pages.apply.form.solution.sector')}
                   </label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>Select your sector</option>
-                    <option>Renewable Energy</option>
-                    <option>Energy Efficiency</option>
-                    <option>Climate-Smart Agriculture</option>
-                    <option>Water & Sanitation</option>
-                    <option>Waste Management</option>
-                    <option>Green Transportation</option>
-                    <option>Carbon Management</option>
-                    <option>Climate Adaptation</option>
-                    <option>Green Finance</option>
-                    <option>Other</option>
+                    <option>{t('pages.apply.form.solution.sectorPlaceholder')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.renewable')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.efficiency')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.agriculture')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.water')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.waste')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.transport')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.carbon')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.adaptation')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.finance')}</option>
+                    <option>{t('pages.apply.form.solution.sectors.other')}</option>
                   </select>
                 </div>
               </div>
 
               {/* Document Upload */}
               <div>
-                <h3 className="font-semibold mb-4 text-gray-800">Supporting Documents (Optional)</h3>
+                <h3 className="font-semibold mb-4 text-gray-800">{t('pages.apply.form.documents.title')}</h3>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                   <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                   <p className="text-gray-600 mb-2">
-                    Upload business plan, pitch deck, or other relevant documents
+                    {t('pages.apply.form.documents.description')}
                   </p>
                   <p className="text-sm text-gray-500 mb-4">
-                    PDF, DOC, PPT files up to 10MB each
+                    {t('pages.apply.form.documents.fileTypes')}
                   </p>
                   <Button
                     type="button"
                     variant="outline"
                     className="rounded-lg"
                   >
-                    Choose Files
+                    {t('pages.apply.form.documents.button')}
                   </Button>
                 </div>
               </div>
@@ -308,7 +324,7 @@ export default function ApplyPage() {
                     color: colors.secondary.gray[700],
                   }}
                 >
-                  Save as Draft
+                  {t('pages.apply.form.actions.draft')}
                 </Button>
                 
                 <Button
@@ -322,7 +338,7 @@ export default function ApplyPage() {
                   }}
                 >
                   <span className="flex items-center justify-center space-x-2">
-                    <span>Continue to Step 2</span>
+                    <span>{t('pages.apply.form.actions.continue')}</span>
                     <ArrowRight className="h-5 w-5" />
                   </span>
                 </Button>
@@ -343,7 +359,7 @@ export default function ApplyPage() {
               color: colors.secondary.gray[900],
             }}
           >
-            Need Help with Your Application?
+            {t('pages.apply.support.title')}
           </h2>
           <p 
             className="text-lg mb-8"
@@ -353,7 +369,7 @@ export default function ApplyPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Our team is here to support you through the application process.
+            {t('pages.apply.support.description')}
           </p>
           
           <div className="grid md:grid-cols-2 gap-6">
@@ -366,8 +382,8 @@ export default function ApplyPage() {
               }}
               asChild
             >
-              <a href="/contact">
-                Contact Support
+              <a href={`/${params.locale}/contact`}>
+                {t('pages.apply.support.contact')}
               </a>
             </Button>
             
@@ -380,8 +396,8 @@ export default function ApplyPage() {
               }}
               asChild
             >
-              <a href="/programs">
-                Learn About Programs
+              <a href={`/${params.locale}/programs`}>
+                {t('pages.apply.support.programs')}
               </a>
             </Button>
           </div>
@@ -393,7 +409,7 @@ export default function ApplyPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
+              {t('copyright')}
             </p>
           </div>
         </div>

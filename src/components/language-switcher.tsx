@@ -1,205 +1,253 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Globe, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguageSwitch, LOCALES, LocaleCode } from '@/lib/i18n';
-import { colors, typography } from '@/lib/design-system';
+import { Globe, Check, ChevronDown } from 'lucide-react';
+import { useLanguageSwitch } from '@/lib/i18n.client';
+import { LOCALES, LocaleCode } from '@/lib/i18n';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 interface LanguageSwitcherProps {
-  variant?: 'default' | 'compact' | 'mobile';
-  showFlag?: boolean;
-  showLabel?: boolean;
+  variant?: 'dropdown' | 'toggle' | 'inline';
+  showFlags?: boolean;
+  showLabels?: boolean;
+  className?: string;
 }
 
+/**
+ * Language Switcher Component
+ * 
+ * Provides UI for users to switch between English and French with three variants:
+ * - dropdown: Dropdown menu with all language options (for header/navbar)
+ * - toggle: Toggle button switching between languages (for mobile)
+ * - inline: Inline buttons side-by-side (for footer)
+ * 
+ * Features:
+ * - Visual indication of current language with flags and labels
+ * - Preserves current page path and query parameters when switching
+ * - Full keyboard accessibility (Tab, Enter, Arrow keys, Escape)
+ * - ARIA attributes for screen readers
+ * - Screen reader announcements for language changes
+ * - WCAG AA compliant color contrast
+ */
 export function LanguageSwitcher({ 
-  variant = 'default', 
-  showFlag = true, 
-  showLabel = true 
+  variant = 'dropdown', 
+  showFlags = true, 
+  showLabels = true,
+  className
 }: LanguageSwitcherProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { currentLocale, availableLocales, switchLanguage, localeConfig } = useLanguageSwitch();
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Close dropdown on escape key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
+  const inlineRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleLanguageChange = (locale: LocaleCode) => {
     switchLanguage(locale);
     setIsOpen(false);
+    
+    // Announce language change to screen readers
+    const newLanguageName = LOCALES[locale].name;
+    setAnnouncement(`Language changed to ${newLanguageName}`);
+    
+    // Clear announcement after it's been read
+    setTimeout(() => setAnnouncement(''), 1000);
   };
 
-  // Filter out current locale from available options
-  const otherLocales = availableLocales.filter(locale => locale !== currentLocale);
+  // Keyboard navigation for inline variant
+  const handleInlineKeyDown = (event: React.KeyboardEvent, index: number) => {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = (index + 1) % availableLocales.length;
+      inlineRefs.current[nextIndex]?.focus();
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = (index - 1 + availableLocales.length) % availableLocales.length;
+      inlineRefs.current[prevIndex]?.focus();
+    }
+  };
 
-  if (variant === 'mobile') {
+  // Dropdown variant - uses Radix UI dropdown menu for accessibility
+  if (variant === 'dropdown') {
     return (
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-gray-500 px-4">
-          Language / Langue
-        </div>
-        <div className="space-y-1">
-          {availableLocales.map((locale) => (
-            <button
-              key={locale}
-              onClick={() => handleLanguageChange(locale)}
-              className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors duration-200 ${
-                locale === currentLocale
-                  ? 'bg-green-50 text-green-700 border-r-2 border-green-500'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                {showFlag && (
-                  <span className="text-lg" role="img" aria-label={LOCALES[locale].name}>
-                    {LOCALES[locale].flag}
-                  </span>
-                )}
-                <span className="font-medium">{LOCALES[locale].name}</span>
-              </div>
-              {locale === currentLocale && (
-                <Check className="h-4 w-4 text-green-600" />
+      <>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                className
               )}
-            </button>
-          ))}
+              aria-label={`Current language: ${localeConfig.name}. Click to change language`}
+              aria-haspopup="menu"
+              aria-expanded={isOpen}
+            >
+              {showFlags && (
+                <span className="text-lg" role="img" aria-label={localeConfig.name}>
+                  {localeConfig.flag}
+                </span>
+              )}
+              {showLabels && (
+                <span className="hidden sm:inline font-medium">{localeConfig.name}</span>
+              )}
+              <Globe className="h-4 w-4 sm:hidden" aria-hidden="true" />
+              <ChevronDown 
+                className={cn(
+                  "h-3 w-3 transition-transform duration-200",
+                  isOpen && "rotate-180"
+                )}
+                aria-hidden="true"
+              />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            {availableLocales.map((locale) => (
+              <DropdownMenuItem
+                key={locale}
+                onClick={() => handleLanguageChange(locale)}
+                className="flex items-center justify-between cursor-pointer focus:bg-accent focus:text-accent-foreground"
+                aria-current={locale === currentLocale ? 'true' : undefined}
+              >
+                <div className="flex items-center gap-2">
+                  {showFlags && (
+                    <span className="text-lg" role="img" aria-label={LOCALES[locale].name}>
+                      {LOCALES[locale].flag}
+                    </span>
+                  )}
+                  <span className="font-medium">{LOCALES[locale].name}</span>
+                </div>
+                {locale === currentLocale && (
+                  <Check className="h-4 w-4 text-primary" aria-hidden="true" />
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
+        {/* Screen reader live region for announcements */}
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {announcement}
         </div>
-      </div>
+      </>
     );
   }
 
+  // Toggle variant - switches between languages with a single button
+  if (variant === 'toggle') {
+    // Get the next language in the cycle
+    const currentIndex = availableLocales.indexOf(currentLocale);
+    const nextIndex = (currentIndex + 1) % availableLocales.length;
+    const nextLocale = availableLocales[nextIndex];
+    const nextLocaleConfig = LOCALES[nextLocale];
+
+    return (
+      <>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleLanguageChange(nextLocale)}
+          className={cn(
+            "flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+            className
+          )}
+          aria-label={`Current language: ${localeConfig.name}. Switch to ${nextLocaleConfig.name}`}
+        >
+          {showFlags && (
+            <span className="text-lg" role="img" aria-label={localeConfig.name}>
+              {localeConfig.flag}
+            </span>
+          )}
+          {showLabels && (
+            <span className="font-medium">{localeConfig.code.toUpperCase()}</span>
+          )}
+          <span className="text-muted-foreground" aria-hidden="true">→</span>
+          {showFlags && (
+            <span className="text-lg" role="img" aria-label={nextLocaleConfig.name}>
+              {nextLocaleConfig.flag}
+            </span>
+          )}
+          {showLabels && (
+            <span className="font-medium">{nextLocale.toUpperCase()}</span>
+          )}
+        </Button>
+        
+        {/* Screen reader live region for announcements */}
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {announcement}
+        </div>
+      </>
+    );
+  }
+
+  // Inline variant - displays all languages as separate buttons side-by-side
   return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`
-          flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-all duration-200 
-          hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-          ${variant === 'compact' ? 'px-2 py-1' : ''}
-        `}
-        style={{
-          fontFamily: typography.fonts.body,
-          color: colors.secondary.gray[700],
-        }}
-        aria-expanded={isOpen}
-        aria-haspopup="menu"
-        aria-label={`Current language: ${localeConfig.name}. Click to change language`}
+    <>
+      <div
+        role="group"
+        aria-label="Language selection"
+        className={cn("flex items-center gap-2", className)}
       >
-        {variant === 'compact' ? (
-          <Globe className="h-4 w-4" />
-        ) : (
-          <>
-            {showFlag && (
-              <span className="text-lg" role="img" aria-label={localeConfig.name}>
-                {localeConfig.flag}
-              </span>
-            )}
-            {showLabel && (
-              <span className="hidden sm:inline">{localeConfig.name}</span>
-            )}
-            <Globe className="h-4 w-4 sm:hidden" />
-          </>
-        )}
-        <ChevronDown 
-          className={`h-3 w-3 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
-
-      {/* Dropdown Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            role="menu"
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50"
-            style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.15)' }}
-          >
-            {/* Arrow pointer */}
-            <div className="absolute -top-1 right-4 w-2 h-2 bg-white border-l border-t border-gray-100 rotate-45"></div>
-            
-            <div className="p-1">
-              {otherLocales.map((locale, index) => (
-                <motion.button
-                  key={locale}
-                  role="menuitem"
-                  tabIndex={0}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => handleLanguageChange(locale)}
-                  className="w-full flex items-center justify-between p-2 rounded-md transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      handleLanguageChange(locale);
-                    }
-                  }}
-                >
-                  <div className="flex items-center space-x-2">
-                    {showFlag && (
-                      <span className="text-lg" role="img" aria-label={LOCALES[locale].name}>
-                        {LOCALES[locale].flag}
-                      </span>
-                    )}
-                    <span 
-                      className="text-sm font-medium text-gray-900"
-                      style={{ fontFamily: typography.fonts.body }}
-                    >
-                      {LOCALES[locale].name}
-                    </span>
-                  </div>
-                  {/* RTL indicator for Arabic */}
-                  {LOCALES[locale].rtl && (
-                    <span className="text-xs text-gray-400 font-mono">RTL</span>
-                  )}
-                </motion.button>
-              ))}
-            </div>
-
-            {/* Footer with current language indicator */}
-            <div className="border-t border-gray-100 p-2 bg-gray-50">
-              <div className="flex items-center justify-center space-x-2">
-                <span className="text-xs text-gray-500">Current:</span>
-                <div className="flex items-center space-x-1">
-                  {showFlag && (
-                    <span className="text-sm" role="img" aria-label={localeConfig.name}>
-                      {localeConfig.flag}
-                    </span>
-                  )}
-                  <span className="text-xs font-medium text-gray-700">
-                    {localeConfig.name}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        {availableLocales.map((locale, index) => {
+          const isActive = locale === currentLocale;
+          const localeInfo = LOCALES[locale];
+          
+          return (
+            <button
+              key={locale}
+              ref={(el) => {
+                inlineRefs.current[index] = el;
+              }}
+              onClick={() => handleLanguageChange(locale)}
+              onKeyDown={(e) => handleInlineKeyDown(e, index)}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              )}
+              aria-label={`Switch to ${localeInfo.name}`}
+              aria-current={isActive ? 'true' : undefined}
+            >
+              {showFlags && (
+                <span className="text-base" role="img" aria-label={localeInfo.name}>
+                  {localeInfo.flag}
+                </span>
+              )}
+              {showLabels && (
+                <span>{localeInfo.name}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      
+      {/* Screen reader live region for announcements */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+    </>
   );
 }

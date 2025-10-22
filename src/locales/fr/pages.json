@@ -1,0 +1,758 @@
+{
+  "home": {
+    "hero": {
+      "title": "Autonomiser l'Innovation Climatique au Kenya",
+      "subtitle": "Construire un Avenir Durable",
+      "description": "Nous accélérons la croissance verte grâce à des solutions climatiques innovantes, en soutenant les PME et en créant un impact environnemental durable à travers l'Afrique.",
+      "stats": "Soutenir 450+ PME • 25M$+ d'Investissement • 2500+ Emplois Créés",
+      "cta": {
+        "programs": "Rejoindre Nos Programmes",
+        "learn": "En Savoir Plus"
+      }
+    },
+    "stats": {
+      "smes": "PME soutenues par nos programmes d'incubation et d'accélération",
+      "investment": "Investissement mobilisé pour les entreprises axées sur le climat",
+      "jobs": "Emplois verts créés et soutenus dans divers secteurs",
+      "solutions": "Solutions climatiques innovantes déployées sur le marché"
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "À Propos de KCIC - Leader de l'Innovation Climatique au Kenya",
+      "description": "Découvrez la mission du Centre d'Innovation Climatique du Kenya pour accélérer la croissance verte et soutenir les entrepreneurs climatiques à travers l'Afrique."
+    },
+    "hero": {
+      "title": "Accélérer l'Innovation Climatique",
+      "description": "Nous sommes le principal centre d'innovation climatique du Kenya, autonomisant les entrepreneurs à construire des solutions durables qui stimulent la croissance verte à travers l'Afrique."
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Accélérer la croissance verte en soutenant les entrepreneurs climatiques et les solutions innovantes qui créent un impact environnemental durable."
+    },
+    "approach": {
+      "title": "Notre Approche",
+      "description": "Nous fournissons un soutien complet incluant le financement, le mentorat et l'accès au marché pour aider les innovations climatiques à se développer avec succès."
+    },
+    "impact": {
+      "title": "Notre Impact",
+      "description": "Soutenir 450+ PME, mobiliser 25M$+ d'investissement et créer 2 500+ emplois dans le secteur climatique."
+    },
+    "story": {
+      "title": "Construire l'Avenir Climatique de l'Afrique",
+      "paragraph1": "Fondé comme le principal hub d'innovation climatique du Kenya, KCIC est devenu le catalyseur de solutions environnementales transformatrices à travers l'Afrique de l'Est. Nous croyons que l'innovation est la clé pour relever les défis climatiques tout en créant des opportunités économiques.",
+      "paragraph2": "Notre écosystème complet soutient les entrepreneurs à chaque étape, de l'idéation précoce aux solutions prêtes pour le marché. Grâce à des partenariats stratégiques et des investissements ciblés, nous construisons un avenir durable pour l'Afrique."
+    },
+    "cta": "Explorez Nos Programmes"
+  },
+  "programs": {
+    "meta": {
+      "title": "Programmes - Soutien à l'Innovation Climatique KCIC",
+      "description": "Découvrez les programmes complets de KCIC soutenant les entrepreneurs climatiques de l'idéation à la mise à l'échelle à travers le Kenya et l'Afrique."
+    },
+    "hero": {
+      "title": "Programmes Qui Génèrent de l'Impact",
+      "description": "Soutien complet pour les entrepreneurs climatiques à chaque étape de leur parcours, des idées innovantes aux solutions prêtes pour le marché."
+    },
+    "incubation": {
+      "title": "Incubation d'Innovation",
+      "description": "Soutien en phase précoce pour les entrepreneurs climatiques avec des idées et solutions innovantes.",
+      "features": {
+        "funding": "Financement de démarrage jusqu'à 50K$",
+        "mentorship": "Mentorat technique",
+        "validation": "Soutien à la validation du marché",
+        "prototype": "Développement de prototype"
+      },
+      "duration": "6 mois"
+    },
+    "acceleration": {
+      "title": "Accélération de Mise à l'Échelle",
+      "description": "Soutien en phase de croissance pour les solutions climatiques éprouvées prêtes à se développer sur les marchés.",
+      "features": {
+        "funding": "Financement de croissance jusqu'à 500K$",
+        "expansion": "Soutien à l'expansion du marché",
+        "partnerships": "Partenariats stratégiques",
+        "access": "Accès au marché international"
+      },
+      "duration": "12 mois"
+    },
+    "partnerships": {
+      "title": "Partenariats d'Entreprise",
+      "description": "Connecter les innovations climatiques avec des partenaires d'entreprise pour des projets pilotes et des achats.",
+      "features": {
+        "pilots": "Programmes pilotes d'entreprise",
+        "procurement": "Opportunités d'approvisionnement",
+        "validation": "Validation technologique",
+        "deployment": "Déploiement sur le marché"
+      },
+      "duration": "En cours"
+    },
+    "awards": {
+      "title": "Prix Climatiques",
+      "description": "Reconnaissance annuelle et financement pour les innovations climatiques exceptionnelles à travers l'Afrique.",
+      "features": {
+        "prize": "Financement de prix jusqu'à 100K$",
+        "recognition": "Reconnaissance régionale",
+        "exposure": "Exposition médiatique",
+        "connections": "Connexions avec les investisseurs"
+      },
+      "duration": "Annuel"
+    },
+    "featuresLabel": "Caractéristiques du Programme:",
+    "durationLabel": "Durée:",
+    "learnMore": "En Savoir Plus",
+    "application": {
+      "title": "Prêt à Rejoindre Nos Programmes?",
+      "step1": {
+        "title": "Postuler en Ligne",
+        "description": "Soumettez votre candidature avec les détails de votre solution climatique"
+      },
+      "step2": {
+        "title": "Processus d'Examen",
+        "description": "Nos experts évaluent votre innovation et votre potentiel de marché"
+      },
+      "step3": {
+        "title": "Commencez Votre Parcours",
+        "description": "Commencez votre programme avec un soutien et des ressources dédiés"
+      },
+      "cta": "Commencer Votre Candidature"
+    }
+  },
+  "impact": {
+    "meta": {
+      "title": "Impact - Résultats de l'Innovation Climatique KCIC",
+      "description": "Découvrez l'impact mesurable des programmes d'innovation climatique de KCIC: 450+ PME soutenues, 25M$+ d'investissement mobilisé, 2 500+ emplois créés."
+    },
+    "hero": {
+      "title": "Impact Climatique Mesurable",
+      "description": "Résultats réels de nos programmes d'innovation climatique à travers le Kenya et l'Afrique. Découvrez comment nous stimulons le changement durable grâce à l'entrepreneuriat."
+    },
+    "mainStats": {
+      "smes": "PME soutenues par nos programmes d'incubation et d'accélération.",
+      "investment": "Investissement mobilisé pour les entreprises axées sur le climat.",
+      "jobs": "Emplois verts créés et soutenus dans divers secteurs.",
+      "solutions": "Solutions climatiques innovantes déployées sur le marché."
+    },
+    "targetStats": {
+      "smes": "PME à soutenir dans notre prochaine phase de croissance.",
+      "investment": "À mobiliser pour développer les solutions climatiques.",
+      "jobs": "Nouveaux emplois verts à créer dans la région.",
+      "solutions": "Nouvelles technologies climatiques à développer et lancer."
+    },
+    "areas": {
+      "title": "Impact à Travers Toutes les Dimensions",
+      "environmental": {
+        "title": "Impact Environnemental",
+        "co2": "Tonnes CO2 Réduites",
+        "people": "Personnes Atteintes",
+        "renewable": "Énergie Renouvelable"
+      },
+      "social": {
+        "title": "Impact Social",
+        "jobs": "Emplois Créés",
+        "women": "Femmes Entrepreneures",
+        "counties": "Comtés Atteints"
+      },
+      "economic": {
+        "title": "Impact Économique",
+        "investment": "Investissement Levé",
+        "revenue": "Revenus Générés",
+        "roi": "ROI Moyen"
+      },
+      "innovation": {
+        "title": "Impact de l'Innovation",
+        "smes": "PME Soutenues",
+        "sectors": "Secteurs Couverts",
+        "success": "Taux de Réussite"
+      }
+    },
+    "stories": {
+      "title": "Histoires de Réussite",
+      "solartech": {
+        "company": "SolarTech Kenya",
+        "sector": "Énergie Renouvelable",
+        "impact": "Fournir de l'énergie propre à 50 000+ ménages ruraux",
+        "funding": "2,5M$ levés",
+        "jobs": "150 emplois créés"
+      },
+      "agroclimate": {
+        "company": "AgroClimate Solutions",
+        "sector": "Agriculture Intelligente face au Climat",
+        "impact": "Soutenir 10 000+ petits agriculteurs",
+        "funding": "1,8M$ levés",
+        "jobs": "200 emplois créés"
+      },
+      "watertech": {
+        "company": "WaterTech Innovations",
+        "sector": "Technologie de l'Eau",
+        "impact": "Accès à l'eau potable pour 25 000+ personnes",
+        "funding": "3,2M$ levés",
+        "jobs": "120 emplois créés"
+      },
+      "fundingLabel": "Financement:",
+      "jobsLabel": "Emplois:"
+    },
+    "cta": {
+      "title": "Faites Partie de Notre Histoire d'Impact",
+      "description": "Rejoignez des centaines d'entrepreneurs climatiques qui créent un impact environnemental et social mesurable à travers l'Afrique.",
+      "button": "Rejoindre Nos Programmes"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contacter KCIC - Entrez en Contact avec Notre Équipe",
+      "description": "Contactez le Centre d'Innovation Climatique du Kenya. Contactez-nous pour en savoir plus sur nos programmes, partenariats ou opportunités d'innovation climatique."
+    },
+    "hero": {
+      "title": "Entrez en Contact",
+      "description": "Prêt à rejoindre l'écosystème d'innovation climatique du Kenya? Nous sommes là pour vous aider à franchir la prochaine étape."
+    },
+    "form": {
+      "title": "Envoyez-nous un Message",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse E-mail",
+      "organization": "Organisation",
+      "organizationPlaceholder": "Votre organisation (optionnel)",
+      "subject": "Sujet",
+      "message": "Message",
+      "messagePlaceholder": "Parlez-nous de votre innovation climatique ou comment nous pouvons vous aider...",
+      "submit": "Envoyer le Message",
+      "subjects": {
+        "general": "Demande Générale",
+        "program": "Candidature au Programme",
+        "partnership": "Opportunité de Partenariat",
+        "media": "Médias et Presse",
+        "support": "Support Technique"
+      }
+    },
+    "info": {
+      "visit": {
+        "title": "Visitez-nous",
+        "line1": "Centre d'Innovation Climatique du Kenya",
+        "line2": "Campus de l'Université Strathmore",
+        "line3": "Ole Sangale Road, Madaraka",
+        "line4": "Nairobi, Kenya"
+      },
+      "call": {
+        "title": "Appelez-nous",
+        "line1": "+254 703 034 000",
+        "line2": "+254 703 034 001",
+        "line3": "Lun - Ven: 8h00 - 17h00",
+        "line4": "EAT (UTC+3)"
+      },
+      "email": {
+        "title": "Envoyez-nous un E-mail",
+        "line1": "info@kenyacic.org",
+        "line2": "programs@kenyacic.org",
+        "line3": "partnerships@kenyacic.org",
+        "line4": "media@kenyacic.org"
+      },
+      "hours": {
+        "title": "Heures d'Ouverture",
+        "line1": "Lundi - Vendredi",
+        "line2": "8h00 - 17h00",
+        "line3": "Heure d'Afrique de l'Est (EAT)",
+        "line4": "UTC+3"
+      }
+    },
+    "map": {
+      "title": "Trouvez-nous à Nairobi",
+      "placeholder": "Carte Interactive Bientôt Disponible",
+      "location": "Campus de l'Université Strathmore, Ole Sangale Road, Nairobi"
+    },
+    "quickActions": {
+      "title": "Prêt à Commencer Votre Parcours Climatique?",
+      "programs": "Explorez Nos Programmes",
+      "apply": "Postuler Maintenant"
+    }
+  },
+  "apply": {
+    "meta": {
+      "title": "Postuler aux Programmes KCIC - Commencez Votre Parcours d'Innovation Climatique",
+      "description": "Postulez aux programmes du Centre d'Innovation Climatique du Kenya. Rejoignez 450+ entrepreneurs climatiques construisant des solutions durables à travers l'Afrique."
+    },
+    "hero": {
+      "title": "Postuler aux Programmes KCIC",
+      "description": "Rejoignez 450+ entrepreneurs climatiques construisant des solutions durables à travers l'Afrique. Commencez votre candidature aujourd'hui."
+    },
+    "steps": {
+      "step1": {
+        "title": "Informations de Base",
+        "description": "Parlez-nous de vous et de votre organisation"
+      },
+      "step2": {
+        "title": "Solution Climatique",
+        "description": "Décrivez votre innovation ou idée climatique"
+      },
+      "step3": {
+        "title": "Modèle d'Affaires",
+        "description": "Expliquez votre approche commerciale et votre marché"
+      },
+      "step4": {
+        "title": "Impact et Objectifs",
+        "description": "Partagez votre impact environnemental et social attendu"
+      }
+    },
+    "form": {
+      "title": "Étape 1: Informations de Base",
+      "personal": {
+        "title": "Informations Personnelles",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Adresse E-mail",
+        "phone": "Numéro de Téléphone",
+        "phonePlaceholder": "+254 700 000 000"
+      },
+      "organization": {
+        "title": "Informations sur l'Organisation",
+        "name": "Nom de l'Organisation",
+        "namePlaceholder": "Votre organisation ou startup",
+        "role": "Votre Rôle",
+        "rolePlaceholder": "ex., Fondateur, PDG, CTO",
+        "stage": "Stade de l'Organisation",
+        "stagePlaceholder": "Sélectionnez votre stade actuel",
+        "stages": {
+          "idea": "Stade d'Idée",
+          "prototype": "Développement de Prototype",
+          "revenue": "Revenus Précoces",
+          "growth": "Stade de Croissance",
+          "established": "Entreprise Établie"
+        }
+      },
+      "program": {
+        "title": "Intérêt pour le Programme",
+        "interest": "Quel programme vous intéresse?",
+        "interestPlaceholder": "Sélectionnez un programme",
+        "programs": {
+          "incubation": "Incubation d'Innovation (Phase précoce)",
+          "acceleration": "Accélération de Mise à l'Échelle (Phase de croissance)",
+          "partnerships": "Partenariats d'Entreprise",
+          "awards": "Prix Climatiques",
+          "guidance": "Pas sûr - besoin de conseils"
+        },
+        "source": "Comment avez-vous entendu parler de KCIC?",
+        "sourcePlaceholder": "Sélectionnez une option",
+        "sources": {
+          "website": "Site Web",
+          "social": "Médias Sociaux",
+          "partner": "Organisation Partenaire",
+          "event": "Événement/Conférence",
+          "referral": "Référence",
+          "media": "Médias/Presse",
+          "other": "Autre"
+        }
+      },
+      "solution": {
+        "title": "Aperçu de la Solution Climatique",
+        "description": "Décrivez brièvement votre solution ou innovation climatique",
+        "descriptionPlaceholder": "Fournissez un bref aperçu de votre solution climatique, le problème qu'elle résout et comment elle fonctionne...",
+        "sector": "Secteur Climatique",
+        "sectorPlaceholder": "Sélectionnez votre secteur",
+        "sectors": {
+          "renewable": "Énergie Renouvelable",
+          "efficiency": "Efficacité Énergétique",
+          "agriculture": "Agriculture Intelligente face au Climat",
+          "water": "Eau et Assainissement",
+          "waste": "Gestion des Déchets",
+          "transport": "Transport Vert",
+          "carbon": "Gestion du Carbone",
+          "adaptation": "Adaptation Climatique",
+          "finance": "Finance Verte",
+          "other": "Autre"
+        }
+      },
+      "documents": {
+        "title": "Documents de Support (Optionnel)",
+        "description": "Téléchargez un plan d'affaires, un pitch deck ou d'autres documents pertinents",
+        "fileTypes": "Fichiers PDF, DOC, PPT jusqu'à 10 Mo chacun",
+        "button": "Choisir des Fichiers"
+      },
+      "actions": {
+        "draft": "Enregistrer comme Brouillon",
+        "continue": "Continuer à l'Étape 2"
+      }
+    },
+    "support": {
+      "title": "Besoin d'Aide avec Votre Candidature?",
+      "description": "Notre équipe est là pour vous soutenir tout au long du processus de candidature.",
+      "contact": "Contacter le Support",
+      "programs": "En Savoir Plus sur les Programmes"
+    }
+  },
+  "faqs": {
+    "meta": {
+      "title": "Questions Fréquemment Posées - KCIC",
+      "description": "Trouvez des réponses aux questions fréquemment posées sur les programmes, services de KCIC et comment nous soutenons l'innovation climatique au Kenya."
+    },
+    "hero": {
+      "title": "Questions Fréquemment Posées",
+      "subtitle": "Obtenez des réponses aux questions courantes",
+      "description": "Trouvez des réponses aux questions fréquemment posées sur les programmes, services de KCIC et comment nous soutenons l'innovation climatique au Kenya."
+    },
+    "search": {
+      "placeholder": "Rechercher dans les FAQ...",
+      "noResults": "Aucune FAQ trouvée",
+      "noResultsDescription": "Essayez d'ajuster vos termes de recherche ou votre filtre de catégorie."
+    },
+    "categories": {
+      "all": "Tout",
+      "general": "Informations Générales",
+      "programs": "Programmes et Services",
+      "eligibility": "Éligibilité et Candidature",
+      "support": "Soutien et Impact",
+      "partnerships": "Partenariats"
+    },
+    "questions": {
+      "general": {
+        "q1": {
+          "question": "Qu'est-ce que le Centre d'Innovation Climatique du Kenya (KCIC)?",
+          "answer": "KCIC est un hub d'innovation climatique de premier plan qui soutient les petites et moyennes entreprises (PME) dans le développement et la mise à l'échelle de solutions climatiques. Nous fournissons incubation, accélération, accès au financement et liens avec le marché pour stimuler le développement durable au Kenya et à travers l'Afrique."
+        },
+        "q2": {
+          "question": "Quand KCIC a-t-il été créé?",
+          "answer": "KCIC a été créé en 2010 avec la vision de devenir le centre d'innovation climatique leader en Afrique. Au cours de la dernière décennie, nous avons soutenu plus de 450 PME et mobilisé plus de 25 millions de dollars d'investissement."
+        },
+        "q3": {
+          "question": "Quelle est la mission de KCIC?",
+          "answer": "Notre mission est d'accélérer l'innovation climatique et la croissance économique verte au Kenya en soutenant les PME axées sur le climat par l'incubation, l'accélération et l'accès au financement, à la technologie et aux marchés."
+        }
+      },
+      "programs": {
+        "q1": {
+          "question": "Quels programmes KCIC offre-t-il?",
+          "answer": "Nous offrons des programmes complets incluant l'incubation pour les startups en phase précoce, l'accélération pour les entreprises en croissance, l'accès au financement, les liens avec le marché, l'assistance technique et le renforcement des capacités dans divers secteurs climatiques."
+        },
+        "q2": {
+          "question": "Sur quels secteurs KCIC se concentre-t-il?",
+          "answer": "Nous nous concentrons sur les secteurs climatiques clés incluant l'énergie renouvelable, l'agriculture durable, l'eau et l'assainissement, la gestion des déchets, le transport vert, l'efficacité énergétique et les technologies d'adaptation climatique."
+        },
+        "q3": {
+          "question": "Quelle est la durée de vos programmes d'incubation et d'accélération?",
+          "answer": "Notre programme d'incubation dure généralement de 6 à 12 mois pour les entreprises en phase précoce, tandis que notre programme d'accélération dure de 3 à 6 mois pour les startups plus matures prêtes à développer leurs opérations."
+        },
+        "q4": {
+          "question": "Fournissez-vous du financement aux startups?",
+          "answer": "Bien que KCIC ne fournisse pas directement de financement, nous facilitons l'accès au financement par notre réseau d'investisseurs, de donateurs et d'institutions financières. Nous aidons également les startups à préparer des plans d'affaires prêts pour l'investissement et les connectons avec des sources de financement appropriées."
+        }
+      },
+      "eligibility": {
+        "q1": {
+          "question": "Qui est éligible pour postuler aux programmes KCIC?",
+          "answer": "Nous soutenons les PME axées sur le climat à différents stades de développement. Les critères d'éligibilité incluent avoir une solution climatique avec un potentiel de marché, être légalement enregistré ou disposé à s'enregistrer au Kenya, et démontrer un engagement envers les objectifs de développement durable."
+        },
+        "q2": {
+          "question": "Comment puis-je postuler aux programmes KCIC?",
+          "answer": "Les candidatures peuvent être soumises via notre portail en ligne. Le processus implique généralement de remplir un formulaire de candidature, de soumettre un plan d'affaires et de participer à un processus d'évaluation. Nous annonçons les périodes de candidature via notre site Web et nos réseaux sociaux."
+        },
+        "q3": {
+          "question": "Quels documents dois-je fournir pour postuler?",
+          "answer": "Les documents requis incluent généralement un plan d'affaires détaillé, des documents d'enregistrement de l'entreprise, des CV des fondateurs, des projections financières, des preuves de concept ou d'informations sur le prototype, et toutes certifications ou permis pertinents."
+        },
+        "q4": {
+          "question": "Y a-t-il des frais de candidature?",
+          "answer": "Non, il n'y a pas de frais de candidature pour les programmes KCIC. Nos services sont fournis gratuitement aux participants sélectionnés, grâce au soutien de nos donateurs et partenaires."
+        }
+      },
+      "support": {
+        "q1": {
+          "question": "Quel soutien les startups reçoivent-elles?",
+          "answer": "Les startups reçoivent un soutien complet incluant la formation au développement commercial, l'assistance technique, le mentorat, les liens avec le marché, la facilitation de l'accès au financement, les opportunités de réseautage et l'espace de bureau lorsque disponible."
+        },
+        "q2": {
+          "question": "Combien d'entreprises KCIC a-t-il soutenues?",
+          "answer": "À ce jour, KCIC a soutenu plus de 450 PME, mobilisé plus de 25 millions de dollars d'investissement et contribué à la création de plus de 2 500 emplois verts dans divers secteurs climatiques."
+        },
+        "q3": {
+          "question": "Fournissez-vous un soutien continu après la fin du programme?",
+          "answer": "Oui, nous maintenons des relations avec nos entreprises alumni et fournissons un soutien continu via notre réseau, des services de suivi et un accès continu à certaines ressources et opportunités."
+        }
+      },
+      "partnerships": {
+        "q1": {
+          "question": "Qui sont les principaux partenaires de KCIC?",
+          "answer": "Nos partenaires incluent des donateurs internationaux comme la Banque mondiale, l'USAID, la GIZ et le DFID; des partenaires de développement comme le PNUD et Climate-KIC; des institutions gouvernementales; des partenaires académiques comme l'Université Strathmore; et des partenaires du secteur privé."
+        },
+        "q2": {
+          "question": "Comment les organisations peuvent-elles s'associer avec KCIC?",
+          "answer": "Les organisations peuvent s'associer avec nous de diverses manières incluant le soutien financier, la fourniture d'expertise technique, la facilitation de l'accès au marché, le mentorat et le partage de ressources. Contactez-nous pour discuter des opportunités de partenariat qui s'alignent avec notre mission."
+        },
+        "q3": {
+          "question": "Travaillez-vous avec des organisations internationales?",
+          "answer": "Oui, nous collaborons activement avec des organisations internationales, des agences de développement et des réseaux d'innovation climatique pour partager les connaissances, accéder aux marchés mondiaux et développer des solutions réussies au-delà du Kenya."
+        }
+      }
+    },
+    "contact": {
+      "title": "Vous avez encore des questions?",
+      "description": "Vous ne trouvez pas la réponse que vous cherchez? Notre équipe est là pour vous aider.",
+      "button": "Contactez-nous"
+    }
+  },
+  "whoWeAre": {
+    "meta": {
+      "title": "Qui Nous Sommes - KCIC",
+      "description": "Découvrez la mission, la vision, les valeurs du Centre d'Innovation Climatique du Kenya et notre parcours pour devenir le hub d'innovation climatique leader en Afrique."
+    },
+    "hero": {
+      "title": "Qui nous sommes",
+      "subtitle": "Autonomiser l'Innovation Climatique au Kenya",
+      "description": "Le Centre d'Innovation Climatique du Kenya (KCIC) est un hub d'innovation climatique de premier plan favorisant le développement durable par la technologie, l'entrepreneuriat et les partenariats stratégiques."
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Accélérer l'innovation climatique et la croissance économique verte au Kenya en soutenant les petites et moyennes entreprises (PME) axées sur le climat par l'incubation, l'accélération et l'accès au financement, à la technologie et aux marchés."
+    },
+    "vision": {
+      "title": "Notre Vision",
+      "description": "Être le centre d'innovation climatique leader en Afrique, catalysant le développement durable par des solutions climatiques transformatrices et créant un écosystème prospère pour l'entrepreneuriat vert."
+    },
+    "story": {
+      "title": "Notre Histoire",
+      "paragraph1": "Créé en 2010, le Centre d'Innovation Climatique du Kenya (KCIC) est né de la reconnaissance que les plus grands défis climatiques du Kenya pourraient devenir ses plus grandes opportunités d'innovation et de croissance économique.",
+      "paragraph2": "Au cours de la dernière décennie, nous sommes passés d'une initiative pionnière à une pierre angulaire de l'écosystème d'innovation climatique du Kenya. Grâce à des partenariats stratégiques avec des donateurs internationaux, des institutions gouvernementales et des leaders du secteur privé, nous avons créé un système de soutien complet pour les entrepreneurs climatiques.",
+      "paragraph3": "Aujourd'hui, KCIC témoigne de ce qui est possible lorsque l'innovation rencontre la détermination. Avec plus de 450 PME soutenues, plus de 25 millions de dollars d'investissement mobilisé et plus de 2 500 emplois verts créés, nous continuons à conduire la transition du Kenya vers un avenir durable et résilient au climat."
+    },
+    "values": {
+      "title": "Nos Valeurs",
+      "subtitle": "Nos valeurs guident chaque décision que nous prenons et chaque partenariat que nous forgeons.",
+      "innovation": {
+        "title": "Innovation",
+        "description": "Nous favorisons la créativité et les solutions de pointe pour relever les défis climatiques."
+      },
+      "impact": {
+        "title": "Impact",
+        "description": "Nous mesurons le succès par le changement environnemental et social positif que nous créons."
+      },
+      "collaboration": {
+        "title": "Collaboration",
+        "description": "Nous croyons au pouvoir des partenariats pour amplifier notre impact collectif."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "Nous maintenons les normes les plus élevées dans tout ce que nous faisons."
+      },
+      "sustainability": {
+        "title": "Durabilité",
+        "description": "Nous nous engageons à créer des solutions durables à long terme."
+      },
+      "transparency": {
+        "title": "Transparence",
+        "description": "Nous opérons avec ouverture et responsabilité dans toutes nos activités."
+      }
+    },
+    "achievements": {
+      "title": "Réalisations Clés",
+      "subtitle": "Notre impact parle à travers le succès de nos partenaires et des communautés que nous servons.",
+      "smes": {
+        "number": "450+",
+        "label": "PME Soutenues",
+        "description": "Dans divers secteurs climatiques"
+      },
+      "investment": {
+        "number": "25M$+",
+        "label": "Investissement Mobilisé",
+        "description": "Pour les entreprises climatiques"
+      },
+      "jobs": {
+        "number": "2 500+",
+        "label": "Emplois Verts Créés",
+        "description": "Opportunités d'emploi durables"
+      },
+      "solutions": {
+        "number": "15+",
+        "label": "Solutions Climatiques",
+        "description": "Déployées sur le marché"
+      }
+    }
+  },
+  "ourTeam": {
+    "meta": {
+      "title": "Notre Équipe - KCIC",
+      "description": "Rencontrez les membres dévoués de l'équipe qui stimulent l'innovation climatique au Centre d'Innovation Climatique du Kenya."
+    },
+    "hero": {
+      "title": "Notre Équipe",
+      "subtitle": "Rencontrez les personnes qui stimulent l'innovation climatique",
+      "description": "Notre équipe diversifiée d'experts, d'innovateurs et de leaders s'engage à accélérer les solutions climatiques et à soutenir les entrepreneurs à travers le Kenya et l'Afrique."
+    },
+    "leadership": {
+      "title": "Équipe de Direction",
+      "subtitle": "Notre direction exécutive rassemble des décennies d'expérience en innovation climatique, finance et développement durable."
+    },
+    "staff": {
+      "title": "Notre Équipe",
+      "subtitle": "Rencontrez les professionnels dévoués qui font le succès de nos programmes et initiatives."
+    },
+    "advisors": {
+      "title": "Conseil Consultatif",
+      "subtitle": "Experts distingués et leaders d'opinion qui fournissent des conseils stratégiques et une perspective internationale à notre travail."
+    },
+    "join": {
+      "title": "Rejoignez Notre Équipe",
+      "description": "Êtes-vous passionné par l'innovation climatique et le développement durable? Nous recherchons toujours des personnes talentueuses pour rejoindre notre mission.",
+      "viewPositions": "Voir les Postes Ouverts",
+      "sendCV": "Envoyer Votre CV"
+    },
+    "labels": {
+      "experience": "d'expérience",
+      "education": "Éducation",
+      "expertise": "Expertise",
+      "achievements": "Réalisations Clés",
+      "advisoryAreas": "Domaines Consultatifs",
+      "department": "Département"
+    }
+  },
+  "board": {
+    "meta": {
+      "title": "Conseil d'Administration - KCIC",
+      "description": "Rencontrez notre conseil d'administration et nos conseillers qui guident la direction stratégique de KCIC en matière d'innovation climatique."
+    },
+    "hero": {
+      "title": "Conseil d'Administration",
+      "subtitle": "Nos membres distingués du conseil apportent des décennies d'expérience en innovation climatique, développement durable et leadership stratégique."
+    }
+  },
+  "careers": {
+    "meta": {
+      "title": "Carrières - KCIC",
+      "description": "Construisez votre carrière tout en ayant un impact significatif sur les solutions climatiques à travers le Kenya et l'Afrique. Explorez les opportunités de rejoindre notre équipe dynamique."
+    },
+    "hero": {
+      "title": "Carrières",
+      "subtitle": "Rejoignez notre mission pour accélérer l'innovation climatique",
+      "description": "Construisez votre carrière tout en ayant un impact significatif sur les solutions climatiques à travers le Kenya et l'Afrique. Explorez les opportunités de rejoindre notre équipe dynamique d'experts en innovation climatique."
+    },
+    "whyWorkWithUs": {
+      "title": "Pourquoi Travailler Avec Nous?",
+      "subtitle": "Rejoignez une équipe passionnée par la création de changements positifs grâce à l'innovation climatique. Nous offrons un environnement dynamique et solidaire où votre travail impacte directement les communautés à travers l'Afrique.",
+      "benefits": {
+        "health": {
+          "title": "Couverture Santé Complète",
+          "description": "Couverture médicale, dentaire et visuelle complète pour vous et votre famille, y compris le soutien en santé mentale."
+        },
+        "development": {
+          "title": "Développement Professionnel",
+          "description": "Budget d'apprentissage annuel, participation à des conférences et opportunités de développement des compétences et de croissance de carrière."
+        },
+        "impact": {
+          "title": "Travail à Impact Mondial",
+          "description": "Opportunité de travailler sur des projets significatifs qui créent un impact environnemental et social positif à travers l'Afrique."
+        },
+        "flexible": {
+          "title": "Environnement de Travail Flexible",
+          "description": "Options de travail hybride, horaires flexibles et culture d'équilibre travail-vie personnelle solidaire."
+        },
+        "equipment": {
+          "title": "Équipement Moderne",
+          "description": "Dernière technologie et équipement pour vous aider à faire votre meilleur travail, y compris les allocations pour ordinateur portable et mobile."
+        },
+        "culture": {
+          "title": "Culture d'Innovation",
+          "description": "Travaillez dans un environnement dynamique et collaboratif qui encourage la créativité et la pensée innovante."
+        }
+      }
+    },
+    "positions": {
+      "featured": "Postes en Vedette",
+      "all": "Tous les Postes Ouverts",
+      "search": "Rechercher des postes...",
+      "noResults": "Aucun poste trouvé",
+      "noResultsDescription": "Essayez d'ajuster vos termes de recherche ou vos filtres.",
+      "viewDetails": "Voir les Détails",
+      "hideDetails": "Masquer les Détails",
+      "applyNow": "Postuler Maintenant",
+      "responsibilities": "Responsabilités Clés",
+      "requirements": "Exigences",
+      "posted": "Publié",
+      "filters": {
+        "department": "Département",
+        "type": "Type",
+        "level": "Niveau",
+        "all": "Tout"
+      },
+      "types": {
+        "fullTime": "Temps plein",
+        "partTime": "Temps partiel",
+        "contract": "Contrat",
+        "internship": "Stage"
+      },
+      "levels": {
+        "junior": "Junior",
+        "midLevel": "Niveau intermédiaire",
+        "senior": "Senior"
+      }
+    },
+    "application": {
+      "title": "Prêt à Postuler?",
+      "process": {
+        "title": "Processus de Candidature",
+        "step1": "Soumettez votre candidature avec CV et lettre de motivation",
+        "step2": "Examen et sélection initiale (5-7 jours ouvrables)",
+        "step3": "Entretiens avec les membres de l'équipe",
+        "step4": "Décision finale et offre d'emploi"
+      },
+      "questions": {
+        "title": "Questions?",
+        "description": "Vous avez des questions sur nos postes ou le processus de candidature?",
+        "email": "careers@kenyacic.org"
+      }
+    }
+  },
+  "staff": {
+    "meta": {
+      "title": "Notre Équipe - KCIC",
+      "description": "Rencontrez les membres dévoués de l'équipe qui stimulent l'innovation climatique au Centre d'Innovation Climatique du Kenya."
+    },
+    "hero": {
+      "title": "Notre Équipe",
+      "subtitle": "Rencontrez les professionnels dévoués qui stimulent l'innovation climatique et le développement durable à travers le Kenya et l'Afrique."
+    }
+  },
+  "procurement": {
+    "meta": {
+      "title": "Approvisionnement - KCIC",
+      "description": "Découvrez les politiques d'approvisionnement, les opportunités et les directives de KCIC pour les fournisseurs et partenaires."
+    },
+    "hero": {
+      "title": "Approvisionnement",
+      "subtitle": "KCIC s'engage à des pratiques d'approvisionnement transparentes, équitables et durables qui soutiennent notre mission d'innovation climatique."
+    },
+    "policy": {
+      "title": "Politique d'Approvisionnement",
+      "description1": "Notre politique d'approvisionnement garantit la transparence, la responsabilité et le rapport qualité-prix dans toutes nos décisions d'achat. Nous priorisons les fournisseurs qui démontrent un engagement envers la durabilité environnementale et la responsabilité sociale.",
+      "description2": "Toutes les activités d'approvisionnement sont menées conformément aux meilleures pratiques internationales et respectent les lois et réglementations kenyanes pertinentes.",
+      "principles": {
+        "title": "Principes Clés",
+        "transparency": "Transparence dans tous les processus d'approvisionnement",
+        "competition": "Concurrence équitable entre les fournisseurs qualifiés",
+        "value": "Rapport qualité-prix et rentabilité",
+        "sustainability": "Durabilité environnementale et sociale",
+        "compliance": "Conformité aux exigences légales et réglementaires"
+      }
+    },
+    "opportunities": {
+      "title": "Opportunités Actuelles",
+      "deadline": "Date limite"
+    },
+    "registration": {
+      "title": "Inscription des Fournisseurs",
+      "howTo": {
+        "title": "Comment S'inscrire",
+        "step1": "Remplir le formulaire d'inscription des fournisseurs",
+        "step2": "Soumettre la documentation requise",
+        "step3": "Attendre la vérification et l'approbation",
+        "step4": "Recevoir la notification du statut d'inscription"
+      },
+      "documents": {
+        "title": "Documents Requis",
+        "incorporation": "Certificat de constitution",
+        "tax": "Certificat de conformité fiscale",
+        "permit": "Permis/licence d'entreprise",
+        "bank": "Relevés bancaires (6 derniers mois)",
+        "references": "Références professionnelles"
+      },
+      "button": "S'inscrire comme Fournisseur"
+    }
+  }
+}

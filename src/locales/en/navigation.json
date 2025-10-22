@@ -1,0 +1,21 @@
+{
+  "menu": {
+    "home": "Home",
+    "about": "About Us",
+    "programs": "Programs",
+    "impact": "Impact",
+    "newsroom": "Newsroom",
+    "contact": "Contact",
+    "apply": "Apply Now",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "footer": {
+    "description": "Empowering climate innovation across Kenya and Africa",
+    "quickLinks": "Quick Links",
+    "programs": "Programs",
+    "contact": "Contact Info",
+    "social": "Follow Us",
+    "rights": "All rights reserved"
+  }
+}
