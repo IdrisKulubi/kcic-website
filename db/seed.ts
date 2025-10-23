@@ -9,6 +9,7 @@ import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema";
 import {
+  admins,
   heroSection,
   heroButtons,
   statistics,
@@ -33,6 +34,22 @@ async function seed() {
   console.log("🌱 Starting database seed...");
 
   try {
+    // Seed Admin User
+    console.log("Seeding admin user...");
+    // Using bcrypt-compatible hash for password "admin123"
+    // In production, this should be changed immediately
+    const bcrypt = await import("bcryptjs");
+    const passwordHash = await bcrypt.hash("admin123", 10);
+    
+    await db.insert(admins).values({
+      id: crypto.randomUUID(),
+      email: "admin@kcic.com",
+      passwordHash: passwordHash,
+      name: "Admin User",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
     // Seed Hero Section
     console.log("Seeding hero section...");
     await db.insert(heroSection).values({
