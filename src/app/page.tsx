@@ -2,30 +2,19 @@ import { getHeroSection } from "@/lib/actions/hero";
 import { listStatistics } from "@/lib/actions/stats";
 import { listNews } from "@/lib/actions/news";
 import { listPartners } from "@/lib/actions/partners";
-import { listProgrammes } from "@/lib/actions/programmes";
 import { getFooterSection } from "@/lib/actions/footer";
-import { getCTABanner } from "@/lib/actions/cta";
 import HomePage from "../components/HomePage";
 
 export default async function Page() {
   // Fetch all data from database in parallel
-  const [
-    heroResult,
-    statsResult,
-    newsResult,
-    partnersResult,
-    programmesResult,
-    footerResult,
-    ctaResult,
-  ] = await Promise.all([
-    getHeroSection(),
-    listStatistics(),
-    listNews({ limit: 6 }), // Get latest 6 news articles
-    listPartners(),
-    listProgrammes(),
-    getFooterSection(),
-    getCTABanner(),
-  ]);
+  const [heroResult, statsResult, newsResult, partnersResult, footerResult] =
+    await Promise.all([
+      getHeroSection(),
+      listStatistics(),
+      listNews({ limit: 6 }), // Get latest 6 news articles
+      listPartners(),
+      getFooterSection(),
+    ]);
 
   // Extract data or use fallbacks
   const heroData =
@@ -38,13 +27,8 @@ export default async function Page() {
       : [];
   const partnersData =
     partnersResult.success && partnersResult.data ? partnersResult.data : [];
-  const programmesData =
-    programmesResult.success && programmesResult.data
-      ? programmesResult.data
-      : [];
   const footerData =
     footerResult.success && footerResult.data ? footerResult.data : null;
-  const ctaData = ctaResult.success && ctaResult.data ? ctaResult.data : null;
 
   return (
     <HomePage
@@ -52,9 +36,7 @@ export default async function Page() {
       stats={statsData}
       news={newsData}
       partners={partnersData}
-      programmes={programmesData}
       footer={footerData}
-      cta={ctaData}
     />
   );
 }

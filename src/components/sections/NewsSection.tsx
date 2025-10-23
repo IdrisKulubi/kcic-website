@@ -334,28 +334,27 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         </Tabs>
 
         {/* Newsletter CTA */}
-        <div className="mt-20">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 text-center text-white">
+        <div className="mt-12">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 md:p-8 text-center text-white">
             <h3 
-              className="font-bold mb-4"
+              className="font-bold text-xl md:text-2xl mb-3"
               style={{
-                fontSize: typography.sizes.heading.h3,
                 fontFamily: typography.fonts.heading,
               }}
             >
               Never Miss an Update
             </h3>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-300 text-sm md:text-base mb-6 max-w-xl mx-auto">
               Subscribe to our newsletter and get the latest climate innovation news delivered to your inbox
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input 
                 type="email" 
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none focus:border-white/40"
+                className="flex-1 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-white/40"
               />
               <Button 
-                className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 text-white font-semibold"
+                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 text-white font-semibold text-sm"
               >
                 Subscribe
               </Button>
