@@ -16,12 +16,26 @@ import {
   ARIA_LABELS 
 } from '@/lib/accessibility';
 
+interface Programme {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  href: string;
+  color: string;
+}
+
+interface ProgrammesSectionProps {
+  programmes?: Programme[];
+}
+
 /**
  * ProgrammesSection component with creative staggered layout
  * Features hover tilt effects, colored shadows, and smooth entrance animations
  */
-export default function ProgrammesSection() {
-  const { programmes } = homePageData;
+export default function ProgrammesSection({ programmes: programmesProp }: ProgrammesSectionProps = {}) {
+  // Use provided programmes or fallback to static data
+  const programmes = programmesProp || homePageData.programmes;
 
   // Custom animation variants for programme cards
   const cardVariants = {

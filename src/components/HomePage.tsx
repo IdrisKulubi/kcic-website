@@ -9,89 +9,20 @@ import {
   PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
+import ProgrammesSection from "@/components/sections/ProgrammesSection";
+import { CTABanner } from "@/components/sections/CTABanner";
 import Footer from "@/components/layout/Footer";
-import { homePageData } from "@/data/home";
-import { newsData } from "@/data/news";
 import { navData } from "@/lib/navigation";
 import { useTranslation } from "@/lib/i18n";
+import type { HeroSectionData } from "@/lib/actions/hero";
+import type { StatisticData } from "@/lib/actions/stats";
+import type { NewsData } from "@/lib/actions/news";
+import type { PartnerData as DBPartnerData } from "@/lib/actions/partners";
+import type { ProgrammeData } from "@/lib/actions/programmes";
+import type { FooterSectionData, FooterLinkData, FooterSocialMediaData } from "@/lib/actions/footer";
+import type { CTABannerData } from "@/lib/actions/cta";
 
-// Static data that doesn't need translation
-const partnersData: PartnerData[] = [
-  {
-    id: "1",
-    name: "World Bank",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/World_Bank_logo.svg/200px-World_Bank_logo.svg.png",
-    category: "donor",
-    description: "Global development partner",
-    website: "https://www.worldbank.org",
-    featured: true,
-  },
-  {
-    id: "2",
-    name: "USAID",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/USAID-Identity.svg/200px-USAID-Identity.svg.png",
-    category: "donor",
-    description: "US Agency for International Development",
-    website: "https://www.usaid.gov",
-    featured: true,
-  },
-  {
-    id: "3",
-    name: "GIZ",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/GIZ-logo.svg/200px-GIZ-logo.svg.png",
-    category: "donor",
-    description: "German development cooperation",
-    website: "https://www.giz.de",
-    featured: true,
-  },
-  {
-    id: "4",
-    name: "DFID",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/UK_aid_logo.svg/200px-UK_aid_logo.svg.png",
-    category: "donor",
-    description: "UK development assistance",
-    website: "https://www.gov.uk",
-    featured: true,
-  },
-  {
-    id: "5",
-    name: "UNDP",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/UNDP_logo.svg/200px-UNDP_logo.svg.png",
-    category: "partner",
-    description: "UN Development Programme",
-    website: "https://www.undp.org",
-    featured: true,
-  },
-  {
-    id: "6",
-    name: "Climate-KIC",
-    logo: "https://www.climate-kic.org/wp-content/themes/climate-kic/assets/img/logo.svg",
-    category: "partner",
-    description: "Europe's climate innovation initiative",
-    website: "https://www.climate-kic.org",
-    featured: true,
-  },
-  {
-    id: "7",
-    name: "Kenya Government",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/200px-Flag_of_Kenya.svg.png",
-    category: "partner",
-    description: "Government of Kenya",
-    website: "https://www.kenya.go.ke",
-    featured: true,
-  },
-  {
-    id: "8",
-    name: "Strathmore University",
-    logo: "https://strathmore.edu/wp-content/uploads/2023/03/Strathmore_University_Logo.png",
-    category: "collaborator",
-    description: "Academic partner",
-    website: "https://strathmore.edu",
-    featured: true,
-  },
-];
-
-// Targets data for 2025
+// Targets data for 2025 (static for now)
 const targetsData = [
   {
     value: "1,000+",
@@ -111,7 +42,21 @@ const targetsData = [
   },
 ];
 
-export default function HomePage() {
+interface HomePageProps {
+  hero: HeroSectionData | null;
+  stats: StatisticData[];
+  news: NewsData[];
+  partners: DBPartnerData[];
+  programmes: ProgrammeData[];
+  footer: {
+    section: FooterSectionData;
+    links: FooterLinkData[];
+    socialMedia: FooterSocialMediaData[];
+  } | null;
+  cta: CTABannerData | null;
+}
+
+export default function HomePage({ hero, stats, news, partners, programmes, footer, cta }: HomePageProps) {
   const { t, locale } = useTranslation();
 
   // Update document title based on locale
@@ -121,8 +66,18 @@ export default function HomePage() {
       : 'KCIC - Empowering Climate Innovation in Kenya';
   }, [locale]);
 
-  // Create translated hero data
-  const translatedHeroData = {
+  // Transform hero data from database or use translations as fallback
+  const translatedHeroData = hero ? {
+    title: hero.headline,
+    subtitle: t('hero.subtitle'),
+    description: hero.subtext,
+    stats: t('hero.stats'),
+    ctaButtons: hero.buttons.map(btn => ({
+      text: btn.text,
+      href: btn.href,
+      variant: btn.variant as "primary" | "secondary",
+    })),
+  } : {
     title: t('hero.title'),
     subtitle: t('hero.subtitle'),
     description: t('hero.description'),
@@ -141,8 +96,11 @@ export default function HomePage() {
     ],
   };
 
-  // Create translated stats data
-  const translatedStatsData = [
+  // Transform stats data from database or use translations as fallback
+  const translatedStatsData = stats.length > 0 ? stats.map(stat => ({
+    value: `${stat.value}${stat.suffix || '+'}`,
+    description: stat.label,
+  })) : [
     {
       value: "450+",
       description: t('stats.smes'),
@@ -160,6 +118,103 @@ export default function HomePage() {
       description: t('stats.solutions'),
     },
   ];
+
+  // Transform news data from database
+  const newsItems = news.map(article => ({
+    id: article.id,
+    title: article.title,
+    excerpt: article.excerpt,
+    publishedAt: typeof article.publishedAt === 'string' ? article.publishedAt : article.publishedAt.toISOString().split('T')[0],
+    category: article.category,
+    imageUrl: article.thumbnail,
+    slug: article.slug,
+    readTime: article.readTime || '5 min',
+    featured: article.featured,
+  }));
+
+  // Transform partners data from database
+  const partnersDataTransformed: PartnerData[] = partners.map(partner => ({
+    id: partner.id,
+    name: partner.name,
+    logo: partner.logo,
+    category: "partner", // Default category since DB doesn't have this field
+    description: partner.name,
+    website: partner.website || undefined,
+    featured: true,
+  }));
+
+  // Transform programmes data from database
+  const programmesDataTransformed = programmes.map(prog => ({
+    id: prog.id,
+    title: prog.title,
+    description: prog.description,
+    image: prog.image,
+    href: prog.href,
+    color: prog.color,
+  }));
+
+  // Transform CTA banner data from database
+  const ctaBannerData = cta ? {
+    headline: cta.headline,
+    subtext: cta.subtext || undefined,
+    ctaButton: {
+      text: cta.buttonText,
+      href: cta.buttonHref,
+    },
+  } : {
+    headline: "Join us in building a sustainable future",
+    subtext: "Be part of Kenya's climate innovation revolution.",
+    ctaButton: {
+      text: "Apply Now",
+      href: "/apply",
+    },
+  };
+
+  // Transform footer data from database
+  const footerData = footer ? {
+    quickLinks: footer.links.map(link => ({
+      label: link.label,
+      href: link.href,
+    })),
+    socialMedia: footer.socialMedia.map(sm => ({
+      platform: sm.platform,
+      href: sm.href,
+      icon: sm.icon,
+    })),
+    contact: {
+      address: footer.section.contactAddress,
+      phone: footer.section.contactPhone,
+      email: footer.section.contactEmail,
+    },
+    newsletter: {
+      title: footer.section.newsletterTitle,
+      description: footer.section.newsletterDescription,
+      placeholder: footer.section.newsletterPlaceholder,
+    },
+    copyright: footer.section.copyright,
+  } : {
+    quickLinks: [
+      { label: "About", href: "/about" },
+      { label: "Programmes", href: "/programmes" },
+      { label: "Media Centre", href: "/media" },
+      { label: "Contacts", href: "/contacts" },
+    ],
+    socialMedia: [
+      { platform: "Twitter", href: "https://twitter.com/kcic_kenya", icon: "twitter" },
+      { platform: "LinkedIn", href: "https://linkedin.com/company/kcic-kenya", icon: "linkedin" },
+    ],
+    contact: {
+      address: "Kenya Climate Innovation Centre, Nairobi, Kenya",
+      phone: "+254 20 123 4567",
+      email: "info@kenyacic.org",
+    },
+    newsletter: {
+      title: "Stay Updated",
+      description: "Get the latest news on climate innovation.",
+      placeholder: "Enter your email address",
+    },
+    copyright: "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
+  };
 
   return (
     <>
@@ -217,13 +272,21 @@ export default function HomePage() {
         <MinimalStatsSection stats={translatedStatsData} targets={targetsData} />
 
         {/* News Section */}
-        <NewsSection news={newsData} />
+        <NewsSection news={newsItems} />
 
         {/* Partners Section */}
-        <PartnersSection partners={partnersData} />
+        <PartnersSection partners={partnersDataTransformed} />
+
+        {/* Programmes Section */}
+        {programmesDataTransformed.length > 0 && (
+          <ProgrammesSection programmes={programmesDataTransformed} />
+        )}
+
+        {/* CTA Banner */}
+        <CTABanner data={ctaBannerData} />
 
         {/* Footer */}
-        <Footer data={homePageData.footer} />
+        <Footer data={footerData} />
       </div>
     </>
   );
