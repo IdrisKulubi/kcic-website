@@ -24,6 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 interface NavItem {
@@ -32,16 +33,41 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-const navItems: NavItem[] = [
-  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { title: "Hero Section", href: "/admin/hero", icon: Home },
-  { title: "Statistics", href: "/admin/stats", icon: BarChart3 },
-  { title: "News", href: "/admin/news", icon: Newspaper },
-  { title: "Team", href: "/admin/team", icon: Users },
-  { title: "Partners", href: "/admin/partners", icon: Handshake },
-  { title: "Programmes", href: "/admin/programmes", icon: Briefcase },
-  { title: "Footer", href: "/admin/footer", icon: Layout },
-  { title: "CTA Banner", href: "/admin/cta", icon: Megaphone },
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+const navGroups: NavGroup[] = [
+  {
+    label: "Overview",
+    items: [
+      { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Homepage Content",
+    items: [
+      { title: "Hero Section", href: "/admin/hero", icon: Home },
+      { title: "Statistics", href: "/admin/stats", icon: BarChart3 },
+      { title: "Programmes", href: "/admin/programmes", icon: Briefcase },
+      { title: "CTA Banner", href: "/admin/cta", icon: Megaphone },
+    ],
+  },
+  {
+    label: "Dynamic Content",
+    items: [
+      { title: "News", href: "/admin/news", icon: Newspaper },
+      { title: "Team", href: "/admin/team", icon: Users },
+      { title: "Partners", href: "/admin/partners", icon: Handshake },
+    ],
+  },
+  {
+    label: "Site-wide",
+    items: [
+      { title: "Footer", href: "/admin/footer", icon: Layout },
+    ],
+  },
 ];
 
 interface AdminSidebarProps {
@@ -68,28 +94,33 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Content Management</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                const Icon = item.icon;
-                
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.href}>
-                        <Icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {navGroups.map((group, index) => (
+          <div key={group.label}>
+            <SidebarGroup>
+              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href;
+                    const Icon = item.icon;
+                    
+                    return (
+                      <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton asChild isActive={isActive}>
+                          <Link href={item.href}>
+                            <Icon className="h-4 w-4" />
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            {index < navGroups.length - 1 && <SidebarSeparator />}
+          </div>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <div className="px-2 py-2 text-xs text-muted-foreground">
