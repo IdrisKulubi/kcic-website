@@ -7,6 +7,10 @@ import { skipLinkUtils, landmarkUtils } from "@/lib/accessibility";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
 import { AccessibilityProvider } from "@/contexts/accessibility-context";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -189,6 +193,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased accessibility-enhanced`}
       >
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <AccessibilityProvider>
           <ThemeProvider
             attribute="class"
@@ -208,7 +213,8 @@ export default function RootLayout({
               {children}
             </main>
             
-           
+            {/* Toast notifications */}
+            <Toaster position="top-right" richColors closeButton />
             
             {/* Performance monitoring (development only) */}
             <PerformanceMonitor />
