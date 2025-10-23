@@ -51,17 +51,32 @@ export default function LoginPage() {
       });
 
       if (response.error) {
-        toast.error("Invalid email or password");
+        console.error("Login error:", response.error);
+        
+        // Provide specific error messages
+        const errorMessage = response.error.message || "Invalid email or password";
+        
+        if (errorMessage.includes("Invalid password")) {
+          toast.error("Invalid password. Please check your password and try again.");
+        } else if (errorMessage.includes("User not found")) {
+          toast.error("No account found with this email address.");
+        } else if (errorMessage.includes("hash")) {
+          toast.error("Authentication error. Please contact support.");
+        } else {
+          toast.error(errorMessage);
+        }
+        
         setIsLoading(false);
         return;
       }
 
-      toast.success("Login successful");
+      toast.success("Login successful! Redirecting...");
       router.push("/admin");
       router.refresh();
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("An error occurred during login");
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+      toast.error(`Login failed: ${errorMessage}`);
       setIsLoading(false);
     }
   };

@@ -9,7 +9,8 @@ import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema";
 import {
-  admins,
+  user,
+  account,
   heroSection,
   heroButtons,
   statistics,
@@ -34,18 +35,39 @@ async function seed() {
   console.log("🌱 Starting database seed...");
 
   try {
-    // Seed Admin User
+    // Seed Admin User (Better Auth)
     console.log("Seeding admin user...");
     // Using bcrypt-compatible hash for password "admin123"
     // In production, this should be changed immediately
     const bcrypt = await import("bcryptjs");
     const passwordHash = await bcrypt.hash("admin123", 10);
     
-    await db.insert(admins).values({
-      id: crypto.randomUUID(),
+    const userId = crypto.randomUUID();
+    
+    // Create user
+    await db.insert(user).values({
+      id: userId,
       email: "admin@kcic.com",
-      passwordHash: passwordHash,
+      emailVerified: true,
       name: "Admin User",
+      image: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    // Create account with password
+    await db.insert(account).values({
+      id: crypto.randomUUID(),
+      accountId: userId,
+      providerId: "credential",
+      userId: userId,
+      password: passwordHash,
+      accessToken: null,
+      refreshToken: null,
+      idToken: null,
+      accessTokenExpiresAt: null,
+      refreshTokenExpiresAt: null,
+      scope: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
