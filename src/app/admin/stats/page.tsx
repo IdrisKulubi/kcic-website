@@ -1,5 +1,6 @@
 'use client';
 
+import type { ComponentType } from 'react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,7 +27,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Loader2, Plus, Trash2, Pencil, GripVertical } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import * as LucideIcons from 'lucide-react';
+import { Loader2, Plus, Trash2, Pencil, GripVertical, BarChart3 } from 'lucide-react';
 import { 
   listStatistics, 
   createStatistic, 
@@ -47,6 +50,14 @@ const statisticFormSchema = z.object({
 
 type StatisticFormData = z.infer<typeof statisticFormSchema>;
 
+const ICON_SUGGESTIONS = ['TrendingUp','Users','Award','BarChart3','Handshake','Briefcase','Target','Trophy','Leaf','Globe'];
+
+function getIconByName(name?: string) {
+  if (!name) return BarChart3;
+  const Icon = (LucideIcons as Record<string, ComponentType<{ className?: string }>>)[name];
+  return Icon || BarChart3;
+}
+
 export default function StatisticsPage() {
   const [statistics, setStatistics] = useState<StatisticData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,6 +72,7 @@ export default function StatisticsPage() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors }
   } = useForm<StatisticFormData>({
     resolver: zodResolver(statisticFormSchema),
@@ -169,7 +181,7 @@ export default function StatisticsPage() {
     setDraggedIndex(index);
   };
 
-  const handleDragOver = (e: React.DragEvent, index: number) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
@@ -218,83 +230,140 @@ export default function StatisticsPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Statistics Management</h1>
-          <p className="text-muted-foreground mt-2">
-            Manage the impact statistics displayed on your homepage
-          </p>
+    <div className="flex flex-col gap-6">
+      {/* Header banner */}
+      <div className="relative overflow-hidden rounded-xl bg-hero-gradient p-6 text-white shadow-glass">
+        <div className="absolute inset-0 opacity-20 sustainability-pattern" />
+        <div className="relative z-10 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Statistics</h1>
+            <p className="text-white/80">Manage the impact metrics shown on the homepage</p>
+          </div>
+          <Button onClick={handleCreate} variant="secondary" className="border-white/20 bg-white/10 text-white hover:bg-white/20">
+            <Plus className="mr-2 h-4 w-4" /> Add Statistic
+          </Button>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Statistic
-        </Button>
       </div>
 
+      {/* Live preview */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Preview</CardTitle>
+          <CardDescription>How your statistics will look to visitors</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {statistics.length === 0 ? (
+            <div className="flex items-center justify-center py-8 text-muted-foreground">No statistics yet</div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {statistics.map((stat) => {
+                const Icon = getIconByName(stat.icon);
+                return (
+                  <div key={`preview-${stat.id}`} className="rounded-lg border p-4 hover-lift">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold tabular-nums">{stat.value}{stat.suffix}</div>
+                        <div className="text-sm text-muted-foreground">{stat.label}</div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold">Manage</h2>
+        {statistics.length > 0 && (
+          <p className="text-sm text-muted-foreground">Tip: drag the handle to reorder</p>
+        )}
+      </div>
+
+      {/* Manage list */}
       {statistics.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <p className="text-muted-foreground mb-4">No statistics yet</p>
+            <p className="mb-4 text-muted-foreground">No statistics yet</p>
             <Button onClick={handleCreate}>
-              <Plus className="h-4 w-4 mr-2" />
-              Create First Statistic
+              <Plus className="mr-2 h-4 w-4" /> Create First Statistic
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
-          {statistics.map((stat, index) => (
-            <Card
-              key={stat.id}
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={(e) => handleDragOver(e, index)}
-              onDrop={(e) => handleDrop(e, index)}
-              className="cursor-move hover:shadow-md transition-shadow"
-            >
-              <CardContent className="flex items-center gap-4 p-6">
-                <GripVertical className="h-5 w-5 text-muted-foreground" />
-                
-                <div className="flex-1 grid grid-cols-4 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Label</p>
-                    <p className="font-medium">{stat.label}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Value</p>
-                    <p className="font-medium">{stat.value}{stat.suffix}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Icon</p>
-                    <p className="font-medium">{stat.icon}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Order</p>
-                    <p className="font-medium">{stat.order}</p>
-                  </div>
-                </div>
+        <div className="grid gap-4">
+          {statistics.map((stat, index) => {
+            const Icon = getIconByName(stat.icon);
+            return (
+              <Card
+                key={stat.id}
+                draggable
+                onDragStart={() => handleDragStart(index)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+                className="transition-shadow hover:shadow-md"
+              >
+                <CardContent className="flex items-center gap-4 p-6">
+                  <GripVertical className="h-5 w-5 text-muted-foreground cursor-grab" />
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleEdit(stat)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteClick(stat.id!)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                  </div>
+
+                  <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Label</p>
+                      <p className="font-medium">{stat.label}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Value</p>
+                      <p className="font-medium tabular-nums">{stat.value}{stat.suffix}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Icon</p>
+                      <p className="font-medium">{stat.icon}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Order</p>
+                      <p className="font-medium">{stat.order}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(stat)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Edit</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(stat.id!)}
+                            className="text-red-500 hover:bg-red-50 hover:text-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
 
@@ -309,60 +378,85 @@ export default function StatisticsPage() {
           </DialogHeader>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="label">Label</Label>
-              <Input
-                id="label"
-                {...register('label')}
-                placeholder="e.g., Startups Supported"
-                className={errors.label ? 'border-red-500' : ''}
-              />
-              {errors.label && (
-                <p className="text-sm text-red-500">{errors.label.message}</p>
-              )}
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="label">Label</Label>
+                <Input
+                  id="label"
+                  {...register('label')}
+                  placeholder="e.g., Startups Supported"
+                  className={errors.label ? 'border-red-500' : ''}
+                />
+                {errors.label && (
+                  <p className="text-sm text-red-500">{errors.label.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="value">Value</Label>
+                <Input
+                  id="value"
+                  type="number"
+                  {...register('value')}
+                  placeholder="e.g., 100"
+                  className={errors.value ? 'border-red-500' : ''}
+                />
+                {errors.value && (
+                  <p className="text-sm text-red-500">{errors.value.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="suffix">Suffix (optional)</Label>
+                <Input
+                  id="suffix"
+                  {...register('suffix')}
+                  placeholder="e.g., +, K, M"
+                  className={errors.suffix ? 'border-red-500' : ''}
+                />
+                {errors.suffix && (
+                  <p className="text-sm text-red-500">{errors.suffix.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="icon">Icon</Label>
+                <Input
+                  id="icon"
+                  {...register('icon')}
+                  placeholder="e.g., TrendingUp, Users, Award"
+                  className={errors.icon ? 'border-red-500' : ''}
+                  list="icon-suggestions"
+                />
+                <datalist id="icon-suggestions">
+                  {ICON_SUGGESTIONS.map((opt) => (
+                    <option key={opt} value={opt} />
+                  ))}
+                </datalist>
+                {errors.icon && (
+                  <p className="text-sm text-red-500">{errors.icon.message}</p>
+                )}
+                <p className="text-xs text-muted-foreground">Use Lucide icon names (e.g., TrendingUp, Users, Award)</p>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="value">Value</Label>
-              <Input
-                id="value"
-                type="number"
-                {...register('value')}
-                placeholder="e.g., 100"
-                className={errors.value ? 'border-red-500' : ''}
-              />
-              {errors.value && (
-                <p className="text-sm text-red-500">{errors.value.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="suffix">Suffix (optional)</Label>
-              <Input
-                id="suffix"
-                {...register('suffix')}
-                placeholder="e.g., +, K, M"
-                className={errors.suffix ? 'border-red-500' : ''}
-              />
-              {errors.suffix && (
-                <p className="text-sm text-red-500">{errors.suffix.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="icon">Icon</Label>
-              <Input
-                id="icon"
-                {...register('icon')}
-                placeholder="e.g., TrendingUp, Users, Award"
-                className={errors.icon ? 'border-red-500' : ''}
-              />
-              {errors.icon && (
-                <p className="text-sm text-red-500">{errors.icon.message}</p>
-              )}
-              <p className="text-xs text-muted-foreground">
-                Use Lucide icon names (e.g., TrendingUp, Users, Award)
-              </p>
+            {/* Live mini preview in dialog */}
+            <div className="rounded-md border p-3">
+              <p className="mb-2 text-xs text-muted-foreground">Preview</p>
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const Icon = getIconByName(watch('icon'));
+                  return (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                  );
+                })()}
+                <div>
+                  <div className="text-2xl font-bold tabular-nums">{watch('value') ?? 0}{watch('suffix') ?? ''}</div>
+                  <div className="text-sm text-muted-foreground">{watch('label') || 'Label'}</div>
+                </div>
+              </div>
             </div>
 
             <DialogFooter>

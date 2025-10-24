@@ -25,7 +25,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  SidebarInput,
 } from "@/components/ui/sidebar";
+import { ModeToggle } from "@/components/themes/mode-toggle";
 
 interface NavItem {
   title: string;
@@ -41,9 +43,7 @@ interface NavGroup {
 const navGroups: NavGroup[] = [
   {
     label: "Overview",
-    items: [
-      { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    ],
+    items: [{ title: "Dashboard", href: "/admin", icon: LayoutDashboard }],
   },
   {
     label: "Homepage Content",
@@ -64,9 +64,7 @@ const navGroups: NavGroup[] = [
   },
   {
     label: "Site-wide",
-    items: [
-      { title: "Footer", href: "/admin/footer", icon: Layout },
-    ],
+    items: [{ title: "Footer", href: "/admin/footer", icon: Layout }],
   },
 ];
 
@@ -81,16 +79,19 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow">
             <LayoutDashboard className="h-4 w-4" />
           </div>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
             <span className="text-sm font-semibold">KCIC Admin</span>
             <span className="text-xs text-muted-foreground">Content Management</span>
           </div>
+        </div>
+        <div className="px-2 pt-1 group-data-[collapsible=icon]:hidden">
+          <SidebarInput placeholder="Search…" aria-label="Search in admin" />
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -103,10 +104,10 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                   {group.items.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
-                    
+
                     return (
                       <SidebarMenuItem key={item.href}>
-                        <SidebarMenuButton asChild isActive={isActive}>
+                        <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
                           <Link href={item.href}>
                             <Icon className="h-4 w-4" />
                             <span>{item.title}</span>
@@ -123,9 +124,12 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-2 py-2 text-xs text-muted-foreground">
-          <p className="truncate font-medium">{user.name}</p>
-          <p className="truncate">{user.email}</p>
+        <div className="flex items-center justify-between gap-2 px-2 py-2">
+          <div className="text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
+            <p className="truncate font-medium">{user.name}</p>
+            <p className="truncate">{user.email}</p>
+          </div>
+          <ModeToggle />
         </div>
       </SidebarFooter>
     </Sidebar>

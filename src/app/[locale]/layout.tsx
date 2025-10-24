@@ -14,13 +14,7 @@ export default function LocaleLayout({ children, params: { locale } }: LocaleLay
     notFound();
   }
 
-  return (
-    <html lang={locale}>
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+  return <>{children}</>;
 }
 
 export async function generateStaticParams() {

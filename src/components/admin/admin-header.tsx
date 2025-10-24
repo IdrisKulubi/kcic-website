@@ -23,6 +23,7 @@ import { LogOut, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { ModeToggle } from "@/components/themes/mode-toggle";
 
 interface AdminHeaderProps {
   user: {
@@ -50,13 +51,13 @@ export function AdminHeader({ user }: AdminHeaderProps) {
   // Generate breadcrumbs from pathname
   const generateBreadcrumbs = () => {
     const paths = pathname.split("/").filter(Boolean);
-    const breadcrumbs = [];
+    const breadcrumbs = [] as { label: string; href: string; isLast: boolean }[];
 
     for (let i = 0; i < paths.length; i++) {
       const path = paths[i];
       const href = "/" + paths.slice(0, i + 1).join("/");
       const label = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
-      
+
       breadcrumbs.push({
         label,
         href,
@@ -90,6 +91,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         </BreadcrumbList>
       </Breadcrumb>
       <div className="ml-auto flex items-center gap-2">
+        <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
@@ -101,9 +103,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">{user.name}</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {user.email}
-                </p>
+                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
