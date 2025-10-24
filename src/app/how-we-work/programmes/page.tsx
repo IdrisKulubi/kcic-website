@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
 import { Lightbulb, Target, Users, TrendingUp, Clock, Award, ArrowRight, CheckCircle } from 'lucide-react';
@@ -344,13 +345,13 @@ export default function ProgrammesPage() {
               viewport={{ once: true }}
               className="text-center mt-12"
             >
-              <a
+              <Link
                 href="/apply"
                 className="inline-flex items-center px-8 py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200 text-lg"
               >
                 Start Your Application
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
+              </Link>
             </motion.div>
           </div>
         </div>

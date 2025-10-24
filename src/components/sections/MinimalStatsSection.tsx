@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useLayoutEffect, useRef } from 'react';
+import Link from 'next/link';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { Button } from '@/components/ui/button';
@@ -133,10 +134,10 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
                   style={{ fontFamily: typography.fonts.body }}
                   asChild
                 >
-                  <a href="/impact">
+                  <Link href="/impact">
                     Learn More
                     <ArrowRight className="h-4 w-4 ml-2" />
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>

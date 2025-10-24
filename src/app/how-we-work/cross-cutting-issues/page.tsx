@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
 import { 
@@ -518,19 +519,19 @@ export default function CrossCuttingIssuesPage() {
                 and create an enabling environment for climate innovation.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/about/contact-us"
                   className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   <Heart className="w-4 h-4 mr-2" />
                   Partner with Us
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/how-we-work/programmes"
                   className="inline-flex items-center px-8 py-3 bg-white text-green-600 font-semibold rounded-lg border border-green-600 hover:bg-green-50 transition-colors duration-200"
                 >
                   Explore Our Programs
-                </a>
+                </Link>
               </div>
             </motion.div>
           </div>

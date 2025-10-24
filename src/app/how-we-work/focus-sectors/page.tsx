@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
 import { 
@@ -566,13 +567,13 @@ export default function FocusSectorsPage() {
                 Join our ecosystem of climate innovators working across these strategic sectors to create sustainable impact.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/how-we-work/programmes"
                   className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   Explore Our Programmes
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/apply"
                   className="inline-flex items-center px-8 py-3 bg-white text-green-600 font-semibold rounded-lg border border-green-600 hover:bg-green-50 transition-colors duration-200"
                 >
