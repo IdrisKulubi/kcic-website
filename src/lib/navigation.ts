@@ -124,8 +124,8 @@ export const navData = {
       href: "/faqs"
     },
   ],
-  // ctaButton: {
-  //   text: "Apply Now",
-  //   href: "/apply",
-  // },
+  ctaButton: {
+    text: "Apply Now",
+    href: "/apply",
+  },
 };
