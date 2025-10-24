@@ -10,7 +10,6 @@ import {
   FormUrl,
   FormSwitch,
   FormSelect,
-  FormCheckbox,
 } from "./form-fields";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

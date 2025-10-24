@@ -5,6 +5,7 @@ import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
 import { navData } from "@/lib/navigation";
 import { ArrowRight, Target, Users, Globe } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About KCIC - Leading Climate Innovation in Kenya",
@@ -196,10 +197,10 @@ export default function AboutPage() {
               }}
               asChild
             >
-              <a href="/programs" className="flex items-center space-x-2">
+              <Link href="/programs" className="flex items-center space-x-2">
                 <span>Explore Our Programs</span>
                 <ArrowRight className="h-5 w-5" />
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

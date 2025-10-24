@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Lightbulb, TrendingUp, Handshake, Award } from 'lucide-react';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Programs - KCIC Climate Innovation Support',
@@ -240,10 +241,10 @@ export default function ProgramsPage() {
             }}
             asChild
           >
-            <a href="/apply" className="flex items-center space-x-2">
+            <Link href="/apply" className="flex items-center space-x-2">
               <span>Start Your Application</span>
               <ArrowRight className="h-5 w-5" />
-            </a>
+            </Link>
           </Button>
         </div>
       </section>

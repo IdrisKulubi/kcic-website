@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { navData } from "@/lib/navigation";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contact KCIC - Get in Touch with Our Team",
@@ -313,7 +314,7 @@ export default function ContactPage() {
               }}
               asChild
             >
-              <a href="/programs">Explore Our Programs</a>
+              <Link href="/programs">Explore Our Programs</Link>
             </Button>
 
             <Button
@@ -326,7 +327,7 @@ export default function ContactPage() {
               }}
               asChild
             >
-              <a href="/apply">Apply Now</a>
+              <Link href="/apply">Apply Now</Link>
             </Button>
           </div>
         </div>

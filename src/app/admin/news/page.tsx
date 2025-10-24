@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,31 +13,35 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Loader2, Plus, Star, StarOff } from 'lucide-react';
-import { DataTable, type DataTableColumn, type DataTableAction } from '@/components/admin/data-table';
-import { 
-  listNews, 
+} from "@/components/ui/select";
+import { Loader2, Plus, Star, StarOff } from "lucide-react";
+import {
+  DataTable,
+  type DataTableColumn,
+  type DataTableAction,
+} from "@/components/admin/data-table";
+import {
+  listNews,
   deleteNewsArticle,
   toggleFeaturedNews,
-  type NewsData 
-} from '@/lib/actions/news';
-import { showSuccessToast, showErrorToast } from '@/lib/toast';
+  type NewsData,
+} from "@/lib/actions/news";
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
 
 const NEWS_CATEGORIES = [
-  'All Categories',
-  'Events',
-  'Announcements',
-  'Success Stories',
-  'Press Release',
-  'Updates'
+  "All Categories",
+  "Events",
+  "Announcements",
+  "Success Stories",
+  "Press Release",
+  "Updates",
 ];
 
 export default function NewsListPage() {
@@ -46,21 +50,25 @@ export default function NewsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
   // Load news articles
   const loadNews = async () => {
     setIsLoading(true);
     const result = await listNews({
-      category: selectedCategory === 'All Categories' ? undefined : selectedCategory
+      category:
+        selectedCategory === "All Categories" ? undefined : selectedCategory,
     });
-    
+
     if (result.success && result.data) {
       setArticles(result.data.articles);
     } else {
-      showErrorToast('Failed to load news', result.error);
+      showErrorToast(
+        "Failed to load news",
+        !result.success ? result.error : "Unknown error"
+      );
     }
-    
+
     setIsLoading(false);
   };
 
@@ -76,16 +84,19 @@ export default function NewsListPage() {
 
   const handleDeleteConfirm = async () => {
     if (!deletingId) return;
-    
+
     const result = await deleteNewsArticle(deletingId);
-    
+
     if (result.success) {
-      showSuccessToast('Article deleted', 'The news article has been removed');
+      showSuccessToast("Article deleted", "The news article has been removed");
       await loadNews();
     } else {
-      showErrorToast('Failed to delete article', result.error);
+      showErrorToast(
+        "Failed to delete article",
+        !result.success ? result.error : "Unknown error"
+      );
     }
-    
+
     setDeleteDialogOpen(false);
     setDeletingId(null);
   };
@@ -93,15 +104,18 @@ export default function NewsListPage() {
   // Handle toggle featured
   const handleToggleFeatured = async (article: NewsData) => {
     const result = await toggleFeaturedNews(article.id!);
-    
+
     if (result.success) {
       showSuccessToast(
-        article.featured ? 'Removed from featured' : 'Added to featured',
-        'Changes are now live on the homepage'
+        article.featured ? "Removed from featured" : "Added to featured",
+        "Changes are now live on the homepage"
       );
       await loadNews();
     } else {
-      showErrorToast('Failed to update featured status', result.error);
+      showErrorToast(
+        "Failed to update featured status",
+        !result.success ? result.error : "Unknown error"
+      );
     }
   };
 
@@ -113,19 +127,19 @@ export default function NewsListPage() {
   // Define table columns
   const columns: DataTableColumn<NewsData>[] = [
     {
-      key: 'thumbnail',
-      label: 'Image',
+      key: "thumbnail",
+      label: "Image",
       render: (article) => (
-        <img 
-          src={article.thumbnail} 
+        <img
+          src={article.thumbnail}
           alt={article.title}
           className="w-16 h-16 object-cover rounded"
         />
-      )
+      ),
     },
     {
-      key: 'title',
-      label: 'Title',
+      key: "title",
+      label: "Title",
       sortable: true,
       render: (article) => (
         <div className="max-w-md">
@@ -134,36 +148,36 @@ export default function NewsListPage() {
             {article.excerpt}
           </p>
         </div>
-      )
+      ),
     },
     {
-      key: 'category',
-      label: 'Category',
+      key: "category",
+      label: "Category",
       sortable: true,
       render: (article) => (
         <Badge variant="secondary">{article.category}</Badge>
-      )
+      ),
     },
     {
-      key: 'publishedAt',
-      label: 'Published',
+      key: "publishedAt",
+      label: "Published",
       sortable: true,
       render: (article) => {
         const date = new Date(article.publishedAt);
         return (
           <span className="text-sm">
-            {date.toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'short', 
-              day: 'numeric' 
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
             })}
           </span>
         );
-      }
+      },
     },
     {
-      key: 'featured',
-      label: 'Featured',
+      key: "featured",
+      label: "Featured",
       render: (article) => (
         <Button
           variant="ghost"
@@ -177,21 +191,21 @@ export default function NewsListPage() {
             <StarOff className="h-4 w-4 text-muted-foreground" />
           )}
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   // Define table actions
   const actions: DataTableAction<NewsData>[] = [
     {
-      label: 'Edit',
-      onClick: handleEdit
+      label: "Edit",
+      onClick: handleEdit,
     },
     {
-      label: 'Delete',
+      label: "Delete",
       onClick: handleDeleteClick,
-      variant: 'destructive'
-    }
+      variant: "destructive",
+    },
   ];
 
   if (isLoading) {
@@ -211,7 +225,7 @@ export default function NewsListPage() {
             Manage news articles and announcements
           </p>
         </div>
-        <Button onClick={() => router.push('/admin/news/new')}>
+        <Button onClick={() => router.push("/admin/news/new")}>
           <Plus className="h-4 w-4 mr-2" />
           Add Article
         </Button>
@@ -248,7 +262,8 @@ export default function NewsListPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this news article. This action cannot be undone.
+              This will permanently delete this news article. This action cannot
+              be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

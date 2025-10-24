@@ -6,6 +6,7 @@ import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
 import { navData } from "@/lib/navigation";
 import { ArrowRight, Leaf, Users, DollarSign, Building } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Impact - KCIC Climate Innovation Results",
@@ -322,10 +323,10 @@ export default function ImpactPage() {
             }}
             asChild
           >
-            <a href="/programs" className="flex items-center space-x-2">
+            <Link href="/programs" className="flex items-center space-x-2">
               <span>Join Our Programs</span>
               <ArrowRight className="h-5 w-5" />
-            </a>
+            </Link>
           </Button>
         </div>
       </section>

@@ -4,6 +4,7 @@ import React from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
 import { Mail, Linkedin, Twitter, Award, Briefcase, Users } from 'lucide-react';
+import Link from 'next/link';
 
 // Sample team data - will be replaced with real data later
 const leadership = [
@@ -444,12 +445,12 @@ export default function OurTeamPage() {
                 We&apos;re always looking for talented individuals to join our mission.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/about/careers"
                   className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                   View Open Positions
-                </a>
+                </Link>
                 <a
                   href="mailto:careers@kenyacic.org"
                   className="inline-flex items-center px-8 py-3 bg-white text-green-600 font-semibold rounded-lg border border-green-600 hover:bg-green-50 transition-colors duration-200"

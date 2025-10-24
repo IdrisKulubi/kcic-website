@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
+import Image from "next/image";
 
 export interface NewsItem {
   id: string;
@@ -141,7 +142,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   <Card className="h-full group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500">
                     {featuredNews.imageUrl && (
                       <div className="relative h-96 overflow-hidden">
-                        <img
+                        <Image
                           src={featuredNews.imageUrl}
                           alt={featuredNews.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -172,7 +173,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           {featuredNews.author && (
                             <div className="flex items-center gap-2">
                               {featuredNews.author.avatar && (
-                                <img 
+                                <Image
                                   src={featuredNews.author.avatar} 
                                   alt={featuredNews.author.name}
                                   className="w-6 h-6 rounded-full"
@@ -232,7 +233,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       <div className="flex gap-4">
                         {article.imageUrl && (
                           <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
-                            <img
+                            <Image
                               src={article.imageUrl}
                               alt={article.title}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -293,7 +294,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   >
                     {article.imageUrl && (
                       <div className="relative h-48 overflow-hidden">
-                        <img
+                        <Image
                           src={article.imageUrl}
                           alt={article.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

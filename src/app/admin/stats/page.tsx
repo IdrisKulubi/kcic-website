@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import type { ComponentType } from 'react';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
+import type { ComponentType } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -18,43 +24,81 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { 
+} from "@/components/ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import * as LucideIcons from 'lucide-react';
-import { Loader2, Plus, Trash2, Pencil, GripVertical, BarChart3 } from 'lucide-react';
-import { 
-  listStatistics, 
-  createStatistic, 
-  updateStatistic, 
+} from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import * as LucideIcons from "lucide-react";
+import {
+  Loader2,
+  Plus,
+  Trash2,
+  Pencil,
+  GripVertical,
+  BarChart3,
+} from "lucide-react";
+import {
+  listStatistics,
+  createStatistic,
+  updateStatistic,
   deleteStatistic,
   reorderStatistics,
-  type StatisticData 
-} from '@/lib/actions/stats';
-import { showSuccessToast, showErrorToast } from '@/lib/toast';
+  type StatisticData,
+} from "@/lib/actions/stats";
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
 
 // Validation schema for the form
 const statisticFormSchema = z.object({
-  label: z.string().min(2, 'Label must be at least 2 characters').max(100, 'Label must be at most 100 characters'),
-  value: z.coerce.number().int('Value must be an integer').min(0, 'Value must be positive'),
-  suffix: z.string().max(20, 'Suffix must be at most 20 characters').optional().or(z.literal('')),
-  icon: z.string().min(1, 'Icon is required')
+  label: z
+    .string()
+    .min(2, "Label must be at least 2 characters")
+    .max(100, "Label must be at most 100 characters"),
+  value: z
+    .number()
+    .int("Value must be an integer")
+    .min(0, "Value must be positive"),
+  suffix: z
+    .string()
+    .max(20, "Suffix must be at most 20 characters")
+    .optional()
+    .or(z.literal("")),
+  icon: z.string().min(1, "Icon is required"),
 });
 
 type StatisticFormData = z.infer<typeof statisticFormSchema>;
 
-const ICON_SUGGESTIONS = ['TrendingUp','Users','Award','BarChart3','Handshake','Briefcase','Target','Trophy','Leaf','Globe'];
+const ICON_SUGGESTIONS = [
+  "TrendingUp",
+  "Users",
+  "Award",
+  "BarChart3",
+  "Handshake",
+  "Briefcase",
+  "Target",
+  "Trophy",
+  "Leaf",
+  "Globe",
+];
 
 function getIconByName(name?: string) {
   if (!name) return BarChart3;
-  const Icon = (LucideIcons as Record<string, ComponentType<{ className?: string }>>)[name];
+  const Icon = (
+    LucideIcons as unknown as Record<
+      string,
+      ComponentType<{ className?: string }>
+    >
+  )[name];
   return Icon || BarChart3;
 }
 
@@ -73,28 +117,31 @@ export default function StatisticsPage() {
     handleSubmit,
     reset,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<StatisticFormData>({
     resolver: zodResolver(statisticFormSchema),
     defaultValues: {
-      label: '',
+      label: "",
       value: 0,
-      suffix: '',
-      icon: ''
-    }
+      suffix: "",
+      icon: "",
+    },
   });
 
   // Load statistics
   const loadStatistics = async () => {
     setIsLoading(true);
     const result = await listStatistics();
-    
+
     if (result.success && result.data) {
       setStatistics(result.data);
     } else {
-      showErrorToast('Failed to load statistics', result.error);
+      showErrorToast(
+        "Failed to load statistics",
+        !result.success ? result.error : "Unknown error"
+      );
     }
-    
+
     setIsLoading(false);
   };
 
@@ -106,10 +153,10 @@ export default function StatisticsPage() {
   const handleCreate = () => {
     setEditingId(null);
     reset({
-      label: '',
+      label: "",
       value: 0,
-      suffix: '',
-      icon: ''
+      suffix: "",
+      icon: "",
     });
     setIsDialogOpen(true);
   };
@@ -120,8 +167,8 @@ export default function StatisticsPage() {
     reset({
       label: stat.label,
       value: stat.value,
-      suffix: stat.suffix || '',
-      icon: stat.icon
+      suffix: stat.suffix || "",
+      icon: stat.icon,
     });
     setIsDialogOpen(true);
   };
@@ -129,28 +176,28 @@ export default function StatisticsPage() {
   // Handle form submission
   const onSubmit = async (data: StatisticFormData) => {
     setIsSaving(true);
-    
+
     let result;
     if (editingId) {
       result = await updateStatistic(editingId, data);
     } else {
       result = await createStatistic(data);
     }
-    
+
     if (result.success) {
       showSuccessToast(
-        editingId ? 'Statistic updated' : 'Statistic created',
-        'Changes are now live on the homepage'
+        editingId ? "Statistic updated" : "Statistic created",
+        "Changes are now live on the homepage"
       );
       setIsDialogOpen(false);
       await loadStatistics();
     } else {
       showErrorToast(
-        editingId ? 'Failed to update statistic' : 'Failed to create statistic',
-        result.error
+        editingId ? "Failed to update statistic" : "Failed to create statistic",
+        !result.success ? result.error : "Unknown error"
       );
     }
-    
+
     setIsSaving(false);
   };
 
@@ -162,16 +209,19 @@ export default function StatisticsPage() {
 
   const handleDeleteConfirm = async () => {
     if (!deletingId) return;
-    
+
     const result = await deleteStatistic(deletingId);
-    
+
     if (result.success) {
-      showSuccessToast('Statistic deleted', 'The statistic has been removed');
+      showSuccessToast("Statistic deleted", "The statistic has been removed");
       await loadStatistics();
     } else {
-      showErrorToast('Failed to delete statistic', result.error);
+      showErrorToast(
+        "Failed to delete statistic",
+        !result.success ? result.error : "Unknown error"
+      );
     }
-    
+
     setDeleteDialogOpen(false);
     setDeletingId(null);
   };
@@ -187,7 +237,7 @@ export default function StatisticsPage() {
 
   const handleDrop = async (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    
+
     if (draggedIndex === null || draggedIndex === dropIndex) {
       setDraggedIndex(null);
       return;
@@ -206,16 +256,19 @@ export default function StatisticsPage() {
     const reorderData = {
       items: newStats.map((stat, idx) => ({
         id: stat.id!,
-        order: idx
-      }))
+        order: idx,
+      })),
     };
 
     const result = await reorderStatistics(reorderData);
-    
+
     if (result.success) {
-      showSuccessToast('Order updated', 'Statistics have been reordered');
+      showSuccessToast("Order updated", "Statistics have been reordered");
     } else {
-      showErrorToast('Failed to reorder statistics', result.error);
+      showErrorToast(
+        "Failed to reorder statistics",
+        !result.success ? result.error : "Unknown error"
+      );
       // Reload to get correct order
       await loadStatistics();
     }
@@ -237,9 +290,15 @@ export default function StatisticsPage() {
         <div className="relative z-10 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Statistics</h1>
-            <p className="text-white/80">Manage the impact metrics shown on the homepage</p>
+            <p className="text-white/80">
+              Manage the impact metrics shown on the homepage
+            </p>
           </div>
-          <Button onClick={handleCreate} variant="secondary" className="border-white/20 bg-white/10 text-white hover:bg-white/20">
+          <Button
+            onClick={handleCreate}
+            variant="secondary"
+            className="border-white/20 bg-white/10 text-white hover:bg-white/20"
+          >
             <Plus className="mr-2 h-4 w-4" /> Add Statistic
           </Button>
         </div>
@@ -249,24 +308,36 @@ export default function StatisticsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Preview</CardTitle>
-          <CardDescription>How your statistics will look to visitors</CardDescription>
+          <CardDescription>
+            How your statistics will look to visitors
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {statistics.length === 0 ? (
-            <div className="flex items-center justify-center py-8 text-muted-foreground">No statistics yet</div>
+            <div className="flex items-center justify-center py-8 text-muted-foreground">
+              No statistics yet
+            </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {statistics.map((stat) => {
                 const Icon = getIconByName(stat.icon);
                 return (
-                  <div key={`preview-${stat.id}`} className="rounded-lg border p-4 hover-lift">
+                  <div
+                    key={`preview-${stat.id}`}
+                    className="rounded-lg border p-4 hover-lift"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div>
-                        <div className="text-2xl font-bold tabular-nums">{stat.value}{stat.suffix}</div>
-                        <div className="text-sm text-muted-foreground">{stat.label}</div>
+                        <div className="text-2xl font-bold tabular-nums">
+                          {stat.value}
+                          {stat.suffix}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {stat.label}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -280,7 +351,9 @@ export default function StatisticsPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Manage</h2>
         {statistics.length > 0 && (
-          <p className="text-sm text-muted-foreground">Tip: drag the handle to reorder</p>
+          <p className="text-sm text-muted-foreground">
+            Tip: drag the handle to reorder
+          </p>
         )}
       </div>
 
@@ -316,19 +389,32 @@ export default function StatisticsPage() {
 
                   <div className="min-w-0 grid w-full grid-cols-1 gap-4 sm:grid-cols-[2fr_1fr_1fr_0.5fr]">
                     <div className="min-w-0">
-                      <p className="mb-1 text-xs text-muted-foreground">Label</p>
-                      <p className="truncate text-base font-medium">{stat.label}</p>
+                      <p className="mb-1 text-xs text-muted-foreground">
+                        Label
+                      </p>
+                      <p className="truncate text-base font-medium">
+                        {stat.label}
+                      </p>
                     </div>
                     <div>
-                      <p className="mb-1 text-xs text-muted-foreground">Value</p>
-                      <p className="text-lg font-semibold tabular-nums">{stat.value}{stat.suffix}</p>
+                      <p className="mb-1 text-xs text-muted-foreground">
+                        Value
+                      </p>
+                      <p className="text-lg font-semibold tabular-nums">
+                        {stat.value}
+                        {stat.suffix}
+                      </p>
                     </div>
                     <div className="min-w-0">
                       <p className="mb-1 text-xs text-muted-foreground">Icon</p>
-                      <p className="truncate text-sm text-muted-foreground">{stat.icon}</p>
+                      <p className="truncate text-sm text-muted-foreground">
+                        {stat.icon}
+                      </p>
                     </div>
                     <div>
-                      <p className="mb-1 text-xs text-muted-foreground">Order</p>
+                      <p className="mb-1 text-xs text-muted-foreground">
+                        Order
+                      </p>
                       <p className="text-sm font-medium">{stat.order}</p>
                     </div>
                   </div>
@@ -337,7 +423,11 @@ export default function StatisticsPage() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(stat)}>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(stat)}
+                          >
                             <Pencil className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -369,9 +459,13 @@ export default function StatisticsPage() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingId ? 'Edit Statistic' : 'Create Statistic'}</DialogTitle>
+            <DialogTitle>
+              {editingId ? "Edit Statistic" : "Create Statistic"}
+            </DialogTitle>
             <DialogDescription>
-              {editingId ? 'Update the statistic details' : 'Add a new statistic to your homepage'}
+              {editingId
+                ? "Update the statistic details"
+                : "Add a new statistic to your homepage"}
             </DialogDescription>
           </DialogHeader>
 
@@ -381,9 +475,9 @@ export default function StatisticsPage() {
                 <Label htmlFor="label">Label</Label>
                 <Input
                   id="label"
-                  {...register('label')}
+                  {...register("label")}
                   placeholder="e.g., Startups Supported"
-                  className={errors.label ? 'border-red-500' : ''}
+                  className={errors.label ? "border-red-500" : ""}
                 />
                 {errors.label && (
                   <p className="text-sm text-red-500">{errors.label.message}</p>
@@ -395,9 +489,9 @@ export default function StatisticsPage() {
                 <Input
                   id="value"
                   type="number"
-                  {...register('value')}
+                  {...register("value", { valueAsNumber: true })}
                   placeholder="e.g., 100"
-                  className={errors.value ? 'border-red-500' : ''}
+                  className={errors.value ? "border-red-500" : ""}
                 />
                 {errors.value && (
                   <p className="text-sm text-red-500">{errors.value.message}</p>
@@ -408,12 +502,14 @@ export default function StatisticsPage() {
                 <Label htmlFor="suffix">Suffix (optional)</Label>
                 <Input
                   id="suffix"
-                  {...register('suffix')}
+                  {...register("suffix")}
                   placeholder="e.g., +, K, M"
-                  className={errors.suffix ? 'border-red-500' : ''}
+                  className={errors.suffix ? "border-red-500" : ""}
                 />
                 {errors.suffix && (
-                  <p className="text-sm text-red-500">{errors.suffix.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.suffix.message}
+                  </p>
                 )}
               </div>
 
@@ -421,9 +517,9 @@ export default function StatisticsPage() {
                 <Label htmlFor="icon">Icon</Label>
                 <Input
                   id="icon"
-                  {...register('icon')}
+                  {...register("icon")}
                   placeholder="e.g., TrendingUp, Users, Award"
-                  className={errors.icon ? 'border-red-500' : ''}
+                  className={errors.icon ? "border-red-500" : ""}
                   list="icon-suggestions"
                 />
                 <datalist id="icon-suggestions">
@@ -434,7 +530,9 @@ export default function StatisticsPage() {
                 {errors.icon && (
                   <p className="text-sm text-red-500">{errors.icon.message}</p>
                 )}
-                <p className="text-xs text-muted-foreground">Use Lucide icon names (e.g., TrendingUp, Users, Award)</p>
+                <p className="text-xs text-muted-foreground">
+                  Use Lucide icon names (e.g., TrendingUp, Users, Award)
+                </p>
               </div>
             </div>
 
@@ -443,7 +541,7 @@ export default function StatisticsPage() {
               <p className="mb-2 text-xs text-muted-foreground">Preview</p>
               <div className="flex items-center gap-3">
                 {(() => {
-                  const Icon = getIconByName(watch('icon'));
+                  const Icon = getIconByName(watch("icon"));
                   return (
                     <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
                       <Icon className="h-5 w-5" />
@@ -451,8 +549,13 @@ export default function StatisticsPage() {
                   );
                 })()}
                 <div>
-                  <div className="text-2xl font-bold tabular-nums">{watch('value') ?? 0}{watch('suffix') ?? ''}</div>
-                  <div className="text-sm text-muted-foreground">{watch('label') || 'Label'}</div>
+                  <div className="text-2xl font-bold tabular-nums">
+                    {watch("value") ?? 0}
+                    {watch("suffix") ?? ""}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {watch("label") || "Label"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -472,8 +575,10 @@ export default function StatisticsPage() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Saving...
                   </>
+                ) : editingId ? (
+                  "Update"
                 ) : (
-                  editingId ? 'Update' : 'Create'
+                  "Create"
                 )}
               </Button>
             </DialogFooter>
@@ -487,7 +592,8 @@ export default function StatisticsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this statistic. This action cannot be undone.
+              This will permanently delete this statistic. This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

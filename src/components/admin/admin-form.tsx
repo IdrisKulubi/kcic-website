@@ -9,7 +9,8 @@ import { Loader2 } from "lucide-react";
 import { ReactNode } from "react";
 
 interface AdminFormProps<T extends FieldValues> {
-  schema: z.ZodType<T>;
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: z.ZodType<T, any, any>;
   defaultValues: DefaultValues<T>;
   onSubmit: (data: T) => Promise<void> | void;
   children: (form: UseFormReturn<T>) => ReactNode;

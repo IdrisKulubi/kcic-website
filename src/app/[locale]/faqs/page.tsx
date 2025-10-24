@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, Search, MessageCircleQuestion } from 'lucide-react';
+import Link from 'next/link';
 
 const faqData = [
   {
@@ -266,12 +267,12 @@ export default function FAQsPage() {
             <p className="text-lg text-gray-600 mb-6">
               Can&apos;t find the answer you&apos;re looking for? Our team is here to help.
             </p>
-            <a
+            <Link
               href="/about/contact-us"
               className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
             >
               Contact Us
-            </a>
+            </Link>
           </motion.div>
         </div>
       </div>

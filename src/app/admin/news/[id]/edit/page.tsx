@@ -1,47 +1,63 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Loader2, ArrowLeft } from 'lucide-react';
-import { ImageUpload } from '@/components/admin/image-upload';
-import { getNewsArticle, updateNewsArticle } from '@/lib/actions/news';
-import { showSuccessToast, showErrorToast } from '@/lib/toast';
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { ImageUpload } from "@/components/admin/image-upload";
+import { getNewsArticle, updateNewsArticle } from "@/lib/actions/news";
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
 
 const NEWS_CATEGORIES = [
-  'Events',
-  'Announcements',
-  'Success Stories',
-  'Press Release',
-  'Updates'
+  "Events",
+  "Announcements",
+  "Success Stories",
+  "Press Release",
+  "Updates",
 ];
 
 // Form validation schema
 const newsFormSchema = z.object({
-  title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be at most 200 characters'),
-  excerpt: z.string().min(20, 'Excerpt must be at least 20 characters').max(500, 'Excerpt must be at most 500 characters'),
-  content: z.string().min(50, 'Content must be at least 50 characters').optional().or(z.literal('')),
-  thumbnail: z.string().url('Please upload a thumbnail image'),
-  category: z.string().min(1, 'Please select a category'),
+  title: z
+    .string()
+    .min(5, "Title must be at least 5 characters")
+    .max(200, "Title must be at most 200 characters"),
+  excerpt: z
+    .string()
+    .min(20, "Excerpt must be at least 20 characters")
+    .max(500, "Excerpt must be at most 500 characters"),
+  content: z
+    .string()
+    .min(50, "Content must be at least 50 characters")
+    .optional()
+    .or(z.literal("")),
+  thumbnail: z.string().url("Please upload a thumbnail image"),
+  category: z.string().min(1, "Please select a category"),
   slug: z.string(),
   readTime: z.string().optional(),
-  featured: z.boolean().default(false),
-  publishedAt: z.string().min(1, 'Please select a publish date')
+  featured: z.boolean(),
+  publishedAt: z.string().min(1, "Please select a publish date"),
 });
 
 type NewsFormData = z.infer<typeof newsFormSchema>;
@@ -50,10 +66,10 @@ export default function EditNewsPage() {
   const router = useRouter();
   const params = useParams();
   const articleId = params.id as string;
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [slugPreview, setSlugPreview] = useState('');
+  const [slugPreview, setSlugPreview] = useState("");
 
   const {
     register,
@@ -61,20 +77,20 @@ export default function EditNewsPage() {
     control,
     watch,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<NewsFormData>({
     resolver: zodResolver(newsFormSchema),
     defaultValues: {
-      title: '',
-      excerpt: '',
-      content: '',
-      thumbnail: '',
-      category: '',
-      slug: '',
-      readTime: '',
+      title: "",
+      excerpt: "",
+      content: "",
+      thumbnail: "",
+      category: "",
+      slug: "",
+      readTime: "",
       featured: false,
-      publishedAt: new Date().toISOString().split('T')[0]
-    }
+      publishedAt: new Date().toISOString().split("T")[0],
+    },
   });
 
   // Load article data
@@ -82,29 +98,32 @@ export default function EditNewsPage() {
     const loadArticle = async () => {
       setIsLoading(true);
       const result = await getNewsArticle(articleId);
-      
+
       if (result.success && result.data) {
         const article = result.data;
         const publishDate = new Date(article.publishedAt);
-        
+
         reset({
           title: article.title,
           excerpt: article.excerpt,
-          content: article.content || '',
+          content: article.content || "",
           thumbnail: article.thumbnail,
           category: article.category,
-          slug: article.slug || '',
-          readTime: article.readTime || '',
+          slug: article.slug || "",
+          readTime: article.readTime || "",
           featured: article.featured,
-          publishedAt: publishDate.toISOString().split('T')[0]
+          publishedAt: publishDate.toISOString().split("T")[0],
         });
-        
-        setSlugPreview(article.slug || '');
+
+        setSlugPreview(article.slug || "");
       } else {
-        showErrorToast('Failed to load article', result.error);
-        router.push('/admin/news');
+        showErrorToast(
+          "Failed to load article",
+          !result.success ? result.error : "Unknown error"
+        );
+        router.push("/admin/news");
       }
-      
+
       setIsLoading(false);
     };
 
@@ -112,17 +131,17 @@ export default function EditNewsPage() {
   }, [articleId, reset, router]);
 
   // Watch title to generate slug preview
-  const title = watch('title');
-  
+  const title = watch("title");
+
   // Generate slug preview
   const generateSlugPreview = (text: string) => {
     return text
       .toLowerCase()
       .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
   };
 
   // Update slug preview when title changes
@@ -134,22 +153,22 @@ export default function EditNewsPage() {
 
   const onSubmit = async (data: NewsFormData) => {
     setIsSaving(true);
-    
+
     const result = await updateNewsArticle(articleId, {
       ...data,
-      publishedAt: new Date(data.publishedAt)
+      publishedAt: new Date(data.publishedAt),
     });
-    
+
     if (result.success) {
-      showSuccessToast(
-        'Article updated',
-        'Changes are now live'
-      );
-      router.push('/admin/news');
+      showSuccessToast("Article updated", "Changes are now live");
+      router.push("/admin/news");
     } else {
-      showErrorToast('Failed to update article', result.error);
+      showErrorToast(
+        "Failed to update article",
+        !result.success ? result.error : "Unknown error"
+      );
     }
-    
+
     setIsSaving(false);
   };
 
@@ -166,16 +185,14 @@ export default function EditNewsPage() {
       <div className="mb-8">
         <Button
           variant="ghost"
-          onClick={() => router.push('/admin/news')}
+          onClick={() => router.push("/admin/news")}
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to News
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">Edit News Article</h1>
-        <p className="text-muted-foreground mt-2">
-          Update article details
-        </p>
+        <p className="text-muted-foreground mt-2">Update article details</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -191,16 +208,19 @@ export default function EditNewsPage() {
               <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"
-                {...register('title')}
+                {...register("title")}
                 placeholder="Enter article title"
-                className={errors.title ? 'border-red-500' : ''}
+                className={errors.title ? "border-red-500" : ""}
               />
               {errors.title && (
                 <p className="text-sm text-red-500">{errors.title.message}</p>
               )}
               {slugPreview && (
                 <p className="text-sm text-muted-foreground">
-                  Slug preview: <code className="bg-muted px-1 py-0.5 rounded">{slugPreview}</code>
+                  Slug preview:{" "}
+                  <code className="bg-muted px-1 py-0.5 rounded">
+                    {slugPreview}
+                  </code>
                 </p>
               )}
             </div>
@@ -209,10 +229,10 @@ export default function EditNewsPage() {
               <Label htmlFor="excerpt">Excerpt *</Label>
               <Textarea
                 id="excerpt"
-                {...register('excerpt')}
+                {...register("excerpt")}
                 placeholder="Brief summary of the article"
                 rows={3}
-                className={errors.excerpt ? 'border-red-500' : ''}
+                className={errors.excerpt ? "border-red-500" : ""}
               />
               {errors.excerpt && (
                 <p className="text-sm text-red-500">{errors.excerpt.message}</p>
@@ -223,10 +243,10 @@ export default function EditNewsPage() {
               <Label htmlFor="content">Content</Label>
               <Textarea
                 id="content"
-                {...register('content')}
+                {...register("content")}
                 placeholder="Full article content (optional)"
                 rows={10}
-                className={errors.content ? 'border-red-500' : ''}
+                className={errors.content ? "border-red-500" : ""}
               />
               {errors.content && (
                 <p className="text-sm text-red-500">{errors.content.message}</p>
@@ -241,7 +261,9 @@ export default function EditNewsPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
+                      <SelectTrigger
+                        className={errors.category ? "border-red-500" : ""}
+                      >
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -255,7 +277,9 @@ export default function EditNewsPage() {
                   )}
                 />
                 {errors.category && (
-                  <p className="text-sm text-red-500">{errors.category.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.category.message}
+                  </p>
                 )}
               </div>
 
@@ -263,7 +287,7 @@ export default function EditNewsPage() {
                 <Label htmlFor="readTime">Read Time</Label>
                 <Input
                   id="readTime"
-                  {...register('readTime')}
+                  {...register("readTime")}
                   placeholder="e.g., 5 min read"
                 />
               </div>
@@ -274,11 +298,13 @@ export default function EditNewsPage() {
               <Input
                 id="publishedAt"
                 type="date"
-                {...register('publishedAt')}
-                className={errors.publishedAt ? 'border-red-500' : ''}
+                {...register("publishedAt")}
+                className={errors.publishedAt ? "border-red-500" : ""}
               />
               {errors.publishedAt && (
-                <p className="text-sm text-red-500">{errors.publishedAt.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.publishedAt.message}
+                </p>
               )}
             </div>
           </CardContent>
@@ -299,13 +325,15 @@ export default function EditNewsPage() {
                 <ImageUpload
                   value={field.value}
                   onChange={field.onChange}
-                  onRemove={() => field.onChange('')}
+                  onRemove={() => field.onChange("")}
                   endpoint="imageUploader"
                 />
               )}
             />
             {errors.thumbnail && (
-              <p className="text-sm text-red-500 mt-2">{errors.thumbnail.message}</p>
+              <p className="text-sm text-red-500 mt-2">
+                {errors.thumbnail.message}
+              </p>
             )}
           </CardContent>
         </Card>
@@ -313,9 +341,7 @@ export default function EditNewsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Settings</CardTitle>
-            <CardDescription>
-              Additional article settings
-            </CardDescription>
+            <CardDescription>Additional article settings</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
@@ -344,7 +370,7 @@ export default function EditNewsPage() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push('/admin/news')}
+            onClick={() => router.push("/admin/news")}
             disabled={isSaving}
           >
             Cancel
@@ -356,7 +382,7 @@ export default function EditNewsPage() {
                 Saving...
               </>
             ) : (
-              'Save Changes'
+              "Save Changes"
             )}
           </Button>
         </div>

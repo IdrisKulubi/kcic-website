@@ -23,7 +23,7 @@ import {
   Trash2,
   GripVertical,
   Pencil,
-  X,
+  
 } from "lucide-react";
 import {
   getFooterSection,
@@ -31,11 +31,9 @@ import {
   createFooterLink,
   updateFooterLink,
   deleteFooterLink,
-  reorderFooterLinks,
   createFooterSocialMedia,
   updateFooterSocialMedia,
   deleteFooterSocialMedia,
-  reorderFooterSocialMedia,
   type FooterSectionData,
   type FooterLinkData,
   type FooterSocialMediaData,

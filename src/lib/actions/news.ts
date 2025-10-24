@@ -4,7 +4,7 @@ import db from '../../../db/drizzle';
 import { news } from '../../../db/schema';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { eq, asc, desc, like, or } from 'drizzle-orm';
+import { eq,  desc, like, or } from 'drizzle-orm';
 import { newsSchema } from '../validators';
 
 export type NewsData = z.infer<typeof newsSchema>;

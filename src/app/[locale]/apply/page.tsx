@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle, Upload, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Apply to KCIC Programs - Start Your Climate Innovation Journey',
@@ -366,9 +367,9 @@ export default function ApplyPage() {
               }}
               asChild
             >
-              <a href="/contact">
+              <Link href="/contact">
                 Contact Support
-              </a>
+              </Link>
             </Button>
             
             <Button
@@ -380,9 +381,9 @@ export default function ApplyPage() {
               }}
               asChild
             >
-              <a href="/programs">
+              <Link href="/programs">
                 Learn About Programs
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

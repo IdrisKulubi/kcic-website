@@ -5,10 +5,12 @@ const locales = ['en', 'fr'];
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default function LocaleLayout({ children, params: { locale } }: LocaleLayoutProps) {
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { locale } = await params;
+  
   // Validate that the locale is supported
   if (!locales.includes(locale)) {
     notFound();

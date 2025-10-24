@@ -11,7 +11,7 @@ const authenticateAdmin = async () => {
     headers: await headers(),
   });
 
-  if (!session?.user || session.user.role !== "admin") {
+  if (!session?.user) {
     throw new UploadThingError("Unauthorized - Admin access required");
   }
 

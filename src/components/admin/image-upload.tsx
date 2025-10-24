@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UploadDropzone } from "@/utils/uploadthing";
-import { X, Upload, Loader2 } from "lucide-react";
+import { X,  Loader2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
