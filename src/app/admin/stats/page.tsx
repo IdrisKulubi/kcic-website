@@ -307,35 +307,33 @@ export default function StatisticsPage() {
                 onDrop={(e) => handleDrop(e, index)}
                 className="transition-shadow hover:shadow-md"
               >
-                <CardContent className="flex items-center gap-4 p-6">
-                  <GripVertical className="h-5 w-5 text-muted-foreground cursor-grab" />
+                <CardContent className="flex items-center gap-4 p-4">
+                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
 
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
-                      <Icon className="h-5 w-5" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <Icon className="h-4 w-4" />
+                  </div>
+
+                  <div className="min-w-0 grid w-full grid-cols-1 gap-4 sm:grid-cols-[2fr_1fr_1fr_0.5fr]">
+                    <div className="min-w-0">
+                      <p className="mb-1 text-xs text-muted-foreground">Label</p>
+                      <p className="truncate text-base font-medium">{stat.label}</p>
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs text-muted-foreground">Value</p>
+                      <p className="text-lg font-semibold tabular-nums">{stat.value}{stat.suffix}</p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="mb-1 text-xs text-muted-foreground">Icon</p>
+                      <p className="truncate text-sm text-muted-foreground">{stat.icon}</p>
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs text-muted-foreground">Order</p>
+                      <p className="text-sm font-medium">{stat.order}</p>
                     </div>
                   </div>
 
-                  <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Label</p>
-                      <p className="font-medium">{stat.label}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Value</p>
-                      <p className="font-medium tabular-nums">{stat.value}{stat.suffix}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Icon</p>
-                      <p className="font-medium">{stat.icon}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Order</p>
-                      <p className="font-medium">{stat.order}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-1">
+                  <div className="ml-auto flex shrink-0 gap-1">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
