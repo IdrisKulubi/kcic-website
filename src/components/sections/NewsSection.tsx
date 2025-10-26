@@ -145,6 +145,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         <Image
                           src={featuredNews.imageUrl}
                           alt={featuredNews.title}
+                          width={800}
+                          height={600}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -176,6 +178,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                                 <Image
                                   src={featuredNews.author.avatar} 
                                   alt={featuredNews.author.name}
+                                  width={24}
+                                  height={24}
                                   className="w-6 h-6 rounded-full"
                                 />
                               )}
@@ -236,6 +240,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                             <Image
                               src={article.imageUrl}
                               alt={article.title}
+                              width={96}
+                              height={96}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             />
                           </div>
@@ -297,6 +303,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         <Image
                           src={article.imageUrl}
                           alt={article.title}
+                          width={400}
+                          height={300}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                         <Badge className={cn(
