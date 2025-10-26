@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -27,6 +28,11 @@ export default async function AdminDashboard() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  // Redirect to login if not authenticated
+  if (!session) {
+    redirect("/admin/login");
+  }
 
   // Fetch quick stats
   const [newsCount, teamCount, partnersCount, statsCount] = await Promise.all([
