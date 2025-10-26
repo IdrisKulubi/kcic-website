@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'strathmore.edu' },
       { protocol: 'https', hostname: 'cdn.sida.se' },
       { protocol: 'https', hostname: 'www.afdb.org' },
+      { protocol: 'https', hostname: 'utfs.io' },
     ],
   },
   

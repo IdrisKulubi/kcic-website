@@ -5,127 +5,126 @@ export const navData = {
     alt: "KCIC Logo",
   },
   navigation: [
-    { 
-      label: "About Us", 
+    {
+      label: "About Us",
       href: "/about",
       subItems: [
-        { 
-          label: "Who we are", 
-          href: "/about/who-we-are", 
-          description: "Learn about our mission, vision, and impact in climate innovation",
-          icon: "Building2"
+        {
+          label: "Who we are",
+          href: "/about/who-we-are",
+          description:
+            "Learn about our mission, vision, and impact in climate innovation",
+          icon: "Building2",
         },
-        { 
-          label: "Our team", 
-          href: "/about/our-team", 
-          description: "Meet the dedicated professionals driving climate solutions",
-          icon: "Users"
+        {
+          label: "Our team",
+          href: "/about/our-team",
+          description:
+            "Meet the dedicated professionals driving climate solutions",
+          icon: "Users",
         },
-        { 
-          label: "Policies and disclosures", 
-          href: "/about/policies-disclosures", 
+        {
+          label: "Policies and disclosures",
+          href: "/about/policies-disclosures",
           description: "Transparency in governance and operational policies",
-          icon: "Shield"
+          icon: "Shield",
         },
-        { 
-          label: "Procurement", 
-          href: "/about/procurement", 
-          description: "Transparent procurement policies and supplier opportunities",
-          icon: "FileText"
+        {
+          label: "Procurement",
+          href: "/about/procurement",
+          description:
+            "Transparent procurement policies and supplier opportunities",
+          icon: "FileText",
         },
-        { 
-          label: "Careers", 
-          href: "/about/careers", 
+        {
+          label: "Careers",
+          href: "/about/careers",
           description: "Join our team and help drive climate innovation",
-          icon: "Briefcase"
+          icon: "Briefcase",
         },
-        { 
-          label: "Contact us", 
-          href: "/about/contact-us", 
+        {
+          label: "Contact us",
+          href: "/about/contact-us",
           description: "Get in touch with our team",
-          icon: "Phone"
+          icon: "Phone",
         },
-      ]
+      ],
     },
-    { 
-      label: "How we work", 
+    {
+      label: "How we work",
       href: "/how-we-work",
       subItems: [
         {
           label: "Focus sectors",
           href: "/how-we-work/focus-sectors",
           description: "Key climate sectors we support and develop",
-          icon: "Target"
+          icon: "Target",
         },
         {
-          label: "Our Programmes", 
+          label: "Our Programmes",
           href: "/how-we-work/programmes",
           description: "Comprehensive programs for climate entrepreneurs",
-          icon: "Lightbulb"
+          icon: "Lightbulb",
         },
         {
-          label: "Cross-Cutting Issues", 
+          label: "Cross-Cutting Issues",
           href: "/how-we-work/cross-cutting-issues",
           description: "Addressing systemic challenges across sectors",
-          icon: "Network"
-        }
-      ]
+          icon: "Network",
+        },
+      ],
     },
-    { 
-      label: "Impact", 
+    {
+      label: "Impact",
       href: "/impact",
       subItems: [
         {
           label: "Stories",
           href: "/impact/stories",
           description: "Success stories from our supported ventures",
-          icon: "BookOpen"
+          icon: "BookOpen",
         },
         {
-          label: "Our Impact", 
+          label: "Our Impact",
           href: "/impact/our-impact",
           description: "Measurable outcomes and achievements",
-          icon: "TrendingUp"
-        }
-      ]
+          icon: "TrendingUp",
+        },
+      ],
     },
-    { 
-      label: "Newsroom", 
+    {
+      label: "Newsroom",
       href: "/newsroom",
       subItems: [
         {
           label: "Publications",
           href: "/newsroom/publications",
           description: "Research reports and industry insights",
-          icon: "FileText"
+          icon: "FileText",
         },
         {
           label: "Events",
           href: "/newsroom/events",
           description: "Upcoming and past events, conferences, and workshops",
-          icon: "Calendar"
+          icon: "Calendar",
         },
         {
           label: "Press Release",
           href: "/newsroom/press-release",
           description: "Latest press releases and media coverage",
-          icon: "Megaphone"
+          icon: "Megaphone",
         },
         {
           label: "Fact sheets",
           href: "/newsroom/fact-sheets",
           description: "Key facts and figures about our work",
-          icon: "ClipboardList"
-        }
-      ]
+          icon: "ClipboardList",
+        },
+      ],
     },
-    { 
-      label: "FAQs", 
-      href: "/faqs"
+    {
+      label: "FAQs",
+      href: "/faqs",
     },
   ],
-  ctaButton: {
-    text: "Apply Now",
-    href: "/apply",
-  },
 };

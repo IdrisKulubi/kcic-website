@@ -29,7 +29,7 @@ interface MinimalNavbarProps {
     alt: string;
   };
   navigation: NavItem[];
-  ctaButton: {
+  ctaButton?: {
     text: string;
     href: string;
   };
@@ -231,22 +231,24 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             </div>
 
             {/* Desktop CTA Button */}
-            <div className="hidden md:block">
-              <Button
-                className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${getMotionSafeClasses('hover:scale-105')}`}
-                style={{
-                  background: colors.primary.green.DEFAULT,
-                  color: 'white',
-                  fontFamily: typography.fonts.body,
-                  border: 'none',
-                }}
-                asChild
-              >
-                <a href={ctaButton.href}>
-                  {ctaButton.text}
-                </a>
-              </Button>
-            </div>
+            {ctaButton && (
+              <div className="hidden md:block">
+                <Button
+                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${getMotionSafeClasses('hover:scale-105')}`}
+                  style={{
+                    background: colors.primary.green.DEFAULT,
+                    color: 'white',
+                    fontFamily: typography.fonts.body,
+                    border: 'none',
+                  }}
+                  asChild
+                >
+                  <a href={ctaButton.href}>
+                    {ctaButton.text}
+                  </a>
+                </Button>
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
@@ -407,25 +409,27 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                 </div>
 
                 {/* Mobile CTA Button */}
-                <div className="p-6 border-t border-gray-100">
-                  <Button
-                    className="w-full py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                    style={{
-                      background: colors.primary.green.DEFAULT,
-                      color: 'white',
-                      fontFamily: typography.fonts.body,
-                      border: 'none',
-                    }}
-                    asChild
-                  >
-                    <a 
-                      href={ctaButton.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                {ctaButton && (
+                  <div className="p-6 border-t border-gray-100">
+                    <Button
+                      className="w-full py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                      style={{
+                        background: colors.primary.green.DEFAULT,
+                        color: 'white',
+                        fontFamily: typography.fonts.body,
+                        border: 'none',
+                      }}
+                      asChild
                     >
-                      {ctaButton.text}
-                    </a>
-                  </Button>
-                </div>
+                      <a 
+                        href={ctaButton.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {ctaButton.text}
+                      </a>
+                    </Button>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>
