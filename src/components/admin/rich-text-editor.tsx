@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Underline } from "@tiptap/extension-underline";
 import { TextAlign } from "@tiptap/extension-text-align";
@@ -38,12 +38,9 @@ interface RichTextEditorProps {
   className?: string;
 }
 
-const MenuBar = ({ editor }: { editor: any }) => {
-  if (!editor) {
-    return null;
-  }
-
+const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const addLink = useCallback(() => {
+    if (!editor) return;
     const url = window.prompt("Enter URL:");
     if (url) {
       editor.chain().focus().setLink({ href: url }).run();
@@ -51,11 +48,16 @@ const MenuBar = ({ editor }: { editor: any }) => {
   }, [editor]);
 
   const addImage = useCallback(() => {
+    if (!editor) return;
     const url = window.prompt("Enter image URL:");
     if (url) {
       editor.chain().focus().setImage({ src: url }).run();
     }
   }, [editor]);
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div className="border-b border-border bg-muted p-2 rounded-t-lg flex flex-wrap gap-1">

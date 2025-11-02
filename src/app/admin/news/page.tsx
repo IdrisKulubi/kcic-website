@@ -34,6 +34,7 @@ import {
   type NewsData,
 } from "@/lib/actions/news";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
+import Image from "next/image";
 
 const NEWS_CATEGORIES = [
   "All Categories",
@@ -130,7 +131,7 @@ export default function NewsListPage() {
       key: "thumbnail",
       label: "Image",
       render: (article) => (
-        <img
+        <Image
           src={article.thumbnail}
           alt={article.title}
           className="w-16 h-16 object-cover rounded"

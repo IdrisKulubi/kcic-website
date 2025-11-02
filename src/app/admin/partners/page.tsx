@@ -50,6 +50,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ImageUpload } from "@/components/admin/image-upload";
+import Image from "next/image";
 
 // Sortable partner card component for drag-and-drop
 function SortablePartnerCard({
@@ -92,7 +93,7 @@ function SortablePartnerCard({
 
       <div className="flex flex-col items-center gap-4 pt-6">
         <div className="w-full h-24 flex items-center justify-center bg-muted rounded-lg overflow-hidden">
-          <img
+          <Image
             src={partner.logo}
             alt={partner.name}
             className="max-w-full max-h-full object-contain p-2"

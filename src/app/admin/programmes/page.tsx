@@ -13,6 +13,7 @@ import { Loader2, Pencil, Save, X } from 'lucide-react';
 import { listProgrammes, updateProgramme, type ProgrammeData } from '@/lib/actions/programmes';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { ImageUpload } from '@/components/admin/image-upload';
+import Image from 'next/image';
 
 // Validation schema for programme form
 const programmeFormSchema = z.object({
@@ -212,7 +213,7 @@ function ProgrammeCard({
         ) : (
           <div className="space-y-4">
             <div className="w-full h-48 rounded-lg overflow-hidden bg-muted">
-              <img
+              <Image
                 src={programme.image}
                 alt={programme.title}
                 className="w-full h-full object-cover"
