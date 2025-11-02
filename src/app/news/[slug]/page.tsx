@@ -40,7 +40,10 @@ export default function NewsArticlePage() {
       if (result.success && result.data) {
         setArticle(result.data);
       } else {
-        showErrorToast("Article not found", "The requested article could not be found");
+        showErrorToast(
+          "Article not found",
+          "The requested article could not be found"
+        );
         router.push("/");
       }
 
@@ -67,10 +70,18 @@ export default function NewsArticlePage() {
     const text = article.title;
 
     const shareUrls = {
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-      email: `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`,
+      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        url
+      )}&text=${encodeURIComponent(text)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        url
+      )}`,
+      email: `mailto:?subject=${encodeURIComponent(
+        text
+      )}&body=${encodeURIComponent(url)}`,
     };
 
     if (platform === "copy") {
@@ -117,18 +128,18 @@ export default function NewsArticlePage() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         {/* Header Actions - Hidden on Print */}
-        <div className="no-print sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="no-print sticky top-0 z-50 bg-white border-b border-gray-300 shadow-sm">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <Button
                 variant="ghost"
                 onClick={() => router.back()}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-gray-900 hover:text-gray-700 hover:bg-gray-100"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span className="hidden sm:inline">Back</span>
+                <span className="hidden sm:inline font-medium">Back</span>
               </Button>
 
               <div className="flex items-center gap-2 flex-wrap">
@@ -136,66 +147,66 @@ export default function NewsArticlePage() {
                   variant="outline"
                   size="sm"
                   onClick={handleDownload}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 border-gray-300 text-gray-900 hover:bg-gray-100 hover:text-gray-900"
                   title="Save as PDF using your browser's print dialog"
                 >
                   <Download className="h-4 w-4" />
-                  <span className="hidden sm:inline">Save PDF</span>
+                  <span className="hidden sm:inline font-medium">Save PDF</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handlePrint}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 border-gray-300 text-gray-900 hover:bg-gray-100 hover:text-gray-900"
                 >
                   <Printer className="h-4 w-4" />
-                  <span className="hidden sm:inline">Print</span>
+                  <span className="hidden sm:inline font-medium">Print</span>
                 </Button>
                 <div className="relative">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowShareMenu(!showShareMenu)}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 border-gray-300 text-gray-900 hover:bg-gray-100 hover:text-gray-900"
                   >
                     <Share2 className="h-4 w-4" />
-                    <span className="hidden sm:inline">Share</span>
+                    <span className="hidden sm:inline font-medium">Share</span>
                   </Button>
 
                   {showShareMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-300 py-2 z-50">
                       <button
                         onClick={() => handleShare("facebook")}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-gray-900"
                       >
                         <Facebook className="h-4 w-4 text-blue-600" />
-                        Facebook
+                        <span className="font-medium">Facebook</span>
                       </button>
                       <button
                         onClick={() => handleShare("twitter")}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-gray-900"
                       >
                         <Twitter className="h-4 w-4 text-sky-500" />
-                        Twitter
+                        <span className="font-medium">Twitter</span>
                       </button>
                       <button
                         onClick={() => handleShare("linkedin")}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-gray-900"
                       >
                         <Linkedin className="h-4 w-4 text-blue-700" />
-                        LinkedIn
+                        <span className="font-medium">LinkedIn</span>
                       </button>
                       <button
                         onClick={() => handleShare("email")}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-gray-900"
                       >
-                        <Mail className="h-4 w-4 text-gray-600" />
-                        Email
+                        <Mail className="h-4 w-4 text-gray-700" />
+                        <span className="font-medium">Email</span>
                       </button>
                       <Separator className="my-2" />
                       <button
                         onClick={() => handleShare("copy")}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-50 text-sm"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm text-gray-900 font-medium"
                       >
                         Copy Link
                       </button>
@@ -211,13 +222,17 @@ export default function NewsArticlePage() {
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Print Header */}
           <div className="print-only mb-8">
-            <h1 className="text-2xl font-bold mb-2">Kenya Climate Innovation Center</h1>
+            <h1 className="text-2xl font-bold mb-2">
+              Kenya Climate Innovation Center
+            </h1>
             <p className="text-sm text-gray-600">www.kenyacic.org</p>
             <Separator className="my-4" />
           </div>
 
           {/* Category Badge */}
-          <Badge className="mb-4">{article.category}</Badge>
+          <Badge className="mb-4 bg-green-600 text-white hover:bg-green-700 font-medium px-3 py-1">
+            {article.category}
+          </Badge>
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -225,14 +240,14 @@ export default function NewsArticlePage() {
           </h1>
 
           {/* Excerpt */}
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+          <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">
             {article.excerpt}
           </p>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-8">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 mb-8 font-medium">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4 text-gray-600" />
               {new Date(article.publishedAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -241,7 +256,7 @@ export default function NewsArticlePage() {
             </div>
             {article.readTime && (
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
+                <Clock className="h-4 w-4 text-gray-600" />
                 {article.readTime}
               </div>
             )}
@@ -275,9 +290,11 @@ export default function NewsArticlePage() {
           <Separator className="my-12" />
 
           <div className="no-print">
-            <div className="bg-gray-100 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-2">Share this article</h3>
-              <p className="text-gray-600 mb-4">
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
+              <h3 className="font-bold text-lg mb-2 text-gray-900">
+                Share this article
+              </h3>
+              <p className="text-gray-700 mb-4 font-medium">
                 Help spread the word about climate innovation
               </p>
               <div className="flex gap-2">
@@ -285,29 +302,37 @@ export default function NewsArticlePage() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleShare("facebook")}
+                  className="border-gray-300 hover:bg-white hover:border-blue-600"
+                  title="Share on Facebook"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Facebook className="h-4 w-4 text-blue-600" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleShare("twitter")}
+                  className="border-gray-300 hover:bg-white hover:border-sky-500"
+                  title="Share on Twitter"
                 >
-                  <Twitter className="h-4 w-4" />
+                  <Twitter className="h-4 w-4 text-sky-500" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleShare("linkedin")}
+                  className="border-gray-300 hover:bg-white hover:border-blue-700"
+                  title="Share on LinkedIn"
                 >
-                  <Linkedin className="h-4 w-4" />
+                  <Linkedin className="h-4 w-4 text-blue-700" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleShare("email")}
+                  className="border-gray-300 hover:bg-white hover:border-gray-700"
+                  title="Share via Email"
                 >
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-4 w-4 text-gray-700" />
                 </Button>
               </div>
             </div>
