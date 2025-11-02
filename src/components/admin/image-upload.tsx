@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UploadDropzone } from "@/utils/uploadthing";
-import { X,  Loader2 } from "lucide-react";
+import { X, Loader2, Upload } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,12 @@ export function ImageUpload({
   className,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+   
+  }, [endpoint, value, disabled]);
 
   return (
     <div className={cn("space-y-4", className)}>
@@ -50,31 +56,62 @@ export function ImageUpload({
         </div>
       ) : (
         <div className="border-2 border-dashed border-border rounded-lg p-8">
-          {isUploading ? (
+          {!isMounted ? (
+            <div className="flex flex-col items-center justify-center space-y-2 py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                Loading uploader...
+              </p>
+            </div>
+          ) : isUploading ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
               <p className="text-sm text-muted-foreground">Uploading...</p>
             </div>
           ) : (
-            <UploadDropzone
-              endpoint={endpoint}
-              onClientUploadComplete={(res) => {
-                if (res?.[0]?.url) {
-                  onChange(res[0].url);
+            <>
+              <div className="flex flex-col items-center justify-center space-y-4 mb-4">
+                <Upload className="h-12 w-12 text-muted-foreground" />
+                <div className="text-center">
+                  <p className="text-sm font-medium">
+                    Drop your image here or click to browse
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    PNG, JPG up to 4MB
+                  </p>
+                </div>
+              </div>
+              <UploadDropzone
+                endpoint={endpoint}
+                onClientUploadComplete={(res) => {
+                  if (res?.[0]?.url) {
+                    onChange(res[0].url);
+                    setIsUploading(false);
+                  }
+                }}
+                onUploadError={(error: Error) => {
+                  console.error("Upload error:", error);
+                  alert(`Upload failed: ${error.message}`);
                   setIsUploading(false);
-                }
-              }}
-              onUploadError={(error: Error) => {
-                console.error("Upload error:", error);
-                alert(`Upload failed: ${error.message}`);
-                setIsUploading(false);
-              }}
-              onUploadBegin={() => {
-                setIsUploading(true);
-              }}
-              disabled={disabled}
-              className="ut-button:bg-primary ut-button:ut-readying:bg-primary/50 ut-label:text-primary ut-allowed-content:text-muted-foreground"
-            />
+                }}
+                onUploadBegin={(fileName) => {
+                  setIsUploading(true);
+                }}
+                onBeforeUploadBegin={(files) => {
+                  return files;
+                }}
+                disabled={disabled}
+                config={{ mode: "auto" }}
+                appearance={{
+                  container: "w-full",
+                  uploadIcon: "hidden",
+                  label: "hidden",
+                  allowedContent: "hidden",
+                  button:
+                    "ut-ready:bg-primary ut-ready:hover:bg-primary/90 ut-uploading:bg-primary/50 ut-uploading:cursor-not-allowed",
+                }}
+              />
+            </>
           )}
         </div>
       )}
