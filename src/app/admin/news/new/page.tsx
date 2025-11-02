@@ -26,6 +26,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { createNewsArticle } from "@/lib/actions/news";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
 
@@ -193,16 +194,24 @@ export default function NewNewsPage() {
 
             <div className="space-y-2">
               <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
-                {...register("content")}
-                placeholder="Full article content (optional)"
-                rows={10}
-                className={errors.content ? "border-red-500" : ""}
+              <Controller
+                name="content"
+                control={control}
+                render={({ field }) => (
+                  <RichTextEditor
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    placeholder="Write your article content with rich formatting..."
+                    className={errors.content ? "border-red-500" : ""}
+                  />
+                )}
               />
               {errors.content && (
-                <p className="text-sm text-red-500">{errors.content.message}</p>
+                <p className="text-sm text-red-500 mt-2">{errors.content.message}</p>
               )}
+              <p className="text-sm text-muted-foreground">
+                Use the toolbar to format your content with headings, bold, italic, lists, and more
+              </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
