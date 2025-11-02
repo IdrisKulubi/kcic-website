@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Calendar, Clock, ArrowUpRight, TrendingUp, Newspaper, BookOpen, Mic, PlayCircle } from "lucide-react";
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
@@ -139,7 +140,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   "lg:col-span-7",
                   getMotionSafeClasses('animate-in fade-in slide-in-from-left duration-1000')
                 )}>
-                  <Card className="h-full group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500">
+                  <Link href={`/news/${featuredNews.slug}`}>
+                    <Card className="h-full group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer">
                     {featuredNews.imageUrl && (
                       <div className="relative h-96 overflow-hidden">
                         <Image
@@ -198,15 +200,13 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           </span>
                         )}
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        className="p-0 h-auto font-semibold text-green-600 hover:text-green-700 group"
-                      >
+                      <span className="inline-flex items-center font-semibold text-green-600 hover:text-green-700 group cursor-pointer">
                         Read Full Story
                         <ArrowUpRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Button>
+                      </span>
                     </CardContent>
-                  </Card>
+                    </Card>
+                  </Link>
                 </div>
               )}
 
@@ -226,14 +226,14 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 </div>
                 
                 {latestNews.slice(0, 3).map((article, index) => (
-                  <Card 
-                    key={article.id} 
-                    className={cn(
-                      "group hover:shadow-lg transition-all duration-300 border-gray-100",
-                      getMotionSafeClasses(`animate-in fade-in slide-in-from-right duration-1000 delay-${(index + 1) * 100}`)
-                    )}
-                  >
-                    <CardContent className="p-4">
+                  <Link key={article.id} href={`/news/${article.slug}`}>
+                    <Card 
+                      className={cn(
+                        "group hover:shadow-lg transition-all duration-300 border-gray-100 cursor-pointer",
+                        getMotionSafeClasses(`animate-in fade-in slide-in-from-right duration-1000 delay-${(index + 1) * 100}`)
+                      )}
+                    >
+                      <CardContent className="p-4">
                       <div className="flex gap-4">
                         {article.imageUrl && (
                           <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
@@ -265,7 +265,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -291,13 +292,13 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {latestNews.slice(3, 6).map((article, index) => (
-                  <Card 
-                    key={article.id}
-                    className={cn(
-                      "group hover:shadow-xl transition-all duration-300 overflow-hidden",
-                      getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
-                    )}
-                  >
+                  <Link key={article.id} href={`/news/${article.slug}`}>
+                    <Card 
+                      className={cn(
+                        "group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer",
+                        getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
+                      )}
+                    >
                     {article.imageUrl && (
                       <div className="relative h-48 overflow-hidden">
                         <Image
@@ -330,12 +331,13 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       </CardDescription>
                     </CardContent>
                     <CardFooter className="pt-0">
-                      <Button variant="link" className="p-0 h-auto text-green-600 group">
+                      <span className="inline-flex items-center text-green-600 group cursor-pointer font-medium">
                         Read More
                         <ArrowUpRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Button>
+                      </span>
                     </CardFooter>
-                  </Card>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             </div>

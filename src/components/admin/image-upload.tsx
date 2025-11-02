@@ -29,7 +29,6 @@ export function ImageUpload({
 
   useEffect(() => {
     setIsMounted(true);
-   
   }, [endpoint, value, disabled]);
 
   return (
