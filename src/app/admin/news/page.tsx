@@ -134,6 +134,8 @@ export default function NewsListPage() {
         <Image
           src={article.thumbnail}
           alt={article.title}
+          width={64}
+          height={64}
           className="w-16 h-16 object-cover rounded"
         />
       ),

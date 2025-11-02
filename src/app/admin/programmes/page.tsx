@@ -1,36 +1,52 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Pencil, Save, X } from 'lucide-react';
-import { listProgrammes, updateProgramme, type ProgrammeData } from '@/lib/actions/programmes';
-import { showSuccessToast, showErrorToast } from '@/lib/toast';
-import { ImageUpload } from '@/components/admin/image-upload';
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Loader2, Pencil, Save, X } from "lucide-react";
+import {
+  listProgrammes,
+  updateProgramme,
+  type ProgrammeData,
+} from "@/lib/actions/programmes";
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
+import { ImageUpload } from "@/components/admin/image-upload";
+import Image from "next/image";
 
 // Validation schema for programme form
 const programmeFormSchema = z.object({
-  title: z.string().min(2, 'Title must be at least 2 characters').max(100, 'Title must be at most 100 characters'),
-  description: z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be at most 1000 characters'),
-  image: z.string().url('Image must be a valid URL'),
-  href: z.string().min(1, 'Link is required'),
-  color: z.string().min(1, 'Color is required')
+  title: z
+    .string()
+    .min(2, "Title must be at least 2 characters")
+    .max(100, "Title must be at most 100 characters"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .max(1000, "Description must be at most 1000 characters"),
+  image: z.string().url("Image must be a valid URL"),
+  href: z.string().min(1, "Link is required"),
+  color: z.string().min(1, "Color is required"),
 });
 
 type ProgrammeFormData = z.infer<typeof programmeFormSchema>;
 
 // Programme card component with edit mode
-function ProgrammeCard({ 
-  programme, 
-  onUpdate 
-}: { 
+function ProgrammeCard({
+  programme,
+  onUpdate,
+}: {
   programme: ProgrammeData;
   onUpdate: () => void;
 }) {
@@ -42,7 +58,7 @@ function ProgrammeCard({
     handleSubmit,
     setValue,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<ProgrammeFormData>({
     resolver: zodResolver(programmeFormSchema),
     defaultValues: {
@@ -50,46 +66,49 @@ function ProgrammeCard({
       description: programme.description,
       image: programme.image,
       href: programme.href,
-      color: programme.color
-    }
+      color: programme.color,
+    },
   });
 
-  const imageValue = watch('image');
+  const imageValue = watch("image");
 
   const onSubmit = async (data: ProgrammeFormData) => {
     setIsSaving(true);
-    
+
     const result = await updateProgramme(programme.id, data);
-    
+
     if (result.success) {
-      showSuccessToast('Programme updated', 'Changes have been saved');
+      showSuccessToast("Programme updated", "Changes have been saved");
       setIsEditing(false);
       onUpdate();
     } else {
-      showErrorToast('Failed to update programme', result.error);
+      showErrorToast("Failed to update programme", result.error);
     }
-    
+
     setIsSaving(false);
   };
 
   const handleCancel = () => {
     // Reset form to original values
-    setValue('title', programme.title);
-    setValue('description', programme.description);
-    setValue('image', programme.image);
-    setValue('href', programme.href);
-    setValue('color', programme.color);
+    setValue("title", programme.title);
+    setValue("description", programme.description);
+    setValue("image", programme.image);
+    setValue("href", programme.href);
+    setValue("color", programme.color);
     setIsEditing(false);
   };
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="pb-4" style={{ backgroundColor: `${programme.color}10` }}>
+      <CardHeader
+        className="pb-4"
+        style={{ backgroundColor: `${programme.color}10` }}
+      >
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-xl">{programme.title}</CardTitle>
             <CardDescription className="mt-1">
-              {isEditing ? 'Edit programme details' : 'Programme information'}
+              {isEditing ? "Edit programme details" : "Programme information"}
             </CardDescription>
           </div>
           {!isEditing && (
@@ -112,9 +131,9 @@ function ProgrammeCard({
               <Label htmlFor={`title-${programme.id}`}>Title *</Label>
               <Input
                 id={`title-${programme.id}`}
-                {...register('title')}
+                {...register("title")}
                 placeholder="Programme title"
-                className={errors.title ? 'border-red-500' : ''}
+                className={errors.title ? "border-red-500" : ""}
               />
               {errors.title && (
                 <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -122,16 +141,20 @@ function ProgrammeCard({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor={`description-${programme.id}`}>Description *</Label>
+              <Label htmlFor={`description-${programme.id}`}>
+                Description *
+              </Label>
               <Textarea
                 id={`description-${programme.id}`}
-                {...register('description')}
+                {...register("description")}
                 placeholder="Programme description"
                 rows={4}
-                className={errors.description ? 'border-red-500' : ''}
+                className={errors.description ? "border-red-500" : ""}
               />
               {errors.description && (
-                <p className="text-sm text-red-500">{errors.description.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.description.message}
+                </p>
               )}
             </div>
 
@@ -139,8 +162,8 @@ function ProgrammeCard({
               <Label>Programme Image *</Label>
               <ImageUpload
                 value={imageValue}
-                onChange={(url) => setValue('image', url)}
-                onRemove={() => setValue('image', '')}
+                onChange={(url) => setValue("image", url)}
+                onRemove={() => setValue("image", "")}
               />
               {errors.image && (
                 <p className="text-sm text-red-500">{errors.image.message}</p>
@@ -151,9 +174,9 @@ function ProgrammeCard({
               <Label htmlFor={`href-${programme.id}`}>Link *</Label>
               <Input
                 id={`href-${programme.id}`}
-                {...register('href')}
+                {...register("href")}
                 placeholder="/path or https://example.com"
-                className={errors.href ? 'border-red-500' : ''}
+                className={errors.href ? "border-red-500" : ""}
               />
               {errors.href && (
                 <p className="text-sm text-red-500">{errors.href.message}</p>
@@ -165,14 +188,14 @@ function ProgrammeCard({
               <div className="flex gap-2">
                 <Input
                   id={`color-${programme.id}`}
-                  {...register('color')}
+                  {...register("color")}
                   placeholder="#000000"
-                  className={errors.color ? 'border-red-500' : ''}
+                  className={errors.color ? "border-red-500" : ""}
                 />
                 <input
                   type="color"
-                  value={watch('color')}
-                  onChange={(e) => setValue('color', e.target.value)}
+                  value={watch("color")}
+                  onChange={(e) => setValue("color", e.target.value)}
                   className="w-12 h-10 rounded border cursor-pointer"
                 />
               </div>
@@ -182,11 +205,7 @@ function ProgrammeCard({
             </div>
 
             <div className="flex gap-2 pt-2">
-              <Button
-                type="submit"
-                disabled={isSaving}
-                className="flex-1"
-              >
+              <Button type="submit" disabled={isSaving} className="flex-1">
                 {isSaving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -222,13 +241,17 @@ function ProgrammeCard({
 
             <div className="space-y-2">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Description</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Description
+                </p>
                 <p className="text-sm mt-1">{programme.description}</p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Link</p>
-                <a 
+                <p className="text-sm font-medium text-muted-foreground">
+                  Link
+                </p>
+                <a
                   href={programme.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -239,9 +262,11 @@ function ProgrammeCard({
               </div>
 
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Color Theme</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Color Theme
+                </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <div 
+                  <div
                     className="w-6 h-6 rounded border"
                     style={{ backgroundColor: programme.color }}
                   />
@@ -267,7 +292,10 @@ export default function ProgrammesPage() {
     if (result.success && result.data) {
       setProgrammes(result.data);
     } else {
-      showErrorToast('Failed to load programmes', !result.success ? result.error : 'Unknown error');
+      showErrorToast(
+        "Failed to load programmes",
+        !result.success ? result.error : "Unknown error"
+      );
     }
 
     setIsLoading(false);
