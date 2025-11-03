@@ -1,138 +1,157 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 interface RichTextDisplayProps {
   content: string;
   className?: string;
 }
 
 export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProps) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Force remove any inline color styles after render
+    if (contentRef.current) {
+      const allElements = contentRef.current.querySelectorAll("*");
+      allElements.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          element.style.removeProperty("color");
+          element.style.color = "#111827";
+        }
+      });
+    }
+  }, [content]);
+
   return (
     <>
       <div
-        className={`rich-text-content prose prose-lg max-w-none ${className}`}
+        ref={contentRef}
+        className={`article-content ${className}`}
         dangerouslySetInnerHTML={{ __html: content }}
       />
       <style jsx global>{`
-        .rich-text-content {
-          line-height: 1.8;
+        .article-content,
+        .article-content *,
+        .article-content p,
+        .article-content span,
+        .article-content div {
           color: #111827 !important;
-        }
-        
-        @media (prefers-color-scheme: dark) {
-          .rich-text-content {
-            color: #f9fafb !important;
-          }
+          font-size: 1.125rem;
+          line-height: 1.75;
         }
 
-        .rich-text-content h1 {
-          font-size: 2.25rem;
-          font-weight: 700;
+        .article-content h1 {
+          font-size: 2.25rem !important;
+          font-weight: 700 !important;
           margin-top: 2rem;
           margin-bottom: 1rem;
           line-height: 1.2;
           color: #000000 !important;
         }
 
-        .rich-text-content h2 {
-          font-size: 1.875rem;
-          font-weight: 700;
+        .article-content h2 {
+          font-size: 1.875rem !important;
+          font-weight: 700 !important;
           margin-top: 1.75rem;
           margin-bottom: 0.875rem;
           line-height: 1.3;
           color: #000000 !important;
         }
 
-        .rich-text-content h3 {
-          font-size: 1.5rem;
-          font-weight: 600;
+        .article-content h3 {
+          font-size: 1.5rem !important;
+          font-weight: 600 !important;
           margin-top: 1.5rem;
           margin-bottom: 0.75rem;
           line-height: 1.4;
           color: #000000 !important;
         }
 
-        .rich-text-content h4 {
-          font-size: 1.25rem;
-          font-weight: 600;
+        .article-content h4 {
+          font-size: 1.25rem !important;
+          font-weight: 600 !important;
           margin-top: 1.25rem;
           margin-bottom: 0.625rem;
           color: #000000 !important;
         }
 
-        .rich-text-content h5 {
-          font-size: 1.125rem;
-          font-weight: 600;
+        .article-content h5 {
+          font-size: 1.125rem !important;
+          font-weight: 600 !important;
           margin-top: 1rem;
           margin-bottom: 0.5rem;
           color: #000000 !important;
         }
 
-        .rich-text-content h6 {
-          font-size: 1rem;
-          font-weight: 600;
+        .article-content h6 {
+          font-size: 1rem !important;
+          font-weight: 600 !important;
           margin-top: 1rem;
           margin-bottom: 0.5rem;
           color: #000000 !important;
         }
 
-        .rich-text-content p {
-          margin-bottom: 1rem;
+        .article-content p {
+          margin-bottom: 1rem !important;
           color: #111827 !important;
-          font-size: 1.125rem;
-          line-height: 1.75;
+          font-size: 1.125rem !important;
+          line-height: 1.75 !important;
         }
 
-        .rich-text-content strong {
-          font-weight: 700;
+        .article-content strong,
+        .article-content b {
+          font-weight: 700 !important;
           color: #000000 !important;
         }
 
-        .rich-text-content em {
+        .article-content em,
+        .article-content i {
           font-style: italic;
         }
 
-        .rich-text-content u {
+        .article-content u {
           text-decoration: underline;
         }
 
-        .rich-text-content s {
+        .article-content s {
           text-decoration: line-through;
         }
 
-        .rich-text-content a {
-          color: #059669;
+        .article-content a {
+          color: #059669 !important;
           text-decoration: underline;
           transition: opacity 0.2s;
           font-weight: 500;
         }
 
-        .rich-text-content a:hover {
+        .article-content a:hover {
           opacity: 0.8;
-          color: #047857;
+          color: #047857 !important;
         }
 
-        .rich-text-content ul,
-        .rich-text-content ol {
+        .article-content ul,
+        .article-content ol {
           margin-left: 1.5rem;
           margin-bottom: 1rem;
           color: #111827 !important;
         }
 
-        .rich-text-content ul {
+        .article-content ul {
           list-style-type: disc;
         }
 
-        .rich-text-content ol {
+        .article-content ol {
           list-style-type: decimal;
         }
 
-        .rich-text-content li {
-          margin-bottom: 0.5rem;
+        .article-content li {
+          margin-bottom: 0.5rem !important;
           line-height: 1.75;
           color: #111827 !important;
         }
 
-        .rich-text-content blockquote {
+        .article-content blockquote {
           border-left: 4px solid #059669;
           padding-left: 1rem;
           margin: 1.5rem 0;
@@ -143,7 +162,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           border-radius: 0.5rem;
         }
 
-        .rich-text-content pre {
+        .article-content pre {
           background: #f3f4f6;
           padding: 1rem;
           border-radius: 0.5rem;
@@ -152,142 +171,124 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           border: 1px solid #e5e7eb;
         }
 
-        .rich-text-content code {
+        .article-content code {
           background: #f3f4f6;
-          color: #dc2626;
+          color: #dc2626 !important;
           padding: 0.125rem 0.25rem;
           border-radius: 0.25rem;
           font-family: monospace;
           font-size: 0.875em;
         }
 
-        .rich-text-content pre code {
+        .article-content pre code {
           background: transparent;
           padding: 0;
-          color: #111827;
+          color: #111827 !important;
         }
 
-        .rich-text-content img {
+        .article-content img {
           max-width: 100%;
           height: auto;
           border-radius: 0.5rem;
           margin: 1.5rem 0;
         }
 
-        .rich-text-content video {
+        .article-content video {
           max-width: 100%;
           height: auto;
           border-radius: 0.5rem;
           margin: 1.5rem 0;
         }
 
-        .rich-text-content table {
+        .article-content table {
           width: 100%;
           border-collapse: collapse;
           margin: 1.5rem 0;
         }
 
-        .rich-text-content th,
-        .rich-text-content td {
+        .article-content th,
+        .article-content td {
           border: 1px solid #d1d5db;
           padding: 0.75rem;
           text-align: left;
           color: #111827 !important;
         }
 
-        .rich-text-content th {
+        .article-content th {
           background: #f3f4f6;
           font-weight: 600;
           color: #000000 !important;
         }
 
-        .rich-text-content .ql-align-center {
-          text-align: center;
-        }
-
-        .rich-text-content .ql-align-right {
-          text-align: right;
-        }
-
-        .rich-text-content .ql-align-justify {
-          text-align: justify;
-        }
-
-        .rich-text-content .ql-indent-1 {
-          padding-left: 3rem;
-        }
-
-        .rich-text-content .ql-indent-2 {
-          padding-left: 6rem;
-        }
-
-        .rich-text-content .ql-indent-3 {
-          padding-left: 9rem;
-        }
-
         /* Dark mode styles */
         @media (prefers-color-scheme: dark) {
-          .rich-text-content h1,
-          .rich-text-content h2,
-          .rich-text-content h3,
-          .rich-text-content h4,
-          .rich-text-content h5,
-          .rich-text-content h6 {
-            color: #f9fafb;
+          .article-content,
+          .article-content *,
+          .article-content p,
+          .article-content span,
+          .article-content div {
+            color: #f9fafb !important;
           }
 
-          .rich-text-content p {
+          .article-content h1,
+          .article-content h2,
+          .article-content h3,
+          .article-content h4,
+          .article-content h5,
+          .article-content h6 {
+            color: #ffffff !important;
+          }
+
+          .article-content p {
             color: #e5e7eb !important;
           }
 
-          .rich-text-content strong {
-            color: #f9fafb;
+          .article-content strong,
+          .article-content b {
+            color: #ffffff !important;
           }
 
-          .rich-text-content a {
-            color: #34d399;
+          .article-content a {
+            color: #34d399 !important;
           }
 
-          .rich-text-content a:hover {
-            color: #6ee7b7;
+          .article-content a:hover {
+            color: #6ee7b7 !important;
           }
 
-          .rich-text-content ul,
-          .rich-text-content ol {
+          .article-content ul,
+          .article-content ol,
+          .article-content li {
             color: #e5e7eb !important;
           }
-          
-          .rich-text-content li {
-            color: #e5e7eb !important;
-          }
 
-          .rich-text-content blockquote {
+          .article-content blockquote {
             color: #d1d5db !important;
             background: #1f2937;
             border-left-color: #34d399;
           }
 
-          .rich-text-content pre {
+          .article-content pre {
             background: #1f2937;
             border-color: #374151;
           }
 
-          .rich-text-content code {
+          .article-content code {
             background: #1f2937;
-            color: #fca5a5;
+            color: #fca5a5 !important;
           }
 
-          .rich-text-content pre code {
-            color: #f9fafb;
+          .article-content pre code {
+            color: #f9fafb !important;
           }
 
-          .rich-text-content th,
-          .rich-text-content td {
+          .article-content th,
+          .article-content td {
             border-color: #374151;
             color: #e5e7eb !important;
           }
 
-          .rich-text-content th {
+          .article-content th {
             background: #1f2937;
             color: #ffffff !important;
           }
