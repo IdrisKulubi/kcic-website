@@ -15,12 +15,12 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
       <style jsx global>{`
         .rich-text-content {
           line-height: 1.8;
-          color: #1f2937;
+          color: #111827 !important;
         }
         
         @media (prefers-color-scheme: dark) {
           .rich-text-content {
-            color: #f3f4f6;
+            color: #f9fafb !important;
           }
         }
 
@@ -30,7 +30,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           margin-top: 2rem;
           margin-bottom: 1rem;
           line-height: 1.2;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content h2 {
@@ -39,7 +39,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           margin-top: 1.75rem;
           margin-bottom: 0.875rem;
           line-height: 1.3;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content h3 {
@@ -48,7 +48,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           margin-top: 1.5rem;
           margin-bottom: 0.75rem;
           line-height: 1.4;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content h4 {
@@ -56,7 +56,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           font-weight: 600;
           margin-top: 1.25rem;
           margin-bottom: 0.625rem;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content h5 {
@@ -64,7 +64,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           font-weight: 600;
           margin-top: 1rem;
           margin-bottom: 0.5rem;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content h6 {
@@ -72,19 +72,19 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           font-weight: 600;
           margin-top: 1rem;
           margin-bottom: 0.5rem;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content p {
           margin-bottom: 1rem;
-          color: #374151;
+          color: #111827 !important;
           font-size: 1.125rem;
           line-height: 1.75;
         }
 
         .rich-text-content strong {
           font-weight: 700;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content em {
@@ -115,7 +115,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
         .rich-text-content ol {
           margin-left: 1.5rem;
           margin-bottom: 1rem;
-          color: #374151;
+          color: #111827 !important;
         }
 
         .rich-text-content ul {
@@ -129,6 +129,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
         .rich-text-content li {
           margin-bottom: 0.5rem;
           line-height: 1.75;
+          color: #111827 !important;
         }
 
         .rich-text-content blockquote {
@@ -136,8 +137,8 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           padding-left: 1rem;
           margin: 1.5rem 0;
           font-style: italic;
-          color: #4b5563;
-          background: #f9fafb;
+          color: #1f2937 !important;
+          background: #f0fdf4;
           padding: 1rem;
           border-radius: 0.5rem;
         }
@@ -191,13 +192,13 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           border: 1px solid #d1d5db;
           padding: 0.75rem;
           text-align: left;
-          color: #374151;
+          color: #111827 !important;
         }
 
         .rich-text-content th {
           background: #f3f4f6;
           font-weight: 600;
-          color: #111827;
+          color: #000000 !important;
         }
 
         .rich-text-content .ql-align-center {
@@ -236,7 +237,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           }
 
           .rich-text-content p {
-            color: #d1d5db;
+            color: #e5e7eb !important;
           }
 
           .rich-text-content strong {
@@ -253,11 +254,15 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
 
           .rich-text-content ul,
           .rich-text-content ol {
-            color: #d1d5db;
+            color: #e5e7eb !important;
+          }
+          
+          .rich-text-content li {
+            color: #e5e7eb !important;
           }
 
           .rich-text-content blockquote {
-            color: #9ca3af;
+            color: #d1d5db !important;
             background: #1f2937;
             border-left-color: #34d399;
           }
@@ -279,12 +284,12 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           .rich-text-content th,
           .rich-text-content td {
             border-color: #374151;
-            color: #d1d5db;
+            color: #e5e7eb !important;
           }
 
           .rich-text-content th {
             background: #1f2937;
-            color: #f9fafb;
+            color: #ffffff !important;
           }
         }
       `}</style>
