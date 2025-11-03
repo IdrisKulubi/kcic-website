@@ -23,12 +23,12 @@ export const navData = {
             "Meet the dedicated professionals driving climate solutions",
           icon: "Users",
         },
-        {
-          label: "Policies and disclosures",
-          href: "/about/policies-disclosures",
-          description: "Transparency in governance and operational policies",
-          icon: "Shield",
-        },
+        // {
+        //   label: "Policies and disclosures",
+        //   href: "/about/policies-disclosures",
+        //   description: "Transparency in governance and operational policies",
+        //   icon: "Shield",
+        // },
         {
           label: "Procurement",
           href: "/about/procurement",
@@ -66,12 +66,6 @@ export const navData = {
           description: "Comprehensive programs for climate entrepreneurs",
           icon: "Lightbulb",
         },
-        {
-          label: "Cross-Cutting Issues",
-          href: "/how-we-work/cross-cutting-issues",
-          description: "Addressing systemic challenges across sectors",
-          icon: "Network",
-        },
       ],
     },
     {
@@ -92,36 +86,36 @@ export const navData = {
         },
       ],
     },
-    {
-      label: "Newsroom",
-      href: "/newsroom",
-      subItems: [
-        {
-          label: "Publications",
-          href: "/newsroom/publications",
-          description: "Research reports and industry insights",
-          icon: "FileText",
-        },
-        {
-          label: "Events",
-          href: "/newsroom/events",
-          description: "Upcoming and past events, conferences, and workshops",
-          icon: "Calendar",
-        },
-        {
-          label: "Press Release",
-          href: "/newsroom/press-release",
-          description: "Latest press releases and media coverage",
-          icon: "Megaphone",
-        },
-        {
-          label: "Fact sheets",
-          href: "/newsroom/fact-sheets",
-          description: "Key facts and figures about our work",
-          icon: "ClipboardList",
-        },
-      ],
-    },
+    // {
+    //   label: "Newsroom",
+    //   href: "/newsroom",
+    //   subItems: [
+    //     {
+    //       label: "Publications",
+    //       href: "/newsroom/publications",
+    //       description: "Research reports and industry insights",
+    //       icon: "FileText",
+    //     },
+    //     {
+    //       label: "Events",
+    //       href: "/newsroom/events",
+    //       description: "Upcoming and past events, conferences, and workshops",
+    //       icon: "Calendar",
+    //     },
+    //     {
+    //       label: "Press Release",
+    //       href: "/newsroom/press-release",
+    //       description: "Latest press releases and media coverage",
+    //       icon: "Megaphone",
+    //     },
+    //     {
+    //       label: "Fact sheets",
+    //       href: "/newsroom/fact-sheets",
+    //       description: "Key facts and figures about our work",
+    //       icon: "ClipboardList",
+    //     },
+    //   ],
+    // },
     {
       label: "FAQs",
       href: "/faqs",
