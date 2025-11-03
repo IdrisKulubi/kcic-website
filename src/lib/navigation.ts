@@ -36,12 +36,12 @@ export const navData = {
             "Transparent procurement policies and supplier opportunities",
           icon: "FileText",
         },
-        {
-          label: "Careers",
-          href: "/about/careers",
-          description: "Join our team and help drive climate innovation",
-          icon: "Briefcase",
-        },
+        // {
+        //   label: "Careers",
+        //   href: "/about/careers",
+        //   description: "Join our team and help drive climate innovation",
+        //   icon: "Briefcase",
+        // },
         {
           label: "Contact us",
           href: "/about/contact-us",

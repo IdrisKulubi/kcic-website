@@ -1,40 +1,39 @@
 'use client';
 
-import React from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
-import { Target, Eye, Heart, Award, Globe, Users } from 'lucide-react';
+import { Target, Eye, Heart, Award, Globe, Users, Shield, Lightbulb } from 'lucide-react';
 
 const values = [
   {
-    icon: Target,
-    title: 'Innovation',
-    description: 'We foster creativity and cutting-edge solutions to address climate challenges.'
+    icon: Heart,
+    title: 'People-centric',
+    description: 'We prioritize the well-being of employees and stakeholders'
   },
   {
-    icon: Heart,
-    title: 'Impact',
-    description: 'We measure success by the positive environmental and social change we create.'
+    icon: Globe,
+    title: 'Inclusivity',
+    description: 'We leave no one behind'
+  },
+  {
+    icon: Award,
+    title: 'Professionalism',
+    description: 'We are committed to excellence'
+  },
+  {
+    icon: Shield,
+    title: 'Integrity',
+    description: 'We walk the talk and keep our word'
+  },
+  {
+    icon: Lightbulb,
+    title: 'Innovation',
+    description: 'We foster creativity and forward-thinking'
   },
   {
     icon: Users,
     title: 'Collaboration',
-    description: 'We believe in the power of partnerships to amplify our collective impact.'
-  },
-  {
-    icon: Award,
-    title: 'Excellence',
-    description: 'We maintain the highest standards in everything we do.'
-  },
-  {
-    icon: Globe,
-    title: 'Sustainability',
-    description: 'We are committed to creating long-term, sustainable solutions.'
-  },
-  {
-    icon: Eye,
-    title: 'Transparency',
-    description: 'We operate with openness and accountability in all our activities.'
+    description: 'We believe we are stronger together'
   }
 ];
 
@@ -65,9 +64,7 @@ export default function WhoWeArePage() {
                   <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
                 </div>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  To accelerate climate innovation and green economic growth in Kenya by supporting 
-                  climate-focused small and medium enterprises (SMEs) through incubation, acceleration, 
-                  and access to finance, technology, and markets.
+                  We catalyze climate entrepreneurship
                 </p>
               </div>
             </motion.div>
@@ -84,9 +81,7 @@ export default function WhoWeArePage() {
                   <h2 className="text-3xl font-bold text-gray-900">Our Vision</h2>
                 </div>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  To be the leading climate innovation centre in Africa, catalyzing sustainable 
-                  development through transformative climate solutions and creating a thriving 
-                  ecosystem for green entrepreneurship.
+                  Sustainable Enterprises and Climate Resilient Communities
                 </p>
               </div>
             </motion.div>
@@ -106,21 +101,13 @@ export default function WhoWeArePage() {
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <div className="max-w-4xl mx-auto">
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  Established in 2010, the Kenya Climate Innovation Centre (KCIC) was born from 
-                  the recognition that Kenya&apos;s greatest climate challenges could become its greatest
-                  opportunities for innovation and economic growth.
+                  Kenya Climate Innovation Center (KCIC) is a World Bank's infoDev initiative, and was the first in a global network of CICs being launched by infoDev's Climate Technology Program (CTP) to support the development and scale up of locally relevant climate technologies.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  Over the past decade, we have evolved from a pioneering initiative to a cornerstone 
-                  of Kenya&apos;s climate innovation ecosystem. Through strategic partnerships with
-                  international donors, government institutions, and private sector leaders, we have 
-                  created a comprehensive support system for climate entrepreneurs.
+                  KCIC was initially set up as a project by a consortium of partners in September 2012 and was funded by UKaid and DANIDA through the World Bank from September 2012 to May 2016. GVEP International (now Energy4Impact), PwC, Strathmore University and KIRDI were the lead partners in a consortium contracted by infoDev to establish and operate the KCIC.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Today, KCIC stands as a testament to what&apos;s possible when innovation meets
-                  determination. With over 450 SMEs supported, $25M+ in investment mobilized, 
-                  and 2,500+ green jobs created, we continue to drive Kenya&apos;s transition to
-                  a sustainable, climate-resilient future.
+                  KCIC was successfully registered as a company limited by guarantee in January 2015 and received a new round of funding from DANIDA to support its activities for the period June 2016 to December 2020.
                 </p>
               </div>
             </motion.div>
@@ -166,45 +153,7 @@ export default function WhoWeArePage() {
           </div>
         </div>
 
-        {/* Key Achievements Section */}
-        <div className="bg-green-50 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Key Achievements</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our impact speaks through the success of our partners and the communities we serve.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { number: '450+', label: 'SMEs Supported', description: 'Across various climate sectors' },
-                { number: '$25M+', label: 'Investment Mobilized', description: 'For climate ventures' },
-                { number: '2,500+', label: 'Green Jobs Created', description: 'Sustainable employment opportunities' },
-                { number: '15+', label: 'Climate Solutions', description: 'Deployed in the market' }
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="text-center bg-white rounded-xl shadow-lg p-6 border border-green-100"
-                >
-                  <div className="text-4xl font-bold text-green-600 mb-2">{stat.number}</div>
-                  <div className="text-lg font-semibold text-gray-900 mb-2">{stat.label}</div>
-                  <div className="text-sm text-gray-600">{stat.description}</div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
+       
       </div>
     </PageLayout>
   );
