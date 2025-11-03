@@ -23,132 +23,53 @@ export default function ProcurementPage() {
               KCIC is committed to transparent, fair, and sustainable procurement practices that support our mission of climate innovation.
             </p>
           </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Procurement Policy</h2>
-              <div className="space-y-4 text-gray-600">
-                <p>
-                  Our procurement policy ensures transparency, accountability, and value for money in all our purchasing decisions. We prioritize suppliers who demonstrate commitment to environmental sustainability and social responsibility.
-                </p>
-                <p>
-                  All procurement activities are conducted in accordance with international best practices and comply with relevant Kenyan laws and regulations.
-                </p>
-              </div>
+
+          {/* Pre-Qualification Announcement */}
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl p-8 mb-16 shadow-lg">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold mb-6">PRE-QUALIFICATION OF SUPPLIERS FOR GOODS, WORKS AND SERVICES</h2>
               
-              <div className="mt-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Key Principles</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Transparency in all procurement processes
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Fair competition among qualified suppliers
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Value for money and cost-effectiveness
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Environmental and social sustainability
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Compliance with legal and regulatory requirements
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Current Opportunities</h2>
-              <div className="space-y-6">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-green-800 mb-2">IT Services & Equipment</h3>
-                  <p className="text-green-700 text-sm mb-3">Deadline: March 15, 2025</p>
-                  <p className="text-gray-600 text-sm">
-                    Seeking suppliers for IT infrastructure, software licenses, and technical support services.
-                  </p>
+              <div className="space-y-4 text-green-50">
+                <p className="text-lg leading-relaxed">
+                  The Kenya Climate Innovation Center (KCIC) is a social impact organization operating in the climate space, committed to supporting micro and small enterprises and driven by innovation. The KCIC provides incubation, capacity-building services, and financing to Kenyan entrepreneurs and new ventures that are developing innovative solutions in renewable energy and energy efficiency, water management, agribusiness, waste management, and commercial forestry in a bid to address climate change challenges.
+                </p>
+                
+                <p className="text-lg font-semibold text-white">
+                  Kenya Climate Innovation Center is in the process of pre-qualifying suppliers for various goods, services and works for the calendar year 2026 to June 2028.
+                </p>
+                
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mt-6">
+                  <h3 className="text-xl font-semibold mb-4 text-white">How to Apply</h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span>Detailed pre-qualification documents can be downloaded from <a href="#" className="underline hover:text-green-200">Here</a></span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span>Alternatively, interested firms may send an email to <a href="mailto:procurement@kenyacic.org" className="underline hover:text-green-200">procurement@kenyacic.org</a> requesting for the pre-qualification document</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span>Payment of a non-refundable fee of <strong className="text-white">Kshs. 2,000.00</strong> per document will apply</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span>Payment can be made via Mpesa Paybill <strong className="text-white">880100</strong>, Account number <strong className="text-white">2594680245</strong></span>
+                    </li>
+                  </ul>
                 </div>
                 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Training & Capacity Building</h3>
-                  <p className="text-blue-700 text-sm mb-3">Deadline: February 28, 2025</p>
-                  <p className="text-gray-600 text-sm">
-                    Professional development and training services for climate innovation programs.
+                <div className="bg-yellow-400 text-gray-900 rounded-lg p-6 mt-6">
+                  <h3 className="text-xl font-bold mb-3">SUBMISSION PROCESS</h3>
+                  <p className="mb-3">
+                    Completed pre-qualification documents accompanied by proof of payment (receipt from KCIC) should be submitted through email address <a href="mailto:procurement@kenyacic.org" className="font-semibold underline">procurement@kenyacic.org</a>.
                   </p>
-                </div>
-                
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-purple-800 mb-2">Consulting Services</h3>
-                  <p className="text-purple-700 text-sm mb-3">Deadline: April 10, 2025</p>
-                  <p className="text-gray-600 text-sm">
-                    Strategic consulting for program evaluation and impact assessment.
+                  <p className="font-semibold">
+                    Please include "Prequalification of goods, works and services 2026" (Indicate category number & item) no later than <span className="text-red-700">Wednesday 24th September 2025 by 5:00pm East African time</span>.
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="bg-gray-50 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Supplier Registration</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">How to Register</h3>
-                <ol className="space-y-3 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5 flex-shrink-0">1</span>
-                    Complete the supplier registration form
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5 flex-shrink-0">2</span>
-                    Submit required documentation
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5 flex-shrink-0">3</span>
-                    Await verification and approval
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5 flex-shrink-0">4</span>
-                    Receive notification of registration status
-                  </li>
-                </ol>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Required Documents</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Certificate of incorporation
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Tax compliance certificate
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Business permit/license
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Bank statements (last 6 months)
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Professional references
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            <div className="text-center mt-8">
-              <button className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200">
-                Register as Supplier
-              </button>
             </div>
           </div>
         </div>
