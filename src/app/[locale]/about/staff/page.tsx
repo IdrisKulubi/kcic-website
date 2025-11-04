@@ -1,25 +1,40 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import Footer from "@/components/layout/Footer";
 import { homePageData } from "@/data/home";
 import { navData } from "@/lib/navigation";
-import { Metadata } from "next";
-import { listTeamMembers } from "@/lib/actions/team";
 import Image from "next/image";
 import { Mail, Linkedin, Twitter } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Our Team - KCIC",
-  description:
-    "Meet the dedicated team members driving climate innovation at Kenya Climate Innovation Centre.",
-};
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio?: string;
+  photo: string;
+  email?: string;
+  linkedin?: string;
+  twitter?: string;
+  order: number;
+}
 
-// Revalidate every 60 seconds
-export const revalidate = 60;
+export default function StaffPage() {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [expandedBios, setExpandedBios] = useState<Set<string>>(new Set());
 
-export default async function StaffPage() {
-  const result = await listTeamMembers();
-  const teamMembers = result.success ? result.data || [] : [];
+  // Fetch team members on mount
+  React.useEffect(() => {
+    async function fetchTeam() {
+      const { listTeamMembers } = await import("@/lib/actions/team");
+      const result = await listTeamMembers();
+      if (result.success && result.data) {
+        setTeamMembers(result.data as TeamMember[]);
+      }
+    }
+    fetchTeam();
+  }, []);
 
   // Helper function to get initials from name
   const getInitials = (name: string) => {
@@ -29,6 +44,25 @@ export default async function StaffPage() {
       .join("")
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  // Helper function to truncate bio
+  const truncateBio = (bio: string, maxLength: number = 100) => {
+    if (bio.length <= maxLength) return bio;
+    return bio.substring(0, maxLength) + "...";
+  };
+
+  // Toggle bio expansion
+  const toggleBio = (memberId: string) => {
+    setExpandedBios((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(memberId)) {
+        newSet.delete(memberId);
+      } else {
+        newSet.add(memberId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -53,75 +87,114 @@ export default async function StaffPage() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
-                <div
-                  key={member.id}
-                  className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-green-100">
-                    {member.photo ? (
-                      <Image
-                        src={member.photo}
-                        alt={member.name}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-green-600 text-2xl font-bold">
-                          {getInitials(member.name)}
-                        </span>
-                      </div>
-                    )}
+              {teamMembers.map((member) => {
+                const isExpanded = expandedBios.has(member.id);
+                return (
+                  <div
+                    key={member.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col group relative"
+                  >
+                    {/* Image Section - Fixed aspect ratio */}
+                    <div className="relative aspect-square bg-green-100 overflow-hidden">
+                      {member.photo ? (
+                        <Image
+                          src={member.photo}
+                          alt={member.name}
+                          fill
+                          className="object-cover object-top"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-green-400 to-blue-500">
+                          <span className="text-white text-5xl font-bold opacity-90">
+                            {getInitials(member.name)}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {/* Read More button - appears on hover */}
+                      {!isExpanded && (member.bio || member.email || member.linkedin || member.twitter) && (
+                        <button
+                          onClick={() => toggleBio(member.id)}
+                          className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        >
+                          <span className="bg-white text-green-600 px-6 py-2 rounded-full font-semibold text-sm hover:bg-green-600 hover:text-white transition-colors">
+                            Read More
+                          </span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="p-6 text-center flex-grow flex flex-col">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        {member.name}
+                      </h3>
+                      <p className="text-green-600 font-medium text-sm">
+                        {member.role}
+                      </p>
+
+                      {/* Expanded Content - Shows when clicked */}
+                      {isExpanded && (
+                        <div className="mt-4 animate-fadeIn">
+                          {member.bio && (
+                            <div className="mb-4 pb-4 border-b border-gray-200">
+                              <p className="text-gray-600 text-sm leading-relaxed text-left">
+                                {member.bio}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Social Links */}
+                          {(member.email || member.linkedin || member.twitter) && (
+                            <div className="flex justify-center gap-3 mb-4">
+                              {member.email && (
+                                <a
+                                  href={`mailto:${member.email}`}
+                                  className="text-gray-400 hover:text-green-600 transition-colors"
+                                  aria-label={`Email ${member.name}`}
+                                >
+                                  <Mail className="w-5 h-5" />
+                                </a>
+                              )}
+                              {member.linkedin && (
+                                <a
+                                  href={member.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-gray-400 hover:text-green-600 transition-colors"
+                                  aria-label={`${member.name}'s LinkedIn`}
+                                >
+                                  <Linkedin className="w-5 h-5" />
+                                </a>
+                              )}
+                              {member.twitter && (
+                                <a
+                                  href={member.twitter}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-gray-400 hover:text-green-600 transition-colors"
+                                  aria-label={`${member.name}'s Twitter`}
+                                >
+                                  <Twitter className="w-5 h-5" />
+                                </a>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Show Less button */}
+                          <button
+                            onClick={() => toggleBio(member.id)}
+                            className="w-full text-green-600 hover:text-green-700 text-sm font-medium py-2 hover:bg-green-50 rounded transition-colors"
+                          >
+                            Show Less
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {member.name}
-                  </h3>
-                  <p className="text-green-600 font-medium mb-3">
-                    {member.role}
-                  </p>
-
-                  {member.bio && (
-                    <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
-                  )}
-
-                  <div className="flex justify-center gap-3 mt-4">
-                    {member.email && (
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="text-gray-400 hover:text-green-600 transition-colors"
-                        aria-label={`Email ${member.name}`}
-                      >
-                        <Mail className="w-5 h-5" />
-                      </a>
-                    )}
-                    {member.linkedin && (
-                      <a
-                        href={member.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-green-600 transition-colors"
-                        aria-label={`${member.name}'s LinkedIn`}
-                      >
-                        <Linkedin className="w-5 h-5" />
-                      </a>
-                    )}
-                    {member.twitter && (
-                      <a
-                        href={member.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-green-600 transition-colors"
-                        aria-label={`${member.name}'s Twitter`}
-                      >
-                        <Twitter className="w-5 h-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
