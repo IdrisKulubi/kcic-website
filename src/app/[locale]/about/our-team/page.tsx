@@ -5,6 +5,9 @@ import Link from "next/link";
 import { listTeamMembers } from "@/lib/actions/team";
 import Image from "next/image";
 
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
 export default async function OurTeamPage() {
   const result = await listTeamMembers();
   const teamMembers = result.success ? result.data || [] : [];

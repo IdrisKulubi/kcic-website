@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "Meet the dedicated team members driving climate innovation at Kenya Climate Innovation Centre.",
 };
 
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
 export default async function StaffPage() {
   const result = await listTeamMembers();
   const teamMembers = result.success ? result.data || [] : [];
