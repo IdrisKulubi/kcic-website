@@ -126,11 +126,39 @@ export default function NewsArticlePage() {
         .print-only {
           display: none;
         }
+        
+        /* Article content styling for readability */
+        article {
+          background: white !important;
+          color: #000000 !important;
+        }
+        
+        article * {
+          color: #000000 !important;
+          opacity: 1 !important;
+          background-color: transparent !important;
+        }
+        
+        article h1,
+        article h2,
+        article h3,
+        article h4,
+        article h5,
+        article h6 {
+          color: #000000 !important;
+        }
+        
+        article p {
+          color: #000000 !important;
+        }
       `}</style>
 
-      <div className="min-h-screen bg-white">
+      <div className="relative min-h-screen">
+        {/* Opaque background for article */}
+        <div className="fixed inset-0 -z-10 bg-white" />
+        
         {/* Header Actions - Hidden on Print */}
-        <div className="no-print sticky top-0 z-50 bg-white border-b border-gray-300 shadow-sm">
+        <div className="no-print sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-300 shadow-sm">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <Button
@@ -219,13 +247,13 @@ export default function NewsArticlePage() {
         </div>
 
         {/* Article Content */}
-        <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <article className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
           {/* Print Header */}
           <div className="print-only mb-8">
-            <h1 className="text-2xl font-bold mb-2">
+            <h1 className="text-2xl font-bold mb-2 text-black">
               Kenya Climate Innovation Center
             </h1>
-            <p className="text-sm text-gray-600">www.kenyacic.org</p>
+            <p className="text-sm text-black">www.kenyacic.org</p>
             <Separator className="my-4" />
           </div>
 
@@ -235,19 +263,19 @@ export default function NewsArticlePage() {
           </Badge>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6 leading-tight">
             {article.title}
           </h1>
 
           {/* Excerpt */}
-          <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">
+          <p className="text-xl text-black mb-8 leading-relaxed font-medium">
             {article.excerpt}
           </p>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 mb-8 font-medium">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-black mb-8 font-medium">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-600" />
+              <Calendar className="h-4 w-4 text-black" />
               {new Date(article.publishedAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -256,7 +284,7 @@ export default function NewsArticlePage() {
             </div>
             {article.readTime && (
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-gray-600" />
+                <Clock className="h-4 w-4 text-black" />
                 {article.readTime}
               </div>
             )}
@@ -291,10 +319,10 @@ export default function NewsArticlePage() {
 
           <div className="no-print">
             <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
-              <h3 className="font-bold text-lg mb-2 text-gray-900">
+              <h3 className="font-bold text-lg mb-2 text-black">
                 Share this article
               </h3>
-              <p className="text-gray-700 mb-4 font-medium">
+              <p className="text-black mb-4 font-medium">
                 Help spread the word about climate innovation
               </p>
               <div className="flex gap-2">
@@ -340,13 +368,13 @@ export default function NewsArticlePage() {
 
           {/* Print Footer */}
           <div className="print-only mt-12 pt-8 border-t border-gray-200">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-black">
               This article was downloaded from Kenya Climate Innovation Center
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-black">
               Visit us at: www.kenyacic.org
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-black">
               Published: {new Date(article.publishedAt).toLocaleDateString()}
             </p>
           </div>

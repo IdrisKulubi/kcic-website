@@ -338,21 +338,7 @@ export default function ProgrammesPage() {
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="text-center mt-12"
-            >
-              <Link
-                href="/apply"
-                className="inline-flex items-center px-8 py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200 text-lg"
-              >
-                Start Your Application
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            </motion.div>
+           
           </div>
         </div>
       </div>

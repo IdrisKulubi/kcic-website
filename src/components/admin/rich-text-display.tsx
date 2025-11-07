@@ -1,44 +1,74 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useMemo, useRef } from "react";
 
 interface RichTextDisplayProps {
   content: string;
   className?: string;
 }
 
+function sanitizeHtml(html: string): string {
+  try {
+    if (typeof window === "undefined" || !("DOMParser" in window)) return html;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    // Remove inline styles and color/opacity-related classes
+    doc.body.querySelectorAll("*").forEach((el) => {
+      // Drop inline styles entirely to avoid color/background overrides
+      if ((el as HTMLElement).hasAttribute("style")) {
+        (el as HTMLElement).removeAttribute("style");
+      }
+
+      // Remove classes that typically affect visibility/colors from CMS exports
+      if ((el as HTMLElement).classList && (el as HTMLElement).classList.length) {
+        const toRemove: string[] = [];
+        (el as HTMLElement).classList.forEach((cls) => {
+          if (/^(text|bg|fill|stroke|opacity)-/i.test(cls)) toRemove.push(cls);
+          if (/has-.*-color/i.test(cls)) toRemove.push(cls);
+          if (/has-text-color|has-background/i.test(cls)) toRemove.push(cls);
+        });
+        toRemove.forEach((c) => (el as HTMLElement).classList.remove(c));
+      }
+    });
+
+    // Normalize anchors for safety and readability
+    doc.body.querySelectorAll("a").forEach((a) => {
+      (a as HTMLAnchorElement).setAttribute("target", "_blank");
+      (a as HTMLAnchorElement).setAttribute("rel", "noopener noreferrer");
+    });
+
+    return doc.body.innerHTML;
+  } catch {
+    return html;
+  }
+}
+
 export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Force remove any inline color styles after render
-    if (contentRef.current) {
-      const allElements = contentRef.current.querySelectorAll("*");
-      allElements.forEach((element) => {
-        if (element instanceof HTMLElement) {
-          element.style.removeProperty("color");
-          element.style.color = "#111827";
-        }
-      });
-    }
-  }, [content]);
+  const sanitized = useMemo(() => sanitizeHtml(content), [content]);
 
   return (
     <>
       <div
         ref={contentRef}
         className={`article-content ${className}`}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: sanitized }}
       />
       <style jsx global>{`
+        .article-content {
+          background: white !important;
+        }
+
+        /* Make text readable regardless of imported CMS styles */
         .article-content,
-        .article-content *,
-        .article-content p,
-        .article-content span,
-        .article-content div {
-          color: #111827 !important;
+        .article-content :where(*, *::before, *::after) {
+          color: #111827 !important; /* gray-900 for better contrast */
           font-size: 1.125rem;
           line-height: 1.75;
+          background: transparent !important;
+          opacity: 1 !important;
         }
 
         .article-content h1 {
@@ -97,6 +127,8 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #111827 !important;
           font-size: 1.125rem !important;
           line-height: 1.75 !important;
+          background: transparent !important;
+          opacity: 1 !important;
         }
 
         .article-content strong,
@@ -119,22 +151,25 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
         }
 
         .article-content a {
-          color: #059669 !important;
+          color: #0891b2 !important;
           text-decoration: underline;
           transition: opacity 0.2s;
-          font-weight: 500;
+          font-weight: 600;
+          background: transparent !important;
+          opacity: 1 !important;
         }
 
         .article-content a:hover {
-          opacity: 0.8;
-          color: #047857 !important;
+          opacity: 1;
+          color: #0e7490 !important;
         }
 
         .article-content ul,
         .article-content ol {
           margin-left: 1.5rem;
           margin-bottom: 1rem;
-          color: #111827 !important;
+          color: #000000 !important;
+          opacity: 1 !important;
         }
 
         .article-content ul {
@@ -148,7 +183,8 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
         .article-content li {
           margin-bottom: 0.5rem !important;
           line-height: 1.75;
-          color: #111827 !important;
+          color: #000000 !important;
+          opacity: 1 !important;
         }
 
         .article-content blockquote {
@@ -220,77 +256,13 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        /* Dark mode styles */
+        /* Keep article text readable in dark mode as well (black text on white background) */
         @media (prefers-color-scheme: dark) {
           .article-content,
-          .article-content *,
-          .article-content p,
-          .article-content span,
-          .article-content div {
-            color: #f9fafb !important;
-          }
-
-          .article-content h1,
-          .article-content h2,
-          .article-content h3,
-          .article-content h4,
-          .article-content h5,
-          .article-content h6 {
-            color: #ffffff !important;
-          }
-
-          .article-content p {
-            color: #e5e7eb !important;
-          }
-
-          .article-content strong,
-          .article-content b {
-            color: #ffffff !important;
-          }
-
-          .article-content a {
-            color: #34d399 !important;
-          }
-
-          .article-content a:hover {
-            color: #6ee7b7 !important;
-          }
-
-          .article-content ul,
-          .article-content ol,
-          .article-content li {
-            color: #e5e7eb !important;
-          }
-
-          .article-content blockquote {
-            color: #d1d5db !important;
-            background: #1f2937;
-            border-left-color: #34d399;
-          }
-
-          .article-content pre {
-            background: #1f2937;
-            border-color: #374151;
-          }
-
-          .article-content code {
-            background: #1f2937;
-            color: #fca5a5 !important;
-          }
-
-          .article-content pre code {
-            color: #f9fafb !important;
-          }
-
-          .article-content th,
-          .article-content td {
-            border-color: #374151;
-            color: #e5e7eb !important;
-          }
-
-          .article-content th {
-            background: #1f2937;
-            color: #ffffff !important;
+          .article-content :where(*, *::before, *::after) {
+            color: #111827 !important;
+            background: transparent !important;
+            opacity: 1 !important;
           }
         }
       `}</style>
