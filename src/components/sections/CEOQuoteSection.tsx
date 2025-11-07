@@ -132,10 +132,13 @@ export default function CEOQuoteSection({
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-8 lg:gap-12 items-center">
           {/* Image */}
-          <div ref={imgWrapRef} className="relative w-full h-full">
-            <div className="relative w-full h-full max-w-sm mx-auto overflow-hidden rounded-2xl shadow-xl" style={{ aspectRatio: "3/4" }}>
+          <div ref={imgWrapRef} className="relative w-full h-full flex md:justify-start">
+            <div
+              className="relative w-full h-full max-w-2xl md:max-w-none md:w-full mx-auto md:mx-0 overflow-hidden rounded-3xl shadow-xl"
+              style={{ aspectRatio: "4/3" }}
+            >
               {isImageLoading && (
                 <div className="absolute inset-0 bg-linear-to-br from-green-100 via-white to-green-50 animate-pulse" aria-hidden />
               )}
@@ -167,7 +170,7 @@ export default function CEOQuoteSection({
           </div>
 
           {/* Quote */}
-          <div ref={quoteRef} className="relative">
+          <div ref={quoteRef} className="relative md:pl-6">
             {/* Big decorative open quote */}
             <div
               className="absolute -top-8 -left-4 select-none text-[5rem] sm:text-[7rem] leading-none opacity-20"
