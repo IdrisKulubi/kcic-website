@@ -2,36 +2,29 @@
 
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
-import { Target, Eye, Heart, Award, Globe, Users, Shield, Lightbulb } from 'lucide-react';
 
 const values = [
   {
-    icon: Heart,
     title: 'People-centric',
     description: 'We prioritize the well-being of employees and stakeholders'
   },
   {
-    icon: Globe,
     title: 'Inclusivity',
     description: 'We leave no one behind'
   },
   {
-    icon: Award,
     title: 'Professionalism',
     description: 'We are committed to excellence'
   },
   {
-    icon: Shield,
     title: 'Integrity',
     description: 'We walk the talk and keep our word'
   },
   {
-    icon: Lightbulb,
     title: 'Innovation',
     description: 'We foster creativity and forward-thinking'
   },
   {
-    icon: Users,
     title: 'Collaboration',
     description: 'We believe we are stronger together'
   }
@@ -60,7 +53,6 @@ export default function WhoWeArePage() {
             >
               <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
                 <div className="flex items-center mb-6">
-                  <Target className="w-8 h-8 text-green-600 mr-3" />
                   <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
                 </div>
                 <p className="text-lg text-gray-700 leading-relaxed">
@@ -77,7 +69,6 @@ export default function WhoWeArePage() {
             >
               <div className="bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
                 <div className="flex items-center mb-6">
-                  <Eye className="w-8 h-8 text-blue-600 mr-3" />
                   <h2 className="text-3xl font-bold text-gray-900">Our Vision</h2>
                 </div>
                 <p className="text-lg text-gray-700 leading-relaxed">
@@ -141,9 +132,7 @@ export default function WhoWeArePage() {
                   className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
                 >
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mr-4">
-                      <value.icon className="w-6 h-6 text-green-600" />
-                    </div>
+                   
                     <h3 className="text-xl font-semibold text-gray-900">{value.title}</h3>
                   </div>
                   <p className="text-gray-600 leading-relaxed">{value.description}</p>
