@@ -2,13 +2,13 @@
 
 import React, { useEffect } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
-import { MinimalHeroSection } from "@/components/sections/MinimalHeroSection";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
 import {
   PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
+import { HeroCarousel, DEFAULT_HERO_IMAGES } from "@/components/sections/HeroCarousel";
 
 import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
@@ -218,6 +218,9 @@ export default function HomePage({
           "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
       };
 
+  // Hero images for the carousel (can be moved to CMS/DB later)
+  const heroImages = DEFAULT_HERO_IMAGES;
+
   return (
     <>
       {/* Structured Data for Homepage */}
@@ -267,8 +270,8 @@ export default function HomePage({
         {/* Navigation */}
         <MinimalNavbar {...navData} />
 
-        {/* Hero Section */}
-        <MinimalHeroSection data={translatedHeroData} />
+        {/* Hero Section - modern slideshow */}
+        <HeroCarousel data={translatedHeroData} images={heroImages} />
 
         {/* Stats Section */}
         <MinimalStatsSection
