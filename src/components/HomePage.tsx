@@ -22,6 +22,7 @@ import type {
   FooterLinkData,
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
+import { CinematicVideoSection } from "./sections/CinematicVideoSection";
 
 // Targets data for 2025 (static for now)
 const targetsData = [
@@ -277,6 +278,14 @@ export default function HomePage({
         <MinimalStatsSection
           stats={translatedStatsData}
           targets={targetsData}
+        />
+
+        {/* Cinematic Video Section (appears after targets) */}
+        <CinematicVideoSection
+          // Embed URL with start at 3s, modest branding, and playsinline
+          embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
+          title="Featured Video"
+          subtitle="KCIC Strategy 4.0 :The Next Frontier"
         />
 
         {/* News Section */}
