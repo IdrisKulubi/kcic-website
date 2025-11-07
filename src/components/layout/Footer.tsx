@@ -196,11 +196,7 @@ export default function Footer({ data }: FooterProps) {
               {data.copyright}
             </p>
 
-            <div className="flex items-center space-x-4 text-gray-400 text-sm">
-              <span>Made with</span>
-              <Leaf className="h-4 w-4 text-green-500" />
-              <span>for a sustainable future</span>
-            </div>
+          
           </div>
         </div>
       </div>

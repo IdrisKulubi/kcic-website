@@ -235,19 +235,16 @@ export const homePageData: HomePageData = {
     quickLinks: [
       { label: "About", href: "/about" },
       { label: "Programmes", href: "/programmes" },
-      { label: "Media Centre", href: "/media" },
-      { label: "Clients Centre", href: "/clients" },
-      { label: "Join Our Programs", href: "/programs" },
+    
       { label: "Contacts", href: "/contacts" },
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" }
+    
     ],
     socialMedia: [
-      { platform: "Twitter", href: "https://twitter.com/kcic_kenya", icon: "twitter" },
-      { platform: "LinkedIn", href: "https://linkedin.com/company/kcic-kenya", icon: "linkedin" },
-      { platform: "Facebook", href: "https://facebook.com/kcic.kenya", icon: "facebook" },
-      { platform: "Instagram", href: "https://instagram.com/kcic_kenya", icon: "instagram" },
-      { platform: "YouTube", href: "https://youtube.com/c/kcickenya", icon: "youtube" }
+      { platform: "Twitter", href: "https://x.com/KenyaCIC", icon: "twitter" },
+      { platform: "LinkedIn", href: "https://www.linkedin.com/company/kenyaclimateinnovationc", icon: "linkedin" },
+      { platform: "Facebook", href: "https://www.facebook.com/ClimateInnovationCenter/?_rdc=2&_rdr#", icon: "facebook" },
+      { platform: "Instagram", href: "https://www.instagram.com/kenya.cic/", icon: "instagram" },
+      { platform: "YouTube", href: "https://www.youtube.com/@KenyaClimateInnovationCenter", icon: "youtube" }
     ],
     contact: {
       address: "Kenya Climate Innovation Centre, University of Nairobi, Nairobi, Kenya",
@@ -259,6 +256,6 @@ export const homePageData: HomePageData = {
       description: "Get the latest news on climate innovation and our programmes delivered to your inbox.",
       placeholder: "Enter your email address"
     },
-    copyright: "© 2024 Kenya Climate Innovation Centre. All rights reserved."
+    copyright: "© 2025 Kenya Climate Innovation Centre. All rights reserved."
   }
 };

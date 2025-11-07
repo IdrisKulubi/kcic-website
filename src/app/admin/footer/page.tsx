@@ -248,11 +248,23 @@ function QuickLinksManager({
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Add form
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+  } = useForm<Omit<FooterLinkFormData, "id">>({
+    resolver: zodResolver(footerLinkSchema.omit({ id: true, order: true })),
+  });
+
+  // Edit form
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    reset: resetEdit,
+    setValue: setEditValue,
+    formState: { errors: editErrors },
   } = useForm<Omit<FooterLinkFormData, "id">>({
     resolver: zodResolver(footerLinkSchema.omit({ id: true, order: true })),
   });
@@ -391,31 +403,91 @@ function QuickLinksManager({
         ) : (
           <div className="space-y-2">
             {links.map((link) => (
-              <div
-                key={link.id}
-                className="flex items-center gap-2 p-3 border rounded-lg"
-              >
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
-                <div className="flex-1">
-                  <p className="font-medium">{link.label}</p>
-                  <p className="text-sm text-muted-foreground">{link.href}</p>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setEditingId(link.id ?? null)}
+              <div key={link.id} className="p-3 border rounded-lg">
+                {editingId === link.id ? (
+                  <form
+                    onSubmit={handleSubmitEdit((data) => handleUpdate(link.id!, data))}
+                    className="space-y-3"
                   >
-                    <Pencil className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => link.id && handleDelete(link.id)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edit-label-${link.id}`}>Label *</Label>
+                      <Input
+                        id={`edit-label-${link.id}`}
+                        defaultValue={link.label}
+                        {...registerEdit("label")}
+                        className={editErrors.label ? "border-red-500" : ""}
+                      />
+                      {editErrors.label && (
+                        <p className="text-sm text-red-500">{editErrors.label.message}</p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edit-href-${link.id}`}>URL *</Label>
+                      <Input
+                        id={`edit-href-${link.id}`}
+                        defaultValue={link.href}
+                        {...registerEdit("href")}
+                        className={editErrors.href ? "border-red-500" : ""}
+                      />
+                      {editErrors.href && (
+                        <p className="text-sm text-red-500">{editErrors.href.message}</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button type="submit" disabled={isSaving}>
+                        {isSaving ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" /> Save
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setEditingId(null);
+                          resetEdit();
+                        }}
+                        disabled={isSaving}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <GripVertical className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex-1">
+                      <p className="font-medium">{link.label}</p>
+                      <p className="text-sm text-muted-foreground">{link.href}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingId(link.id ?? null);
+                          // Prime edit form with current values
+                          setEditValue("label", link.label);
+                          setEditValue("href", link.href);
+                        }}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => link.id && handleDelete(link.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -437,11 +509,25 @@ function SocialMediaManager({
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Add form
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+  } = useForm<Omit<FooterSocialMediaFormData, "id">>({
+    resolver: zodResolver(
+      footerSocialMediaSchema.omit({ id: true, order: true })
+    ),
+  });
+
+  // Edit form
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    reset: resetEdit,
+    setValue: setEditValue,
+    formState: { errors: editErrors },
   } = useForm<Omit<FooterSocialMediaFormData, "id">>({
     resolver: zodResolver(
       footerSocialMediaSchema.omit({ id: true, order: true })
@@ -610,34 +696,106 @@ function SocialMediaManager({
         ) : (
           <div className="space-y-2">
             {socialMedia.map((sm) => (
-              <div
-                key={sm.id}
-                className="flex items-center gap-2 p-3 border rounded-lg"
-              >
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
-                <div className="flex-1">
-                  <p className="font-medium">{sm.platform}</p>
-                  <p className="text-sm text-muted-foreground">{sm.href}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Icon: {sm.icon}
-                  </p>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setEditingId(sm.id ?? null)}
+              <div key={sm.id} className="p-3 border rounded-lg">
+                {editingId === sm.id ? (
+                  <form
+                    onSubmit={handleSubmitEdit((data) => handleUpdate(sm.id!, data))}
+                    className="space-y-3"
                   >
-                    <Pencil className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => sm.id && handleDelete(sm.id)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edit-platform-${sm.id}`}>Platform *</Label>
+                      <Input
+                        id={`edit-platform-${sm.id}`}
+                        defaultValue={sm.platform}
+                        {...registerEdit("platform")}
+                        className={editErrors.platform ? "border-red-500" : ""}
+                      />
+                      {editErrors.platform && (
+                        <p className="text-sm text-red-500">{editErrors.platform.message}</p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edit-sm-href-${sm.id}`}>URL *</Label>
+                      <Input
+                        id={`edit-sm-href-${sm.id}`}
+                        defaultValue={sm.href}
+                        {...registerEdit("href")}
+                        className={editErrors.href ? "border-red-500" : ""}
+                      />
+                      {editErrors.href && (
+                        <p className="text-sm text-red-500">{editErrors.href.message}</p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edit-icon-${sm.id}`}>Icon Name *</Label>
+                      <Input
+                        id={`edit-icon-${sm.id}`}
+                        defaultValue={sm.icon}
+                        {...registerEdit("icon")}
+                        className={editErrors.icon ? "border-red-500" : ""}
+                      />
+                      {editErrors.icon && (
+                        <p className="text-sm text-red-500">{editErrors.icon.message}</p>
+                      )}
+                      <p className="text-xs text-muted-foreground">Use Lucide icon names (lowercase)</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button type="submit" disabled={isSaving}>
+                        {isSaving ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" /> Save
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setEditingId(null);
+                          resetEdit();
+                        }}
+                        disabled={isSaving}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <GripVertical className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex-1">
+                      <p className="font-medium">{sm.platform}</p>
+                      <p className="text-sm text-muted-foreground">{sm.href}</p>
+                      <p className="text-xs text-muted-foreground">Icon: {sm.icon}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingId(sm.id ?? null);
+                          // Prime edit form with current values
+                          setEditValue("platform", sm.platform);
+                          setEditValue("href", sm.href);
+                          setEditValue("icon", sm.icon);
+                        }}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => sm.id && handleDelete(sm.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
