@@ -10,7 +10,6 @@ import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 export const DEFAULT_HERO_IMAGES: Array<{ src: string; alt: string }> = [
   { src: "/images/news/slide1.jpg", alt: "Entrepreneur presenting a KCIC-supported climate innovation" },
   { src: "/images/news/slide2.jpg", alt: "KCIC team engaging partners at a climate resilience summit" },
-  { src: "/images/news/slide3.jpeg", alt: "Climate technology showcase featuring sustainable products" },
   { src: "/images/news/slide4.jpeg", alt: "Green startup celebrating funding milestone with KCIC" },
 ];
 

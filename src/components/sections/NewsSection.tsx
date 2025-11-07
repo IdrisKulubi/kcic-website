@@ -100,7 +100,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   };
 
   return (
-    <section className={cn("py-20 sm:py-32 bg-white", className)}>
+    <section className={cn("py-20 sm:py-32 bg-transparent", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -260,37 +260,37 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       )}
                     >
                       <CardContent className="p-4">
-                      <div className="flex gap-4">
-                        {article.imageUrl && (
-                          <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden">
-                            <Image
-                              src={article.imageUrl}
-                              alt={article.title}
-                              width={96}
-                              height={96}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            />
+                        <div className="flex gap-4">
+                          {article.imageUrl && (
+                            <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden">
+                              <Image
+                                src={article.imageUrl}
+                                alt={article.title}
+                                width={96}
+                                height={96}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                              />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant="secondary" className="text-xs">
+                                {getTypeIcon(article.type)}
+                                <span className="ml-1">{article.category}</span>
+                              </Badge>
+                              <span className="text-xs text-gray-500">
+                                {formatDate(article.publishedAt)}
+                              </span>
+                            </div>
+                            <h4 className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-green-600 transition-colors">
+                              {article.title}
+                            </h4>
+                            <p className="text-sm text-gray-600 line-clamp-1">
+                              {article.excerpt}
+                            </p>
                           </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="secondary" className="text-xs">
-                              {getTypeIcon(article.type)}
-                              <span className="ml-1">{article.category}</span>
-                            </Badge>
-                            <span className="text-xs text-gray-500">
-                              {formatDate(article.publishedAt)}
-                            </span>
-                          </div>
-                          <h4 className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-green-600 transition-colors">
-                            {article.title}
-                          </h4>
-                          <p className="text-sm text-gray-600 line-clamp-1">
-                            {article.excerpt}
-                          </p>
                         </div>
-                      </div>
-                    </CardContent>
+                      </CardContent>
                     </Card>
                   </Link>
                 ))}
@@ -371,30 +371,45 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         </Tabs>
 
         {/* Newsletter CTA */}
-        <div className="mt-12">
-          <div className="bg-linear-to-br from-gray-900 to-gray-800 rounded-2xl p-6 md:p-8 text-center text-white">
-            <h3 
-              className="font-bold text-xl md:text-2xl mb-3"
-              style={{
-                fontFamily: typography.fonts.heading,
-              }}
-            >
-              Never Miss an Update
-            </h3>
-            <p className="text-gray-300 text-sm md:text-base mb-6 max-w-xl mx-auto">
-              Subscribe to our newsletter and get the latest climate innovation news delivered to your inbox
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input 
-                type="email" 
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-white/40"
-              />
-                <Button 
-                className="px-6 py-2.5 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm"
+        <div className="mt-16">
+          <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-white via-green-50/70 to-white shadow-lg border border-green-100">
+            <div className="absolute -top-12 -left-6 h-48 w-48 rounded-full bg-green-500/10 blur-3xl" aria-hidden />
+            <div className="absolute -bottom-16 right-0 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl" aria-hidden />
+            <div className="relative z-10 flex flex-col gap-8 p-8 md:p-12 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-xl text-center md:text-left">
+                <h3
+                  className="font-bold text-2xl md:text-3xl"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    color: colors.secondary.gray[900],
+                  }}
                 >
-                Subscribe
-                </Button>
+                  Never Miss an Update
+                </h3>
+                <p
+                  className="mt-3 text-sm md:text-base text-gray-600"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                  }}
+                >
+                  Subscribe to our newsletter and get the latest climate innovation news delivered straight to your inbox.
+                </p>
+              </div>
+              <form className="w-full max-w-lg md:flex md:items-center md:justify-end" aria-label="Newsletter subscription">
+                <div className="flex w-full flex-col gap-3 sm:flex-row">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 rounded-full border border-green-200 bg-white px-5 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100"
+                  />
+                  <Button
+                    type="submit"
+                    className="sm:w-auto rounded-full bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-green-700"
+                  >
+                    Subscribe
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

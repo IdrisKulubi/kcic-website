@@ -87,7 +87,7 @@ export function PartnersSection({
   };
 
   return (
-    <section className="py-20 sm:py-32 bg-white overflow-hidden">
+    <section className="py-20 sm:py-32 bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -178,8 +178,8 @@ export function PartnersSection({
           </div>
 
           <div className="relative overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-32 bg-linear-to-r from-white to-transparent z-10" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-linear-to-l from-white to-transparent z-10" />
+            <div className="absolute inset-y-0 left-0 w-32 bg-linear-to-r from-white/70 to-transparent dark:from-black/30 z-10" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-linear-to-l from-white/70 to-transparent dark:from-black/30 z-10" />
 
             <div
               ref={scrollRef}

@@ -65,7 +65,7 @@ export default function Footer({ data }: FooterProps) {
   };
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <footer className="bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand and Contact Info */}
@@ -81,7 +81,7 @@ export default function Footer({ data }: FooterProps) {
               />
             </Link>
 
-            <address className="space-y-3 text-gray-300 not-italic">
+            <address className="space-y-3 text-gray-600 not-italic">
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
                 <span className="text-sm leading-relaxed">
@@ -92,7 +92,7 @@ export default function Footer({ data }: FooterProps) {
                 <Phone className="h-5 w-5 text-blue-400 shrink-0" />
                 <a
                   href={`tel:${data.contact.phone}`}
-                  className="text-sm hover:text-blue-400 transition-colors"
+                  className="text-sm hover:text-blue-600 transition-colors"
                 >
                   {data.contact.phone}
                 </a>
@@ -101,7 +101,7 @@ export default function Footer({ data }: FooterProps) {
                 <Mail className="h-5 w-5 text-yellow-400 shrink-0" />
                 <a
                   href={`mailto:${data.contact.email}`}
-                  className="text-sm hover:text-yellow-400 transition-colors"
+                  className="text-sm hover:text-yellow-600 transition-colors"
                 >
                   {data.contact.email}
                 </a>
@@ -111,7 +111,7 @@ export default function Footer({ data }: FooterProps) {
 
           {/* Quick Links */}
           <nav className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-white">
+            <h3 className="text-lg font-semibold mb-6 text-gray-900">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -119,7 +119,7 @@ export default function Footer({ data }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm block py-1"
+                    className="text-gray-600 hover:text-green-600 transition-colors duration-300 text-sm block py-1"
                   >
                     {link.label}
                   </Link>
@@ -130,7 +130,7 @@ export default function Footer({ data }: FooterProps) {
 
           {/* Social Media */}
           <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-white">Follow Us</h3>
+            <h3 className="text-lg font-semibold mb-6 text-gray-900">Follow Us</h3>
             <div className="flex flex-wrap gap-3">
               {data.socialMedia.map((social) => {
                 const IconComponent =
@@ -141,10 +141,10 @@ export default function Footer({ data }: FooterProps) {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all duration-300 group flex items-center justify-center"
+                    className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 group flex items-center justify-center"
                     aria-label={`Follow KCIC on ${social.platform}`}
                   >
-                    <IconComponent className="h-5 w-5 text-gray-300 group-hover:text-green-400 transition-colors duration-300" />
+                    <IconComponent className="h-5 w-5 text-gray-600 group-hover:text-green-600 transition-colors duration-300" />
                   </a>
                 );
               })}
@@ -153,10 +153,10 @@ export default function Footer({ data }: FooterProps) {
 
           {/* Newsletter Signup */}
           <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-white">
+            <h3 className="text-lg font-semibold mb-6 text-gray-900">
               {data.newsletter.title}
             </h3>
-            <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
               {data.newsletter.description}
             </p>
 
@@ -167,7 +167,7 @@ export default function Footer({ data }: FooterProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={data.newsletter.placeholder}
-                  className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500 pr-12"
+                  className="bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-green-500 focus:ring-green-500 pr-12"
                   disabled={isSubmitting}
                 />
                 <Button
@@ -196,9 +196,9 @@ export default function Footer({ data }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-700 pt-8">
+        <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-400 text-sm text-center sm:text-left">
+            <p className="text-gray-500 text-sm text-center sm:text-left">
               {data.copyright}
             </p>
 
