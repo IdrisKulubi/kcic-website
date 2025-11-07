@@ -34,39 +34,31 @@ export function CinematicVideoSection({
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ paused: true });
 
-      // Cinematic entrance sequence - inspired "jump in" pop
+      // Smooth fade + scale entrance
       tl.fromTo(
         headingRef.current,
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", immediateRender: false }
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: "cubic.out", immediateRender: false }
       )
-        // Stage (wrap of the frame) pop-in with slight overshoot
+        // Smooth video frame entrance - scale + blur fade
         .fromTo(
           stageRef.current,
-          { autoAlpha: 0, y: 100, scale: 0.82, rotateX: -6, transformPerspective: 1200 },
-          { autoAlpha: 1, y: 0, scale: 1.06, rotateX: 0, duration: 0.6, ease: "back.out(1.6)", immediateRender: false },
-          "<0.05"
+          { autoAlpha: 0, scale: 0.92, filter: "blur(8px)" },
+          { autoAlpha: 1, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out", immediateRender: false },
+          "<0.15"
         )
-        .to(stageRef.current, { scale: 1, duration: 0.25, ease: "power2.out" }, "<")
-        // Lights glow in slightly after pop
+        // Ambient glow fade in
         .fromTo(
           lightsRef.current,
           { autoAlpha: 0 },
-          { autoAlpha: 0.35, duration: 0.6, ease: "sine.out", immediateRender: false },
-          "<0.05"
-        )
-        // Frame clarity (blur -> sharp) for cinematic reveal
-        .fromTo(
-          frameRef.current,
-          { filter: "blur(12px)" },
-          { filter: "blur(0px)", duration: 0.5, ease: "power2.out", immediateRender: false },
-          "<0.05"
+          { autoAlpha: 0.4, duration: 0.7, ease: "sine.out", immediateRender: false },
+          "<0.1"
         );
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top 85%",
-        end: "top 70%",
+        start: "top 80%",
+        end: "top 65%",
         onEnter: () => tl.play(),
         onEnterBack: () => tl.play(),
         onLeave: () => tl.reverse(),
@@ -74,51 +66,42 @@ export function CinematicVideoSection({
         invalidateOnRefresh: true,
       });
 
-      // Pin the section briefly so users can see the jump-in
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top center",
-        end: "+=60%",
-        pin: true,
-        pinSpacing: false,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      });
-
-      // Parallax while scrolling within the pinned window
+      // Smooth parallax on scroll (no pin - feels more natural)
       gsap.to(frameRef.current, {
-        yPercent: -12,
+        yPercent: -8,
+        opacity: 1,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top center",
-          end: "+=60%",
-          scrub: 1.1,
+          start: "top 70%",
+          end: "bottom 30%",
+          scrub: 0.8,
           invalidateOnRefresh: true,
         },
       });
 
       gsap.to(headingRef.current, {
-        yPercent: 8,
+        yPercent: 5,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top center",
-          end: "+=60%",
-          scrub: 1.3,
+          start: "top 70%",
+          end: "bottom 30%",
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       });
 
+      // Subtle glow breathing effect
       gsap.to(lightsRef.current, {
-        scale: 1.12,
-        rotation: 2,
-        ease: "none",
+        scale: 1.08,
+        opacity: 0.5,
+        ease: "sine.inOut",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top center",
-          end: "+=60%",
-          scrub: 1.6,
+          start: "top 70%",
+          end: "bottom 30%",
+          scrub: 1.2,
           invalidateOnRefresh: true,
         },
       });
@@ -131,53 +114,53 @@ export function CinematicVideoSection({
   }, [shouldDisableAnimations]);
 
   return (
-    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-16 sm:py-20 overflow-hidden bg-transparent">
-      {/* Ambient lights / gradients */}
+    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-20 sm:py-28 overflow-hidden bg-transparent">
+      {/* Ambient lights / gradients - smoother */}
       <div
         ref={lightsRef}
         className="pointer-events-none absolute inset-0 opacity-0"
         style={{
           background:
-            "radial-gradient(60% 60% at 20% 30%, rgba(127,209,52,0.25) 0%, rgba(127,209,52,0) 60%)," +
-            "radial-gradient(50% 50% at 80% 70%, rgba(0,255,255,0.25) 0%, rgba(0,255,255,0) 60%)",
-          filter: "saturate(120%)",
+            "radial-gradient(circle at 25% 35%, rgba(127,209,52,0.15) 0%, rgba(127,209,52,0) 50%)," +
+            "radial-gradient(circle at 75% 65%, rgba(0,255,255,0.12) 0%, rgba(0,255,255,0) 50%)",
+          filter: "blur(30px)",
         }}
         aria-hidden
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-10">
+        <div ref={headingRef} className="text-center mb-12 sm:mb-16">
           <p
-            className="uppercase tracking-wider text-sm text-gray-500"
+            className="uppercase tracking-widest text-xs sm:text-sm text-gray-400 mb-3"
             style={{ fontFamily: typography.fonts.body, letterSpacing: typography.letterSpacing.widest }}
           >
             {title}
           </p>
           <h2
             id="cinematic-video-heading"
-            className="font-bold mt-2"
+            className="font-bold"
             style={{
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontSize: 'clamp(1.75rem, 5vw, 3.2rem)',
               fontFamily: typography.fonts.heading,
               color: colors.primary.green.DEFAULT,
-              lineHeight: typography.lineHeights.tight,
+              lineHeight: 1.2,
+              letterSpacing: "-0.02em",
             }}
           >
             {subtitle}
           </h2>
         </div>
 
-        {/* Video frame */}
+        {/* Video frame - cleaner design */}
         <div ref={stageRef} className="will-change-transform">
-          <div ref={frameRef} className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5">
-            {/* Subtle border glow */}
+          <div ref={frameRef} className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-500" style={{ background: "#000" }}>
+            {/* Subtle top glow */}
             <div
-              className="pointer-events-none absolute -inset-px rounded-3xl"
+              className="pointer-events-none absolute top-0 left-0 right-0 h-px"
               style={{
-                background: colors.gradients.subtle,
-                opacity: 0.7,
-                filter: 'blur(6px)',
+                background: `linear-gradient(90deg, transparent, ${colors.primary.green.DEFAULT}, transparent)`,
+                opacity: 0.4,
               }}
               aria-hidden
             />

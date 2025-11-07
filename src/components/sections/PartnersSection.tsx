@@ -215,7 +215,7 @@ export function PartnersSection({
             <Button
               className="px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
               style={{
-                background: colors.gradients.primary,
+                background: colors.primary.green.DEFAULT,
                 color: "white",
                 fontFamily: typography.fonts.body,
               }}

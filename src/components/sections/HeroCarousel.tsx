@@ -188,13 +188,13 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                 size="lg"
                 className={
                   button.variant === "primary"
-                    ? `px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 border-none`
+                    ? "px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 border-none hover:brightness-110"
                     : `px-8 py-4 text-lg font-semibold rounded-full bg-transparent border-2 transition-all duration-300`
                 }
                 style={
                   button.variant === "primary"
                     ? {
-                        background: colors.gradients.primary,
+                        backgroundColor: colors.primary.green.DEFAULT,
                         color: "#FFFFFF",
                         fontFamily: typography.fonts.body,
                       }

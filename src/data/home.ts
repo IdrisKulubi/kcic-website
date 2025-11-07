@@ -248,7 +248,7 @@ export const homePageData: HomePageData = {
     ],
     contact: {
       address: "Kenya Climate Innovation Centre, University of Nairobi, Nairobi, Kenya",
-      phone: "+254 20 123 4567",
+      phone: "+254 703 034701",
       email: "info@kenyacic.org"
     },
     newsletter: {

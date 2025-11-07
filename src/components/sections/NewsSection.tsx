@@ -364,11 +364,11 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 placeholder="Enter your email"
                 className="flex-1 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm placeholder:text-gray-400 focus:outline-none focus:border-white/40"
               />
-              <Button 
-                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 text-white font-semibold text-sm"
-              >
+                <Button 
+                className="px-6 py-2.5 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm"
+                >
                 Subscribe
-              </Button>
+                </Button>
             </div>
           </div>
         </div>

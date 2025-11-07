@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Twitter,
   Linkedin,
@@ -12,7 +13,6 @@ import {
   Phone,
   MapPin,
   Send,
-  Leaf,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,20 +70,26 @@ export default function Footer({ data }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand and Contact Info */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
-              <Leaf className="h-8 w-8 text-green-500" />
-              <span className="text-xl font-bold">KCIC</span>
-            </div>
+            <Link href="/" className="mb-6 inline-block" aria-label="Kenya Climate Innovation Centre home">
+              <Image
+                src="/images/hero/KCIC logo.png"
+                alt="Kenya Climate Innovation Centre logo"
+                width={160}
+                height={48}
+                className="h-12 w-auto"
+                priority
+              />
+            </Link>
 
             <address className="space-y-3 text-gray-300 not-italic">
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                <MapPin className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
                 <span className="text-sm leading-relaxed">
                   {data.contact.address}
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-blue-400 flex-shrink-0" />
+                <Phone className="h-5 w-5 text-blue-400 shrink-0" />
                 <a
                   href={`tel:${data.contact.phone}`}
                   className="text-sm hover:text-blue-400 transition-colors"
@@ -92,7 +98,7 @@ export default function Footer({ data }: FooterProps) {
                 </a>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-yellow-400 flex-shrink-0" />
+                <Mail className="h-5 w-5 text-yellow-400 shrink-0" />
                 <a
                   href={`mailto:${data.contact.email}`}
                   className="text-sm hover:text-yellow-400 transition-colors"
