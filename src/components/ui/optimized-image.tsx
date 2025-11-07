@@ -51,8 +51,15 @@ export function OptimizedImage({
     setIsLoading(false);
   };
 
+  // Ensure wrapper has dimensions when using fill layout
+  const wrapperClass = cn(
+    "relative overflow-hidden",
+    (props as any).fill ? "h-full w-full" : "",
+    className
+  );
+
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={wrapperClass}>
       {isLoading && (
         <div 
           className="absolute inset-0 bg-gradient-to-br from-climate-green/20 to-climate-blue/20 animate-pulse"
@@ -63,7 +70,7 @@ export function OptimizedImage({
         src={imgSrc}
         alt={alt}
         onError={handleError}
-        onLoad={handleLoad}
+        onLoadingComplete={handleLoad}
         priority={priority}
         quality={IMAGE_QUALITY[qualityVariant]}
         placeholder="blur"
@@ -71,8 +78,10 @@ export function OptimizedImage({
         sizes={IMAGE_SIZES[sizeVariant]}
         className={cn(
           "transition-all duration-500 ease-out",
+          (props as any).fill ? "object-cover h-full w-full" : "",
           isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
-          hasError && "filter grayscale opacity-75"
+          hasError && "filter grayscale opacity-75",
+          className
         )}
         {...props}
       />
