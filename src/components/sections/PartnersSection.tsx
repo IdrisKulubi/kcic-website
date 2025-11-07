@@ -70,6 +70,22 @@ export function PartnersSection({
     collaborator: <Building2 className="h-4 w-4" />,
   };
 
+  const getTabStyles = (category: string) => {
+    const isActive = selectedCategory === category;
+    return {
+      className: cn(
+        "px-6 py-2 rounded-full bg-gray-100 transition-all duration-200",
+        isActive && "text-white shadow-sm"
+      ),
+      style: isActive
+        ? {
+            backgroundColor: colors.primary.green[500],
+            boxShadow: `0 0 0 2px ${colors.primary.green[200]}`,
+          }
+        : undefined,
+    } as const;
+  };
+
   return (
     <section className="py-20 sm:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,7 +96,14 @@ export function PartnersSection({
               "animate-in fade-in slide-in-from-bottom-8 duration-1000"
             )}
           >
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-green-50 to-cyan-50 text-green-700 border-green-200">
+            <Badge
+              className="mb-4 px-4 py-1.5 border rounded-full"
+              style={{
+                backgroundColor: colors.primary.green[50],
+                borderColor: colors.primary.green[200],
+                color: colors.primary.green[700],
+              }}
+            >
               <Sparkles className="h-3 w-3 mr-1" />
               Trusted by Industry Leaders
             </Badge>
@@ -115,7 +138,7 @@ export function PartnersSection({
               <TabsTrigger
                 value="all"
                 onClick={() => setSelectedCategory("all")}
-                className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
+                {...getTabStyles("all")}
               >
                 All ({partners.length})
               </TabsTrigger>
@@ -124,7 +147,7 @@ export function PartnersSection({
                   key={category}
                   value={category}
                   onClick={() => setSelectedCategory(category)}
-                  className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
+                  {...getTabStyles(category)}
                 >
                   <span className="flex items-center gap-2">
                     {categoryIcons[category as keyof typeof categoryIcons]}
@@ -155,8 +178,8 @@ export function PartnersSection({
           </div>
 
           <div className="relative overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+            <div className="absolute inset-y-0 left-0 w-32 bg-linear-to-r from-white to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-linear-to-l from-white to-transparent z-10" />
 
             <div
               ref={scrollRef}
@@ -174,11 +197,11 @@ export function PartnersSection({
                 }}
               >
                 {scrollPartners.map((partner, index) => (
-                  <div key={`scroll-${index}`} className="flex-shrink-0">
+                  <div key={`scroll-${index}`} className="shrink-0">
                     <Image
                       src={partner.logo || "/images/placeholder-logo.png"}
                       alt={partner.name}
-                      className="h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                      className="h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300"
                       width={100}
                       height={100}
                     />
@@ -191,7 +214,13 @@ export function PartnersSection({
 
         {/* CTA Section */}
         <div className="mt-20">
-          <div className="bg-gradient-to-br from-green-50 via-cyan-50 to-green-50 rounded-3xl p-12 text-center">
+          <div
+            className="rounded-3xl p-12 text-center"
+            style={{
+              backgroundColor: colors.primary.green[50],
+              border: `1px solid ${colors.primary.green[200]}`,
+            }}
+          >
             <h3
               className="font-bold mb-4"
               style={{
@@ -277,13 +306,13 @@ function PartnerGrid({ partners }: { partners: PartnerData[] }) {
             <Image
               src={partner.logo || "/images/placeholder-logo.png"}
               alt={partner.name}
-              className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+              className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
               priority
               width={100}
               height={100}
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
         </a>
       ))}
     </div>

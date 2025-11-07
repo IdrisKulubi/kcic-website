@@ -83,13 +83,36 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return colors[category as keyof typeof colors] || 'from-gray-500 to-gray-600';
   };
 
+  const getTabStyles = (category: string) => {
+    const isActive = selectedCategory === category;
+    return {
+      className: cn(
+        "px-6 py-2 rounded-full bg-gray-100 capitalize transition-all duration-200",
+        isActive && "text-white shadow-sm"
+      ),
+      style: isActive
+        ? {
+            backgroundColor: colors.primary.green[500],
+            boxShadow: `0 0 0 2px ${colors.primary.green[200]}`,
+          }
+        : undefined,
+    } as const;
+  };
+
   return (
     <section className={cn("py-20 sm:py-32 bg-white", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className={getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000')}>
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-gray-200">
+            <Badge
+              className="mb-4 px-4 py-1.5 border rounded-full"
+              style={{
+                backgroundColor: colors.primary.green[50],
+                borderColor: colors.primary.green[200],
+                color: colors.primary.green[700],
+              }}
+            >
               <TrendingUp className="h-3 w-3 mr-1" />
               Latest Updates
             </Badge>
@@ -118,14 +141,17 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         </div>
 
         {/* Category Tabs */}
-        <Tabs defaultValue="all" className="w-full mb-12">
+        <Tabs
+          value={selectedCategory}
+          onValueChange={(value) => setSelectedCategory(value)}
+          className="w-full mb-12"
+        >
           <TabsList className="flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0 mb-12">
             {categories.map((category) => (
               <TabsTrigger 
                 key={category}
                 value={category}
-                onClick={() => setSelectedCategory(category)}
-                className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white capitalize"
+                {...getTabStyles(category)}
               >
                 {category}
               </TabsTrigger>
@@ -151,10 +177,10 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           height={600}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
                         <div className="absolute bottom-6 left-6 right-6">
                           <Badge className={cn(
-                            "mb-3 text-white border-0 bg-gradient-to-r",
+                            "mb-3 text-white border-0 bg-linear-to-r",
                             getCategoryColor(featuredNews.category)
                           )}>
                             {featuredNews.category}
@@ -236,7 +262,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       <CardContent className="p-4">
                       <div className="flex gap-4">
                         {article.imageUrl && (
-                          <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
+                          <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden">
                             <Image
                               src={article.imageUrl}
                               alt={article.title}
@@ -309,7 +335,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                         <Badge className={cn(
-                          "absolute top-3 left-3 text-white border-0 bg-gradient-to-r text-xs",
+                          "absolute top-3 left-3 text-white border-0 bg-linear-to-r text-xs",
                           getCategoryColor(article.category)
                         )}>
                           {article.category}
@@ -346,7 +372,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
         {/* Newsletter CTA */}
         <div className="mt-12">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 md:p-8 text-center text-white">
+          <div className="bg-linear-to-br from-gray-900 to-gray-800 rounded-2xl p-6 md:p-8 text-center text-white">
             <h3 
               className="font-bold text-xl md:text-2xl mb-3"
               style={{
