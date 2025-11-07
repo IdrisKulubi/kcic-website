@@ -2,12 +2,10 @@ import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { Metadata } from "next";
 import { colors, typography } from "@/lib/design-system";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import Link from "next/link";
+import { FaLocationDot, FaPhone, FaEnvelope, FaClock } from "react-icons/fa6";
+import { homePageData } from "@/data/home";
 
 export const metadata: Metadata = {
   title: "Contact KCIC - Get in Touch with Our Team",
@@ -17,7 +15,7 @@ export const metadata: Metadata = {
 
 const contactInfo = [
   {
-    icon: MapPin,
+  icon: FaLocationDot,
     title: "Visit Us",
     details: [
       "Kenya Climate Innovation Centre",
@@ -28,7 +26,7 @@ const contactInfo = [
     color: colors.primary.green.DEFAULT,
   },
   {
-    icon: Phone,
+  icon: FaPhone,
     title: "Call Us",
     details: [
       "+254 703 034 000",
@@ -39,7 +37,7 @@ const contactInfo = [
     color: colors.primary.cyan.DEFAULT,
   },
   {
-    icon: Mail,
+  icon: FaEnvelope,
     title: "Email Us",
     details: [
       "info@kenyacic.org",
@@ -50,7 +48,7 @@ const contactInfo = [
     color: colors.primary.green.DEFAULT,
   },
   {
-    icon: Clock,
+  icon: FaClock,
     title: "Office Hours",
     details: [
       "Monday - Friday",
@@ -68,18 +66,34 @@ export default function ContactPage() {
       <MinimalNavbar {...navData} />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1
-            className="font-bold mb-8"
+      <section className="relative overflow-hidden px-4 pt-32 pb-24 bg-linear-to-b from-green-50 via-white to-white">
+        <div className="absolute inset-x-0 top-10 flex justify-center pointer-events-none">
+          <div
+            className="h-32 w-32 rounded-full blur-3xl opacity-60"
+            style={{ backgroundColor: colors.primary.green[200] }}
+          />
+        </div>
+        <div className="max-w-5xl mx-auto text-center relative">
+          <span
+            className="inline-flex items-center px-4 py-1.5 mb-6 rounded-full text-sm"
             style={{
-              fontSize: "clamp(2.5rem, 8vw, 5rem)",
+              backgroundColor: colors.primary.green[100],
+              color: colors.primary.green[700],
+              fontFamily: typography.fonts.body,
+            }}
+          >
+            Kenya Climate Innovation Centre
+          </span>
+          <h1
+            className="font-bold mb-6"
+            style={{
+              fontSize: "clamp(2.75rem, 7vw, 4.75rem)",
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
               lineHeight: typography.lineHeights.tight,
             }}
           >
-            Get in Touch
+            Let&apos;s Build a Climate Resilient Future Together
           </h1>
           <p
             className="text-xl mb-12 max-w-3xl mx-auto"
@@ -89,260 +103,115 @@ export default function ContactPage() {
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Ready to join Kenya&apos;s climate innovation ecosystem? We&apos;re
-            here to help you take the next step.
+            Have a question about our programmes, investment opportunities, or
+            collaboration? Reach out and our team will connect you with the
+            right people.
           </p>
         </div>
       </section>
 
-      {/* Contact Form & Info */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Contact Form */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm">
-              <h2
-                className="font-bold mb-8"
-                style={{
-                  fontSize: typography.sizes.heading.h3,
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                }}
-              >
-                Send Us a Message
-              </h2>
-
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      First Name
-                    </label>
-                    <Input
-                      placeholder="Your first name"
-                      className="rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Last Name
-                    </label>
-                    <Input
-                      placeholder="Your last name"
-                      className="rounded-lg"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="rounded-lg"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Organization
-                  </label>
-                  <Input
-                    placeholder="Your organization (optional)"
-                    className="rounded-lg"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Subject
-                  </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option>General Inquiry</option>
-                    <option>Program Application</option>
-                    <option>Partnership Opportunity</option>
-                    <option>Media & Press</option>
-                    <option>Technical Support</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700">
-                    Message
-                  </label>
-                  <Textarea
-                    placeholder="Tell us about your climate innovation or how we can help..."
-                    rows={6}
-                    className="rounded-lg"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full py-4 rounded-lg font-semibold"
-                  style={{
-                    background: colors.gradients.primary,
-                    color: "white",
-                    fontFamily: typography.fonts.body,
-                    border: "none",
-                  }}
+      {/* Contact Information */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid gap-8 md:grid-cols-2">
+            {contactInfo.map((info) => {
+              const IconComponent = info.icon;
+              return (
+                <div
+                  key={info.title}
+                  className="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
-                  Send Message
-                </Button>
-              </form>
-            </div>
-
-            {/* Contact Information */}
-            <div className="space-y-8">
-              {contactInfo.map((info, index) => {
-                const IconComponent = info.icon;
-                return (
-                  <div
-                    key={index}
-                    className="bg-white rounded-2xl p-6 shadow-sm"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
-                        <IconComponent
-                          className="h-6 w-6"
-                          style={{ color: info.color }}
-                        />
-                      </div>
-                      <div>
-                        <h3
-                          className="font-bold mb-3"
-                          style={{
-                            fontSize: typography.sizes.heading.h4,
-                            fontFamily: typography.fonts.heading,
-                            color: colors.secondary.gray[900],
-                          }}
-                        >
-                          {info.title}
-                        </h3>
-                        <div className="space-y-1">
-                          {info.details.map((detail, detailIndex) => (
-                            <p
-                              key={detailIndex}
-                              style={{
-                                fontFamily: typography.fonts.body,
-                                color: colors.secondary.gray[600],
-                                fontSize: typography.sizes.body.sm,
-                              }}
-                            >
-                              {detail}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
+                  <div className="flex items-start gap-5">
+                    <div
+                      className="h-12 w-12 shrink-0 rounded-2xl flex items-center justify-center"
+                      style={{ backgroundColor: info.color + "1A" }}
+                    >
+                      <IconComponent
+                        className="h-6 w-6"
+                        style={{ color: info.color }}
+                      />
+                    </div>
+                    <div>
+                      <h3
+                        className="font-semibold mb-3"
+                        style={{
+                          fontSize: typography.sizes.heading.h4,
+                          fontFamily: typography.fonts.heading,
+                          color: colors.secondary.gray[900],
+                        }}
+                      >
+                        {info.title}
+                      </h3>
+                      <ul className="space-y-2">
+                        {info.details.map((detail) => (
+                          <li
+                            key={detail}
+                            style={{
+                              fontFamily: typography.fonts.body,
+                              color: colors.secondary.gray[600],
+                              fontSize: typography.sizes.body.sm,
+                            }}
+                          >
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Map Section */}
-      <section className="py-20">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
-          <h2
-            className="text-center font-bold mb-12"
-            style={{
-              fontSize: typography.sizes.heading.h2,
-              fontFamily: typography.fonts.heading,
-              color: colors.secondary.gray[900],
-            }}
-          >
-            Find Us in Nairobi
-          </h2>
+          <div className="text-center mb-12">
+            <h2
+              className="font-bold mb-4"
+              style={{
+                fontSize: typography.sizes.heading.h2,
+                fontFamily: typography.fonts.heading,
+                color: colors.secondary.gray[900],
+              }}
+            >
+              Visit Our Innovation Hub in Nairobi
+            </h2>
+            <p
+              className="max-w-3xl mx-auto"
+              style={{
+                fontFamily: typography.fonts.body,
+                color: colors.secondary.gray[600],
+                lineHeight: typography.lineHeights.relaxed,
+              }}
+            >
+              We&apos;re located within Strathmore University&apos;s campus—easily
+              accessible and surrounded by a community of innovators,
+              investors, and sustainability leaders.
+            </p>
+          </div>
 
-          {/* Placeholder for map - you would integrate with Google Maps or similar */}
-          <div className="bg-gray-200 rounded-2xl h-96 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin
-                className="h-12 w-12 mx-auto mb-4"
-                style={{ color: colors.primary.green.DEFAULT }}
+          <div className="rounded-3xl overflow-hidden shadow-xl border border-gray-200">
+            <div className="aspect-video">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7752656026228!2d36.81002607569015!3d-1.3101592356541791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10f7bbc30573%3A0xb822a84e63d8c610!2sKenya%20Climate%20Innovation%20Center!5e0!3m2!1sen!2ske!4v1762525310440!5m2!1sen!2ske"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Kenya Climate Innovation Centre location"
               />
-              <p
-                className="font-semibold"
-                style={{
-                  fontFamily: typography.fonts.body,
-                  color: colors.secondary.gray[700],
-                }}
-              >
-                Interactive Map Coming Soon
-              </p>
-              <p
-                className="text-sm mt-2"
-                style={{
-                  fontFamily: typography.fonts.body,
-                  color: colors.secondary.gray[600],
-                }}
-              >
-                Strathmore University Campus, Ole Sangale Road, Nairobi
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Actions */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2
-            className="font-bold mb-8"
-            style={{
-              fontSize: typography.sizes.heading.h2,
-              fontFamily: typography.fonts.heading,
-              color: colors.secondary.gray[900],
-            }}
-          >
-            Ready to Start Your Climate Journey?
-          </h2>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Button
-              className="py-4 rounded-lg font-semibold"
-              style={{
-                background: colors.gradients.primary,
-                color: "white",
-                fontFamily: typography.fonts.body,
-                border: "none",
-              }}
-              asChild
-            >
-              <Link href="/programs">Explore Our Programs</Link>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="py-4 rounded-lg font-semibold"
-              style={{
-                borderColor: colors.primary.green.DEFAULT,
-                color: colors.primary.green.DEFAULT,
-                fontFamily: typography.fonts.body,
-              }}
-              asChild
-            >
-              <Link href="/apply">Apply Now</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer data={homePageData.footer} />
     </div>
   );
 }
