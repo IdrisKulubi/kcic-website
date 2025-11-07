@@ -29,18 +29,20 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
   useLayoutEffect(() => {
     if (!sectionRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
+
+    // Section intro
     gsap.fromTo(
       sectionRef.current,
-      { opacity: 0, x: -120 },
+      { opacity: 0, y: 40 },
       {
         opacity: 1,
-        x: 0,
-        duration: 0.9,
+        y: 0,
+        duration: 0.8,
         ease: 'power2.out',
         immediateRender: false,
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 90%',
+          start: 'top 88%',
           end: 'top 70%',
           once: true,
           toggleActions: 'play none none none',
@@ -48,6 +50,27 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
         },
       }
     );
+
+    // Animate each stat card on scroll in/out
+    const items = gsap.utils.toArray<HTMLElement>(sectionRef.current.querySelectorAll('[data-stat-item]'));
+    items.forEach((el, i) => {
+      gsap.set(el, { opacity: 0, y: 30, scale: 0.96 });
+      const tl = gsap.timeline({ paused: true })
+        .to(el, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power3.out' });
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 90%',
+        end: 'top 60%',
+        onEnter: () => tl.play(),
+        onEnterBack: () => tl.play(),
+        onLeaveBack: () => gsap.to(el, { opacity: 0, y: 20, scale: 0.98, duration: 0.3, ease: 'power1.out' }),
+        // small stagger via scrub delay
+        scrub: false,
+        invalidateOnRefresh: true,
+      });
+    });
+
     ScrollTrigger.refresh();
   }, []);
 
@@ -56,26 +79,26 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
       {data.map((stat, index) => (
         <div 
           key={index}
-          className={`relative ${getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 150}`)}`}
+          data-stat-item
+          className="relative p-4 rounded-2xl bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
         >
           <h3 
-            className="font-bold mb-3"
+            className="font-bold mb-2"
             style={{
-              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
+              fontSize: 'clamp(2rem, 4vw, 2.6rem)',
               fontFamily: typography.fonts.heading,
               lineHeight: typography.lineHeights.tight,
-              background: colors.gradients.primary,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: colors.primary.green.DEFAULT,
+              textShadow: '0 1px 0 rgba(0,0,0,0.03)'
             }}
           >
             {stat.value}
           </h3>
+          <div className="h-1 w-10 rounded-full mb-3" style={{ background: colors.primary.green.DEFAULT }} />
           <p 
-            className="text-gray-600"
+            className="text-gray-700"
             style={{
-              fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
+              fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
             }}
@@ -157,10 +180,8 @@ export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps
                 Our Impact
               </h2>
               <div 
-                className="w-24 h-1 mx-auto"
-                style={{
-                  background: colors.gradients.primary,
-                }}
+                className="w-24 h-1 mx-auto rounded-full"
+                style={{ background: colors.primary.green.DEFAULT }}
               />
             </div>
             {renderStats(stats)}

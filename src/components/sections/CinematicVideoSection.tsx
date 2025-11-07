@@ -38,13 +38,13 @@ export function CinematicVideoSection({
       tl.fromTo(
         headingRef.current,
         { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }
+        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", immediateRender: false }
       )
         // Stage (wrap of the frame) pop-in with slight overshoot
         .fromTo(
           stageRef.current,
           { autoAlpha: 0, y: 100, scale: 0.82, rotateX: -6, transformPerspective: 1200 },
-          { autoAlpha: 1, y: 0, scale: 1.06, rotateX: 0, duration: 0.6, ease: "back.out(1.6)" },
+          { autoAlpha: 1, y: 0, scale: 1.06, rotateX: 0, duration: 0.6, ease: "back.out(1.6)", immediateRender: false },
           "<0.05"
         )
         .to(stageRef.current, { scale: 1, duration: 0.25, ease: "power2.out" }, "<")
@@ -52,21 +52,21 @@ export function CinematicVideoSection({
         .fromTo(
           lightsRef.current,
           { autoAlpha: 0 },
-          { autoAlpha: 0.35, duration: 0.6, ease: "sine.out" },
+          { autoAlpha: 0.35, duration: 0.6, ease: "sine.out", immediateRender: false },
           "<0.05"
         )
         // Frame clarity (blur -> sharp) for cinematic reveal
         .fromTo(
           frameRef.current,
           { filter: "blur(12px)" },
-          { filter: "blur(0px)", duration: 0.5, ease: "power2.out" },
+          { filter: "blur(0px)", duration: 0.5, ease: "power2.out", immediateRender: false },
           "<0.05"
         );
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
+        start: "top 85%",
+        end: "top 70%",
         onEnter: () => tl.play(),
         onEnterBack: () => tl.play(),
         onLeave: () => tl.reverse(),
@@ -77,12 +77,50 @@ export function CinematicVideoSection({
       // Pin the section briefly so users can see the jump-in
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top 65%",
-        end: "+=120%",
+        start: "top center",
+        end: "+=60%",
         pin: true,
-        pinSpacing: true,
+        pinSpacing: false,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+      });
+
+      // Parallax while scrolling within the pinned window
+      gsap.to(frameRef.current, {
+        yPercent: -12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top center",
+          end: "+=60%",
+          scrub: 1.1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      gsap.to(headingRef.current, {
+        yPercent: 8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top center",
+          end: "+=60%",
+          scrub: 1.3,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      gsap.to(lightsRef.current, {
+        scale: 1.12,
+        rotation: 2,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top center",
+          end: "+=60%",
+          scrub: 1.6,
+          invalidateOnRefresh: true,
+        },
       });
 
       // Safety refresh
@@ -93,7 +131,7 @@ export function CinematicVideoSection({
   }, [shouldDisableAnimations]);
 
   return (
-    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-24 sm:py-32 overflow-hidden bg-white">
+    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-16 sm:py-20 overflow-hidden bg-white">
       {/* Ambient lights / gradients */}
       <div
         ref={lightsRef}
@@ -109,7 +147,7 @@ export function CinematicVideoSection({
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-10 opacity-0">
+        <div ref={headingRef} className="text-center mb-10">
           <p
             className="uppercase tracking-wider text-sm text-gray-500"
             style={{ fontFamily: typography.fonts.body, letterSpacing: typography.letterSpacing.widest }}
@@ -122,10 +160,7 @@ export function CinematicVideoSection({
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               fontFamily: typography.fonts.heading,
-              background: colors.gradients.primary,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: colors.primary.green.DEFAULT,
               lineHeight: typography.lineHeights.tight,
             }}
           >
@@ -134,7 +169,7 @@ export function CinematicVideoSection({
         </div>
 
         {/* Video frame */}
-        <div ref={stageRef} className="opacity-0 will-change-transform">
+        <div ref={stageRef} className="will-change-transform">
           <div ref={frameRef} className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5">
             {/* Subtle border glow */}
             <div
