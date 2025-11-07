@@ -131,7 +131,7 @@ export function CinematicVideoSection({
   }, [shouldDisableAnimations]);
 
   return (
-    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-16 sm:py-20 overflow-hidden bg-white">
+    <section ref={sectionRef} aria-labelledby="cinematic-video-heading" className="relative py-16 sm:py-20 overflow-hidden bg-transparent">
       {/* Ambient lights / gradients */}
       <div
         ref={lightsRef}

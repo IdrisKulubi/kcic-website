@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
@@ -23,6 +23,8 @@ import type {
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
 import { CinematicVideoSection } from "./sections/CinematicVideoSection";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Targets data for 2025 (static for now)
 const targetsData = [
@@ -64,6 +66,7 @@ export default function HomePage({
   footer,
 }: HomePageProps) {
   const { t, locale } = useTranslation();
+  const bgRef = useRef<HTMLDivElement | null>(null);
 
   // Update document title based on locale
   useEffect(() => {
@@ -72,6 +75,25 @@ export default function HomePage({
         ? "KCIC - Autonomiser l'innovation climatique au Kenya"
         : "KCIC - Empowering Climate Innovation in Kenya";
   }, [locale]);
+
+  // Subtle gradient parallax across the whole page
+  useLayoutEffect(() => {
+    if (!bgRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.to(bgRef.current, {
+        duration: 1,
+        css: { "--g1x": "14%", "--g1y": "18%", "--g2x": "86%", "--g2y": "82%" },
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.2,
+        },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   // Transform hero data from database or use translations as fallback
   const translatedHeroData = hero
@@ -267,7 +289,44 @@ export default function HomePage({
         }}
       />
 
-      <div className="min-h-screen">
+      <div className="relative min-h-screen overflow-x-clip">
+        {/* Global canvas background */}
+        <div
+          ref={bgRef}
+          className="fixed inset-0 -z-10 pointer-events-none"
+          aria-hidden
+          style={{
+            // CSS variables so GSAP can animate gradient focal points
+            ["--g1x" as any]: "10%",
+            ["--g1y" as any]: "20%",
+            ["--g2x" as any]: "90%",
+            ["--g2y" as any]: "80%",
+          } as React.CSSProperties}
+        >
+          {/* Light mode canvas */}
+          <div
+            className="absolute inset-0 dark:hidden"
+            style={{
+              background:
+                "radial-gradient(60% 40% at var(--g1x) var(--g1y), rgba(127,209,52,0.10) 0%, rgba(127,209,52,0) 60%)," +
+                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,255,255,0.08) 0%, rgba(0,255,255,0) 60%)," +
+                "linear-gradient(180deg, #FFFFFF 0%, #F7FBF4 35%, #FFFFFF 100%)",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+          {/* Dark mode canvas */}
+          <div
+            className="absolute inset-0 hidden dark:block"
+            style={{
+              background:
+                "radial-gradient(60% 40% at var(--g1x) var(--g1y), rgba(127,209,52,0.18) 0%, rgba(127,209,52,0) 60%)," +
+                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,255,255,0.12) 0%, rgba(0,255,255,0) 60%)," +
+                "linear-gradient(180deg, #0B0F0A 0%, #0E1410 35%, #0B0F0A 100%)",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+        </div>
+
         {/* Navigation */}
         <MinimalNavbar {...navData} />
 
