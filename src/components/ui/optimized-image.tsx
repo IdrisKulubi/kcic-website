@@ -70,7 +70,7 @@ export function OptimizedImage({
         src={imgSrc}
         alt={alt}
         onError={handleError}
-        onLoadingComplete={handleLoad}
+        onLoad={handleLoad}
         priority={priority}
         quality={IMAGE_QUALITY[qualityVariant]}
         placeholder="blur"

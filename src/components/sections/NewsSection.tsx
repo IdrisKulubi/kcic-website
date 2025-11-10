@@ -74,13 +74,13 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      'Innovation': 'from-blue-500 to-indigo-500',
+      'Innovation': 'from-[var(--brand-blue)] to-[var(--brand-blue)]',
       'Sustainability': 'from-green-500 to-emerald-500',
       'Technology': 'from-purple-500 to-pink-500',
       'Impact': 'from-orange-500 to-red-500',
-      'Events': 'from-cyan-500 to-blue-500',
-    };
-    return colors[category as keyof typeof colors] || 'from-gray-500 to-gray-600';
+      'Events': 'from-[var(--brand-blue)] to-[var(--brand-blue)]',
+    } as const;
+    return colors[category as keyof typeof colors] || 'from-[var(--brand-blue)] to-[var(--brand-blue)]';
   };
 
   const getTabStyles = (category: string) => {
@@ -185,10 +185,20 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           )}>
                             {featuredNews.category}
                           </Badge>
-                          <h3 className="text-white font-bold text-3xl mb-2" style={{ fontFamily: typography.fonts.heading }}>
+                          <h3
+                            className="text-white font-bold mb-3"
+                            style={{
+                              fontFamily: typography.fonts.heading,
+                              fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)",
+                              lineHeight: 1.25,
+                            }}
+                          >
                             {featuredNews.title}
                           </h3>
-                          <p className="text-white/90 line-clamp-2">
+                          <p
+                            className="text-white/85 line-clamp-3 max-w-2xl"
+                            style={{ fontSize: "clamp(1rem, 1.4vw, 1.15rem)" }}
+                          >
                             {featuredNews.excerpt}
                           </p>
                         </div>
@@ -226,9 +236,12 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           </span>
                         )}
                       </div>
-                      <span className="inline-flex items-center font-semibold text-green-600 hover:text-green-700 group cursor-pointer">
-                        Read Full Story
-                        <ArrowUpRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      <span
+                        className="inline-flex items-center gap-1 text-brand font-semibold text-sm sm:text-base hover:underline underline-offset-4 group"
+                        aria-hidden="true"
+                      >
+                        Read full story
+                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </CardContent>
                     </Card>
@@ -259,16 +272,17 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         getMotionSafeClasses(`animate-in fade-in slide-in-from-right duration-1000 delay-${(index + 1) * 100}`)
                       )}
                     >
-                      <CardContent className="p-4">
+                      <CardContent className="p-4 flex-1">
                         <div className="flex gap-4">
                           {article.imageUrl && (
-                            <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden">
+                            <div className="relative shrink-0 h-24 w-24 overflow-hidden rounded-lg bg-gray-100">
                               <Image
                                 src={article.imageUrl}
                                 alt={article.title}
-                                width={96}
-                                height={96}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                fill
+                                sizes="96px"
+                                className="object-cover object-center transition-transform duration-300 group-hover:scale-110"
+                                priority={index === 0}
                               />
                             </div>
                           )}
@@ -282,7 +296,10 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                                 {formatDate(article.publishedAt)}
                               </span>
                             </div>
-                            <h4 className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-green-600 transition-colors">
+                            <h4
+                              className="font-semibold text-gray-900 line-clamp-2 mb-1 transition-colors group-hover:text-(--brand-primary)"
+                              style={{ "--brand-primary": colors.primary.green.DEFAULT } as React.CSSProperties}
+                            >
                               {article.title}
                             </h4>
                             <p className="text-sm text-gray-600 line-clamp-1">
@@ -316,23 +333,24 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                 {latestNews.slice(3, 6).map((article, index) => (
-                  <Link key={article.id} href={`/news/${article.slug}`}>
+                  <Link key={article.id} href={`/news/${article.slug}`} className="block h-full">
                     <Card 
                       className={cn(
-                        "group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer",
+                        "group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer h-full flex flex-col",
                         getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
                       )}
                     >
                     {article.imageUrl && (
-                      <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-48 overflow-hidden rounded-t-md bg-gray-100">
                         <Image
                           src={article.imageUrl}
                           alt={article.title}
-                          width={400}
-                          height={300}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                          priority={index === 0}
                         />
                         <Badge className={cn(
                           "absolute top-3 left-3 text-white border-0 bg-linear-to-r text-xs",
@@ -342,12 +360,15 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         </Badge>
                       </div>
                     )}
-                    <CardHeader className="pb-3">
+                    <CardHeader className="pb-3 flex-1">
                       <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
                         <span>{formatDate(article.publishedAt)}</span>
                         {article.readTime && <span>{article.readTime}</span>}
                       </div>
-                      <CardTitle className="text-lg line-clamp-2 group-hover:text-green-600 transition-colors">
+                      <CardTitle
+                        className="text-lg line-clamp-2 transition-colors group-hover:text-(--brand-primary)"
+                        style={{ "--brand-primary": colors.primary.green.DEFAULT } as React.CSSProperties}
+                      >
                         {article.title}
                       </CardTitle>
                     </CardHeader>
@@ -357,9 +378,12 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       </CardDescription>
                     </CardContent>
                     <CardFooter className="pt-0">
-                      <span className="inline-flex items-center text-green-600 group cursor-pointer font-medium">
-                        Read More
-                        <ArrowUpRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      <span
+                        className="inline-flex items-center gap-1 text-brand font-semibold text-sm sm:text-base hover:underline underline-offset-4 group"
+                        aria-hidden="true"
+                      >
+                        Read more
+                        <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </CardFooter>
                     </Card>
@@ -404,7 +428,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   />
                   <Button
                     type="submit"
-                    className="sm:w-auto rounded-full bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-green-700"
+                    className="sm:w-auto rounded-full px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
+                    style={{ backgroundColor: colors.primary.green.DEFAULT }}
                   >
                     Subscribe
                   </Button>

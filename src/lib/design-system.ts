@@ -30,19 +30,19 @@ export const colors = {
       900: '#1A2B0A',
     },
     
-    // Primary Cyan - C:100 M:0 Y:0 K:0
+    // Brand Blue
     cyan: {
-      DEFAULT: '#00FFFF',
-      50: '#E6FFFF',
-      100: '#CCFFFF',
-      200: '#99FFFF',
-      300: '#66FFFF',
-      400: '#33FFFF',
-      500: '#00FFFF',
-      600: '#00CCCC',
-      700: '#009999',
-      800: '#006666',
-      900: '#003333',
+      DEFAULT: '#00aeef',
+      50: '#e0f7ff',
+      100: '#b8ecff',
+      200: '#82deff',
+      300: '#4bd0ff',
+      400: '#1dc1fb',
+      500: '#00aeef',
+      600: '#008ecb',
+      700: '#0070a3',
+      800: '#005777',
+      900: '#003e54',
     },
   },
   
@@ -65,10 +65,10 @@ export const colors = {
   
   // Gradient combinations for visual interest
   gradients: {
-    primary: 'linear-gradient(135deg, #7FD134 0%, #00FFFF 100%)',
-    secondary: 'linear-gradient(135deg, #00FFFF 0%, #808080 100%)',
-    vibrant: 'linear-gradient(135deg, #7FD134 0%, #00FFFF 50%, #7FD134 100%)',
-    subtle: 'linear-gradient(135deg, rgba(127, 209, 52, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%)',
+    primary: 'linear-gradient(135deg, #7FD134 0%, #00aeef 100%)',
+    secondary: 'linear-gradient(135deg, #00aeef 0%, #808080 100%)',
+    vibrant: 'linear-gradient(135deg, #7FD134 0%, #00aeef 50%, #7FD134 100%)',
+    subtle: 'linear-gradient(135deg, rgba(127, 209, 52, 0.1) 0%, rgba(0, 174, 239, 0.1) 100%)',
     glow: 'radial-gradient(circle, rgba(127, 209, 52, 0.3) 0%, transparent 70%)',
   },
   
@@ -84,7 +84,7 @@ export const colors = {
   // Semantic colors
   semantic: {
     success: '#7FD134',
-    info: '#00FFFF',
+    info: '#00aeef',
     warning: '#FFA500',
     error: '#FF4444',
   },

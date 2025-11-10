@@ -122,7 +122,7 @@ export function CinematicVideoSection({
         style={{
           background:
             "radial-gradient(circle at 25% 35%, rgba(127,209,52,0.15) 0%, rgba(127,209,52,0) 50%)," +
-            "radial-gradient(circle at 75% 65%, rgba(0,255,255,0.12) 0%, rgba(0,255,255,0) 50%)",
+            "radial-gradient(circle at 75% 65%, rgba(0,174,239,0.12) 0%, rgba(0,174,239,0) 50%)",
           filter: "blur(30px)",
         }}
         aria-hidden

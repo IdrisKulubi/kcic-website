@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
+import { colors } from "@/lib/design-system";
 
 interface FooterProps {
   data: FooterData;
@@ -174,7 +175,8 @@ export default function Footer({ data }: FooterProps) {
                   type="submit"
                   size="sm"
                   disabled={isSubmitting}
-                  className="absolute right-1 top-1 h-8 w-8 p-0 bg-green-600 hover:bg-green-700"
+                  className="absolute right-1 top-1/2 h-10 w-10 -translate-y-1/2 p-0 text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
+                  style={{ backgroundColor: colors.primary.green.DEFAULT }}
                 >
                   <Send className="h-4 w-4" />
                 </Button>

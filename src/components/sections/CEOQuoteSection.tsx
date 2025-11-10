@@ -149,7 +149,7 @@ export default function CEOQuoteSection({
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
-                onLoadingComplete={() => setIsImageLoading(false)}
+                onLoad={() => setIsImageLoading(false)}
                 onError={() => {
                   if (currentImage !== "/images/placeholder-logo.svg") {
                     setCurrentImage("/images/placeholder-logo.svg");

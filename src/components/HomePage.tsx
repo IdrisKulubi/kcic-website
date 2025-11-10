@@ -310,7 +310,7 @@ export default function HomePage({
             style={{
               background:
                 "radial-gradient(60% 40% at var(--g1x) var(--g1y), rgba(127,209,52,0.10) 0%, rgba(127,209,52,0) 60%)," +
-                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,255,255,0.08) 0%, rgba(0,255,255,0) 60%)," +
+                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,174,239,0.08) 0%, rgba(0,174,239,0) 60%)," +
                 "linear-gradient(180deg, #FFFFFF 0%, #F7FBF4 35%, #FFFFFF 100%)",
               backgroundRepeat: "no-repeat",
             }}
@@ -321,7 +321,7 @@ export default function HomePage({
             style={{
               background:
                 "radial-gradient(60% 40% at var(--g1x) var(--g1y), rgba(127,209,52,0.18) 0%, rgba(127,209,52,0) 60%)," +
-                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,255,255,0.12) 0%, rgba(0,255,255,0) 60%)," +
+                "radial-gradient(40% 35% at var(--g2x) var(--g2y), rgba(0,174,239,0.12) 0%, rgba(0,174,239,0) 60%)," +
                 "linear-gradient(180deg, #0B0F0A 0%, #0E1410 35%, #0B0F0A 100%)",
               backgroundRepeat: "no-repeat",
             }}

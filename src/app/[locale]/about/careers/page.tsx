@@ -23,8 +23,8 @@ export default function CareersPage() {
           className="pointer-events-none absolute inset-0 opacity-60"
           style={{
             background:
-              'radial-gradient(34rem 20rem at 20% 25%, rgba(127,209,52,0.12) 0%, rgba(127,209,52,0) 70%),' +
-              'radial-gradient(34rem 20rem at 80% 75%, rgba(0,255,255,0.10) 0%, rgba(0,255,255,0) 70%)',
+'radial-gradient(34rem 20rem at 20% 25%, rgba(127,209,52,0.12) 0%, rgba(127,209,52,0) 70%),' +
+              'radial-gradient(34rem 20rem at 80% 75%, rgba(0,174,239,0.10) 0%, rgba(0,174,239,0) 70%)',
             filter: 'blur(28px)'
           }}
           aria-hidden
