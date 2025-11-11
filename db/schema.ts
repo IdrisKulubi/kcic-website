@@ -128,6 +128,7 @@ export const teamMembers = pgTable("team_members", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   role: text("role").notNull(),
+  category: text("category").notNull().default('Other'),
   bio: text("bio"),
   photo: text("photo").notNull(),
   email: text("email"),
@@ -137,7 +138,8 @@ export const teamMembers = pgTable("team_members", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 }, (table) => ({
-  orderIdx: index("team_members_order_idx").on(table.order)
+  orderIdx: index("team_members_order_idx").on(table.order),
+  categoryIdx: index("team_members_category_idx").on(table.category)
 }));
 
 // Partners table

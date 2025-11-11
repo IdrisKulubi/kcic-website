@@ -205,36 +205,7 @@ export default function OurTeamPage() {
           )}
         </div>
 
-        {/* Join Our Team */}
-        <div className="bg-green-50 py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Join Our Team
-              </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Are you passionate about climate innovation and sustainable
-                development? We&apos;re always looking for talented individuals
-                to join our mission.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {/* <Link
-                  href="/about/careers"
-                  className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
-                >
-                  View Open Positions
-                </Link> */}
-                <Link
-                  href="mailto:careers@kenyacic.org"
-                  className="inline-flex items-center px-8 py-3 bg-white text-green-600 font-semibold rounded-lg border border-green-600 hover:bg-green-50 transition-colors duration-200"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Send Your CV
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+      
       </div>
     </PageLayout>
   );

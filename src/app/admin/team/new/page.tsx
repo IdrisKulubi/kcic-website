@@ -24,8 +24,15 @@ import { createTeamMember } from "@/lib/actions/team";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
 import { teamMemberSchema } from "@/lib/validators";
 
+const categorySchema = z
+  .string()
+  .min(2, "Section is required")
+  .max(50, "Section must be at most 50 characters");
+
 // Form schema without id and order (auto-generated)
-const formSchema = teamMemberSchema.omit({ id: true, order: true });
+const formSchema = teamMemberSchema
+  .omit({ id: true, order: true })
+  .extend({ category: categorySchema });
 type FormData = z.infer<typeof formSchema>;
 
 export default function NewTeamMemberPage() {
@@ -37,6 +44,7 @@ export default function NewTeamMemberPage() {
     defaultValues: {
       name: "",
       role: "",
+      category: "Management",
       bio: "",
       photo: "",
       email: "",
@@ -125,6 +133,27 @@ export default function NewTeamMemberPage() {
                         disabled={isSubmitting}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Section / Category *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. Management, Board, Operations"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Type the section where this person appears. Examples: Management, Board, Operations, Advisory, Others.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

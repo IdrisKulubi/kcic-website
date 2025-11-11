@@ -100,7 +100,6 @@ export default function HomePage({
   const translatedHeroData = hero
     ? {
         title: hero.headline,
-        subtitle: t("hero.subtitle"),
         description: hero.subtext,
         stats: t("hero.stats"),
         ctaButtons: hero.buttons.map((btn) => ({
@@ -111,7 +110,6 @@ export default function HomePage({
       }
     : {
         title: t("hero.title"),
-        subtitle: t("hero.subtitle"),
         description: t("hero.description"),
         stats: t("hero.stats"),
         ctaButtons: [

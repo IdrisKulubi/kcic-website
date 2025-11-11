@@ -161,7 +161,8 @@ export default function TeamListPage() {
       const filtered = members.filter(
         (member) =>
           member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          member.role.toLowerCase().includes(searchQuery.toLowerCase())
+          member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (member as any).category?.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredMembers(filtered);
     }

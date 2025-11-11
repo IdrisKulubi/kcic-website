@@ -16,7 +16,7 @@ export const DEFAULT_HERO_IMAGES: Array<{ src: string; alt: string }> = [
 interface HeroCarouselProps {
   data: {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     description: string;
     ctaButtons: Array<{
       text: string;
@@ -153,18 +153,20 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
             {data.title}
           </h1>
 
-          <h2
-            className={`font-medium mb-4 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150")}`}
-            style={{
-              fontSize: typography.sizes.heading.h2,
-              fontFamily: typography.fonts.body,
-              color: colors.primary.green.DEFAULT,
-              letterSpacing: typography.letterSpacing.wide,
-              textShadow: "0 1px 8px rgba(0,0,0,0.3)",
-            }}
-          >
-            {data.subtitle}
-          </h2>
+          {data.subtitle ? (
+            <h2
+              className={`font-medium mb-4 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150")}`}
+              style={{
+                fontSize: typography.sizes.heading.h2,
+                fontFamily: typography.fonts.body,
+                color: colors.primary.green.DEFAULT,
+                letterSpacing: typography.letterSpacing.wide,
+                textShadow: "0 1px 8px rgba(0,0,0,0.3)",
+              }}
+            >
+              {data.subtitle}
+            </h2>
+          ) : null}
 
           <p
             className={`mx-auto max-w-2xl text-white/90 mb-8 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300")}`}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -41,10 +41,11 @@ export default function EditTeamMemberPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as unknown as Resolver<FormData>,
     defaultValues: {
       name: "",
       role: "",
+      category: "Management",
       bio: "",
       photo: "",
       email: "",
@@ -65,6 +66,7 @@ export default function EditTeamMemberPage() {
         form.reset({
           name: member.name,
           role: member.role,
+          category: (member as any).category || "Management",
           bio: member.bio || "",
           photo: member.photo,
           email: member.email || "",
@@ -175,6 +177,27 @@ export default function EditTeamMemberPage() {
                         disabled={isSubmitting}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Section / Category *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. Management, Board, Operations"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Type the section where this person appears. Examples: Management, Board, Operations, Advisory, Others.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

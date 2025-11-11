@@ -52,6 +52,7 @@ export const teamMemberSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),
   role: z.string().min(2, 'Role must be at least 2 characters').max(100, 'Role must be at most 100 characters'),
+  category: z.string().min(2, 'Section is required').max(50, 'Section must be at most 50 characters').default('Other'),
   bio: z.string().max(1000, 'Bio must be at most 1000 characters').optional().or(z.literal('')),
   photo: z.string().url('Photo must be a valid URL'),
   email: z.string().email('Invalid email address').optional().or(z.literal('')),

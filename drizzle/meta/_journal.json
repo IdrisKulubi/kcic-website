@@ -15,6 +15,13 @@
       "when": 1761220718606,
       "tag": "0001_old_human_fly",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762852327883,
+      "tag": "0002_rare_lightspeed",
+      "breakpoints": true
     }
   ]
 }
