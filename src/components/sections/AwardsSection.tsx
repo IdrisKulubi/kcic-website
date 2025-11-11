@@ -97,7 +97,7 @@ function BalloonsLayer() {
   return (
     <div
       ref={layerRef}
-      className="absolute inset-0 z-800 pointer-events-none select-none overflow-hidden opacity-40 mix-blend-screen"
+  className="absolute inset-0 z-800 pointer-events-none select-none overflow-hidden opacity-70 mix-blend-screen"
       aria-hidden
     >
       {balloons.map((b) => (
@@ -116,8 +116,8 @@ function BalloonsLayer() {
           <div
             className="w-full h-full rounded-full"
             style={{
-              background: `radial-gradient(70% 65% at 30% 30%, hsla(${b.hue}, 80%, 60%, ${b.alpha}) 0%, hsla(${b.hue}, 80%, 45%, ${b.alpha * 0.8}) 40%, transparent 85%)`,
-              boxShadow: `0 10px 30px hsla(${b.hue}, 80%, 50%, ${b.alpha * 0.35})`,
+              background: `radial-gradient(70% 65% at 30% 30%, hsla(${b.hue}, 80%, 65%, ${b.alpha}) 0%, hsla(${b.hue}, 80%, 50%, ${b.alpha * 1.1}) 45%, transparent 90%)`,
+              boxShadow: `0 16px 40px hsla(${b.hue}, 80%, 55%, ${b.alpha * 0.45})`,
             }}
           />
           <div
