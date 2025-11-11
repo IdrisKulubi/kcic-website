@@ -158,6 +158,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
               fontSize: typography.sizes.body.lg,
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
+              color: colors.primary.green.DEFAULT,
             }}
           >
             {data.description}

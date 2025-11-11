@@ -30,20 +30,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Targets data for 2025 (static for now)
 const targetsData = [
   {
-    value: "1,000+",
+    value: "12,000+",
     description: "SMEs to be supported in our next phase of growth.",
   },
   {
-    value: "$50M+",
+    value: "$33M+",
     description: "To be mobilized to scale climate solutions.",
   },
   {
-    value: "5,000+",
+    value: "100,000+",
     description: "New green jobs to be created across the region.",
   },
   {
-    value: "30+",
-    description: "New climate technologies to be developed and launched.",
+    value: "67,500+",
+    description: "Customers reached by supported enterprises.",
   },
 ];
 
