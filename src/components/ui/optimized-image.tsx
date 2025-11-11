@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { ImageProps } from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { BLUR_DATA_URL, IMAGE_SIZES, IMAGE_QUALITY } from '@/lib/image-utils';
 
@@ -17,7 +17,7 @@ interface OptimizedImageProps extends Omit<ImageProps, 'alt'> {
 export function OptimizedImage({
   src,
   alt,
-  fallbackSrc = '/images/placeholder.jpg',
+  fallbackSrc = '/images/placeholder-logo.svg',
   className,
   priority = false,
   sizeVariant = 'card',
@@ -27,6 +27,14 @@ export function OptimizedImage({
   const [imgSrc, setImgSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  // Reset internal state when the src changes so each award renders its own image
+  useEffect(() => {
+    setImgSrc(src);
+    setIsLoading(true);
+    setHasError(false);
+  }, [src]);
 
   // Preload critical images
   useEffect(() => {
@@ -51,6 +59,14 @@ export function OptimizedImage({
     setIsLoading(false);
   };
 
+  // Hide skeleton immediately if the browser already cached the image
+  useEffect(() => {
+    const img = imageRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setIsLoading(false);
+    }
+  }, [imgSrc]);
+
   // Ensure wrapper has dimensions when using fill layout
   const wrapperClass = cn(
     "relative overflow-hidden",
@@ -61,16 +77,18 @@ export function OptimizedImage({
   return (
     <div className={wrapperClass}>
       {isLoading && (
-        <div 
-          className="absolute inset-0 bg-gradient-to-br from-climate-green/20 to-climate-blue/20 animate-pulse"
+        <div
+          className="absolute inset-0 bg-linear-to-br from-climate-green/20 to-climate-blue/20 animate-pulse"
           aria-hidden="true"
         />
       )}
       <Image
+        ref={imageRef}
         src={imgSrc}
         alt={alt}
         onError={handleError}
         onLoad={handleLoad}
+        onLoadingComplete={() => setIsLoading(false)}
         priority={priority}
         quality={IMAGE_QUALITY[qualityVariant]}
         placeholder="blur"

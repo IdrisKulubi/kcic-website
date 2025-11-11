@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
+import { AwardsSection } from "@/components/sections";
 import {
   PartnersSection,
   PartnerData,
@@ -337,6 +338,9 @@ export default function HomePage({
           stats={translatedStatsData}
           targets={targetsData}
         />
+
+        {/* Awards & Recognition (below stats) */}
+        <AwardsSection />
 
         {/* Cinematic Video Section (appears after targets) */}
         <CinematicVideoSection

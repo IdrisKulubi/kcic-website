@@ -9,3 +9,4 @@ export { default as ProgrammesSection } from "./ProgrammesSection";
 export { LatestNewsSection } from "./LatestNewsSection";
 export { PartnersSection } from "./PartnersSection";
 export { CTABanner } from "./CTABanner";
+export { default as AwardsSection } from "./AwardsSection";
