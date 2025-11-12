@@ -315,7 +315,9 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
             </div>
 
             {/* Bottom Grid - More Articles */}
-            <div className="mt-12">
+
+
+            {/* <div className="mt-12">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-semibold text-xl" style={{ fontFamily: typography.fonts.heading }}>
                   More Stories
@@ -390,7 +392,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   </Link>
                 ))}
               </div>
-            </div>
+            </div> */}
           </TabsContent>
         </Tabs>
 
