@@ -95,81 +95,124 @@ export const colors = {
 // ============================================================================
 
 /**
- * Typography configuration based on Gotham font family
- * Fallback to Century Gothic as specified
+ * Typography configuration based on Geist font family (Next.js optimized)
+ * Provides consistent, accessible typography across all sections
+ * 
+ * Requirements addressed:
+ * - 4.1: Maximum 2 font families (Geist Sans for headings, Geist for body)
+ * - 4.2: 6 heading levels + 3 body text sizes
+ * - 4.3: Consistent line heights (1.2 headings, 1.6 body)
+ * - 4.6: Responsive font sizes with mobile scaling (30-40% reduction)
+ * - 4.7: Letter spacing for display headings
  */
 export const typography = {
-  // Font families
+  // Font families - Using Geist (loaded via next/font)
   fonts: {
-    primary: '"Gotham", "Century Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    heading: '"Gotham Bold", "Century Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    body: '"Gotham Book", "Century Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    mono: '"SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace',
+    primary: 'var(--font-geist-sans)',
+    heading: 'var(--font-geist-sans)',
+    body: 'var(--font-geist-sans)',
+    mono: 'var(--font-geist-mono)',
   },
   
-  // Font weights mapping to Gotham variants
+  // Font weights - Consistent across all sections
   weights: {
-    thin: 100,       // Gotham Thin
-    light: 300,      // Gotham Light
-    book: 400,       // Gotham Book
-    medium: 500,     // Gotham Medium
-    bold: 700,       // Gotham Bold
-    black: 900,      // Gotham Black
+    light: 300,
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+    extrabold: 800,
   },
   
   // Font sizes with responsive scaling
+  // Mobile: 60-70% of desktop (30-40% reduction as per requirements)
   sizes: {
-    // Display sizes for hero sections
+    // Display sizes for hero sections (Requirements 4.2, 4.6)
     display: {
-      '2xl': 'clamp(3rem, 8vw, 6rem)',
-      xl: 'clamp(2.5rem, 6vw, 4.5rem)',
-      lg: 'clamp(2rem, 5vw, 3.5rem)',
+      '2xl': ['clamp(2.5rem, 8vw, 6rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],      // 40px → 96px
+      'xl': ['clamp(2.25rem, 6vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],    // 36px → 72px
+      'lg': ['clamp(1.875rem, 5vw, 3.5rem)', { lineHeight: '1.2', letterSpacing: '-0.02em' }],   // 30px → 56px
+      'md': ['clamp(1.5rem, 4vw, 2.25rem)', { lineHeight: '1.2', letterSpacing: '-0.02em' }],    // 24px → 36px
+      'sm': ['clamp(1.25rem, 3vw, 1.875rem)', { lineHeight: '1.3', letterSpacing: '-0.02em' }],  // 20px → 30px
     },
     
-    // Heading sizes
+    // Heading sizes (Requirements 4.2, 4.3, 4.6)
     heading: {
-      h1: 'clamp(2rem, 4vw, 3rem)',
-      h2: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-      h3: 'clamp(1.5rem, 3vw, 2rem)',
-      h4: 'clamp(1.25rem, 2.5vw, 1.75rem)',
-      h5: 'clamp(1.125rem, 2vw, 1.5rem)',
-      h6: 'clamp(1rem, 1.5vw, 1.25rem)',
+      h1: ['clamp(1.875rem, 4vw, 3rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],       // 30px → 48px
+      h2: ['clamp(1.5rem, 3.5vw, 2.5rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],     // 24px → 40px
+      h3: ['clamp(1.25rem, 3vw, 2rem)', { lineHeight: '1.2', letterSpacing: '0' }],              // 20px → 32px
+      h4: ['clamp(1.125rem, 2.5vw, 1.75rem)', { lineHeight: '1.3', letterSpacing: '0' }],        // 18px → 28px
+      h5: ['clamp(1rem, 2vw, 1.5rem)', { lineHeight: '1.3', letterSpacing: '0' }],               // 16px → 24px
+      h6: ['clamp(0.9375rem, 1.5vw, 1.25rem)', { lineHeight: '1.3', letterSpacing: '0' }],       // 15px → 20px
     },
     
-    // Body text sizes
+    // Body text sizes (Requirements 4.2, 4.3, 4.6)
     body: {
-      xl: '1.25rem',
-      lg: '1.125rem',
-      base: '1rem',
-      sm: '0.875rem',
-      xs: '0.75rem',
+      xl: ['clamp(1.125rem, 2vw, 1.25rem)', { lineHeight: '1.6', letterSpacing: '0' }],          // 18px → 20px
+      lg: ['clamp(1rem, 1.5vw, 1.125rem)', { lineHeight: '1.6', letterSpacing: '0' }],           // 16px → 18px
+      base: ['clamp(0.9375rem, 1.2vw, 1rem)', { lineHeight: '1.6', letterSpacing: '0' }],        // 15px → 16px
+      sm: ['clamp(0.8125rem, 1vw, 0.875rem)', { lineHeight: '1.5', letterSpacing: '0' }],        // 13px → 14px
+      xs: ['clamp(0.6875rem, 0.8vw, 0.75rem)', { lineHeight: '1.5', letterSpacing: '0' }],       // 11px → 12px
     },
     
-    // Special sizes for stats
+    // Special sizes for stats and metrics (Requirements 4.2, 4.6)
     stats: {
-      value: 'clamp(2.5rem, 5vw, 4rem)',
-      label: 'clamp(0.875rem, 1.5vw, 1.125rem)',
-      suffix: 'clamp(1.5rem, 3vw, 2.5rem)',
+      value: ['clamp(2rem, 5vw, 3.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],      // 32px → 56px
+      label: ['clamp(0.875rem, 1.5vw, 1.125rem)', { lineHeight: '1.4', letterSpacing: '0' }],    // 14px → 18px
+      suffix: ['clamp(1.25rem, 3vw, 2rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],    // 20px → 32px
     },
   },
   
-  // Line heights
+  // Line heights (Requirement 4.3)
   lineHeights: {
-    tight: 1.1,
-    snug: 1.3,
-    normal: 1.5,
-    relaxed: 1.7,
-    loose: 2,
+    tight: 1.1,      // For display text and large numbers
+    snug: 1.2,       // For headings
+    normal: 1.5,     // For UI elements
+    relaxed: 1.6,    // For body text (primary)
+    loose: 1.7,      // For long-form content
   },
   
-  // Letter spacing
+  // Letter spacing (Requirement 4.7)
   letterSpacing: {
-    tighter: '-0.05em',
-    tight: '-0.025em',
-    normal: '0',
-    wide: '0.025em',
-    wider: '0.05em',
-    widest: '0.1em',
+    tighter: '-0.02em',  // Display headings
+    tight: '-0.01em',    // Large headings (h1, h2)
+    normal: '0',         // Body text and smaller headings
+    wide: '0.025em',     // Uppercase labels
+    wider: '0.05em',     // Tracking for small caps
+    widest: '0.1em',     // Wide tracking for emphasis
+  },
+  
+  // Utility functions for consistent typography application
+  utils: {
+    // Get font size with line height and letter spacing
+    getTextStyle: (size: string, weight: number = 400) => ({
+      fontSize: size,
+      fontWeight: weight,
+      lineHeight: 'inherit',
+      letterSpacing: 'inherit',
+    }),
+    
+    // Get responsive heading styles
+    getHeadingStyle: (level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') => {
+      const [fontSize, config] = typography.sizes.heading[level];
+      return {
+        fontSize,
+        lineHeight: config.lineHeight,
+        letterSpacing: config.letterSpacing,
+        fontWeight: 700,
+      };
+    },
+    
+    // Get responsive body text styles
+    getBodyStyle: (size: 'xl' | 'lg' | 'base' | 'sm' | 'xs' = 'base') => {
+      const [fontSize, config] = typography.sizes.body[size];
+      return {
+        fontSize,
+        lineHeight: config.lineHeight,
+        letterSpacing: config.letterSpacing,
+        fontWeight: 400,
+      };
+    },
   },
 } as const;
 

@@ -587,7 +587,168 @@
     background: var(--climate-green-dark);
   }
 
+  /* ========================================================================
+     TYPOGRAPHY UTILITIES (Requirements 4.1-4.7)
+     ======================================================================== */
+
+  /* Display text utilities - For hero sections */
+  .text-display-2xl {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-xl {
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-lg {
+    font-size: clamp(1.875rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-md {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-sm {
+    font-size: clamp(1.25rem, 3vw, 1.875rem);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Heading utilities - Consistent with h1-h6 */
+  .text-h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-h3 {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .text-h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .text-h5 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .text-h6 {
+    font-size: clamp(0.9375rem, 1.5vw, 1.25rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  /* Body text utilities */
+  .text-body-xl {
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-lg {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-base {
+    font-size: clamp(0.9375rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-sm {
+    font-size: clamp(0.8125rem, 1vw, 0.875rem);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text-body-xs {
+    font-size: clamp(0.6875rem, 0.8vw, 0.75rem);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* Stats text utilities */
+  .text-stat-value {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-stat-label {
+    font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .text-stat-suffix {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  /* Font weight utilities */
+  .font-light { font-weight: 300; }
+  .font-normal { font-weight: 400; }
+  .font-medium { font-weight: 500; }
+  .font-semibold { font-weight: 600; }
+  .font-bold { font-weight: 700; }
+  .font-extrabold { font-weight: 800; }
+
+  /* Line height utilities */
+  .leading-tight { line-height: 1.1; }
+  .leading-snug { line-height: 1.2; }
+  .leading-normal { line-height: 1.5; }
+  .leading-relaxed { line-height: 1.6; }
+  .leading-loose { line-height: 1.7; }
+
+  /* Letter spacing utilities */
+  .tracking-tighter { letter-spacing: -0.02em; }
+  .tracking-tight { letter-spacing: -0.01em; }
+  .tracking-normal { letter-spacing: 0; }
+  .tracking-wide { letter-spacing: 0.025em; }
+  .tracking-wider { letter-spacing: 0.05em; }
+  .tracking-widest { letter-spacing: 0.1em; }
+
   /* Line clamp utilities */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -600,6 +761,22 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Text balance for better readability */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
   }
 
   /* Horizontal scroll snap */
@@ -833,10 +1010,52 @@
     font-weight: 600;
   }
 
-  /* Ensure headings have proper hierarchy */
+  /* Typography System - Consistent heading hierarchy (Requirement 4.2, 4.3) */
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-family: var(--font-geist-sans);
+    font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+  }
+
+  h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+    line-height: 1.3;
+  }
+
+  h5 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.3;
+  }
+
+  h6 {
+    font-size: clamp(0.9375rem, 1.5vw, 1.25rem);
+    line-height: 1.3;
+  }
+
+  /* Body text defaults (Requirement 4.3) */
+  body {
+    font-family: var(--font-geist-sans);
+    font-size: clamp(0.9375rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    letter-spacing: 0;
   }
 
   /* Improve list accessibility */
