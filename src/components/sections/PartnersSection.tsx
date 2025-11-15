@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import { useState, useMemo, memo } from "react";
 import Link from "next/link";
 import { colors, typography } from "@/lib/design-system";
-import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +12,7 @@ import {
   Users,
   Award,
   Building2,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -34,139 +33,125 @@ interface PartnersSectionProps {
   subtitle?: string;
 }
 
+const CATEGORY_CONFIG: Record<string, { icon: LucideIcon; label: string }> = {
+  donor: { icon: Award, label: "Donors" },
+  partner: { icon: Users, label: "Partners" },
+  supporter: { icon: Globe2, label: "Supporters" },
+  collaborator: { icon: Building2, label: "Collaborators" },
+};
+
 export function PartnersSection({
   partners,
   title = "Partners & Donors",
   subtitle = "Collaborating with world-class organizations to accelerate climate innovation",
 }: PartnersSectionProps) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-  const [selectedCategory, setSelectedCategory] = useState<"all" | string>(
-    "all"
-  );
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<string>("all");
   const [isPaused, setIsPaused] = useState(false);
 
-  // Categorize partners
-  const categorizedPartners = partners.reduce((acc, partner) => {
-    const category = partner.category || "supporter";
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(partner);
-    return acc;
-  }, {} as Record<string, PartnerData[]>);
+  const categorizedPartners = useMemo(() => {
+    const result: Record<string, PartnerData[]> = {};
+    partners.forEach((partner) => {
+      const category = partner.category || "supporter";
+      if (!result[category]) result[category] = [];
+      result[category].push(partner);
+    });
+    return result;
+  }, [partners]);
 
-  // Filter partners by category
-  const displayPartners =
-    selectedCategory === "all"
-      ? partners
-      : categorizedPartners[selectedCategory] || [];
+  const displayPartners = useMemo(() => {
+    if (activeTab === "all") return partners;
+    return categorizedPartners[activeTab] || [];
+  }, [activeTab, partners, categorizedPartners]);
 
-  // Duplicate for infinite scroll
-  const scrollPartners = [...partners, ...partners, ...partners];
+  const scrollPartners = useMemo(() => {
+    return [...partners, ...partners, ...partners];
+  }, [partners]);
 
-  const categoryIcons = {
-    donor: <Award className="h-4 w-4" />,
-    partner: <Users className="h-4 w-4" />,
-    supporter: <Globe2 className="h-4 w-4" />,
-    collaborator: <Building2 className="h-4 w-4" />,
-  };
-
-  const getTabStyles = (category: string) => {
-    const isActive = selectedCategory === category;
-    return {
-      className: cn(
-        "px-6 py-2 rounded-full bg-gray-100 transition-all duration-200",
-        isActive && "text-white shadow-sm"
-      ),
-      style: isActive
-        ? {
-            backgroundColor: colors.primary.green[500],
-            boxShadow: `0 0 0 2px ${colors.primary.green[200]}`,
-          }
-        : undefined,
-    } as const;
-  };
+  const categories = useMemo(() => {
+    const cats: Array<{ value: string; label: string; count: number; IconComponent: LucideIcon | null }> = [
+      { value: "all", label: "All", count: partners.length, IconComponent: null },
+    ];
+    
+    Object.entries(categorizedPartners).forEach(([key, items]) => {
+      const config = CATEGORY_CONFIG[key];
+      if (config) {
+        cats.push({
+          value: key,
+          label: config.label,
+          count: items.length,
+          IconComponent: config.icon,
+        });
+      }
+    });
+    
+    return cats;
+  }, [partners.length, categorizedPartners]);
 
   return (
     <section className="py-20 sm:py-32 bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div
-            className={getMotionSafeClasses(
-              "animate-in fade-in slide-in-from-bottom-8 duration-1000"
-            )}
+          <Badge
+            className="mb-4 px-4 py-1.5 border rounded-full"
+            style={{
+              backgroundColor: colors.primary.green[50],
+              borderColor: colors.primary.green[200],
+              color: colors.primary.green[700],
+            }}
           >
-            <Badge
-              className="mb-4 px-4 py-1.5 border rounded-full"
-              style={{
-                backgroundColor: colors.primary.green[50],
-                borderColor: colors.primary.green[200],
-                color: colors.primary.green[700],
-              }}
-            >
-              <Sparkles className="h-3 w-3 mr-1" />
-              Trusted by Industry Leaders
-            </Badge>
-            <h2
-              className="font-bold mb-4"
-              style={{
-                fontSize: "clamp(2rem, 5vw, 3.5rem)",
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-                lineHeight: typography.lineHeights.tight,
-              }}
-            >
-              {title}
-            </h2>
-            <p
-              className="text-lg max-w-3xl mx-auto"
-              style={{
-                fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-                lineHeight: typography.lineHeights.relaxed,
-              }}
-            >
-              {subtitle}
-            </p>
-          </div>
+            <Sparkles className="h-3 w-3 mr-1" />
+            Trusted by Industry Leaders
+          </Badge>
+          <h2
+            className="font-bold mb-4"
+            style={{
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              fontFamily: typography.fonts.heading,
+              color: colors.secondary.gray[900],
+              lineHeight: typography.lineHeights.tight,
+            }}
+          >
+            {title}
+          </h2>
+          <p
+            className="text-lg max-w-3xl mx-auto"
+            style={{
+              fontFamily: typography.fonts.body,
+              color: colors.secondary.gray[600],
+              lineHeight: typography.lineHeights.relaxed,
+            }}
+          >
+            {subtitle}
+          </p>
         </div>
 
         {/* Category Tabs */}
         <div className="mb-12">
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0">
-              <TabsTrigger
-                value="all"
-                onClick={() => setSelectedCategory("all")}
-                {...getTabStyles("all")}
-              >
-                All ({partners.length})
-              </TabsTrigger>
-              {Object.entries(categorizedPartners).map(([category, items]) => (
-                <TabsTrigger
-                  key={category}
-                  value={category}
-                  onClick={() => setSelectedCategory(category)}
-                  {...getTabStyles(category)}
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {categories.map((category) => {
+              const Icon = category.IconComponent;
+              return (
+                <button
+                  key={category.value}
+                  onClick={() => setActiveTab(category.value)}
+                  className={cn(
+                    "px-6 py-2 rounded-full transition-all duration-200",
+                    activeTab === category.value
+                      ? "bg-[#80c738] text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  )}
                 >
                   <span className="flex items-center gap-2">
-                    {categoryIcons[category as keyof typeof categoryIcons]}
-                    {category.charAt(0).toUpperCase() + category.slice(1)}s (
-                    {items.length})
+                    {Icon && <Icon className="h-4 w-4" />}
+                    {category.label} ({category.count})
                   </span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+                </button>
+              );
+            })}
+          </div>
 
-            <TabsContent value="all" className="mt-8">
-              <PartnerGrid partners={displayPartners} />
-            </TabsContent>
-            {Object.keys(categorizedPartners).map((category) => (
-              <TabsContent key={category} value={category} className="mt-8">
-                <PartnerGrid partners={categorizedPartners[category]} />
-              </TabsContent>
-            ))}
-          </Tabs>
+          <PartnerGrid partners={displayPartners} />
         </div>
 
         {/* Infinite Scroll Marquee */}
@@ -178,26 +163,17 @@ export function PartnersSection({
           </div>
 
           <div className="relative overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-32 bg-linear-to-r from-white/70 to-transparent dark:from-black/30 z-10" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-linear-to-l from-white/70 to-transparent dark:from-black/30 z-10" />
+            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
 
             <div
-              ref={scrollRef}
               className="flex gap-12"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              <div
-                className={cn(
-                  "flex gap-12 animate-scroll",
-                  isPaused && "animation-paused"
-                )}
-                style={{
-                  animation: "scroll 40s linear infinite",
-                }}
-              >
+              <div className={cn("flex gap-12", !isPaused && "animate-scroll")}>
                 {scrollPartners.map((partner, index) => (
-                  <div key={`scroll-${index}`} className="shrink-0">
+                  <div key={`scroll-${partner.id}-${index}`} className="shrink-0">
                     <Image
                       src={partner.logo || "/images/placeholder-logo.png"}
                       alt={partner.name}
@@ -224,7 +200,7 @@ export function PartnersSection({
             <h3
               className="font-bold mb-4"
               style={{
-                fontSize: typography.sizes.heading.h3,
+                fontSize: typography.sizes.heading.h3[0],
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
               }}
@@ -271,50 +247,38 @@ export function PartnersSection({
         .animate-scroll {
           animation: scroll 40s linear infinite;
         }
-        .animation-paused {
-          animation-play-state: paused;
-        }
       `}</style>
     </section>
   );
 }
 
-// Partner Grid Component
-function PartnerGrid({ partners }: { partners: PartnerData[] }) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-
+const PartnerGrid = memo(function PartnerGrid({ 
+  partners 
+}: { 
+  partners: PartnerData[] 
+}) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-      {partners.map((partner, index) => (
+      {partners.map((partner) => (
         <a
           key={partner.id}
           href={partner.website}
           target="_blank"
           rel="noopener noreferrer"
-          className={cn(
-            "group relative bg-white rounded-xl p-6 border border-gray-100",
-            "hover:border-gray-200 hover:shadow-lg transition-all duration-300",
-            "hover:-translate-y-1",
-            getMotionSafeClasses(
-              `animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${
-                index * 50
-              }`
-            )
-          )}
+          className="group relative bg-white rounded-xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
         >
           <div className="relative h-16 flex items-center justify-center">
             <Image
               src={partner.logo || "/images/placeholder-logo.png"}
               alt={partner.name}
               className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
-              priority
               width={100}
               height={100}
             />
           </div>
-          <div className="absolute inset-0 bg-linear-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
         </a>
       ))}
     </div>
   );
-}
+});

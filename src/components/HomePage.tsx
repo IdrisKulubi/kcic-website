@@ -27,6 +27,12 @@ import { CinematicVideoSection } from "./sections/CinematicVideoSection";
 import CEOQuoteSection from "./sections/CEOQuoteSection";
 import ClimateChallenge from "./sections/ClimateChallenge";
 import HistoryTimeline from "./sections/HistoryTimeline";
+import FoundingBeliefs from "./sections/FoundingBeliefs";
+import WhatWeDo from "./sections/WhatWeDo";
+import HowWeDoIt from "./sections/HowWeDoIt";
+import KeySectors from "./sections/KeySectors";
+import ProgramsShowcase from "./sections/ProgramsShowcase";
+import Vision2030 from "./sections/Vision2030";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -47,6 +53,49 @@ const targetsData = [
   {
     value: "67,500+",
     description: "Customers reached by supported enterprises.",
+  },
+];
+
+// 13 Years On Impact Data (static for now)
+const thirteenYearsOnData = [
+  {
+    value: "57,517",
+    description: "Jobs Created",
+    subdescription: "56% women owned",
+  },
+  {
+    value: "3,500+",
+    description: "SMEs Supported",
+    subdescription: "2,730 incubated/accelerated",
+  },
+  {
+    value: "$63M",
+    description: "Leveraged",
+    subdescription: "For supported enterprises",
+  },
+  {
+    value: "73",
+    description: "Policy Initiatives",
+    subdescription: "Legislative reforms & advocacy",
+  },
+  {
+    value: "507,149",
+    description: "Tonnes CO2 Mitigated",
+  },
+  {
+    value: "67%",
+    description: "Commercialization Rate",
+    subdescription: "For incubated enterprises",
+  },
+  {
+    value: "$85M",
+    description: "Revenue Generated",
+    subdescription: "By supported enterprises",
+  },
+  {
+    value: "3",
+    description: "Awards",
+    subdescription: "Recent recognition (2024/2025)",
   },
 ];
 
@@ -335,41 +384,64 @@ export default function HomePage({
         {/* Hero Section - modern slideshow */}
         <HeroCarousel data={translatedHeroData} images={heroImages} />
 
-        {/* Climate Challenge Section (NEW) */}
-        <ClimateChallenge />
+        {/* Main Content Sections with proper spacing */}
+        <div className="space-y-16 md:space-y-24 lg:space-y-32">
+          {/* Climate Challenge Section (NEW) */}
+          <ClimateChallenge />
 
-        {/* History Timeline Section (NEW) */}
-        <HistoryTimeline />
+          {/* History Timeline Section (NEW) */}
+          <HistoryTimeline />
 
-        {/* Stats Section */}
-        <MinimalStatsSection
-          stats={translatedStatsData}
-          targets={targetsData}
-        />
+          {/* Founding Beliefs Section (NEW) */}
+          <FoundingBeliefs />
 
-        {/* Awards & Recognition (below stats) */}
-        <AwardsSection />
+          {/* What We Do Section (NEW) */}
+          <WhatWeDo />
 
-        {/* Cinematic Video Section (appears after targets) */}
-        <CinematicVideoSection
-          // Embed URL with start at 3s, modest branding, and playsinline
-          embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
-          title="Featured Video"
-          subtitle="KCIC Strategy 4.0 :The Next Frontier"
-        />
+          {/* How We Do It Section (NEW) */}
+          <HowWeDoIt />
 
-        {/* CEO Quote Section (below video) */}
-        <CEOQuoteSection
-          imageSrc="/images/ceo.jpg"
-          name="Joseph Murabula"
-          title="CEO, KCIC"
-        />
+          {/* Key Sectors Section (NEW) */}
+          <KeySectors />
 
-        {/* News Section */}
-        <NewsSection news={newsItems} />
+          {/* Programs Showcase Section (NEW) */}
+          <ProgramsShowcase />
 
-        {/* Partners Section */}
-        <PartnersSection partners={partnersDataTransformed} />
+          {/* 13 Years On Impact Section - Dark Variant */}
+          <MinimalStatsSection
+            stats={thirteenYearsOnData}
+            variant="dark"
+            title="KCIC 13 Years On"
+            subtitle="Progress in Supporting Climate Innovation & Entrepreneurship across Africa"
+          />
+
+          {/* Awards & Recognition (below stats) */}
+          <AwardsSection />
+
+          {/* Cinematic Video Section (appears after targets) */}
+          <CinematicVideoSection
+            // Embed URL with start at 3s, modest branding, and playsinline
+            embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
+            title="Featured Video"
+            subtitle="KCIC Strategy 4.0 :The Next Frontier"
+          />
+
+          {/* CEO Quote Section (below video) */}
+          <CEOQuoteSection
+            imageSrc="/images/ceo.jpg"
+            name="Joseph Murabula"
+            title="CEO, KCIC"
+          />
+
+          {/* Vision 2030 Section (NEW) */}
+          <Vision2030 />
+
+          {/* News Section */}
+          <NewsSection news={newsItems} />
+
+          {/* Partners Section */}
+          <PartnersSection partners={partnersDataTransformed} />
+        </div>
 
         {/* Footer */}
         <Footer data={footerData} />
