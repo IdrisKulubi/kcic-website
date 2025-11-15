@@ -24,7 +24,6 @@ import type {
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
 import { CinematicVideoSection } from "./sections/CinematicVideoSection";
-import CEOQuoteSection from "./sections/CEOQuoteSection";
 import ClimateChallenge from "./sections/ClimateChallenge";
 import HistoryTimeline from "./sections/HistoryTimeline";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
@@ -385,62 +384,68 @@ export default function HomePage({
         <HeroCarousel data={translatedHeroData} images={heroImages} />
 
         {/* Main Content Sections with proper spacing */}
-        <div className="space-y-16 md:space-y-24 lg:space-y-32">
-          {/* Climate Challenge Section (NEW) */}
-          <ClimateChallenge />
+        <div className="space-y-0">
+          {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
+          <div className="bg-white">
+            <ClimateChallenge />
+            <div className="border-t border-gray-100">
+              <HistoryTimeline />
+            </div>
+            <div className="border-t border-gray-100">
+              <FoundingBeliefs />
+            </div>
+          </div>
 
-          {/* History Timeline Section (NEW) */}
-          <HistoryTimeline />
+          {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
+          <div className="bg-gradient-to-b from-gray-50 to-white py-20 sm:py-32">
+            <WhatWeDo />
+            <div className="mt-16">
+              <HowWeDoIt />
+            </div>
+          </div>
 
-          {/* Founding Beliefs Section (NEW) */}
-          <FoundingBeliefs />
+          {/* SECTION 3: Focus Areas & Programs - Combined */}
+          <div className="bg-white py-20 sm:py-32">
+            <KeySectors />
+            <div className="mt-20">
+              <ProgramsShowcase />
+            </div>
+          </div>
 
-          {/* What We Do Section (NEW) */}
-          <WhatWeDo />
+          {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+            <MinimalStatsSection
+              stats={thirteenYearsOnData}
+              variant="dark"
+              title="KCIC 13 Years On"
+              subtitle="Progress in Supporting Climate Innovation & Entrepreneurship across Africa"
+            />
+            <div className="border-t border-white/10">
+              <AwardsSection />
+            </div>
+          </div>
 
-          {/* How We Do It Section (NEW) */}
-          <HowWeDoIt />
+          {/* SECTION 5: Vision & Strategy - Combined (Video + Vision 2030) */}
+          <div className="bg-white">
+            <CinematicVideoSection
+              embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
+              title="Featured Video"
+              subtitle="KCIC Strategy 4.0: The Next Frontier"
+            />
+            <div className="border-t border-gray-100">
+              <Vision2030 />
+            </div>
+          </div>
 
-          {/* Key Sectors Section (NEW) */}
-          <KeySectors />
+          {/* SECTION 6: News */}
+          <div className="bg-gray-50 py-20 sm:py-32">
+            <NewsSection news={newsItems} />
+          </div>
 
-          {/* Programs Showcase Section (NEW) */}
-          <ProgramsShowcase />
-
-          {/* 13 Years On Impact Section - Dark Variant */}
-          <MinimalStatsSection
-            stats={thirteenYearsOnData}
-            variant="dark"
-            title="KCIC 13 Years On"
-            subtitle="Progress in Supporting Climate Innovation & Entrepreneurship across Africa"
-          />
-
-          {/* Awards & Recognition (below stats) */}
-          <AwardsSection />
-
-          {/* Cinematic Video Section (appears after targets) */}
-          <CinematicVideoSection
-            // Embed URL with start at 3s, modest branding, and playsinline
-            embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
-            title="Featured Video"
-            subtitle="KCIC Strategy 4.0 :The Next Frontier"
-          />
-
-          {/* CEO Quote Section (below video) */}
-          <CEOQuoteSection
-            imageSrc="/images/ceo.jpg"
-            name="Joseph Murabula"
-            title="CEO, KCIC"
-          />
-
-          {/* Vision 2030 Section (NEW) */}
-          <Vision2030 />
-
-          {/* News Section */}
-          <NewsSection news={newsItems} />
-
-          {/* Partners Section */}
-          <PartnersSection partners={partnersDataTransformed} />
+          {/* SECTION 7: Partners */}
+          <div className="bg-white">
+            <PartnersSection partners={partnersDataTransformed} />
+          </div>
         </div>
 
         {/* Footer */}
