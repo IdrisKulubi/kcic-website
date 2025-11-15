@@ -91,8 +91,8 @@ const config: Config = {
       },
       boxShadow: {
         glass: "var(--glass-shadow)",
-        "climate-green": "0 10px 40px rgba(16, 185, 129, 0.3)",
-        "climate-blue": "0 10px 40px rgba(14, 165, 233, 0.3)",
+        "climate-green": "0 10px 40px rgba(128, 199, 56, 0.3)",
+        "climate-blue": "0 10px 40px rgba(0, 173, 221, 0.3)",
         "climate-yellow": "0 10px 40px rgba(245, 158, 11, 0.3)",
       },
       animation: {

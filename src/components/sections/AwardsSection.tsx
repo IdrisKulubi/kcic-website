@@ -359,8 +359,8 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
         aria-hidden
         style={{
           background:
-            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green[50]} 0%, transparent 60%),` +
-            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.cyan[50]} 0%, transparent 60%)`,
+            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green['50']} 0%, transparent 60%),` +
+            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.blue['50']} 0%, transparent 60%)`,
         }}
       />
 

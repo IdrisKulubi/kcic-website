@@ -144,7 +144,7 @@ export default function TypographyTestPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="text-stat-value" style={{ color: colors.primary.green.DEFAULT }}>
+              <div className="text-stat-value text-climate-green">
                 57,517
               </div>
               <div className="text-stat-label text-gray-600">
@@ -152,7 +152,7 @@ export default function TypographyTestPage() {
               </div>
             </div>
             <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="text-stat-value" style={{ color: colors.primary.green.DEFAULT }}>
+              <div className="text-stat-value text-climate-blue">
                 3,500+
               </div>
               <div className="text-stat-label text-gray-600">
@@ -160,7 +160,7 @@ export default function TypographyTestPage() {
               </div>
             </div>
             <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="text-stat-value" style={{ color: colors.primary.green.DEFAULT }}>
+              <div className="text-stat-value text-climate-green">
                 $63M
               </div>
               <div className="text-stat-label text-gray-600">
@@ -254,21 +254,21 @@ export default function TypographyTestPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 bg-white border-2 border-gray-200 rounded-lg">
-              <p className="text-body-sm text-gray-500 mb-4">✓ PASS - Gray 900 on White (16:1)</p>
-              <h3 className="text-h3 mb-2" style={{ color: colors.secondary.gray[900] }}>
+              <p className="text-body-sm text-gray-500 mb-4">✓ PASS - Gray 900 on White (16.5:1)</p>
+              <h3 className="text-h3 mb-2 text-gray-900">
                 Normal Text Example
               </h3>
-              <p className="text-body-base" style={{ color: colors.secondary.gray[900] }}>
+              <p className="text-body-base text-gray-900">
                 This text has excellent contrast and is readable for all users.
               </p>
             </div>
             <div className="p-6 bg-white border-2 border-gray-200 rounded-lg">
-              <p className="text-body-sm text-gray-500 mb-4">✓ PASS - Climate Green on White (3.8:1) - Large text only</p>
-              <h3 className="text-h3 mb-2" style={{ color: colors.primary.green.DEFAULT }}>
+              <p className="text-body-sm text-gray-500 mb-4">✓ PASS - Brand Green on White (3.2:1) - Large text only</p>
+              <h3 className="text-h3 mb-2 text-climate-green">
                 Large Text Example
               </h3>
-              <p className="text-body-lg font-semibold" style={{ color: colors.primary.green.DEFAULT }}>
-                Use climate green for headings and large text (18px+ or 14px+ bold).
+              <p className="text-body-lg font-semibold text-climate-green">
+                Use brand green for headings and large text (18px+ or 14px+ bold).
               </p>
             </div>
           </div>
@@ -285,7 +285,7 @@ export default function TypographyTestPage() {
               All text uses clamp() for fluid scaling between mobile and desktop.
             </p>
             <div className="space-y-4">
-              <div className="text-display-lg font-bold" style={{ color: colors.primary.green.DEFAULT }}>
+              <div className="text-display-lg font-bold text-climate-green">
                 This heading scales from 30px to 56px
               </div>
               <p className="text-body-lg">

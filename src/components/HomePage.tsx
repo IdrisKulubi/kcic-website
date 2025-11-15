@@ -25,6 +25,8 @@ import type {
 } from "@/lib/actions/footer";
 import { CinematicVideoSection } from "./sections/CinematicVideoSection";
 import CEOQuoteSection from "./sections/CEOQuoteSection";
+import ClimateChallenge from "./sections/ClimateChallenge";
+import HistoryTimeline from "./sections/HistoryTimeline";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -332,6 +334,12 @@ export default function HomePage({
 
         {/* Hero Section - modern slideshow */}
         <HeroCarousel data={translatedHeroData} images={heroImages} />
+
+        {/* Climate Challenge Section (NEW) */}
+        <ClimateChallenge />
+
+        {/* History Timeline Section (NEW) */}
+        <HistoryTimeline />
 
         {/* Stats Section */}
         <MinimalStatsSection
