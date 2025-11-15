@@ -12,4 +12,3 @@ export { CTABanner } from "./CTABanner";
 export { default as AwardsSection } from "./AwardsSection";
 export { default as FoundingBeliefs } from "./FoundingBeliefs";
 export { default as KeySectors } from "./KeySectors";
-export { default as Vision2030 } from "./Vision2030";

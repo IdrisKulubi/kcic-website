@@ -31,7 +31,6 @@ import WhatWeDo from "./sections/WhatWeDo";
 import HowWeDoIt from "./sections/HowWeDoIt";
 import KeySectors from "./sections/KeySectors";
 import ProgramsShowcase from "./sections/ProgramsShowcase";
-import Vision2030 from "./sections/Vision2030";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -425,16 +424,13 @@ export default function HomePage({
             </div>
           </div>
 
-          {/* SECTION 5: Vision & Strategy - Combined (Video + Vision 2030) */}
+          {/* SECTION 5: Strategy Video */}
           <div className="bg-white">
             <CinematicVideoSection
               embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
               title="Featured Video"
               subtitle="KCIC Strategy 4.0: The Next Frontier"
             />
-            <div className="border-t border-gray-100">
-              <Vision2030 />
-            </div>
           </div>
 
           {/* SECTION 6: News */}
