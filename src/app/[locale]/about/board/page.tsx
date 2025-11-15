@@ -36,7 +36,7 @@ export default function BoardPage() {
                   Former Director of Climate Change at Ministry of Environment. Over 20 years of experience in environmental policy and sustainable development.
                 </p>
                 <div className="text-sm text-gray-500">
-                  <p>PhD Environmental Science, University of Nairobi</p>
+                  <p>PhD Environmental Science, Strathmore University</p>
                   <p>MSc Climate Change Policy, Oxford University</p>
                 </div>
               </div>

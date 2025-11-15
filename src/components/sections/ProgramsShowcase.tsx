@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { colors, typography } from "@/lib/design-system";
 import Image from "next/image";
+import { colors, typography } from "@/lib/design-system";
 
 interface ProgramMetric {
   value: string;
@@ -16,6 +16,7 @@ interface ProgramEnterprise {
 
 interface ProgramCard {
   name: string;
+  image: string;
   fundingSource: string;
   fundingAmount: string;
   overview: string;
@@ -31,6 +32,7 @@ interface ProgramsShowcaseSectionProps {
 const programs: ProgramCard[] = [
   {
     name: "GreenBiz Programme",
+    image: "/images/programmes/greenbiz.jpg",
     fundingSource: "DANIDA",
     fundingAmount: "$10M",
     overview:
@@ -50,6 +52,7 @@ const programs: ProgramCard[] = [
   },
   {
     name: "AgriBiz Programme",
+    image: "/images/programmes/biz.jpg",
     fundingSource: "EU & DANIDA",
     fundingAmount: "€18.9M",
     overview:
@@ -69,6 +72,7 @@ const programs: ProgramCard[] = [
   },
   {
     name: "PUSE Programme",
+    image: "/images/programmes/puse.jpg",
     fundingSource: "Mott Foundation",
     fundingAmount: "$350K",
     overview:
@@ -88,6 +92,7 @@ const programs: ProgramCard[] = [
   },
   {
     name: "SWIFT Programme",
+    image: "/images/programmes/swift.jpg",
     fundingSource: "IKEA Foundation",
     fundingAmount: "$5.1M",
     overview:
@@ -166,195 +171,57 @@ export default function ProgramsShowcase({
           </p>
         </div>
 
-        {/* Program Cards - Alternating Layout */}
-        <div className="space-y-16 sm:space-y-24">
-          {programs.map((program, index) => {
-            const isEven = index % 2 === 0;
-
-            return (
-              <div
-                key={index}
-                className={`flex flex-col ${
-                  isEven ? "lg:flex-row" : "lg:flex-row-reverse"
-                } gap-8 lg:gap-12 items-center`}
-              >
-                {/* Image Side (50%) */}
-                <div className="w-full lg:w-1/2">
-                  <div
-                    className="relative rounded-2xl overflow-hidden group"
-                    style={{
-                      aspectRatio: "4/3",
-                      background: `linear-gradient(135deg, ${program.accentColor}20, ${program.accentColor}40)`,
-                    }}
-                  >
-                    {/* Placeholder for program image */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div
-                        className="text-center p-8"
-                        style={{ color: program.accentColor }}
-                      >
-                        <div
-                          className="font-bold mb-2"
-                          style={{
-                            fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                            fontFamily: typography.fonts.heading,
-                          }}
-                        >
-                          {program.name}
-                        </div>
-                        <div
-                          className="opacity-70"
-                          style={{
-                            fontSize: "clamp(0.875rem, 1.5vw, 1rem)",
-                            fontFamily: typography.fonts.body,
-                          }}
-                        >
-                          Program Visual
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Side (50%) */}
-                <div className="w-full lg:w-1/2">
-                  {/* Glass morphism card */}
-                  <div
-                    className="relative p-6 sm:p-8 rounded-2xl"
-                    style={{
-                      background: "hsl(var(--card))",
-                      backdropFilter: "blur(12px)",
-                      border: `1px solid ${program.accentColor}20`,
-                      borderRadius: "16px",
-                    }}
-                  >
-                    {/* Program Name */}
-                    <h3
-                      className="font-bold mb-2"
-                      style={{
-                        fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                        fontFamily: typography.fonts.heading,
-                        lineHeight: typography.lineHeights.snug,
-                        color: program.accentColor,
-                      }}
-                    >
-                      {program.name}
-                    </h3>
-
-                    {/* Funding Info */}
-                    <p
-                      className="text-foreground/60 mb-4"
-                      style={{
-                        fontSize: "clamp(0.875rem, 1.5vw, 1rem)",
-                        fontFamily: typography.fonts.body,
-                        fontWeight: 500,
-                      }}
-                    >
-                      Funded by {program.fundingSource} • {program.fundingAmount}
-                    </p>
-
-                    {/* Overview */}
-                    <p
-                      className="text-foreground/80 mb-6"
-                      style={{
-                        fontSize: "clamp(0.9375rem, 1.5vw, 1.125rem)",
-                        fontFamily: typography.fonts.body,
-                        lineHeight: typography.lineHeights.relaxed,
-                      }}
-                    >
-                      {program.overview}
-                    </p>
-
-                    {/* Metrics Grid (3 columns) */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                      {program.metrics.map((metric, metricIndex) => (
-                        <div
-                          key={metricIndex}
-                          className="text-center p-3 rounded-xl"
-                          style={{
-                            background: `${program.accentColor}10`,
-                            border: `1px solid ${program.accentColor}20`,
-                          }}
-                        >
-                          <div
-                            className="font-bold mb-1"
-                            style={{
-                              fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
-                              fontFamily: typography.fonts.heading,
-                              lineHeight: typography.lineHeights.tight,
-                              color: program.accentColor,
-                            }}
-                          >
-                            {metric.value}
-                          </div>
-                          <div
-                            className="text-foreground/70"
-                            style={{
-                              fontSize: "clamp(0.6875rem, 1.2vw, 0.875rem)",
-                              fontFamily: typography.fonts.body,
-                              fontWeight: 500,
-                              lineHeight: typography.lineHeights.snug,
-                            }}
-                          >
-                            {metric.label}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Enterprise Logos Row */}
-                    <div className="pt-6 border-t border-border">
-                      <p
-                        className="text-foreground/60 text-sm mb-3"
-                        style={{
-                          fontFamily: typography.fonts.body,
-                          fontWeight: 500,
-                        }}
-                      >
-                        Featured Enterprises
-                      </p>
-                      <div className="flex flex-wrap gap-4">
-                        {program.enterprises.map((enterprise, entIndex) => (
-                          <div
-                            key={entIndex}
-                            className="group/logo relative w-16 h-16 rounded-lg overflow-hidden transition-all duration-300 hover:scale-110"
-                            style={{
-                              background: `${program.accentColor}10`,
-                              border: `1px solid ${program.accentColor}20`,
-                            }}
-                            title={enterprise.name}
-                          >
-                            {/* Placeholder for enterprise logo */}
-                            <div className="absolute inset-0 flex items-center justify-center grayscale group-hover/logo:grayscale-0 transition-all duration-300">
-                              <span
-                                className="text-xs font-semibold text-center px-1"
-                                style={{
-                                  color: program.accentColor,
-                                  fontFamily: typography.fonts.body,
-                                }}
-                              >
-                                {enterprise.name.substring(0, 4)}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Accent glow effect on hover */}
-                    <div
-                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10"
-                      style={{
-                        background: `radial-gradient(circle at center, ${program.accentColor}15, transparent 70%)`,
-                        filter: "blur(20px)",
-                      }}
-                      aria-hidden
-                    />
-                  </div>
-                </div>
+        {/* Program Cards - Simple vertical layout (image on top) */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {programs.map((program) => (
+            <article
+              key={program.name}
+              className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md"
+              style={{ borderColor: `${program.accentColor}33` }}
+            >
+              {/* Program image */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src={program.image}
+                  alt={program.name}
+                  fill
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
-            );
-          })}
+
+              {/* Content */}
+              <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
+                <h3
+                  className="text-base sm:text-lg font-semibold text-foreground"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    lineHeight: typography.lineHeights.snug,
+                  }}
+                >
+                  {program.name}
+                </h3>
+                <p
+                  className="text-xs sm:text-sm text-foreground/60"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                    fontWeight: 500,
+                  }}
+                >
+                  Funded by {program.fundingSource} - {program.fundingAmount}
+                </p>
+                <p
+                  className="mt-1 text-sm text-foreground/80 line-clamp-4"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                    lineHeight: typography.lineHeights.relaxed,
+                  }}
+                >
+                  {program.overview}
+                </p>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
