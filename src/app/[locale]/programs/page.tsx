@@ -1,4 +1,3 @@
-import React from 'react';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
 import { navData } from '@/lib/navigation';
 import { Metadata } from 'next';
@@ -37,7 +36,7 @@ const programs = [
       'International market access'
     ],
     duration: '12 months',
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
   {
     icon: Handshake,
@@ -63,7 +62,7 @@ const programs = [
       'Investor connections'
     ],
     duration: 'Annual',
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
 ];
 
@@ -115,7 +114,7 @@ export default function ProgramsPage() {
                   <h3 
                     className="font-bold mb-4"
                     style={{
-                      fontSize: typography.sizes.heading.h3,
+                      fontSize: typography.sizes.heading.h3[0],
                       fontFamily: typography.fonts.heading,
                       color: colors.secondary.gray[900],
                     }}
@@ -188,7 +187,7 @@ export default function ProgramsPage() {
           <h2 
             className="font-bold mb-12"
             style={{
-              fontSize: typography.sizes.heading.h2,
+              fontSize: typography.sizes.heading.h2[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}
@@ -211,7 +210,7 @@ export default function ProgramsPage() {
             <div>
               <div 
                 className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold"
-                style={{ backgroundColor: colors.primary.cyan.DEFAULT }}
+                style={{ backgroundColor: colors.primary.blue.DEFAULT }}
               >
                 2
               </div>

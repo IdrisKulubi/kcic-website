@@ -23,7 +23,6 @@ import type {
   FooterLinkData,
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
-import { CinematicVideoSection } from "./sections/CinematicVideoSection";
 import ClimateChallenge from "./sections/ClimateChallenge";
 import HistoryTimeline from "./sections/HistoryTimeline";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
@@ -428,21 +427,12 @@ export default function HomePage({
             </div>
           </div>
 
-          {/* SECTION 5: Strategy Video */}
-          <div className="bg-white">
-            <CinematicVideoSection
-              embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
-              title="Featured Video"
-              subtitle="KCIC Strategy 4.0: The Next Frontier"
-            />
-          </div>
-
-          {/* SECTION 6: News */}
+          {/* SECTION 5: News */}
           <div className="bg-gray-50 py-20 sm:py-32">
             <NewsSection news={newsItems} />
           </div>
 
-          {/* SECTION 7: Partners */}
+          {/* SECTION 6: Partners */}
           <div className="bg-white">
             <PartnersSection partners={partnersDataTransformed} />
           </div>

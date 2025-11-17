@@ -33,7 +33,7 @@ export default function WhatWeDo({
   const sectionRef = useRef<HTMLElement | null>(null);
   const missionRef = useRef<HTMLDivElement | null>(null);
   const visionRef = useRef<HTMLDivElement | null>(null);
-  const valuesRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const valuesRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useLayoutEffect(() => {
     if (shouldDisableAnimations()) return;
