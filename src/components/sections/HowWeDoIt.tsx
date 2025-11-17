@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { DollarSign, GraduationCap, Database, Building2 } from "lucide-react";
+import { FaDollarSign, FaGraduationCap, FaDatabase, FaBuilding } from "react-icons/fa6";
 
 interface ServiceCard {
   title: string;
@@ -30,7 +30,7 @@ const services: ServiceCard[] = [
       "Revenue-based financing (RBF)",
       "Investment syndication",
     ],
-    icon: DollarSign,
+    icon: FaDollarSign,
     gradientColor: colors.primary.green.DEFAULT,
   },
   {
@@ -43,7 +43,7 @@ const services: ServiceCard[] = [
       "Mentorship programs",
       "Leadership development",
     ],
-    icon: GraduationCap,
+    icon: FaGraduationCap,
     gradientColor: colors.primary.blue.DEFAULT,
   },
   {
@@ -56,7 +56,7 @@ const services: ServiceCard[] = [
       "Industry insights",
       "Best practices sharing",
     ],
-    icon: Database,
+    icon: FaDatabase,
     gradientColor: colors.primary.green.DEFAULT,
   },
   {
@@ -69,7 +69,7 @@ const services: ServiceCard[] = [
       "Partnership facilitation",
       "Ecosystem development",
     ],
-    icon: Building2,
+    icon: FaBuilding,
     gradientColor: colors.primary.blue.DEFAULT,
   },
 ];

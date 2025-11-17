@@ -6,14 +6,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
 import {
-  Sun,
-  Recycle,
-  Car,
-  TreePine,
-  Droplet,
-  Wheat,
-  Network,
-} from "lucide-react";
+  FaSolarPanel,
+  FaRecycle,
+  FaCar,
+  FaTree,
+  FaDroplet,
+  FaSeedling,
+  FaNetworkWired,
+} from "react-icons/fa6";
 
 interface SectorCard {
   title: string;
@@ -32,49 +32,49 @@ const sectors: SectorCard[] = [
     title: "Renewable Energy",
     description: "Clean energy solutions for sustainable power generation",
     items: ["Solar", "Mini-grids", "Clean cooking", "Bioenergy"],
-    icon: Sun,
+    icon: FaSolarPanel,
     accentColor: "#FFA500", // climate-yellow
   },
   {
     title: "Circular Economy",
     description: "Waste reduction and resource optimization",
     items: ["Waste management", "Recycling", "Green manufacturing"],
-    icon: Recycle,
+    icon: FaRecycle,
     accentColor: colors.primary.green.DEFAULT,
   },
   {
     title: "Mobility",
     description: "Sustainable transportation solutions",
     items: ["E-mobility", "Sustainable transport", "MaaS"],
-    icon: Car,
+    icon: FaCar,
     accentColor: colors.primary.blue.DEFAULT,
   },
   {
     title: "Nature Based Solutions",
     description: "Ecosystem restoration and conservation",
     items: ["Ecosystem restoration", "Agroforestry", "Carbon credits"],
-    icon: TreePine,
+    icon: FaTree,
     accentColor: "#2D5016", // climate-forest (darker green)
   },
   {
     title: "Water",
     description: "Water resource management and conservation",
     items: ["Harvesting", "Recycling", "WASH", "Smart irrigation"],
-    icon: Droplet,
+    icon: FaDroplet,
     accentColor: "#006885", // climate-ocean (darker blue)
   },
   {
     title: "Agriculture",
     description: "Climate-smart agricultural practices",
     items: ["Climate-smart agriculture", "Agribusiness", "Agri-tech"],
-    icon: Wheat,
+    icon: FaSeedling,
     accentColor: "#66A02D", // climate-earth (earthy green)
   },
   {
     title: "Cross-Cutting",
     description: "Enabling ecosystem development",
     items: ["Policy", "Finance", "Innovation ecosystem"],
-    icon: Network,
+    icon: FaNetworkWired,
     accentColor: colors.primary.blue.DEFAULT,
   },
 ];

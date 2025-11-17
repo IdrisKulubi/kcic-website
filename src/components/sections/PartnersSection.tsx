@@ -128,7 +128,7 @@ export function PartnersSection({
 
         {/* Category Tabs */}
         <div className="mb-12">
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             {categories.map((category) => {
               const Icon = category.IconComponent;
               return (
@@ -136,13 +136,13 @@ export function PartnersSection({
                   key={category.value}
                   onClick={() => setActiveTab(category.value)}
                   className={cn(
-                    "px-6 py-2 rounded-full transition-all duration-200",
+                    "px-5 py-2.5 rounded-full transition-all duration-200 text-sm font-medium",
                     activeTab === category.value
-                      ? "bg-[#80c738] text-white shadow-sm"
+                      ? "bg-[#80c738] text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   )}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 whitespace-nowrap">
                     {Icon && <Icon className="h-4 w-4" />}
                     {category.label} ({category.count})
                   </span>

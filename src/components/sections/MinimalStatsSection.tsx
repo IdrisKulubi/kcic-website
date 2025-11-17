@@ -57,35 +57,38 @@ export function MinimalStatsSection({
     if (isDark) {
       return (
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
           aria-live="polite"
         >
           {data.map((stat, index) => (
-            <div key={index} className="space-y-2">
-              <p
-                className="text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-white/60"
-                style={{ fontFamily: typography.fonts.body }}
-              >
-                {stat.description}
-              </p>
+            <div key={index} className="space-y-3">
               <div className="flex items-baseline gap-2">
                 <span
                   ref={(el) => {
                     if (!isTargets) counterRefs.current[index] = el;
                   }}
-                  className="text-3xl sm:text-4xl font-bold text-[#FFC94A]"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FFC94A] block"
                   style={{
                     fontFamily: typography.fonts.heading,
-                    lineHeight: typography.lineHeights.tight,
+                    lineHeight: 1,
                     textShadow: '0 2px 6px rgba(0,0,0,0.35)',
                   }}
                 >
                   {stat.value}
                 </span>
               </div>
+              <p
+                className="text-sm sm:text-base font-medium text-white/90"
+                style={{ 
+                  fontFamily: typography.fonts.body,
+                  lineHeight: typography.lineHeights.snug,
+                }}
+              >
+                {stat.description}
+              </p>
               {stat.subdescription && (
                 <p
-                  className="text-sm text-white/75"
+                  className="text-xs sm:text-sm text-white/60"
                   style={{
                     fontFamily: typography.fonts.body,
                     lineHeight: typography.lineHeights.relaxed,
