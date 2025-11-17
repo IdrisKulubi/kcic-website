@@ -146,6 +146,7 @@ export default function HomePage({
     return () => ctx.revert();
   }, []);
 
+
   // Transform hero data from database or use translations as fallback
   const translatedHeroData = hero
     ? {
@@ -417,7 +418,10 @@ export default function HomePage({
               stats={thirteenYearsOnData}
               variant="dark"
               title="KCIC 13 Years On"
-              subtitle="Progress in Supporting Climate Innovation & Entrepreneurship across Africa"
+              subtitle="Progress in supporting climate innovation & entrepreneurship across Africa."
+              imageSrc="/images/kcicmap.png"
+              imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
+              imageSide="left"
             />
             <div className="border-t border-white/10">
               <AwardsSection />

@@ -2,6 +2,7 @@
 
 import React, { useLayoutEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -21,6 +22,10 @@ interface MinimalStatsSectionProps {
   variant?: 'light' | 'dark';
   title?: string;
   subtitle?: string;
+  /** Optional side image for layouts like KCIC 13 Years On */
+  imageSrc?: string;
+  imageAlt?: string;
+  imageSide?: 'left' | 'right';
 }
 
 export function MinimalStatsSection({ 
@@ -28,7 +33,10 @@ export function MinimalStatsSection({
   targets, 
   variant = 'light',
   title,
-  subtitle 
+  subtitle,
+  imageSrc,
+  imageAlt,
+  imageSide = 'left',
 }: MinimalStatsSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const counterRefs = useRef<(HTMLElement | null)[]>([]);
@@ -44,46 +52,88 @@ export function MinimalStatsSection({
 
   const renderStats = (data: StatItem[], isTargets: boolean = false) => {
     const isDark = variant === 'dark';
-    
+
+    // Modern minimal layout for dark variant (KCIC 13 Years On)
+    if (isDark) {
+      return (
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10"
+          aria-live="polite"
+        >
+          {data.map((stat, index) => (
+            <div key={index} className="space-y-2">
+              <p
+                className="text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-white/60"
+                style={{ fontFamily: typography.fonts.body }}
+              >
+                {stat.description}
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span
+                  ref={(el) => {
+                    if (!isTargets) counterRefs.current[index] = el;
+                  }}
+                  className="text-3xl sm:text-4xl font-bold text-[#FFC94A]"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    lineHeight: typography.lineHeights.tight,
+                    textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+                  }}
+                >
+                  {stat.value}
+                </span>
+              </div>
+              {stat.subdescription && (
+                <p
+                  className="text-sm text-white/75"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                    lineHeight: typography.lineHeights.relaxed,
+                  }}
+                >
+                  {stat.subdescription}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Original card layout for light variant (impact page etc.)
     return (
-      <div 
+      <div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
         aria-live="polite"
       >
         {data.map((stat, index) => (
-          <div 
+          <div
             key={index}
-            className={`relative p-6 rounded-2xl transition-all duration-300 ${
-              isDark 
-                ? 'bg-transparent border border-white/10 hover:border-white/20 hover:shadow-2xl' 
-                : 'bg-white shadow-sm border border-gray-100 hover:shadow-md'
-            }`}
+            className="relative p-6 rounded-2xl transition-all duration-300 bg-white shadow-sm border border-gray-100 hover:shadow-md"
           >
-            <h3 
+            <h3
               ref={(el) => {
                 if (!isTargets) counterRefs.current[index] = el;
               }}
               className="font-bold mb-2"
               style={{
-                fontSize: isDark ? '3.5rem' : 'clamp(2rem, 4vw, 2.6rem)',
+                fontSize: 'clamp(2rem, 4vw, 2.6rem)',
                 fontFamily: typography.fonts.heading,
                 lineHeight: typography.lineHeights.tight,
-                color: isDark ? '#FFA500' : colors.primary.green.DEFAULT,
-                textShadow: isDark ? '0 2px 4px rgba(0,0,0,0.3)' : '0 1px 0 rgba(0,0,0,0.03)'
+                color: colors.primary.green.DEFAULT,
+                textShadow: '0 1px 0 rgba(0,0,0,0.03)',
               }}
             >
               {stat.value}
             </h3>
-            <div 
-              className="h-1 w-10 rounded-full mb-3" 
-              style={{ 
-                background: isDark ? '#FFA500' : colors.primary.green.DEFAULT 
-              }} 
+            <div
+              className="h-1 w-10 rounded-full mb-3"
+              style={{ background: colors.primary.green.DEFAULT }}
             />
-            <p 
-              className={isDark ? 'text-white font-semibold' : 'text-gray-700'}
+            <p
+              className="text-gray-700"
               style={{
-                fontSize: isDark ? '1.125rem' : 'clamp(0.9rem, 1.5vw, 1rem)',
+                fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
               }}
@@ -91,8 +141,8 @@ export function MinimalStatsSection({
               {stat.description}
             </p>
             {stat.subdescription && (
-              <p 
-                className={isDark ? 'text-white/70 mt-2' : 'text-gray-500 mt-2'}
+              <p
+                className="text-gray-500 mt-2"
                 style={{
                   fontSize: '0.875rem',
                   fontFamily: typography.fonts.body,
@@ -192,36 +242,91 @@ export function MinimalStatsSection({
           </Tabs>
         ) : (
           <>
-            <div className="text-center mb-12">
-              <h2 
-                className="font-bold mb-4"
-                style={{
-                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                  fontFamily: typography.fonts.heading,
-                  color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
-                  lineHeight: typography.lineHeights.tight,
-                }}
-              >
-                {title || 'Our Impact'}
-              </h2>
-              {subtitle && (
-                <p 
-                  className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
-                  style={{
-                    fontSize: '1.25rem',
-                    fontFamily: typography.fonts.body,
-                    lineHeight: typography.lineHeights.relaxed,
-                  }}
-                >
-                  {subtitle}
-                </p>
-              )}
-              <div 
-                className="w-24 h-1 mx-auto rounded-full mt-4"
-                style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
-              />
-            </div>
-            {renderStats(stats, false)}
+            {imageSrc ? (
+              <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
+                {/* Image side */}
+                <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
+                  <div className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
+                    <Image
+                      src={imageSrc}
+                      alt={imageAlt || ''}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                      className="object-contain object-center"
+                      priority={variant === 'dark'}
+                    />
+                  </div>
+                </div>
+
+                {/* Stats side */}
+                <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
+                  <div className="mb-10 text-center lg:text-left">
+                    <h2 
+                      className="font-bold mb-4"
+                      style={{
+                        fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+                        fontFamily: typography.fonts.heading,
+                        color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
+                        lineHeight: typography.lineHeights.tight,
+                      }}
+                    >
+                      {title || 'Our Impact'}
+                    </h2>
+                    {subtitle && (
+                      <p 
+                        className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
+                        style={{
+                          fontSize: '1.1rem',
+                          fontFamily: typography.fonts.body,
+                          lineHeight: typography.lineHeights.relaxed,
+                        }}
+                      >
+                        {subtitle}
+                      </p>
+                    )}
+                    <div 
+                      className={`w-24 h-1 mt-5 rounded-full ${isDark ? '' : ''} ${imageSide === 'right' ? 'lg:ml-0 mx-auto' : 'lg:ml-0 mx-auto'}`}
+                      style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
+                    />
+                  </div>
+
+                  {renderStats(stats, false)}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mb-12">
+                  <h2 
+                    className="font-bold mb-4"
+                    style={{
+                      fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                      fontFamily: typography.fonts.heading,
+                      color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
+                      lineHeight: typography.lineHeights.tight,
+                    }}
+                  >
+                    {title || 'Our Impact'}
+                  </h2>
+                  {subtitle && (
+                    <p 
+                      className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
+                      style={{
+                        fontSize: '1.25rem',
+                        fontFamily: typography.fonts.body,
+                        lineHeight: typography.lineHeights.relaxed,
+                      }}
+                    >
+                      {subtitle}
+                    </p>
+                  )}
+                  <div 
+                    className="w-24 h-1 mx-auto rounded-full mt-4"
+                    style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
+                  />
+                </div>
+                {renderStats(stats, false)}
+              </>
+            )}
           </>
         )}
       </div>
