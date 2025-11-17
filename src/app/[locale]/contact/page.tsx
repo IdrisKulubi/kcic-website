@@ -1,4 +1,3 @@
-import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { Metadata } from "next";
 import { colors, typography } from "@/lib/design-system";
@@ -34,7 +33,7 @@ const contactInfo = [
       "Mon - Fri: 8:00 AM - 5:00 PM",
       "EAT (UTC+3)",
     ],
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
   {
   icon: FaEnvelope,
@@ -56,7 +55,7 @@ const contactInfo = [
       "East Africa Time (EAT)",
       "UTC+3",
     ],
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
 ];
 
@@ -135,7 +134,7 @@ export default function ContactPage() {
                       <h3
                         className="font-semibold mb-3"
                         style={{
-                          fontSize: typography.sizes.heading.h4,
+                          fontSize: typography.sizes.heading.h4[0],
                           fontFamily: typography.fonts.heading,
                           color: colors.secondary.gray[900],
                         }}
@@ -149,7 +148,7 @@ export default function ContactPage() {
                             style={{
                               fontFamily: typography.fonts.body,
                               color: colors.secondary.gray[600],
-                              fontSize: typography.sizes.body.sm,
+                              fontSize: typography.sizes.body.sm[0],
                             }}
                           >
                             {detail}
@@ -172,7 +171,7 @@ export default function ContactPage() {
             <h2
               className="font-bold mb-4"
               style={{
-                fontSize: typography.sizes.heading.h2,
+                fontSize: typography.sizes.heading.h2[0],
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
               }}

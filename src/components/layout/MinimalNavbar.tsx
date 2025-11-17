@@ -157,7 +157,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                     }`}
                     style={{
                       fontFamily: typography.fonts.body,
-                      fontSize: typography.sizes.body.base,
+                      fontSize: typography.sizes.body.base[0],
                     }}
                     aria-expanded={item.subItems ? activeDropdown === item.label : undefined}
                     aria-controls={item.subItems ? `dropdown-${item.label}` : undefined}
@@ -336,7 +336,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                               style={{
                                 fontFamily: typography.fonts.body,
                                 color: colors.secondary.gray[700],
-                                fontSize: typography.sizes.body.lg,
+                                fontSize: typography.sizes.body.lg[0],
                               }}
                               aria-expanded={expandedMobileItem === item.label}
                               aria-controls={`mobile-submenu-${item.label}`}
@@ -391,7 +391,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                             style={{
                               fontFamily: typography.fonts.body,
                               color: colors.secondary.gray[700],
-                              fontSize: typography.sizes.body.lg,
+                              fontSize: typography.sizes.body.lg[0],
                             }}
                             onClick={() => setIsMobileMenuOpen(false)}
                           >

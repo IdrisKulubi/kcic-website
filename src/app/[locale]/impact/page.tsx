@@ -1,4 +1,3 @@
-import React from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { Metadata } from "next";
@@ -72,7 +71,7 @@ const impactAreas = [
       { value: "60%", label: "Women Entrepreneurs" },
       { value: "25", label: "Counties Reached" },
     ],
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
   {
     icon: DollarSign,
@@ -92,7 +91,7 @@ const impactAreas = [
       { value: "15+", label: "Sectors Covered" },
       { value: "95%", label: "Success Rate" },
     ],
-    color: colors.primary.cyan.DEFAULT,
+    color: colors.primary.blue.DEFAULT,
   },
 ];
 
@@ -163,7 +162,7 @@ export default function ImpactPage() {
           <h2
             className="text-center font-bold mb-16"
             style={{
-              fontSize: typography.sizes.heading.h2,
+              fontSize: typography.sizes.heading.h2[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}
@@ -184,7 +183,7 @@ export default function ImpactPage() {
                     <h3
                       className="font-bold"
                       style={{
-                        fontSize: typography.sizes.heading.h3,
+                        fontSize: typography.sizes.heading.h3[0],
                         fontFamily: typography.fonts.heading,
                         color: colors.secondary.gray[900],
                       }}
@@ -230,7 +229,7 @@ export default function ImpactPage() {
           <h2
             className="text-center font-bold mb-16"
             style={{
-              fontSize: typography.sizes.heading.h2,
+              fontSize: typography.sizes.heading.h2[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}
@@ -244,7 +243,7 @@ export default function ImpactPage() {
                 <h3
                   className="font-bold mb-2"
                   style={{
-                    fontSize: typography.sizes.heading.h4,
+                    fontSize: typography.sizes.heading.h4[0],
                     fontFamily: typography.fonts.heading,
                     color: colors.secondary.gray[900],
                   }}
@@ -294,7 +293,7 @@ export default function ImpactPage() {
           <h2
             className="font-bold mb-8"
             style={{
-              fontSize: typography.sizes.heading.h2,
+              fontSize: typography.sizes.heading.h2[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}

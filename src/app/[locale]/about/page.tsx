@@ -61,7 +61,7 @@ export default function AboutPage() {
               <h3
                 className="font-bold mb-4"
                 style={{
-                  fontSize: typography.sizes.heading.h3,
+                  fontSize: typography.sizes.heading.h3[0],
                   fontFamily: typography.fonts.heading,
                   color: colors.secondary.gray[900],
                 }}
@@ -85,13 +85,13 @@ export default function AboutPage() {
               <div className="mb-6">
                 <Users
                   className="h-16 w-16 mx-auto"
-                  style={{ color: colors.primary.cyan.DEFAULT }}
+                  style={{ color: colors.primary.blue.DEFAULT }}
                 />
               </div>
               <h3
                 className="font-bold mb-4"
                 style={{
-                  fontSize: typography.sizes.heading.h3,
+                  fontSize: typography.sizes.heading.h3[0],
                   fontFamily: typography.fonts.heading,
                   color: colors.secondary.gray[900],
                 }}
@@ -121,7 +121,7 @@ export default function AboutPage() {
               <h3
                 className="font-bold mb-4"
                 style={{
-                  fontSize: typography.sizes.heading.h3,
+                  fontSize: typography.sizes.heading.h3[0],
                   fontFamily: typography.fonts.heading,
                   color: colors.secondary.gray[900],
                 }}
@@ -149,7 +149,7 @@ export default function AboutPage() {
           <h2
             className="font-bold mb-12"
             style={{
-              fontSize: typography.sizes.heading.h2,
+              fontSize: typography.sizes.heading.h2[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}

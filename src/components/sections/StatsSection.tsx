@@ -91,7 +91,7 @@ export function StatsSection({ stats, className }: StatsSectionProps) {
         animate={{
           background: [
             `radial-gradient(circle at 30% 50%, ${designSystem.colors.primary.green[200]} 0%, transparent 60%)`,
-            `radial-gradient(circle at 70% 50%, ${designSystem.colors.primary.cyan[200]} 0%, transparent 60%)`,
+            `radial-gradient(circle at 70% 50%, ${designSystem.colors.primary.blue[200]} 0%, transparent 60%)`,
             `radial-gradient(circle at 30% 50%, ${designSystem.colors.primary.green[200]} 0%, transparent 60%)`,
           ],
         }}

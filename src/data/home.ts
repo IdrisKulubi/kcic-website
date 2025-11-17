@@ -247,7 +247,7 @@ export const homePageData: HomePageData = {
       { platform: "YouTube", href: "https://www.youtube.com/@KenyaClimateInnovationCenter", icon: "youtube" }
     ],
     contact: {
-      address: "Kenya Climate Innovation Centre, University of Nairobi, Nairobi, Kenya",
+      address: "Kenya Climate Innovation Centre, Strathmore University Campus, Ole Sangale Rd, Nairobi, Kenya",
       phone: "+254 703 034701",
       email: "info@kenyacic.org"
     },

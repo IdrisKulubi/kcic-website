@@ -487,7 +487,7 @@ export default function PressReleasePage() {
                 <div className="space-y-2 text-left">
                   <p className="text-gray-700">Phone: +254-20-123-4567</p>
                   <p className="text-gray-700">Email: media@kenyacic.org</p>
-                  <p className="text-gray-700">Address: University of Nairobi, Nairobi, Kenya</p>
+                  <p className="text-gray-700">Address: Strathmore University Campus, Ole Sangale Rd, Nairobi, Kenya</p>
                 </div>
                 <button className="w-full mt-6 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200">
                   Send Media Inquiry

@@ -85,11 +85,13 @@ function BalloonsLayer() {
 
   const balloons = useMemo(() => {
     // Pre-generate random positions/colors to avoid hydration mismatch
+    // Use Math.random() with a seed-like approach for consistency
     return Array.from({ length: 28 }).map((_, i) => {
-      const left = Math.round(Math.random() * 100);
-      const size = Math.round(gsap.utils.random(36, 96));
-      const hue = gsap.utils.random(85, 195); // green→cyan hues
-      const alpha = gsap.utils.random(0.25, 0.55);
+      const seed = i * 0.123456; // Pseudo-seed for deterministic values
+      const left = Math.round(((Math.sin(seed * 1.1) + 1) / 2) * 100);
+      const size = Math.round(36 + ((Math.sin(seed * 2.3) + 1) / 2) * 60);
+      const hue = 85 + ((Math.sin(seed * 3.7) + 1) / 2) * 110; // green→cyan hues
+      const alpha = 0.25 + ((Math.sin(seed * 4.9) + 1) / 2) * 0.3;
       return { id: i, left, size, hue, alpha };
     });
   }, []);
@@ -359,8 +361,8 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
         aria-hidden
         style={{
           background:
-            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green[50]} 0%, transparent 60%),` +
-            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.cyan[50]} 0%, transparent 60%)`,
+            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green['50']} 0%, transparent 60%),` +
+            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.blue['50']} 0%, transparent 60%)`,
         }}
       />
 

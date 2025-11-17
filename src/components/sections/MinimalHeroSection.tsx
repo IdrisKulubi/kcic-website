@@ -110,8 +110,8 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
                       fontFamily: typography.fonts.body,
                     }
                   : {
-                      borderColor: colors.primary.cyan.DEFAULT,
-                      color: colors.primary.cyan.DEFAULT,
+                      borderColor: colors.primary.blue.DEFAULT,
+                      color: colors.primary.blue.DEFAULT,
                       fontFamily: typography.fonts.body,
                       backgroundColor: 'transparent',
                     }

@@ -110,7 +110,7 @@ export default function ApplyPage() {
             <h2 
               className="font-bold mb-8"
               style={{
-                fontSize: typography.sizes.heading.h2,
+                fontSize: typography.sizes.heading.h2[0],
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
               }}
@@ -339,7 +339,7 @@ export default function ApplyPage() {
           <h2 
             className="font-bold mb-6"
             style={{
-              fontSize: typography.sizes.heading.h3,
+              fontSize: typography.sizes.heading.h3[0],
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
             }}
@@ -376,8 +376,8 @@ export default function ApplyPage() {
               variant="outline"
               className="py-3 rounded-lg font-semibold"
               style={{
-                borderColor: colors.primary.cyan.DEFAULT,
-                color: colors.primary.cyan.DEFAULT,
+                borderColor: colors.primary.blue.DEFAULT,
+                color: colors.primary.blue.DEFAULT,
               }}
               asChild
             >
@@ -394,7 +394,7 @@ export default function ApplyPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600 text-sm">
-              © 2024 Kenya Climate Innovation Centre. All rights reserved.
+              © 2025 Kenya Climate Innovation Centre. All rights reserved.
             </p>
           </div>
         </div>

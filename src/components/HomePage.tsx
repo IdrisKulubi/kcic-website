@@ -23,8 +23,13 @@ import type {
   FooterLinkData,
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
-import { CinematicVideoSection } from "./sections/CinematicVideoSection";
-import CEOQuoteSection from "./sections/CEOQuoteSection";
+import ClimateChallenge from "./sections/ClimateChallenge";
+import HistoryTimeline from "./sections/HistoryTimeline";
+import FoundingBeliefs from "./sections/FoundingBeliefs";
+import WhatWeDo from "./sections/WhatWeDo";
+import HowWeDoIt from "./sections/HowWeDoIt";
+import KeySectors from "./sections/KeySectors";
+import ProgramsShowcase from "./sections/ProgramsShowcase";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -45,6 +50,49 @@ const targetsData = [
   {
     value: "67,500+",
     description: "Customers reached by supported enterprises.",
+  },
+];
+
+// 13 Years On Impact Data (static for now)
+const thirteenYearsOnData = [
+  {
+    value: "57,517",
+    description: "Jobs Created",
+    subdescription: "56% women owned",
+  },
+  {
+    value: "3,500+",
+    description: "SMEs Supported",
+    subdescription: "2,730 incubated/accelerated",
+  },
+  {
+    value: "$63M",
+    description: "Leveraged",
+    subdescription: "For supported enterprises",
+  },
+  {
+    value: "73",
+    description: "Policy Initiatives",
+    subdescription: "Legislative reforms & advocacy",
+  },
+  {
+    value: "507,149",
+    description: "Tonnes CO2 Mitigated",
+  },
+  {
+    value: "67%",
+    description: "Commercialization Rate",
+    subdescription: "For incubated enterprises",
+  },
+  {
+    value: "$85M",
+    description: "Revenue Generated",
+    subdescription: "By supported enterprises",
+  },
+  {
+    value: "3",
+    description: "Awards",
+    subdescription: "Recent recognition (2024/2025)",
   },
 ];
 
@@ -96,6 +144,7 @@ export default function HomePage({
     });
     return () => ctx.revert();
   }, []);
+
 
   // Transform hero data from database or use translations as fallback
   const translatedHeroData = hero
@@ -333,35 +382,61 @@ export default function HomePage({
         {/* Hero Section - modern slideshow */}
         <HeroCarousel data={translatedHeroData} images={heroImages} />
 
-        {/* Stats Section */}
-        <MinimalStatsSection
-          stats={translatedStatsData}
-          targets={targetsData}
-        />
+        {/* Main Content Sections with proper spacing */}
+        <div className="space-y-0">
+          {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
+          <div className="bg-white">
+            <ClimateChallenge />
+            <div className="border-t border-gray-100">
+              <HistoryTimeline />
+            </div>
+            <div className="border-t border-gray-100">
+              <FoundingBeliefs />
+            </div>
+          </div>
 
-        {/* Awards & Recognition (below stats) */}
-        <AwardsSection />
+          {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
+          <div className="bg-gradient-to-b from-gray-50 to-white py-20 sm:py-32">
+            <WhatWeDo />
+            <div className="mt-16">
+              <HowWeDoIt />
+            </div>
+          </div>
 
-        {/* Cinematic Video Section (appears after targets) */}
-        <CinematicVideoSection
-          // Embed URL with start at 3s, modest branding, and playsinline
-          embedUrl="https://www.youtube.com/embed/6Yqz6Gh4lww?start=3&rel=0&modestbranding=1&playsinline=1"
-          title="Featured Video"
-          subtitle="KCIC Strategy 4.0 :The Next Frontier"
-        />
+          {/* SECTION 3: Focus Areas & Programs - Combined */}
+          <div className="bg-white py-20 sm:py-32">
+            <KeySectors />
+            <div className="mt-20">
+              <ProgramsShowcase />
+            </div>
+          </div>
 
-        {/* CEO Quote Section (below video) */}
-        <CEOQuoteSection
-          imageSrc="/images/ceo.jpg"
-          name="Joseph Murabula"
-          title="CEO, KCIC"
-        />
+          {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+            <MinimalStatsSection
+              stats={thirteenYearsOnData}
+              variant="dark"
+              title="KCIC 13 Years On"
+              subtitle="Progress in supporting climate innovation & entrepreneurship across Africa."
+              imageSrc="/images/kcicmap.png"
+              imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
+              imageSide="left"
+            />
+            <div className="border-t border-white/10">
+              <AwardsSection />
+            </div>
+          </div>
 
-        {/* News Section */}
-        <NewsSection news={newsItems} />
+          {/* SECTION 5: News */}
+          <div className="bg-gray-50 py-20 sm:py-32">
+            <NewsSection news={newsItems} />
+          </div>
 
-        {/* Partners Section */}
-        <PartnersSection partners={partnersDataTransformed} />
+          {/* SECTION 6: Partners */}
+          <div className="bg-white">
+            <PartnersSection partners={partnersDataTransformed} />
+          </div>
+        </div>
 
         {/* Footer */}
         <Footer data={footerData} />

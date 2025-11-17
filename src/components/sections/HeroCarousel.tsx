@@ -141,7 +141,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
           <h1
             className={`font-bold mb-6 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700")}`}
             style={{
-              fontSize: typography.sizes.display.xl,
+              fontSize: typography.sizes.display.xl[0],
               fontFamily: typography.fonts.heading,
               lineHeight: typography.lineHeights.tight,
               letterSpacing: typography.letterSpacing.tight,
@@ -155,7 +155,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
           <p
             className={`mx-auto max-w-2xl text-white/90 mb-8 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300")}`}
             style={{
-              fontSize: typography.sizes.body.lg,
+              fontSize: typography.sizes.body.lg[0],
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
               color: colors.primary.green.DEFAULT,
@@ -185,8 +185,8 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                         fontFamily: typography.fonts.body,
                       }
                     : {
-                        borderColor: colors.primary.cyan.DEFAULT,
-                        color: colors.primary.cyan.DEFAULT,
+                        borderColor: colors.primary.blue.DEFAULT,
+                        color: colors.primary.blue.DEFAULT,
                         fontFamily: typography.fonts.body,
                         backgroundColor: "transparent",
                       }
