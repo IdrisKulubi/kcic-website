@@ -60,13 +60,11 @@ export const navData = {
           description: "Key climate sectors we support and develop",
           icon: "Target",
         },
-        {
-          label: "Our Programmes",
-          href: "/how-we-work/programmes",
-          description: "Comprehensive programs for climate entrepreneurs",
-          icon: "Lightbulb",
-        },
       ],
+    },
+    {
+      label: "Our Programmes",
+      href: "/how-we-work/programmes",
     },
     {
       label: "Impact",

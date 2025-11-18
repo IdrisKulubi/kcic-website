@@ -139,7 +139,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
       <div className="relative z-10 w-full">
         <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-6xl text-center">
           <h1
-            className={`font-bold mb-6 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700")}`}
+            className={`font-bold mb-4 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700")}`}
             style={{
               fontSize: typography.sizes.display.xl[0],
               fontFamily: typography.fonts.heading,
@@ -152,17 +152,19 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
             {data.title}
           </h1>
 
-          <p
-            className={`mx-auto max-w-2xl text-white/90 mb-8 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300")}`}
+          <h2
+            className={`mx-auto max-w-3xl font-semibold mb-8 ${getMotionSafeClasses("animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300")}`}
             style={{
-              fontSize: typography.sizes.body.lg[0],
-              fontFamily: typography.fonts.body,
-              lineHeight: typography.lineHeights.relaxed,
+              fontSize: typography.sizes.heading.h2[0],
+              fontFamily: typography.fonts.heading,
+              lineHeight: typography.lineHeights.snug,
+              letterSpacing: typography.letterSpacing.tight,
               color: colors.primary.green.DEFAULT,
+              textShadow: "0 1px 10px rgba(0,0,0,0.25)",
             }}
           >
             {data.description}
-          </p>
+          </h2>
 
           {/* CTA Buttons */}
           <div
