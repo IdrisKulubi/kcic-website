@@ -53,11 +53,14 @@ export function MinimalStatsSection({
   const renderStats = (data: StatItem[], isTargets: boolean = false) => {
     const isDark = variant === 'dark';
 
-    // Modern minimal layout for dark variant (KCIC 13 Years On)
+    // Modern minimal layout for "dark" variant (KCIC 13 Years On)
+    // NOTE: This layout is used on a light background on the homepage,
+    // so we use dark text colors in light mode and switch to light text
+    // only when the overall page is in dark mode.
     if (isDark) {
       return (
         <div
-          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
+          className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:gap-x-10 lg:gap-y-14"
           aria-live="polite"
         >
           {data.map((stat, index) => (
@@ -67,18 +70,18 @@ export function MinimalStatsSection({
                   ref={(el) => {
                     if (!isTargets) counterRefs.current[index] = el;
                   }}
-                  className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FFC94A] block"
+                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-climate-green dark:text-[#FFC94A] block"
                   style={{
                     fontFamily: typography.fonts.heading,
-                    lineHeight: 1,
-                    textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+                    lineHeight: 1.1,
+                    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
                   }}
                 >
                   {stat.value}
                 </span>
               </div>
               <p
-                className="text-sm sm:text-base font-medium text-white/90"
+                className="text-sm sm:text-base font-medium text-gray-800 dark:text-white/90"
                 style={{ 
                   fontFamily: typography.fonts.body,
                   lineHeight: typography.lineHeights.snug,
@@ -88,7 +91,7 @@ export function MinimalStatsSection({
               </p>
               {stat.subdescription && (
                 <p
-                  className="text-xs sm:text-sm text-white/60"
+                  className="text-xs sm:text-sm text-gray-600 dark:text-white/60"
                   style={{
                     fontFamily: typography.fonts.body,
                     lineHeight: typography.lineHeights.relaxed,
@@ -162,85 +165,123 @@ export function MinimalStatsSection({
   };
 
   const isDark = variant === 'dark';
-  const sectionBg = isDark 
-    ? 'linear-gradient(135deg, #0B0F0A, #0E1410)' 
-    : 'transparent';
 
   return (
     <section 
       id="impact-section"
       ref={sectionRef}
-      className={`py-20 sm:py-32 ${isDark ? 'w-full' : ''}`}
-      style={{
-        background: sectionBg,
-      }}
+      className={`py-20 sm:py-32 relative`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 
+            className="font-bold mb-4"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontFamily: typography.fonts.heading,
+              color: colors.secondary.gray[900],
+              lineHeight: typography.lineHeights.tight,
+            }}
+          >
+            {title || 'Our Impact'}
+          </h2>
+          {subtitle && (
+            <p 
+              className="mt-4 text-gray-600"
+              style={{
+                fontSize: '1.25rem',
+                fontFamily: typography.fonts.body,
+                lineHeight: typography.lineHeights.relaxed,
+              }}
+            >
+              {subtitle}
+            </p>
+          )}
+          <div 
+            className="w-24 h-1 mx-auto rounded-full mt-4"
+            style={{ background: colors.primary.green.DEFAULT }}
+          />
+        </div>
+
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
-            <div className="flex flex-col items-center mb-16">
-              <TabsList className={`shadow-sm rounded-full p-1 ${
-                isDark ? 'bg-white/10' : 'bg-white'
-              }`}>
+            <div className="flex flex-col items-center mb-12">
+              <TabsList className="shadow-sm rounded-full p-1.5 bg-white/90 dark:bg-white/10 backdrop-blur">
                 <TabsTrigger 
                   value="impact"
-                  className={`text-lg font-semibold px-6 py-2 rounded-full transition-all ${
+                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${
                     isDark 
-                      ? 'data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70' 
+                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white' 
                       : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
                   }`}
                   style={{ fontFamily: typography.fonts.heading }}
                 >
-                  Impact
+                  <span className="flex flex-col items-center">
+                    <span>2010 - Today</span>
+                    <span className="text-xs font-normal opacity-75">13 Years of Impact</span>
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="targets"
-                  className={`text-lg font-semibold px-6 py-2 rounded-full transition-all ${
+                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${
                     isDark 
-                      ? 'data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70' 
+                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white' 
                       : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
                   }`}
                   style={{ fontFamily: typography.fonts.heading }}
                 >
-                  Our Targets
+                  <span className="flex flex-col items-center">
+                    <span>2025 - 2030</span>
+                    <span className="text-xs font-normal opacity-75">Our Targets</span>
+                  </span>
                 </TabsTrigger>
               </TabsList>
-              <div 
-                className={`mt-4 text-sm ${isDark ? 'text-white/60' : 'text-gray-500'}`}
-                style={{ fontFamily: typography.fonts.body }}
-              >
-                (2025-2030)
-              </div>
             </div>
 
-            <TabsContent value="impact" className="mt-0">
-              {renderStats(stats, false)}
-            </TabsContent>
-            
-            <TabsContent value="targets" className="mt-0">
-              {renderStats(targets, true)}
-            </TabsContent>
+            {imageSrc ? (
+              <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
+                {/* Image side - stays the same */}
+                <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
+                  <div className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
+                    <Image
+                      src={imageSrc}
+                      alt={imageAlt || ''}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                      className="object-contain object-center"
+                      priority={variant === 'dark'}
+                    />
+                  </div>
+                </div>
+
+                {/* Stats side - switches between impact and targets */}
+                <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
+                  <TabsContent value="impact" className="mt-0">
+                    {renderStats(stats, false)}
+                  </TabsContent>
+                  
+                  <TabsContent value="targets" className="mt-0">
+                    {renderStats(targets, true)}
+                  </TabsContent>
+                </div>
+              </div>
+            ) : (
+              <>
+                <TabsContent value="impact" className="mt-0">
+                  {renderStats(stats, false)}
+                </TabsContent>
+                
+                <TabsContent value="targets" className="mt-0">
+                  {renderStats(targets, true)}
+                </TabsContent>
+              </>
+            )}
 
             <div className={`mt-16 pt-12 ${
               isDark ? 'border-t border-white/10' : 'border-t border-gray-200'
             }`}>
-              <div className="flex justify-center">
-                <Button 
-                  variant="outline"
-                  className={`rounded-full px-8 py-3 transition-all duration-300 ${
-                    isDark 
-                      ? 'border-white/30 text-white hover:bg-white/10' 
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                  style={{ fontFamily: typography.fonts.body }}
-                  asChild
-                >
-                  <Link href="/impact">
-                    Learn More
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Link>
-                </Button>
-              </div>
+             
             </div>
           </Tabs>
         ) : (

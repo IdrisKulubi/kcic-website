@@ -33,23 +33,45 @@ import ProgramsShowcase from "./sections/ProgramsShowcase";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Targets data for 2025 (static for now)
+// Vision 2030 Targets (2025-2030)
 const targetsData = [
   {
     value: "12,000+",
-    description: "SMEs to be supported in our next phase of growth.",
+    description: "Enterprises Supported",
+    subdescription: "Across Africa",
   },
   {
-    value: "$33M+",
-    description: "To be mobilized to scale climate solutions.",
+    value: "$33M",
+    description: "Leveraged",
+    subdescription: "To support enterprises",
   },
   {
-    value: "100,000+",
-    description: "New green jobs to be created across the region.",
+    value: "80%",
+    description: "Commercialization Rate",
+    subdescription: "Of supported enterprises",
   },
   {
-    value: "67,500+",
-    description: "Customers reached by supported enterprises.",
+    value: "$55M",
+    description: "Mobilized",
+    subdescription: "In climate finance across Africa",
+  },
+  {
+    value: "100,000",
+    description: "Green Jobs Created",
+  },
+  {
+    value: "1.2M",
+    description: "Tonnes CO2 Mitigated",
+  },
+  {
+    value: "67,500",
+    description: "Customers Reached",
+    subdescription: "By supported enterprises",
+  },
+  {
+    value: "60",
+    description: "New Collaborations",
+    subdescription: "Established",
   },
 ];
 
@@ -412,17 +434,19 @@ export default function HomePage({
           </div>
 
           {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
-          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+          <div className="relative">
             <MinimalStatsSection
               stats={thirteenYearsOnData}
+              targets={targetsData}
               variant="dark"
-              title="KCIC 13 Years On"
-              subtitle="Progress in supporting climate innovation & entrepreneurship across Africa."
+              title="Our Impact Journey"
+              subtitle="From 13 years of achievements to our ambitious 2030 vision"
               imageSrc="/images/KCIC-Map.png"
               imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
               imageSide="left"
+              showToggle={true}
             />
-            <div className="border-t border-white/10">
+            <div className="border-t border-white/10 relative">
               <AwardsSection />
             </div>
           </div>

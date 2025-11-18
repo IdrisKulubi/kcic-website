@@ -42,7 +42,7 @@ const CATEGORY_CONFIG: Record<string, { icon: LucideIcon; label: string }> = {
 
 export function PartnersSection({
   partners,
-  title = "Partners & Donors",
+  title = "Our Partners",
   subtitle = "Collaborating with world-class organizations to accelerate climate innovation",
 }: PartnersSectionProps) {
   const [activeTab, setActiveTab] = useState<string>("all");

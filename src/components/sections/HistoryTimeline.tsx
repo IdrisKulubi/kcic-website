@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { Calendar, Globe, Rocket, TrendingUp } from "lucide-react";
+import { FaCalendar, FaGlobe, FaRocket, FaChartLine } from "react-icons/fa6";
 
 interface TimelineEvent {
   year: number;
@@ -23,25 +23,25 @@ const timelineEvents: TimelineEvent[] = [
     year: 2010,
     title: "Concept Development",
     description: "Concept developed by infoDev, UNIDO, and DFID to support climate innovation in Kenya",
-    icon: Calendar,
+    icon: FaCalendar,
   },
   {
     year: 2012,
     title: "First CIC Established",
     description: "First Climate Innovation Centre established by World Bank InfoDev program",
-    icon: Rocket,
+    icon: FaRocket,
   },
   {
     year: 2015,
     title: "Independent Operation",
     description: "KCIC begins independent operation, expanding services and impact",
-    icon: TrendingUp,
+    icon: FaChartLine,
   },
   {
     year: 2024,
     title: "Regional Presence",
     description: "Established regional presence across Kenya, Uganda, and Tanzania",
-    icon: Globe,
+    icon: FaGlobe,
   },
 ];
 
