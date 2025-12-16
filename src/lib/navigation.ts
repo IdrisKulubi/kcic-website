@@ -66,24 +66,7 @@ export const navData = {
       label: "Our Programmes",
       href: "/how-we-work/programmes",
     },
-    {
-      label: "Impact",
-      href: "/impact",
-      subItems: [
-        {
-          label: "Stories",
-          href: "/impact/stories",
-          description: "Success stories from our supported ventures",
-          icon: "BookOpen",
-        },
-        {
-          label: "Our Impact",
-          href: "/impact/our-impact",
-          description: "Measurable outcomes and achievements",
-          icon: "TrendingUp",
-        },
-      ],
-    },
+   
     // {
     //   label: "Newsroom",
     //   href: "/newsroom",

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { colors, typography } from "@/lib/design-system";
 import { Button } from "@/components/ui/button";
 import { navData } from "@/lib/navigation";
-import { ArrowRight, Target, Users, Globe } from "lucide-react";
+import { ArrowRight, Target, UsersThree, Planet } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -48,93 +48,57 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="mb-6">
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Mission Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
                 <Target
-                  className="h-16 w-16 mx-auto"
-                  style={{ color: colors.primary.green.DEFAULT }}
+                  className="h-10 w-10 text-climate-green"
+                  weight="duotone"
                 />
               </div>
-              <h3
-                className="font-bold mb-4"
-                style={{
-                  fontSize: typography.sizes.heading.h3[0],
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                }}
-              >
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
                 Our Mission
               </h3>
-              <p
-                style={{
-                  fontFamily: typography.fonts.body,
-                  color: colors.secondary.gray[600],
-                  lineHeight: typography.lineHeights.relaxed,
-                }}
-              >
+              <p className="text-gray-600 leading-relaxed text-lg">
                 To accelerate green growth by supporting climate entrepreneurs
                 and innovative solutions that create lasting environmental
                 impact.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="mb-6">
-                <Users
-                  className="h-16 w-16 mx-auto"
-                  style={{ color: colors.primary.blue.DEFAULT }}
+            {/* Approach Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+                <UsersThree
+                  className="h-10 w-10 text-climate-blue"
+                  weight="duotone"
                 />
               </div>
-              <h3
-                className="font-bold mb-4"
-                style={{
-                  fontSize: typography.sizes.heading.h3[0],
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                }}
-              >
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
                 Our Approach
               </h3>
-              <p
-                style={{
-                  fontFamily: typography.fonts.body,
-                  color: colors.secondary.gray[600],
-                  lineHeight: typography.lineHeights.relaxed,
-                }}
-              >
+              <p className="text-gray-600 leading-relaxed text-lg">
                 We provide comprehensive support including funding, mentorship,
                 and market access to help climate innovations scale
                 successfully.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="mb-6">
-                <Globe
-                  className="h-16 w-16 mx-auto"
-                  style={{ color: colors.primary.green.DEFAULT }}
+            {/* Impact Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+                <Planet
+                  className="h-10 w-10 text-climate-green-dark"
+                  weight="duotone"
                 />
               </div>
-              <h3
-                className="font-bold mb-4"
-                style={{
-                  fontSize: typography.sizes.heading.h3[0],
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                }}
-              >
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
                 Our Impact
               </h3>
-              <p
-                style={{
-                  fontFamily: typography.fonts.body,
-                  color: colors.secondary.gray[600],
-                  lineHeight: typography.lineHeights.relaxed,
-                }}
-              >
+              <p className="text-gray-600 leading-relaxed text-lg">
                 Supporting 450+ SMEs, mobilizing $25M+ in investment, and
                 creating 2,500+ jobs across the climate sector.
               </p>
@@ -190,7 +154,7 @@ export default function AboutPage() {
             <Button
               className="px-8 py-4 rounded-full font-semibold"
               style={{
-                background: colors.gradients.primary,
+                background: colors.primary.green.DEFAULT,
                 color: "white",
                 fontFamily: typography.fonts.body,
                 border: "none",

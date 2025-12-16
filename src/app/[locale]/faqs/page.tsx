@@ -163,11 +163,10 @@ export default function FAQsPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    selectedCategory === category
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${selectedCategory === category
                       ? 'bg-green-600 text-white shadow-md'
                       : 'bg-white text-gray-700 border border-gray-300 hover:border-green-300 hover:text-green-600'
-                  }`}
+                    }`}
                 >
                   {category}
                 </button>
@@ -195,15 +194,15 @@ export default function FAQsPage() {
                 transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
                 className="mb-12"
               >
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
                   {category.category}
                 </h2>
-                
+
                 <div className="space-y-4">
                   {category.questions.map((faq, index) => {
                     const itemId = `${category.category}-${index}`;
                     const isOpen = openItems.includes(itemId);
-                    
+
                     return (
                       <motion.div
                         key={index}
@@ -217,7 +216,7 @@ export default function FAQsPage() {
                           className="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset rounded-lg"
                           aria-expanded={isOpen}
                         >
-                          <span className="font-semibold text-gray-900 text-lg pr-4">
+                          <span className="font-medium text-gray-900 text-sm pr-4">
                             {faq.question}
                           </span>
                           <motion.div
@@ -232,7 +231,7 @@ export default function FAQsPage() {
                             )}
                           </motion.div>
                         </button>
-                        
+
                         <AnimatePresence>
                           {isOpen && (
                             <motion.div
@@ -242,7 +241,7 @@ export default function FAQsPage() {
                               transition={{ duration: 0.3, ease: 'easeInOut' }}
                               className="overflow-hidden"
                             >
-                              <div className="px-6 pb-4 text-gray-700 leading-relaxed">
+                              <div className="px-6 pb-4 text-gray-600 text-sm leading-relaxed">
                                 {faq.answer}
                               </div>
                             </motion.div>
@@ -263,13 +262,13 @@ export default function FAQsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-16 text-center bg-green-50 rounded-2xl p-8"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Still have questions?</h3>
-            <p className="text-lg text-gray-600 mb-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Still have questions?</h3>
+            <p className="text-sm text-gray-600 mb-4">
               Can&apos;t find the answer you&apos;re looking for? Our team is here to help.
             </p>
             <Link
               href="/about/contact-us"
-              className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
+              className="inline-flex items-center px-5 py-2.5 text-sm bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200"
             >
               Contact Us
             </Link>

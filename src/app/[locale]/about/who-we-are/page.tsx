@@ -121,28 +121,29 @@ export default function WhoWeArePage() {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {values.map((value, index) => (
                 <motion.div
                   key={value.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+                  className="bg-white rounded-2xl p-8 border border-gray-100/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="flex items-center mb-4">
-                   
-                    <h3 className="text-xl font-semibold text-gray-900">{value.title}</h3>
+                  <div className="flex flex-col h-full justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3 tracking-tight">{value.title}</h3>
+                      <p className="text-gray-500 leading-relaxed text-sm">{value.description}</p>
+                    </div>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </div>
 
-       
+
       </div>
     </PageLayout>
   );
