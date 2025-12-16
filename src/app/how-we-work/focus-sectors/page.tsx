@@ -1,304 +1,272 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sun,
-  Droplets,
-  Leaf,
-  Recycle,
-  Zap,
-  Car,
-  ArrowRight,
-} from "lucide-react";
+  SunIcon,
+  DropIcon,
+  PlantIcon,
+  RecycleIcon,
+  TreeIcon,
+  ArrowRightIcon,
+  CheckCircleIcon,
+  LightbulbIcon,
+  CarIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
+// Updated Data based on the provided image
 const focusSectors = [
   {
     id: 1,
     name: "Renewable Energy",
-    icon: Sun,
+    icon: SunIcon,
     description:
-      "Supporting clean energy solutions including solar, wind, hydro, and biomass technologies to power Kenya's sustainable future.",
-    color: "yellow",
+      "Powering the future through clean, sustainable energy solutions and efficiency.",
+    color: "amber", // Orange/Yellow
+    gradient: "from-amber-400 to-orange-600",
+    bgLight: "bg-amber-50",
+    textLight: "text-amber-600",
+    borderLight: "border-amber-200",
     keyAreas: [
-      "Solar Home Systems",
-      "Mini-grid Development",
-      "Wind Energy Solutions",
-      "Biomass & Biogas",
-      "Energy Storage Systems",
+      "Off-grid solar & mini-grids",
+      "Productive use of energy",
+      "Clean cooking technologies",
+      "Bioenergy & waste-to-energy systems",
+      "Energy efficiency & demand-side management",
+      "Green financing for energy solutions",
     ],
-    featured: true,
   },
   {
     id: 2,
-    name: "Sustainable Agriculture",
-    icon: Leaf,
+    name: "Agriculture",
+    icon: PlantIcon, // Plant icon
     description:
-      "Supporting climate-smart agricultural technologies that increase productivity while protecting the environment.",
-    color: "green",
+      "Transforming food systems with climate-smart technologies and agribusiness innovation.",
+    color: "orange", // Earthy/Brown/Orange
+    gradient: "from-orange-500 to-amber-700",
+    bgLight: "bg-orange-50",
+    textLight: "text-orange-700",
+    borderLight: "border-orange-200",
     keyAreas: [
-      "Precision Agriculture",
-      "Climate-Smart Farming",
-      "Agricultural IoT Systems",
-      "Sustainable Irrigation",
-      "Post-Harvest Solutions",
+      "Climate-smart Agriculture",
+      "Agribusiness development & Value Addition",
+      "Irrigation & water-use efficiency",
+      "Post-harvest management & storage",
+      "Agri-tech (e.g precision farming, drone use)",
+      "Market access & financing",
     ],
-    featured: true,
   },
   {
     id: 3,
-    name: "Water & Sanitation",
-    icon: Droplets,
+    name: "Water",
+    icon: DropIcon,
     description:
-      "Developing innovative solutions for clean water access, water treatment, and sanitation systems.",
-    color: "blue",
+      "Ensuring water security through innovative harvesting, treatment, and management.",
+    color: "cyan", // Blue/Cyan
+    gradient: "from-cyan-400 to-blue-600",
+    bgLight: "bg-cyan-50",
+    textLight: "text-cyan-600",
+    borderLight: "border-cyan-200",
     keyAreas: [
-      "Water Purification Systems",
-      "Smart Water Management",
-      "Wastewater Treatment",
-      "Sanitation Solutions",
-      "Water Quality Monitoring",
+      "Water harvesting & storage technologies",
+      "Wastewater recycling & reuse",
+      "WASH Innovations",
+      "Smart Irrigation systems",
+      "Water quality monitoring & purification tech",
+      "Integrated water resource management",
     ],
-    featured: false,
   },
   {
     id: 4,
-    name: "Waste Management",
-    icon: Recycle,
+    name: "Circular Economy",
+    icon: RecycleIcon,
     description:
-      "Promoting circular economy solutions that turn waste into valuable resources and reduce environmental impact.",
-    color: "emerald",
+      "Redefining waste as a resource through recycling, upcycling, and eco-design.",
+    color: "teal", // Teal/Green-Blue
+    gradient: "from-teal-400 to-emerald-600",
+    bgLight: "bg-teal-50",
+    textLight: "text-teal-600",
+    borderLight: "border-teal-200",
     keyAreas: [
-      "Plastic Recycling",
-      "Organic Waste Processing",
-      "E-waste Management",
-      "Waste-to-Energy Systems",
-      "Circular Economy Models",
+      "Solid waste management & recycling",
+      "Green manufacturing & product lifecycle extension",
+      "Upcycling and eco-design",
+      "Plastic alternatives & biodegradable materials",
+      "Industrial symbiosis & resource recovery",
     ],
-    featured: true,
   },
   {
     id: 5,
-    name: "Green Transportation",
-    icon: Car,
+    name: "Nature Based Solutions",
+    icon: TreeIcon,
     description:
-      "Accelerating the adoption of clean mobility solutions including electric vehicles and sustainable transport systems.",
-    color: "indigo",
+      "Harnessing nature to restore ecosystems, conserve biodiversity, and sequester carbon.",
+    color: "green", // Pure Green
+    gradient: "from-green-500 to-emerald-700",
+    bgLight: "bg-green-50",
+    textLight: "text-green-700",
+    borderLight: "border-green-200",
     keyAreas: [
-      "Electric Vehicles",
-      "Charging Infrastructure",
-      "Battery Technology",
-      "Fleet Management Systems",
-      "Micro-mobility Solutions",
+      "Ecosystem restoration & afforestation",
+      "Sustainable forestry & agroforestry",
+      "Blue economy & ecosystem restoration",
+      "Biodiversity conservation & ecotourism",
+      "Carbon credits generation",
+      "Community-based natural resource management",
     ],
-    featured: false,
   },
   {
     id: 6,
-    name: "Energy Efficiency",
-    icon: Zap,
+    name: "Mobility",
+    icon: CarIcon,
     description:
-      "Implementing smart energy solutions that reduce consumption and optimize energy use across sectors.",
-    color: "purple",
+      "Driving the transition to clean, efficient, and sustainable transport systems.",
+    color: "lime", // Dark Green/Lime
+    gradient: "from-lime-600 to-green-800",
+    bgLight: "bg-lime-50",
+    textLight: "text-lime-700",
+    borderLight: "border-lime-200",
     keyAreas: [
-      "Smart Building Systems",
-      "Industrial Energy Optimization",
-      "Energy Management Software",
-      "LED Lighting Solutions",
-      "HVAC Optimization",
+      "E-mobility (EVs, e-bikes, e-boda)",
+      "Sustainable public transport systems",
+      "Mobility-as-a-service (MaaS) & digital platforms",
+      "Non-motorized transport infrastructure",
+      "Logistics & freight optimization",
+      "Battery charging & swapping infrastructure",
     ],
-    featured: false,
   },
 ];
 
 export default function FocusSectorsPage() {
-  const [selectedSector, setSelectedSector] = useState<number | null>(null);
-
-  const selectedSectorData = selectedSector
-    ? focusSectors.find((sector) => sector.id === selectedSector)
-    : null;
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   return (
     <PageLayout
-      title="Focus Sectors"
-      subtitle="Key climate sectors driving our innovation"
-      description="Discover the strategic climate sectors where KCIC concentrates its efforts to accelerate sustainable development and environmental impact across Kenya."
-      breadcrumb={[
-        { label: "How we work", href: "/how-we-work" },
-        { label: "Focus sectors" },
-      ]}
+      title="Key Sectors & Themes"
+      subtitle="Catalyzing Innovation Across the Climate Spectrum"
+      description="Our work is anchored on six strategic pillars designed to address the most pressing climate challenges while unlocking economic opportunities in Africa."
     >
-      <div className="py-16">
-        {/* Sector Overview */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      <div className="min-h-screen bg-gray-50/50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Introduction */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Our Strategic Sectors
+            <div className="inline-flex items-center justify-center p-3 bg-green-100 rounded-full mb-6">
+              <LightbulbIcon className="w-6 h-6 text-green-600" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+              Six Pillars of Impact
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
-              KCIC focuses on six key climate sectors that offer the greatest
-              potential for environmental impact, economic growth, and job
-              creation in Kenya and across East Africa.
+            <p className="text-lg text-gray-600 leading-relaxed">
+              We support innovative enterprises operating at the intersection of climate action and economic growth.
             </p>
           </motion.div>
 
-          {/* Sector Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {focusSectors.map((sector, index) => (
-              <motion.div
-                key={sector.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                onClick={() =>
-                  setSelectedSector(
-                    selectedSector === sector.id ? null : sector.id
-                  )
-                }
-                className={`cursor-pointer bg-white rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
-                  selectedSector === sector.id
-                    ? "border-green-500 ring-2 ring-green-200"
-                    : "border-gray-100 hover:border-green-300"
-                }`}
-              >
-                {/* Sector Header */}
-                <div
-                  className={`h-32 bg-gradient-to-br ${
-                    sector.color === "yellow"
-                      ? "from-yellow-400 to-orange-500"
-                      : sector.color === "green"
-                      ? "from-green-400 to-emerald-500"
-                      : sector.color === "blue"
-                      ? "from-blue-400 to-cyan-500"
-                      : sector.color === "emerald"
-                      ? "from-emerald-400 to-teal-500"
-                      : sector.color === "indigo"
-                      ? "from-indigo-400 to-purple-500"
-                      : "from-purple-400 to-pink-500"
-                  } relative rounded-t-xl`}
+          {/* Sectors Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relarive z-10">
+            {focusSectors.map((sector, index) => {
+              const checkIsSelected = selectedId === sector.id;
+
+              return (
+                <motion.div
+                  key={sector.id}
+                  layoutId={`card-${sector.id}`} // Helper for layout animations
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  onClick={() => setSelectedId(checkIsSelected ? null : sector.id)}
+                  className={`
+                    group relative overflow-hidden rounded-3xl cursor-pointer transition-all duration-500 ease-out border
+                    ${checkIsSelected
+                      ? "ring-4 ring-offset-4 ring-green-100 border-transparent shadow-2xl scale-[1.02]"
+                      : "border-gray-200 bg-white hover:shadow-xl hover:-translate-y-1"
+                    }
+                  `}
                 >
-                  <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-xl"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <sector.icon className="w-12 h-12 text-white opacity-90" />
-                  </div>
-                </div>
-
-                {/* Sector Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    {sector.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    {sector.description}
-                  </p>
-
-                  <div className="flex items-center justify-end text-green-600 text-sm font-medium">
-                    {selectedSector === sector.id ? "Show Less" : "Learn More"}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Sector Details */}
-        {selectedSectorData && (
-          <div className="bg-gray-50 py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="bg-white rounded-xl shadow-lg p-8"
-              >
-                {/* Sector Header */}
-                <div className="flex items-center mb-6 pb-6 border-b border-gray-200">
+                  {/* Card Background Gradient (Visible on Hover/Active) */}
                   <div
-                    className={`w-14 h-14 bg-gradient-to-br ${
-                      selectedSectorData.color === "yellow"
-                        ? "from-yellow-400 to-orange-500"
-                        : selectedSectorData.color === "green"
-                        ? "from-green-400 to-emerald-500"
-                        : selectedSectorData.color === "blue"
-                        ? "from-blue-400 to-cyan-500"
-                        : selectedSectorData.color === "emerald"
-                        ? "from-emerald-400 to-teal-500"
-                        : selectedSectorData.color === "indigo"
-                        ? "from-indigo-400 to-purple-500"
-                        : "from-purple-400 to-pink-500"
-                    } rounded-xl flex items-center justify-center mr-5`}
-                  >
-                    <selectedSectorData.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                      {selectedSectorData.name}
-                    </h2>
-                    <p className="text-gray-600">
-                      {selectedSectorData.description}
-                    </p>
-                  </div>
-                </div>
+                    className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-gradient-to-br ${sector.gradient}`}
+                  />
 
-                {/* Key Focus Areas */}
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Key Focus Areas
-                  </h3>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {selectedSectorData.keyAreas.map((area, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center bg-gray-50 rounded-lg p-3"
-                      >
-                        <ArrowRight className="w-4 h-4 text-green-600 mr-3 flex-shrink-0" />
-                        <span className="text-gray-700 text-sm">{area}</span>
+                  <div className={`h-1.5 w-full bg-gradient-to-r ${sector.gradient}`} />
+
+                  <div className="p-6">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`
+                        w-12 h-12 rounded-xl flex items-center justify-center shadow-md transform group-hover:scale-110 transition-transform duration-300
+                        bg-gradient-to-br ${sector.gradient} text-white
+                      `}>
+                        <sector.icon className="w-6 h-6" />
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        )}
+                      <div className={`
+                        w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300
+                        ${checkIsSelected ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-400 group-hover:bg-green-50 group-hover:text-green-600"}
+                      `}>
+                        <ArrowRightIcon className={`w-4 h-4 transition-transform duration-300 ${checkIsSelected ? "rotate-90" : ""}`} />
+                      </div>
+                    </div>
 
-        {/* Call to Action */}
-        <div className="bg-green-50 py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Ready to Innovate in Climate Solutions?
-              </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Join our ecosystem of climate innovators working across these
-                strategic sectors to create sustainable impact.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/how-we-work/programmes"
-                  className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
-                >
-                  Explore Our Programmes
-                </Link>
-              </div>
-            </motion.div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">
+                      {sector.name}
+                    </h3>
+
+                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                      {sector.description}
+                    </p>
+
+                    {/* Expandable Content (Key Areas) */}
+                    <AnimatePresence>
+                      {checkIsSelected && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                          <div className={`pt-6 border-t ${sector.borderLight}`}>
+                            <h4 className={`text-sm font-bold uppercase tracking-wider mb-4 ${sector.textLight}`}>
+                              Focus Areas
+                            </h4>
+                            <ul className="space-y-3">
+                              {sector.keyAreas.map((area, i) => (
+                                <motion.li
+                                  key={i}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: i * 0.05 }}
+                                  className="flex items-start text-sm text-gray-700"
+                                >
+                                  <CheckCircleIcon className={`w-4 h-4 mr-2 mt-0.5 flex-shrink-0 ${sector.textLight}`} />
+                                  <span>{area}</span>
+                                </motion.li>
+                              ))}
+                            </ul>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Bottom Decorative Element */}
+          <div className="mt-20 text-center">
+            <p className="inline-block px-6 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-500">
+              Building a sustainable future, one sector at a time.
+            </p>
           </div>
         </div>
       </div>
     </PageLayout>
   );
 }
+

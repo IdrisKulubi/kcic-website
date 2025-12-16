@@ -52,7 +52,7 @@ export const navData = {
     },
     {
       label: "How we work",
-      href: "/how-we-work",
+      href: "/how-we-work/focus-sectors",
       subItems: [
         {
           label: "Focus sectors",

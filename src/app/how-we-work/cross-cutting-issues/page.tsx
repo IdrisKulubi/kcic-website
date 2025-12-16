@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion } from 'framer-motion';
-import { 
-  Users, DollarSign, Scale, GraduationCap, 
+import {
+  Users, DollarSign, Scale, GraduationCap,
   Network, ArrowRight, CheckCircle, AlertCircle,
   Target, Lightbulb, Heart
 } from 'lucide-react';
@@ -259,10 +259,6 @@ export default function CrossCuttingIssuesPage() {
       title="Cross-Cutting Issues"
       subtitle="Addressing systemic challenges in climate innovation"
       description="Explore how KCIC tackles the fundamental barriers that cut across all climate sectors to create an enabling environment for sustainable innovation."
-      breadcrumb={[
-        { label: 'How we work', href: '/how-we-work' },
-        { label: 'Cross-cutting issues' }
-      ]}
     >
       <div className="py-16">
         {/* Issues Overview */}
@@ -275,7 +271,7 @@ export default function CrossCuttingIssuesPage() {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Systemic Challenges We Address</h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
-              Beyond sector-specific support, KCIC addresses fundamental barriers that affect all climate 
+              Beyond sector-specific support, KCIC addresses fundamental barriers that affect all climate
               innovations. These cross-cutting issues require dedicated attention and specialized interventions.
             </p>
           </motion.div>
@@ -290,19 +286,17 @@ export default function CrossCuttingIssuesPage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 onClick={() => setSelectedIssue(issue.id)}
-                className={`cursor-pointer bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-2xl ${
-                  selectedIssue === issue.id ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-100 hover:border-green-300'
-                }`}
+                className={`cursor-pointer bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-2xl ${selectedIssue === issue.id ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-100 hover:border-green-300'
+                  }`}
               >
                 {/* Issue Header */}
-                <div className={`h-32 bg-gradient-to-br ${
-                  issue.color === 'pink' ? 'from-pink-400 to-rose-500' :
+                <div className={`h-32 bg-gradient-to-br ${issue.color === 'pink' ? 'from-pink-400 to-rose-500' :
                   issue.color === 'green' ? 'from-green-400 to-emerald-500' :
-                  issue.color === 'blue' ? 'from-blue-400 to-cyan-500' :
-                  issue.color === 'purple' ? 'from-purple-400 to-violet-500' :
-                  issue.color === 'orange' ? 'from-orange-400 to-red-500' :
-                  'from-indigo-400 to-blue-500'
-                } relative rounded-t-2xl`}>
+                    issue.color === 'blue' ? 'from-blue-400 to-cyan-500' :
+                      issue.color === 'purple' ? 'from-purple-400 to-violet-500' :
+                        issue.color === 'orange' ? 'from-orange-400 to-red-500' :
+                          'from-indigo-400 to-blue-500'
+                  } relative rounded-t-2xl`}>
                   <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-2xl"></div>
                   <div className="absolute top-4 right-4">
                     {issue.featured && (
@@ -357,14 +351,13 @@ export default function CrossCuttingIssuesPage() {
               >
                 {/* Issue Header */}
                 <div className="flex items-center mb-8">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${
-                    selectedIssueData.color === 'pink' ? 'from-pink-400 to-rose-500' :
+                  <div className={`w-16 h-16 bg-gradient-to-br ${selectedIssueData.color === 'pink' ? 'from-pink-400 to-rose-500' :
                     selectedIssueData.color === 'green' ? 'from-green-400 to-emerald-500' :
-                    selectedIssueData.color === 'blue' ? 'from-blue-400 to-cyan-500' :
-                    selectedIssueData.color === 'purple' ? 'from-purple-400 to-violet-500' :
-                    selectedIssueData.color === 'orange' ? 'from-orange-400 to-red-500' :
-                    'from-indigo-400 to-blue-500'
-                  } rounded-xl flex items-center justify-center mr-6`}>
+                      selectedIssueData.color === 'blue' ? 'from-blue-400 to-cyan-500' :
+                        selectedIssueData.color === 'purple' ? 'from-purple-400 to-violet-500' :
+                          selectedIssueData.color === 'orange' ? 'from-orange-400 to-red-500' :
+                            'from-indigo-400 to-blue-500'
+                    } rounded-xl flex items-center justify-center mr-6`}>
                     <selectedIssueData.icon className="w-8 h-8 text-white" />
                   </div>
                   <div>
@@ -398,31 +391,28 @@ export default function CrossCuttingIssuesPage() {
                   <div className="bg-gray-100 rounded-lg p-1">
                     <button
                       onClick={() => setActiveSection('challenges')}
-                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${
-                        activeSection === 'challenges'
-                          ? 'bg-white text-gray-900 shadow-md'
-                          : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${activeSection === 'challenges'
+                        ? 'bg-white text-gray-900 shadow-md'
+                        : 'text-gray-600 hover:text-gray-800'
+                        }`}
                     >
                       Challenges
                     </button>
                     <button
                       onClick={() => setActiveSection('approach')}
-                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${
-                        activeSection === 'approach'
-                          ? 'bg-white text-gray-900 shadow-md'
-                          : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${activeSection === 'approach'
+                        ? 'bg-white text-gray-900 shadow-md'
+                        : 'text-gray-600 hover:text-gray-800'
+                        }`}
                     >
                       Our Approach
                     </button>
                     <button
                       onClick={() => setActiveSection('initiatives')}
-                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${
-                        activeSection === 'initiatives'
-                          ? 'bg-white text-gray-900 shadow-md'
-                          : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                      className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${activeSection === 'initiatives'
+                        ? 'bg-white text-gray-900 shadow-md'
+                        : 'text-gray-600 hover:text-gray-800'
+                        }`}
                     >
                       Initiatives
                     </button>
@@ -515,7 +505,7 @@ export default function CrossCuttingIssuesPage() {
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Collaborate with Us</h2>
               <p className="text-xl text-gray-600 mb-8">
-                These challenges require collective action. Partner with us to address systemic barriers 
+                These challenges require collective action. Partner with us to address systemic barriers
                 and create an enabling environment for climate innovation.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
