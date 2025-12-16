@@ -1,5 +1,5 @@
-import { 
-  pgTable, 
+import {
+  pgTable,
   index,
   text,
   timestamp,
@@ -155,18 +155,47 @@ export const partners = pgTable("partners", {
   orderIdx: index("partners_order_idx").on(table.order)
 }));
 
-// Programmes table
+// Programmes table - expanded for full programme pages
 export const programmes = pgTable("programmes", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
   image: text("image").notNull(),
-  href: text("href").notNull(),
+  headerImage: text("header_image"),
   color: text("color").notNull(),
   order: integer("order").notNull(),
+  isActive: boolean("is_active").default(false).notNull(),
+  applicationLink: text("application_link"),
+  // Rich text content sections (stored as HTML)
+  introduction: text("introduction"),
+  applicationProcess: text("application_process"),
+  criteria: text("criteria"),
+  eligibility: text("eligibility"),
+  applicationSelection: text("application_selection"),
+  technicalSupport: text("technical_support"),
+  definitions: text("definitions"),
+  terms: text("terms"),
+  scoringSystem: text("scoring_system"),
+  fraudPolicy: text("fraud_policy"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 }, (table) => ({
-  orderIdx: index("programmes_order_idx").on(table.order)
+  orderIdx: index("programmes_order_idx").on(table.order),
+  slugIdx: index("programmes_slug_idx").on(table.slug)
+}));
+
+// Programme Sponsors table
+export const programmeSponsors = pgTable("programme_sponsors", {
+  id: text("id").primaryKey(),
+  programmeId: text("programme_id").references(() => programmes.id, { onDelete: "cascade" }).notNull(),
+  name: text("name").notNull(),
+  logo: text("logo").notNull(),
+  order: integer("order").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+}, (table) => ({
+  programmeIdx: index("programme_sponsors_programme_idx").on(table.programmeId),
+  orderIdx: index("programme_sponsors_order_idx").on(table.order)
 }));
 
 // Footer Section table
@@ -225,9 +254,17 @@ export const heroButtonsRelations = relations(heroButtons, ({ one }) => ({
   })
 }));
 
+// Programme relations
+export const programmesRelations = relations(programmes, ({ many }) => ({
+  sponsors: many(programmeSponsors)
+}));
 
-
-
+export const programmeSponsorsRelations = relations(programmeSponsors, ({ one }) => ({
+  programme: one(programmes, {
+    fields: [programmeSponsors.programmeId],
+    references: [programmes.id]
+  })
+}));
 
 
 

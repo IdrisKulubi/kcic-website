@@ -41,9 +41,9 @@ async function seed() {
     // In production, this should be changed immediately
     const bcrypt = await import("bcryptjs");
     const passwordHash = await bcrypt.hash("admin123", 10);
-    
+
     const userId = crypto.randomUUID();
-    
+
     // Create user
     await db.insert(user).values({
       id: userId,
@@ -149,11 +149,25 @@ async function seed() {
       homePageData.programmes.map((programme, idx) => ({
         id: programme.id,
         title: programme.title,
+        slug: programme.href.replace(/^\//, '').replace(/\//g, '-') || `programme-${idx}`,
         description: programme.description,
         image: programme.image,
-        href: programme.href,
+        headerImage: null,
         color: programme.color,
         order: idx,
+        isActive: false,
+        applicationLink: null,
+        introduction: null,
+        applicationProcess: null,
+        criteria: null,
+        eligibility: null,
+        applicationSelection: null,
+        technicalSupport: null,
+        definitions: null,
+        terms: null,
+        scoringSystem: null,
+        fraudPolicy: null,
+        createdAt: new Date(),
         updatedAt: new Date(),
       }))
     );
