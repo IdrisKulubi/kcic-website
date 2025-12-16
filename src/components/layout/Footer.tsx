@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Twitter,
-  Linkedin,
-  Facebook,
-  Instagram,
-  Youtube,
-  Mail,
+  XLogo,
+  LinkedinLogo,
+  FacebookLogo,
+  InstagramLogo,
+  YoutubeLogo,
+  Envelope,
   Phone,
   MapPin,
-  Send,
-} from "lucide-react";
+  PaperPlaneTilt,
+} from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
@@ -24,11 +24,11 @@ interface FooterProps {
 }
 
 const socialIcons = {
-  twitter: Twitter,
-  linkedin: Linkedin,
-  facebook: Facebook,
-  instagram: Instagram,
-  youtube: Youtube,
+  twitter: XLogo,
+  linkedin: LinkedinLogo,
+  facebook: FacebookLogo,
+  instagram: InstagramLogo,
+  youtube: YoutubeLogo,
 };
 
 export default function Footer({ data }: FooterProps) {
@@ -99,7 +99,7 @@ export default function Footer({ data }: FooterProps) {
                 </a>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-yellow-400 shrink-0" />
+                <Envelope className="h-5 w-5 text-yellow-400 shrink-0" />
                 <a
                   href={`mailto:${data.contact.email}`}
                   className="text-sm hover:text-yellow-600 transition-colors"
@@ -178,17 +178,16 @@ export default function Footer({ data }: FooterProps) {
                   className="absolute right-1 top-1/2 h-10 w-10 -translate-y-1/2 p-0 text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
                   style={{ backgroundColor: colors.primary.green.DEFAULT }}
                 >
-                  <Send className="h-4 w-4" />
+                  <PaperPlaneTilt className="h-4 w-4" />
                 </Button>
               </div>
 
               {submitMessage && (
                 <div
-                  className={`text-xs ${
-                    submitMessage.includes("Thank you")
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
+                  className={`text-xs ${submitMessage.includes("Thank you")
+                    ? "text-green-400"
+                    : "text-red-400"
+                    }`}
                 >
                   {submitMessage}
                 </div>
@@ -204,7 +203,7 @@ export default function Footer({ data }: FooterProps) {
               {data.copyright}
             </p>
 
-          
+
           </div>
         </div>
       </div>

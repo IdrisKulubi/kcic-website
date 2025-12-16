@@ -208,29 +208,29 @@ export default function ProgrammesPage() {
 
       {/* Bottom CTA */}
       {programmes.length > 0 && (
-        <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <section className="py-16 bg-gradient-to-br from-gray-900 to-gray-800">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Ready to Transform Your Climate Idea?
               </h2>
-              <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-gray-400 text-sm mb-6 max-w-xl mx-auto">
                 Join our community of innovators driving sustainable solutions across Africa.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center">
                 <Link
                   href="/about/contact-us"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-green-600 text-white font-semibold rounded-full hover:bg-green-500 transition-colors shadow-lg shadow-green-600/30"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-green-600 text-white font-medium rounded-full hover:bg-green-500 transition-colors shadow-md shadow-green-600/20"
                 >
                   Get in Touch
                 </Link>
                 <Link
                   href="/faqs"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-colors backdrop-blur-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-white/10 text-white font-medium rounded-full hover:bg-white/20 transition-colors backdrop-blur-sm"
                 >
                   Learn More
                 </Link>

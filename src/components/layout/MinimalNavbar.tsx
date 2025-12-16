@@ -2,7 +2,25 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, ChevronDown, Users, Building2, FileText, Target, Phone, Lightbulb, Shield, Briefcase, Network, BookOpen, TrendingUp, Calendar, Megaphone, ClipboardList } from 'lucide-react';
+import {
+  List,
+  X,
+  CaretDown,
+  Users,
+  Buildings,
+  FileText,
+  Crosshair,
+  Phone,
+  Lightbulb,
+  Shield,
+  Briefcase,
+  Graph,
+  BookOpen,
+  TrendUp,
+  Calendar,
+  Megaphone,
+  ClipboardText
+} from '@phosphor-icons/react';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -36,20 +54,24 @@ interface MinimalNavbarProps {
 }
 
 const iconMap = {
-  Building2,
+  Building2: Buildings,
+  Buildings,
   Users,
   FileText,
-  Target,
+  Target: Crosshair,
+  Crosshair,
   Phone,
   Lightbulb,
   Shield,
   Briefcase,
-  Network,
+  Network: Graph,
+  Graph,
   BookOpen,
-  TrendingUp,
+  TrendUp,
   Calendar,
   Megaphone,
-  ClipboardList,
+  ClipboardList: ClipboardText,
+  ClipboardText,
 };
 
 export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
@@ -62,7 +84,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const getIcon = (iconName: string) => {
-    return iconMap[iconName as keyof typeof iconMap] || Building2;
+    return iconMap[iconName as keyof typeof iconMap] || Buildings;
   };
 
   useEffect(() => {
@@ -86,7 +108,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
     window.addEventListener('scroll', handleScroll);
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
@@ -120,11 +142,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-            : 'bg-white/90 backdrop-blur-sm shadow-sm'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg'
+          : 'bg-white/90 backdrop-blur-sm shadow-sm'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -152,9 +173,8 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
-                      activeDropdown === item.label ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-gray-900'
-                    }`}
+                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${activeDropdown === item.label ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-gray-900'
+                      }`}
                     style={{
                       fontFamily: typography.fonts.body,
                       fontSize: typography.sizes.body.base[0],
@@ -167,10 +187,9 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   >
                     {item.label}
                     {item.subItems && (
-                      <ChevronDown 
-                        className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                          activeDropdown === item.label ? 'rotate-180' : ''
-                        }`}
+                      <CaretDown
+                        className={`ml-1 h-4 w-4 transition-transform duration-200 ${activeDropdown === item.label ? 'rotate-180' : ''
+                          }`}
                       />
                     )}
                   </button>
@@ -190,7 +209,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                       >
                         {/* Arrow pointer */}
                         <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-l border-t border-gray-100 rotate-45"></div>
-                        
+
                         <div className="p-1">
                           {item.subItems.map((subItem, index) => (
                             <motion.a
@@ -208,7 +227,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                 {React.createElement(getIcon(subItem.icon), { className: "w-3 h-3 text-green-600" })}
                               </div>
                               <div className="ml-2 flex-1">
-                                <span 
+                                <span
                                   className="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors duration-200 block"
                                   style={{ fontFamily: typography.fonts.body }}
                                 >
@@ -225,10 +244,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
               ))}
             </div>
 
-            {/* Language Switcher */}
-            <div className="hidden md:block">
-              <LanguageSwitcher variant="compact" />
-            </div>
+
 
             {/* Desktop CTA Button */}
             {ctaButton && (
@@ -269,7 +285,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   {isMobileMenuOpen ? (
                     <X className="h-6 w-6" />
                   ) : (
-                    <Menu className="h-6 w-6" />
+                    <List className="h-6 w-6" />
                   )}
                 </motion.div>
               </button>
@@ -289,14 +305,14 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <motion.div 
+            <motion.div
               className="fixed inset-0 bg-black/60 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <motion.div 
+            <motion.div
               className="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -346,10 +362,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                 animate={{ rotate: expandedMobileItem === item.label ? 180 : 0 }}
                                 transition={{ duration: 0.2 }}
                               >
-                                <ChevronDown className="h-5 w-5" />
+                                <CaretDown className="h-5 w-5" />
                               </motion.div>
                             </button>
-                            
+
                             <AnimatePresence>
                               {expandedMobileItem === item.label && (
                                 <motion.div
@@ -401,7 +417,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                       </motion.div>
                     ))}
                   </div>
-                  
+
                   {/* Mobile Language Switcher */}
                   <div className="mt-6 px-6 pt-6 border-t border-gray-100">
                     <LanguageSwitcher variant="mobile" />
@@ -421,7 +437,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                       }}
                       asChild
                     >
-                      <a 
+                      <a
                         href={ctaButton.href}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
