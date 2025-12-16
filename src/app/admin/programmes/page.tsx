@@ -134,7 +134,7 @@ function SponsorManager({ programmeId }: { programmeId: string }) {
       <div className="flex flex-wrap gap-4">
         {sponsors.map((sponsor) => (
           <div key={sponsor.id} className="relative group">
-            <div className="w-24 h-16 bg-gray-100 rounded-lg overflow-hidden border">
+            <div className="relative w-24 h-16 bg-gray-100 rounded-lg overflow-hidden border">
               <Image src={sponsor.logo} alt={sponsor.name} fill className="object-contain p-2" />
             </div>
             <button
@@ -148,26 +148,34 @@ function SponsorManager({ programmeId }: { programmeId: string }) {
         ))}
       </div>
 
-      <div className="flex gap-2 items-end">
-        <div className="flex-1">
-          <Label>Sponsor Name</Label>
-          <Input
-            value={newSponsor.name}
-            onChange={(e) => setNewSponsor(prev => ({ ...prev, name: e.target.value }))}
-            placeholder="e.g., European Union"
-          />
+      <div className="space-y-4 border rounded-lg p-4 bg-gray-50">
+        <Label className="text-sm font-medium">Add New Sponsor</Label>
+        <div className="space-y-3">
+          <div>
+            <Label className="text-xs text-muted-foreground">Sponsor Name</Label>
+            <Input
+              value={newSponsor.name}
+              onChange={(e) => setNewSponsor(prev => ({ ...prev, name: e.target.value }))}
+              placeholder="e.g., European Union"
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-muted-foreground">Sponsor Logo</Label>
+            <ImageUpload
+              value={newSponsor.logo}
+              onChange={(url) => setNewSponsor(prev => ({ ...prev, logo: url }))}
+              onRemove={() => setNewSponsor(prev => ({ ...prev, logo: '' }))}
+            />
+          </div>
+          <Button
+            onClick={handleAdd}
+            disabled={adding || !newSponsor.name || !newSponsor.logo}
+            className="w-full"
+          >
+            {adding ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
+            Add Sponsor
+          </Button>
         </div>
-        <div className="flex-1">
-          <Label>Logo URL</Label>
-          <Input
-            value={newSponsor.logo}
-            onChange={(e) => setNewSponsor(prev => ({ ...prev, logo: e.target.value }))}
-            placeholder="https://..."
-          />
-        </div>
-        <Button onClick={handleAdd} disabled={adding || !newSponsor.name || !newSponsor.logo}>
-          {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-        </Button>
       </div>
     </div>
   );

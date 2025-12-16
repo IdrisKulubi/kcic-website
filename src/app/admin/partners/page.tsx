@@ -96,6 +96,8 @@ function SortablePartnerCard({
           <Image
             src={partner.logo}
             alt={partner.name}
+            width={160}
+            height={80}
             className="max-w-full max-h-full object-contain p-2"
           />
         </div>
