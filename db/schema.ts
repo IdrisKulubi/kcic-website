@@ -266,5 +266,73 @@ export const programmeSponsorsRelations = relations(programmeSponsors, ({ one })
   })
 }));
 
+// Opportunities table - supports jobs, consulting, RFPs, tenders
+export const opportunities = pgTable("opportunities", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  type: text("type").notNull(), // 'job' | 'consulting' | 'rfp' | 'tender'
+  referenceNumber: text("reference_number"), // e.g., "RFP: KCIC/2025/202"
 
+  // Core content
+  summary: text("summary").notNull(), // Short description for cards
+  description: text("description"), // Rich HTML content - full details
 
+  // Categorization
+  department: text("department"), // e.g., "Programs", "Finance", "Operations"
+  location: text("location"), // e.g., "Nairobi, Kenya", "Remote"
+  workMode: text("work_mode"), // 'remote' | 'onsite' | 'hybrid'
+  employmentType: text("employment_type"), // 'full-time' | 'part-time' | 'contract' | 'consultancy'
+
+  // Requirements sections (Rich HTML)
+  requirements: text("requirements"),
+  qualifications: text("qualifications"),
+  responsibilities: text("responsibilities"),
+
+  // Application details - either link or email (or both)
+  applicationEmail: text("application_email"),
+  applicationLink: text("application_link"),
+  applicationInstructions: text("application_instructions"), // Rich HTML
+
+  // Dates
+  deadline: timestamp("deadline"),
+  issuedDate: timestamp("issued_date"),
+
+  // Status
+  isActive: boolean("is_active").default(true).notNull(),
+  isFeatured: boolean("is_featured").default(false).notNull(),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  slugIdx: index("opportunities_slug_idx").on(table.slug),
+  typeIdx: index("opportunities_type_idx").on(table.type),
+  activeIdx: index("opportunities_active_idx").on(table.isActive),
+}));
+
+// Attachments for opportunities (RFP docs, ToRs, etc.)
+export const opportunityAttachments = pgTable("opportunity_attachments", {
+  id: text("id").primaryKey(),
+  opportunityId: text("opportunity_id").references(() => opportunities.id, { onDelete: "cascade" }).notNull(),
+  fileName: text("file_name").notNull(),
+  fileUrl: text("file_url").notNull(),
+  fileType: text("file_type"), // 'pdf' | 'doc' | 'docx'
+  fileSize: integer("file_size"), // in bytes
+  order: integer("order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => ({
+  opportunityIdx: index("opportunity_attachments_opportunity_idx").on(table.opportunityId),
+  orderIdx: index("opportunity_attachments_order_idx").on(table.order),
+}));
+
+// Opportunity relations
+export const opportunitiesRelations = relations(opportunities, ({ many }) => ({
+  attachments: many(opportunityAttachments)
+}));
+
+export const opportunityAttachmentsRelations = relations(opportunityAttachments, ({ one }) => ({
+  opportunity: one(opportunities, {
+    fields: [opportunityAttachments.opportunityId],
+    references: [opportunities.id]
+  })
+}));

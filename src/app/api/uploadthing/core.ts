@@ -70,6 +70,22 @@ export const ourFileRouter = {
       console.log("file url", file.url);
       return { uploadedBy: metadata.userId, url: file.url };
     }),
+
+  // Document uploader for attachments (PDF, DOC, DOCX)
+  documentUploader: f({
+    pdf: { maxFileSize: "16MB", maxFileCount: 1 },
+    text: { maxFileSize: "4MB", maxFileCount: 1 },
+    blob: { maxFileSize: "16MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const user = await authenticateAdmin();
+      return { userId: user.userId };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Document upload complete for userId:", metadata.userId);
+      console.log("file url", file.url);
+      return { uploadedBy: metadata.userId, url: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
