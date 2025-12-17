@@ -198,18 +198,18 @@ export default function ProgrammeDetailPage({ programme }: Props) {
 
                                         {/* Content */}
                                         <div
-                                            className="text-[15px] leading-[1.7] text-gray-600
-                                                [&_p]:mb-4 [&_p]:text-gray-600
-                                                [&_ul]:my-4 [&_ul]:pl-5 [&_ul]:list-disc [&_ul]:text-gray-600
-                                                [&_ol]:my-4 [&_ol]:pl-5 [&_ol]:list-decimal [&_ol]:text-gray-600
-                                                [&_li]:mb-1.5 [&_li]:text-gray-600
+                                            className="text-xs leading-relaxed text-gray-600 max-w-none
+                                                [&_p]:mb-2.5 [&_p]:text-xs [&_p]:text-gray-600
+                                                [&_ul]:my-2.5 [&_ul]:pl-4 [&_ul]:list-disc [&_ul]:text-xs [&_ul]:text-gray-600
+                                                [&_ol]:my-2.5 [&_ol]:pl-4 [&_ol]:list-decimal [&_ol]:text-xs [&_ol]:text-gray-600
+                                                [&_li]:mb-1 [&_li]:text-xs [&_li]:text-gray-600
                                                 [&_strong]:text-gray-800 [&_strong]:font-medium
                                                 [&_a]:text-green-600 [&_a]:underline [&_a]:underline-offset-2
-                                                [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-6 [&_h3]:mb-2
-                                                [&_h4]:text-sm [&_h4]:font-medium [&_h4]:text-gray-700 [&_h4]:mt-4 [&_h4]:mb-2
-                                                [&_table]:w-full [&_table]:my-4 [&_table]:text-sm
-                                                [&_th]:text-left [&_th]:py-2 [&_th]:px-3 [&_th]:bg-gray-50 [&_th]:font-medium [&_th]:text-gray-700
-                                                [&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-gray-100"
+                                                [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-1.5
+                                                [&_h4]:text-xs [&_h4]:font-medium [&_h4]:text-gray-700 [&_h4]:mt-3 [&_h4]:mb-1
+                                                [&_table]:w-full [&_table]:my-2.5 [&_table]:text-xs
+                                                [&_th]:text-left [&_th]:py-1 [&_th]:px-2 [&_th]:bg-gray-50 [&_th]:font-medium [&_th]:text-gray-700 [&_th]:text-xs
+                                                [&_td]:py-1 [&_td]:px-2 [&_td]:border-b [&_td]:border-gray-100 [&_td]:text-xs"
                                             dangerouslySetInnerHTML={{ __html: content }}
                                         />
                                     </motion.section>
@@ -222,38 +222,37 @@ export default function ProgrammeDetailPage({ programme }: Props) {
 
             {/* Floating Apply Button */}
             {programme.isActive && programme.applicationLink && (
-                <div className="fixed bottom-8 right-8 z-50">
+                <div className="fixed bottom-6 right-6 z-50">
                     <a
                         href={programme.applicationLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="
-              flex items-center gap-3 px-6 py-4 
+              flex items-center gap-2 px-4 py-2.5 
               bg-green-600 hover:bg-green-700 
-              text-white font-semibold text-lg
-              rounded-2xl shadow-2xl shadow-green-600/30
+              text-white font-medium text-sm
+              rounded-full shadow-lg shadow-green-600/20
               transition-all duration-300 hover:scale-105
-              backdrop-blur-sm
             "
                     >
                         Apply Here
-                        <ArrowSquareOutIcon className="w-5 h-5" />
+                        <ArrowSquareOutIcon className="w-4 h-4" />
                     </a>
                 </div>
             )}
 
             {/* Back to Programmes CTA */}
-            <div className="bg-gray-50 py-16">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <div className="bg-gray-50 py-12">
+                <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h3 className="text-lg font-bold text-gray-900 mb-3">
                         Explore More Programmes
                     </h3>
-                    <p className="text-gray-600 mb-8">
+                    <p className="text-gray-600 text-sm mb-6">
                         Discover other initiatives supporting climate innovation across Africa.
                     </p>
                     <Link
                         href="/how-we-work/programmes"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors"
                     >
                         <ArrowLeftIcon className="w-4 h-4" />
                         View All Programmes
