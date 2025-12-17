@@ -71,12 +71,12 @@ const typeConfig: Record<OpportunityType, {
 function ContentSection({ title, content }: { title: string; content: string }) {
     if (!content) return null;
     return (
-        <div className="mb-10 last:mb-0">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="mb-8 last:mb-0">
+            <h3 className="text-base font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">
                 {title}
             </h3>
             <div
-                className="prose prose-lg max-w-none text-gray-600 prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-ul:list-disc prose-ul:pl-4"
+                className="text-sm leading-relaxed text-gray-600 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-3 [&_li]:mb-1 [&_strong]:font-semibold [&_strong]:text-gray-800 [&_a]:text-green-600 [&_a]:underline [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-2 [&_h4]:text-sm [&_h4]:font-medium [&_h4]:text-gray-700 [&_h4]:mt-3 [&_h4]:mb-1"
                 dangerouslySetInnerHTML={{ __html: content }}
             />
         </div>
@@ -191,7 +191,7 @@ export default function OpportunityDetailPage() {
                                         )}
                                     </div>
 
-                                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-snug mb-4">
                                         {opportunity.title}
                                     </h1>
 
@@ -280,11 +280,11 @@ export default function OpportunityDetailPage() {
                                     </div>
 
                                     {opportunity.deadline && (
-                                        <div className="mt-6 pt-6 border-t border-gray-100">
+                                        <div className="mt-6 pt-4 border-t border-gray-100">
                                             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Application Deadline</p>
-                                            <div className="flex items-center gap-3 text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
-                                                <Clock className="w-5 h-5" />
-                                                <span className="font-bold">
+                                            <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-100">
+                                                <Clock className="w-4 h-4 flex-shrink-0" />
+                                                <span className="text-sm font-semibold">
                                                     {format(new Date(opportunity.deadline), 'MMMM d, yyyy')}
                                                 </span>
                                             </div>
@@ -292,11 +292,11 @@ export default function OpportunityDetailPage() {
                                     )}
                                 </div>
 
-                                {/* Attachments Box */}
+                                {/* Attachments/Downloads Box */}
                                 {opportunity.attachments.length > 0 && (
-                                    <div className="bg-gray-50 rounded-2xl border border-gray-100 p-6">
+                                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                                         <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                            <DownloadSimple className="w-5 h-5 text-gray-500" />
+                                            <DownloadSimple className="w-5 h-5 text-green-600" />
                                             Downloads
                                         </h3>
                                         <div className="space-y-3">
@@ -306,20 +306,24 @@ export default function OpportunityDetailPage() {
                                                     href={file.fileUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-sm transition-all group"
+                                                    download
+                                                    className="flex items-center justify-between gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-green-200 hover:bg-green-50/50 transition-all group"
                                                 >
-                                                    <div className="p-2 bg-gray-50 rounded-md group-hover:bg-green-50 transition-colors">
-                                                        <FileText className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-gray-900 truncate group-hover:text-green-700 transition-colors">
-                                                            {file.fileName || 'Document'}
-                                                        </p>
-                                                        <div className="flex items-center gap-2 mt-1">
-                                                            <span className="text-xs text-gray-500 uppercase">{(file.fileType || 'file').split('/').pop()}</span>
-                                                            <span className="text-gray-300">•</span>
-                                                            <span className="text-xs text-green-600 font-medium group-hover:underline">Download</span>
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                        <div className="h-10 w-10 flex items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm flex-shrink-0 text-green-600 group-hover:scale-110 transition-transform">
+                                                            <FileText className="w-5 h-5" weight="fill" />
                                                         </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm font-semibold text-gray-900 truncate pr-4" title={file.fileName}>
+                                                                {file.fileName || 'Document'}
+                                                            </p>
+                                                            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide truncate max-w-[180px] sm:max-w-[200px]" title={(file.fileType || 'PDF').split('/').pop()}>
+                                                                {(file.fileType || 'PDF').split('/').pop()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 group-hover:text-green-600 group-hover:border-green-200 transition-colors flex-shrink-0">
+                                                        <DownloadSimple className="w-4 h-4" weight="bold" />
                                                     </div>
                                                 </a>
                                             ))}
@@ -327,13 +331,7 @@ export default function OpportunityDetailPage() {
                                     </div>
                                 )}
 
-                                {/* Share Box */}
-                                <div className="p-6">
-                                    <button className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-green-600 transition-colors mx-auto">
-                                        <ShareNetwork className="w-4 h-4" />
-                                        Share this opportunity
-                                    </button>
-                                </div>
+                              
                             </motion.div>
                         </div>
                     </div>

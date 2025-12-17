@@ -120,7 +120,9 @@ function AttachmentManager({
     const [newAttachment, setNewAttachment] = useState({ fileName: '', fileUrl: '' });
 
     const handleAdd = async () => {
-        if (!newAttachment.fileName || !newAttachment.fileUrl) return;
+        if (!newAttachment.fileName || !newAttachment.fileUrl) {
+            return;
+        }
         setUploading(true);
 
         const result = await addOpportunityAttachment(opportunityId, {
@@ -218,10 +220,12 @@ function OpportunityEditor({
     opportunity,
     onSave,
     onCancel,
+    onAttachmentUpdate,
 }: {
     opportunity?: OpportunityWithAttachments;
     onSave: () => void;
     onCancel: () => void;
+    onAttachmentUpdate?: () => void;
 }) {
     const [isSaving, setIsSaving] = useState(false);
     const isNew = !opportunity;
@@ -532,7 +536,7 @@ function OpportunityEditor({
                         <AttachmentManager
                             opportunityId={opportunity.id}
                             attachments={opportunity.attachments}
-                            onUpdate={onSave}
+                            onUpdate={onAttachmentUpdate || onSave}
                         />
                     ) : (
                         <p className="text-sm text-muted-foreground">
@@ -719,6 +723,20 @@ export default function OpportunitiesAdminPage() {
         loadOpportunities();
     };
 
+    // Refresh the editing opportunity without closing the dialog (for attachment updates)
+    const handleRefreshEditingOpportunity = async () => {
+        if (editingOpportunity) {
+            const result = await listOpportunities({ includeInactive: true });
+            if (result.success && result.data) {
+                setOpportunities(result.data);
+                const updated = result.data.find(o => o.id === editingOpportunity.id);
+                if (updated) {
+                    setEditingOpportunity(updated);
+                }
+            }
+        }
+    };
+
     const filteredOpportunities = typeFilter === "all"
         ? opportunities
         : opportunities.filter(o => o.type === typeFilter);
@@ -819,6 +837,7 @@ export default function OpportunitiesAdminPage() {
                             opportunity={editingOpportunity}
                             onSave={handleSave}
                             onCancel={handleCloseEditor}
+                            onAttachmentUpdate={handleRefreshEditingOpportunity}
                         />
                     )}
                 </DialogContent>
