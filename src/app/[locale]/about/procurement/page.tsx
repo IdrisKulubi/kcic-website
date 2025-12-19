@@ -1,81 +1,232 @@
-import React from "react";
-import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
-import Footer from "@/components/layout/Footer";
-import { homePageData } from "@/data/home";
-import { navData } from "@/lib/navigation";
-import { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Procurement - KCIC",
-  description: "Learn about KCIC's procurement policies, opportunities, and guidelines for suppliers and partners.",
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { motion } from 'framer-motion';
+import {
+  Users,
+  FileText,
+  MapPin,
+  Clock,
+  CaretRight,
+  Briefcase,
+  DownloadSimple
+} from '@phosphor-icons/react';
+import { listOpportunities, OpportunityWithAttachments, OpportunityType } from '@/lib/actions/opportunities';
+import { format } from 'date-fns';
+
+// Only procurement types (no 'job')
+const procurementTypes: OpportunityType[] = ['consulting', 'rfp', 'tender'];
+
+const typeConfig: Record<OpportunityType, { label: string; icon: typeof Briefcase; color: string; bgColor: string }> = {
+  job: { label: 'Job', icon: Briefcase, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+  consulting: { label: 'Consulting', icon: Users, color: 'text-purple-600', bgColor: 'bg-purple-100' },
+  rfp: { label: 'RFP', icon: FileText, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+  tender: { label: 'Tender', icon: FileText, color: 'text-cyan-600', bgColor: 'bg-cyan-100' },
 };
 
-export default function ProcurementPage() {
-  return (
-    <div className="min-h-screen">
-      <MinimalNavbar {...navData} />
+function OpportunityCard({ opportunity }: { opportunity: OpportunityWithAttachments }) {
+  const config = typeConfig[opportunity.type as OpportunityType];
+  const Icon = config.icon;
 
-      <main className="pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Procurement</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              KCIC is committed to transparent, fair, and sustainable procurement practices that support our mission of climate innovation.
-            </p>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <Link href={`/about/careers/${opportunity.slug}`}>
+        <div className="group relative bg-white rounded-xl border border-gray-200 p-5 hover:border-green-300 hover:shadow-lg transition-all duration-300">
+          {/* Type badge */}
+          <div className="flex items-center justify-between mb-3">
+            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color}`}>
+              <Icon className="w-3.5 h-3.5" weight="bold" />
+              {config.label}
+            </div>
+            {opportunity.isFeatured && (
+              <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                Featured
+              </span>
+            )}
           </div>
 
-          {/* Pre-Qualification Announcement */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl p-6 mb-12 shadow-lg">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl font-bold mb-4">PRE-QUALIFICATION OF SUPPLIERS FOR GOODS, WORKS AND SERVICES</h2>
+          {/* Title */}
+          <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors line-clamp-2">
+            {opportunity.title}
+          </h3>
 
-              <div className="space-y-3 text-green-50 text-sm">
-                <p className="leading-relaxed">
-                  The Kenya Climate Innovation Center (KCIC) is a social impact organization operating in the climate space, committed to supporting micro and small enterprises and driven by innovation. The KCIC provides incubation, capacity-building services, and financing to Kenyan entrepreneurs and new ventures that are developing innovative solutions in renewable energy and energy efficiency, water management, agribusiness, waste management, and commercial forestry in a bid to address climate change challenges.
-                </p>
+          {/* Reference number for RFPs */}
+          {opportunity.referenceNumber && (
+            <p className="text-xs text-gray-500 mb-2 font-mono">{opportunity.referenceNumber}</p>
+          )}
 
-                <p className="font-semibold text-white">
-                  Kenya Climate Innovation Center is in the process of pre-qualifying suppliers for various goods, services and works for the calendar year 2026 to June 2028.
-                </p>
+          {/* Summary */}
+          <p className="text-sm text-gray-600 mb-4 line-clamp-2">{opportunity.summary}</p>
 
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mt-4">
-                  <h3 className="text-base font-semibold mb-3 text-white">How to Apply</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                      <span>Detailed pre-qualification documents can be downloaded from <a href="#" className="underline hover:text-green-200">Here</a></span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                      <span>Alternatively, interested firms may send an email to <a href="mailto:procurement@kenyacic.org" className="underline hover:text-green-200">procurement@kenyacic.org</a> requesting for the pre-qualification document</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                      <span>Payment of a non-refundable fee of <strong className="text-white">Kshs. 2,000.00</strong> per document will apply</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                      <span>Payment can be made via Mpesa Paybill <strong className="text-white">880100</strong>, Account number <strong className="text-white">2594680245</strong></span>
-                    </li>
-                  </ul>
-                </div>
+          {/* Meta info */}
+          <div className="flex flex-wrap gap-3 text-xs text-gray-500">
+            {opportunity.location && (
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" />
+                {opportunity.location}
+              </span>
+            )}
+            {opportunity.deadline && (
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" />
+                Deadline: {format(new Date(opportunity.deadline), 'MMM d, yyyy')}
+              </span>
+            )}
+            {opportunity.attachments && opportunity.attachments.length > 0 && (
+              <span className="flex items-center gap-1 text-green-600">
+                <DownloadSimple className="w-3.5 h-3.5" />
+                {opportunity.attachments.length} attachment(s)
+              </span>
+            )}
+          </div>
 
-                <div className="bg-yellow-400 text-gray-900 rounded-lg p-4 mt-4">
-                  <h3 className="text-base font-bold mb-2">SUBMISSION PROCESS</h3>
-                  <p className="mb-2 text-sm">
-                    Completed pre-qualification documents accompanied by proof of payment (receipt from KCIC) should be submitted through email address <a href="mailto:procurement@kenyacic.org" className="font-semibold underline">procurement@kenyacic.org</a>.
-                  </p>
-                  <p className="font-semibold text-sm">
-                    Please include "Prequalification of goods, works and services 2026" (Indicate category number & item) no later than <span className="text-red-700">Wednesday 24th September 2025 by 5:00pm East African time</span>.
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* Arrow indicator */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+            <CaretRight className="w-5 h-5 text-green-600" weight="bold" />
           </div>
         </div>
-      </main>
+      </Link>
+    </motion.div>
+  );
+}
 
-      <Footer data={homePageData.footer} />
-    </div>
+function NoOpportunities() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="relative group"
+    >
+      <div className="relative rounded-2xl bg-white/80 backdrop-blur-xl border border-gray-100/80 shadow-lg p-10 sm:p-14 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-green-50/30 opacity-60" />
+
+        <div className="relative z-10">
+          <motion.div
+            className="mx-auto mb-8 relative"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg shadow-green-500/25">
+              <FileText className="h-9 w-9 text-white" weight="fill" />
+            </div>
+            <div className="absolute inset-0 -m-2 rounded-3xl border-2 border-green-200/50" />
+          </motion.div>
+
+          <motion.h2
+            className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 tracking-tight"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            No procurement opportunities at the moment
+          </motion.h2>
+
+          <motion.p
+            className="text-gray-500 text-lg leading-relaxed mb-10 max-w-md mx-auto"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            We don&apos;t have any active RFPs, tenders, or consulting opportunities right now. Check back soon or contact us for more information.
+          </motion.p>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-3 justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <Link
+              href="mailto:procurement@kenyacic.org"
+              className="group/btn inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-5 py-2.5 text-sm text-white font-medium shadow-md shadow-green-500/20 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            >
+              Contact Procurement
+            </Link>
+
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200/80 px-5 py-2.5 text-sm text-gray-700 font-medium hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-gray-200/50"
+            >
+              Back to Home
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function ProcurementPage() {
+  const [opportunities, setOpportunities] = useState<OpportunityWithAttachments[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOpportunities() {
+      const result = await listOpportunities({ isActive: true });
+      if (result.success && result.data) {
+        const procurementOpportunities = result.data.filter(o =>
+          procurementTypes.includes(o.type as OpportunityType)
+        );
+        setOpportunities(procurementOpportunities);
+      }
+      setLoading(false);
+    }
+    fetchOpportunities();
+  }, []);
+
+  return (
+    <PageLayout
+      title="Procurement"
+      subtitle="RFPs, Tenders & Consulting Opportunities"
+      description="View current procurement opportunities including RFPs, tenders, and consulting assignments at KCIC."
+      breadcrumb={[
+        { label: 'About Us', href: '/about' },
+        { label: 'Procurement' }
+      ]}
+    >
+      <section className="relative py-12 sm:py-16 overflow-hidden">
+        {/* Ambient background effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-30"
+            style={{
+              background: 'radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%)',
+              filter: 'blur(60px)',
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : opportunities.length === 0 ? (
+            <NoOpportunities />
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {opportunities.map((opportunity, index) => (
+                <motion.div
+                  key={opportunity.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <OpportunityCard opportunity={opportunity} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </PageLayout>
   );
 }

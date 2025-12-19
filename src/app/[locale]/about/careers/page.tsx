@@ -21,8 +21,8 @@ import { format } from 'date-fns';
 const typeConfig: Record<OpportunityType, { label: string; icon: typeof Briefcase; color: string; bgColor: string }> = {
   job: { label: 'Job', icon: Briefcase, color: 'text-blue-600', bgColor: 'bg-blue-100' },
   consulting: { label: 'Consulting', icon: Users, color: 'text-purple-600', bgColor: 'bg-purple-100' },
-  rfp: { label: 'RFP', icon: FileText, color: 'text-orange-600', bgColor: 'bg-orange-100' },
-  tender: { label: 'Tender', icon: FileText, color: 'text-amber-600', bgColor: 'bg-amber-100' },
+  rfp: { label: 'RFP', icon: FileText, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+  tender: { label: 'Tender', icon: FileText, color: 'text-cyan-600', bgColor: 'bg-cyan-100' },
 };
 
 function OpportunityCard({ opportunity }: { opportunity: OpportunityWithAttachments }) {
@@ -165,11 +165,11 @@ function NoOpportunities() {
 export default function CareersPage() {
   const [opportunities, setOpportunities] = useState<OpportunityWithAttachments[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<OpportunityType | 'all'>('all');
 
   useEffect(() => {
     async function fetchOpportunities() {
-      const result = await listOpportunities({ isActive: true });
+      // Only fetch 'job' type opportunities for careers page
+      const result = await listOpportunities({ isActive: true, type: 'job' });
       if (result.success && result.data) {
         setOpportunities(result.data);
       }
@@ -177,15 +177,6 @@ export default function CareersPage() {
     }
     fetchOpportunities();
   }, []);
-
-  const filteredOpportunities = activeFilter === 'all'
-    ? opportunities
-    : opportunities.filter(o => o.type === activeFilter);
-
-  const getCount = (type: OpportunityType | 'all') => {
-    if (type === 'all') return opportunities.length;
-    return opportunities.filter(o => o.type === type).length;
-  };
 
   return (
     <PageLayout
@@ -225,39 +216,9 @@ export default function CareersPage() {
             <NoOpportunities />
           ) : (
             <>
-              {/* Filter tabs */}
-              <div className="flex flex-wrap gap-2 mb-8">
-                <button
-                  onClick={() => setActiveFilter('all')}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeFilter === 'all'
-                      ? 'bg-green-600 text-white shadow-md'
-                      : 'bg-white text-gray-700 border border-gray-200 hover:border-green-300'
-                    }`}
-                >
-                  All ({getCount('all')})
-                </button>
-                {(Object.keys(typeConfig) as OpportunityType[]).map((type) => {
-                  const count = getCount(type);
-                  if (count === 0) return null;
-                  const config = typeConfig[type];
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setActiveFilter(type)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeFilter === type
-                          ? 'bg-green-600 text-white shadow-md'
-                          : 'bg-white text-gray-700 border border-gray-200 hover:border-green-300'
-                        }`}
-                    >
-                      {config.label} ({count})
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Opportunities grid */}
+              {/* Opportunities grid - Jobs only */}
               <div className="grid gap-4 sm:grid-cols-2">
-                {filteredOpportunities.map((opportunity, index) => (
+                {opportunities.map((opportunity, index) => (
                   <motion.div
                     key={opportunity.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -268,12 +229,6 @@ export default function CareersPage() {
                   </motion.div>
                 ))}
               </div>
-
-              {filteredOpportunities.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">No {typeConfig[activeFilter as OpportunityType]?.label.toLowerCase() || ''} opportunities available.</p>
-                </div>
-              )}
             </>
           )}
         </div>

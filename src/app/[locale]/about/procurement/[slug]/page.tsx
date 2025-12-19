@@ -17,7 +17,6 @@ import {
     ArrowSquareOut,
     DownloadSimple,
     CaretLeft,
-    ShareNetwork,
     Hash
 } from '@phosphor-icons/react';
 import { getOpportunityBySlug, OpportunityWithAttachments, OpportunityType } from '@/lib/actions/opportunities';
@@ -53,18 +52,18 @@ const typeConfig: Record<OpportunityType, {
     rfp: {
         label: 'Request for Proposal',
         icon: FileText,
-        color: 'text-blue-600',
-        bgColor: 'bg-blue-50',
-        borderColor: 'border-blue-100',
-        accentColor: 'blue'
+        color: 'text-orange-600',
+        bgColor: 'bg-orange-50',
+        borderColor: 'border-orange-100',
+        accentColor: 'orange'
     },
     tender: {
         label: 'Tender Notice',
         icon: FileText,
-        color: 'text-cyan-600',
-        bgColor: 'bg-cyan-50',
-        borderColor: 'border-cyan-100',
-        accentColor: 'cyan'
+        color: 'text-emerald-600',
+        bgColor: 'bg-emerald-50',
+        borderColor: 'border-emerald-100',
+        accentColor: 'emerald'
     },
 };
 
@@ -76,14 +75,14 @@ function ContentSection({ title, content }: { title: string; content: string }) 
                 {title}
             </h3>
             <div
-                className="text-sm leading-relaxed text-gray-600 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-3 [&_li]:mb-1 [&_strong]:font-semibold [&_strong]:text-gray-800 [&_a]:text-green-600 [&_a]:underline [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-2 [&_h4]:text-sm [&_h4]:font-medium [&_h4]:text-gray-700 [&_h4]:mt-3 [&_h4]:mb-1"
+                className="text-sm leading-relaxed text-gray-600 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-3 [&_li]:mb-1 [&_strong]:font-semibold [&_strong]:text-gray-800 [&_a]:text-orange-600 [&_a]:underline [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-2 [&_h4]:text-sm [&_h4]:font-medium [&_h4]:text-gray-700 [&_h4]:mt-3 [&_h4]:mb-1"
                 dangerouslySetInnerHTML={{ __html: content }}
             />
         </div>
     );
 }
 
-export default function OpportunityDetailPage() {
+export default function ProcurementDetailPage() {
     const params = useParams();
     const slug = params?.slug as string;
 
@@ -108,9 +107,9 @@ export default function OpportunityDetailPage() {
 
     if (loading) {
         return (
-            <PageLayout title="Careers" breadcrumb={[{ label: 'About Us', href: '/about' }, { label: 'Careers', href: '/about/careers' }, { label: 'Loading...' }]}>
+            <PageLayout title="Procurement" breadcrumb={[{ label: 'About Us', href: '/about' }, { label: 'Procurement', href: '/about/procurement' }, { label: 'Loading...' }]}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex justify-center">
-                    <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
                 </div>
             </PageLayout>
         );
@@ -118,13 +117,13 @@ export default function OpportunityDetailPage() {
 
     if (error || !opportunity) {
         return (
-            <PageLayout title="Careers" breadcrumb={[{ label: 'About Us', href: '/about' }, { label: 'Careers', href: '/about/careers' }, { label: 'Not Found' }]}>
+            <PageLayout title="Procurement" breadcrumb={[{ label: 'About Us', href: '/about' }, { label: 'Procurement', href: '/about/procurement' }, { label: 'Not Found' }]}>
                 <div className="max-w-md mx-auto py-20 text-center">
                     <FileText className="w-16 h-16 mx-auto text-gray-300 mb-4" />
                     <h2 className="text-xl font-bold text-gray-900 mb-2">Opportunity Not Found</h2>
                     <p className="text-gray-500 mb-6">This listing may have expired or been removed.</p>
-                    <Link href="/about/careers">
-                        <Button>Back to Careers</Button>
+                    <Link href="/about/procurement">
+                        <Button>Back to Procurement</Button>
                     </Link>
                 </div>
             </PageLayout>
@@ -133,29 +132,15 @@ export default function OpportunityDetailPage() {
 
     const config = typeConfig[opportunity.type as OpportunityType];
     const Icon = config.icon;
-    const isRfpOrTender = opportunity.type === 'rfp' || opportunity.type === 'tender';
-
-    // Determine if this is a procurement type (consulting, rfp, tender) vs career (job)
-    const isProcurement = opportunity.type === 'consulting' || opportunity.type === 'rfp' || opportunity.type === 'tender';
-    const backLink = isProcurement ? '/about/procurement' : '/about/careers';
-    const backLabel = isProcurement ? 'Back to Procurement' : 'Back to Careers';
-    const pageTitle = isProcurement ? 'Procurement' : 'Careers';
-    const pageSubtitle = isProcurement
-        ? 'RFPs, Tenders & Consulting Opportunities'
-        : 'Join our team and help drive sustainable innovation in Africa.';
-    const detailLabel = opportunity.type === 'rfp' ? 'RFP Details'
-        : opportunity.type === 'tender' ? 'Tender Details'
-            : opportunity.type === 'consulting' ? 'Consultancy Details'
-                : 'Job Details';
 
     return (
         <PageLayout
-            title={pageTitle}
-            subtitle={pageSubtitle}
+            title="Procurement"
+            subtitle="RFPs, Tenders & Consulting Opportunities"
             breadcrumb={[
                 { label: 'About Us', href: '/about' },
-                { label: isProcurement ? 'Procurement' : 'Careers', href: backLink },
-                { label: detailLabel }
+                { label: 'Procurement', href: '/about/procurement' },
+                { label: opportunity.type === 'rfp' ? 'RFP Details' : opportunity.type === 'tender' ? 'Tender Details' : 'Consultancy Details' }
             ]}
         >
             <div className="bg-white min-h-screen pb-20">
@@ -163,11 +148,11 @@ export default function OpportunityDetailPage() {
 
                     {/* Back Link */}
                     <Link
-                        href={backLink}
-                        className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-green-600 mb-8 transition-colors"
+                        href="/about/procurement"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-orange-600 mb-8 transition-colors"
                     >
                         <CaretLeft className="w-4 h-4" />
-                        {backLabel}
+                        Back to Procurement
                     </Link>
 
                     <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
@@ -266,17 +251,17 @@ export default function OpportunityDetailPage() {
                                 {/* Application Box */}
                                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                                     <h3 className="text-lg font-bold text-gray-900 mb-2">
-                                        {isRfpOrTender ? 'Submit Proposal' : 'Apply for this Role'}
+                                        Submit Proposal
                                     </h3>
                                     <p className="text-sm text-gray-500 mb-6">
-                                        Please review the requirements carefully before submitting your application.
+                                        Please review the requirements carefully before submitting your proposal.
                                     </p>
 
                                     <div className="space-y-3">
                                         {opportunity.applicationLink && (
-                                            <Button className="w-full h-12 text-base" asChild>
+                                            <Button className="w-full h-12 text-base bg-orange-600 hover:bg-orange-700" asChild>
                                                 <a href={opportunity.applicationLink} target="_blank" rel="noopener noreferrer">
-                                                    {isRfpOrTender ? 'Submit Proposal' : 'Apply Now'}
+                                                    Submit Proposal
                                                     <ArrowSquareOut className="w-4 h-4 ml-2" />
                                                 </a>
                                             </Button>
@@ -285,7 +270,7 @@ export default function OpportunityDetailPage() {
                                         {opportunity.applicationEmail && (
                                             <Button variant="outline" className="w-full h-12 text-base" asChild>
                                                 <a href={`mailto:${opportunity.applicationEmail}`}>
-                                                    Email Application
+                                                    Email Submission
                                                     <EnvelopeSimple className="w-4 h-4 ml-2" />
                                                 </a>
                                             </Button>
@@ -294,8 +279,8 @@ export default function OpportunityDetailPage() {
 
                                     {opportunity.deadline && (
                                         <div className="mt-6 pt-4 border-t border-gray-100">
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Application Deadline</p>
-                                            <div className="flex items-center gap-2 text-green-700 bg-green-50 px-3 py-2 rounded-lg border border-green-100">
+                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Submission Deadline</p>
+                                            <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-100">
                                                 <Clock className="w-4 h-4 flex-shrink-0" />
                                                 <span className="text-sm font-semibold">
                                                     {format(new Date(opportunity.deadline), 'MMMM d, yyyy')}
@@ -309,8 +294,8 @@ export default function OpportunityDetailPage() {
                                 {opportunity.attachments.length > 0 && (
                                     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                                         <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                            <DownloadSimple className="w-5 h-5 text-green-600" />
-                                            Downloads
+                                            <DownloadSimple className="w-5 h-5 text-orange-600" />
+                                            Documents
                                         </h3>
                                         <div className="space-y-3">
                                             {opportunity.attachments.map((file) => (
@@ -320,10 +305,10 @@ export default function OpportunityDetailPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     download
-                                                    className="flex items-center justify-between gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-green-200 hover:bg-green-50/50 transition-all group"
+                                                    className="flex items-center justify-between gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all group"
                                                 >
                                                     <div className="flex items-center gap-3 min-w-0">
-                                                        <div className="h-10 w-10 flex items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm flex-shrink-0 text-green-600 group-hover:scale-110 transition-transform">
+                                                        <div className="h-10 w-10 flex items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm flex-shrink-0 text-orange-600 group-hover:scale-110 transition-transform">
                                                             <FileText className="w-5 h-5" weight="fill" />
                                                         </div>
                                                         <div className="min-w-0">
@@ -335,7 +320,7 @@ export default function OpportunityDetailPage() {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 group-hover:text-green-600 group-hover:border-green-200 transition-colors flex-shrink-0">
+                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 group-hover:text-orange-600 group-hover:border-orange-200 transition-colors flex-shrink-0">
                                                         <DownloadSimple className="w-4 h-4" weight="bold" />
                                                     </div>
                                                 </a>
