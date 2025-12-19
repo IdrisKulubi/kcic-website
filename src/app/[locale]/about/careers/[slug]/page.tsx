@@ -250,7 +250,36 @@ export default function OpportunityDetailPage() {
                                     <ContentSection title="Key Responsibilities" content={opportunity.responsibilities || ''} />
                                     <ContentSection title="Requirements & Skills" content={opportunity.requirements || ''} />
                                     <ContentSection title="Qualifications" content={opportunity.qualifications || ''} />
-                                    <ContentSection title="Application Process" content={opportunity.applicationInstructions || ''} />
+
+                                    {/* Application Process with attachment links */}
+                                    {(opportunity.applicationInstructions || opportunity.attachments.length > 0) && (
+                                        <div className="mb-8 last:mb-0">
+                                            <h3 className="text-base font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">
+                                                Application Process
+                                            </h3>
+                                            {opportunity.applicationInstructions && (
+                                                <div
+                                                    className="text-sm leading-relaxed text-gray-600 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-3 [&_li]:mb-1 [&_strong]:font-semibold [&_strong]:text-gray-800 [&_a]:text-green-600 [&_a]:underline"
+                                                    dangerouslySetInnerHTML={{ __html: opportunity.applicationInstructions }}
+                                                />
+                                            )}
+                                            {opportunity.attachments.length > 0 && (
+                                                <div className="mt-4 space-y-2">
+                                                    {opportunity.attachments.map((file) => (
+                                                        <a
+                                                            key={file.id}
+                                                            href={file.fileUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium underline underline-offset-2"
+                                                        >
+                                                            📎 Click here to view: {file.fileName || 'Attachment'}
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </motion.div>
                         </div>
