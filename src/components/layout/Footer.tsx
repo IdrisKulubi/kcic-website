@@ -13,11 +13,13 @@ import {
   Phone,
   MapPin,
   PaperPlaneTilt,
+  ShieldCheck,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
 import { colors } from "@/lib/design-system";
+import { WhistleblowerModal } from "@/components/whistleblower/WhistleblowerModal";
 
 interface FooterProps {
   data: FooterData;
@@ -35,6 +37,7 @@ export default function Footer({ data }: FooterProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  const [isWhistleblowerOpen, setIsWhistleblowerOpen] = useState(false);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -203,10 +206,24 @@ export default function Footer({ data }: FooterProps) {
               {data.copyright}
             </p>
 
-
+            {/* Whistleblower Button */}
+            <button
+              onClick={() => setIsWhistleblowerOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200 rounded-lg transition-all duration-200"
+              style={{ backgroundColor: colors.primary.green.DEFAULT }}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Whistleblower
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Whistleblower Modal */}
+      <WhistleblowerModal
+        isOpen={isWhistleblowerOpen}
+        onClose={() => setIsWhistleblowerOpen(false)}
+      />
     </footer>
   );
 }

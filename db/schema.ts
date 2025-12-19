@@ -336,3 +336,37 @@ export const opportunityAttachmentsRelations = relations(opportunityAttachments,
     references: [opportunities.id]
   })
 }));
+
+// Whistleblower Reports table
+export const whistleblowerReports = pgTable("whistleblower_reports", {
+  id: text("id").primaryKey(),
+  referenceNumber: text("reference_number").notNull().unique(), // e.g., WB-2024001
+
+  // Report details
+  category: text("category").notNull(), // 'fraud' | 'misconduct' | 'safety' | 'harassment' | 'corruption' | 'other'
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+
+  // Optional context
+  incidentDate: timestamp("incident_date"),
+  department: text("department"),
+  involvedParties: text("involved_parties"), // Names/descriptions of people involved
+  evidence: text("evidence"), // Any supporting information or file references
+
+  // Contact (optional for anonymous reports)
+  contactEmail: text("contact_email"),
+  isAnonymous: boolean("is_anonymous").default(true).notNull(),
+
+  // Status management
+  status: text("status").default("new").notNull(), // 'new' | 'reviewing' | 'investigating' | 'resolved' | 'dismissed'
+  adminNotes: text("admin_notes"),
+  reviewedBy: text("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  statusIdx: index("whistleblower_status_idx").on(table.status),
+  categoryIdx: index("whistleblower_category_idx").on(table.category),
+  createdAtIdx: index("whistleblower_created_at_idx").on(table.createdAt),
+}));

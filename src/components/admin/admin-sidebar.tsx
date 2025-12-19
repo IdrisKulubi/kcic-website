@@ -12,6 +12,7 @@ import {
   Briefcase,
   Layout,
   Megaphone,
+  ShieldAlert,
 } from "lucide-react";
 import {
   Sidebar,
@@ -61,6 +62,12 @@ const navGroups: NavGroup[] = [
       { title: "Team", href: "/admin/team", icon: Users },
       { title: "Partners", href: "/admin/partners", icon: Handshake },
       { title: "Opportunities", href: "/admin/opportunities", icon: Briefcase },
+    ],
+  },
+  {
+    label: "Reports",
+    items: [
+      { title: "Whistleblower Reports", href: "/admin/whistleblower", icon: ShieldAlert },
     ],
   },
   {
