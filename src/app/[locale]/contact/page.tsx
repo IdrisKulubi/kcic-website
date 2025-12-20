@@ -28,8 +28,7 @@ const contactInfo = [
   icon: FaPhone,
     title: "Call Us",
     details: [
-      "+254 703 034 000",
-      "+254 703 034 001",
+      "+254 703 034 701",
       "Mon - Fri: 8:00 AM - 5:00 PM",
       "EAT (UTC+3)",
     ],
