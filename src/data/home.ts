@@ -248,7 +248,7 @@ export const homePageData: HomePageData = {
     ],
     contact: {
       address: "Kenya Climate Innovation Centre, Strathmore University Campus, Ole Sangale Rd, Nairobi, Kenya",
-      phone: "+254 703 034701",
+      phone: "+254 703 034 701",
       email: "info@kenyacic.org"
     },
     newsletter: {
