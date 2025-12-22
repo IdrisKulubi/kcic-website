@@ -294,7 +294,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Apple-Style Full-Screen Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -303,136 +303,162 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
+            {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-white"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
             />
-            <motion.div
-              className="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            >
-              <div className="flex flex-col h-full">
-                {/* Mobile Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                  <span className="text-lg font-semibold text-gray-900">Menu</span>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-                    aria-label="Close menu"
-                  >
-                    <X className="h-5 w-5 text-gray-500" />
-                  </button>
-                </div>
 
-                {/* Mobile Navigation Links */}
-                <div className="flex-1 overflow-y-auto py-6">
-                  <div className="space-y-2 px-6">
-                    {navigation.map((item, index) => (
-                      <motion.div
-                        key={item.label}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        {item.subItems ? (
-                          <div className="space-y-2">
-                            <button
-                              onClick={() => setExpandedMobileItem(
-                                expandedMobileItem === item.label ? null : item.label
-                              )}
-                              className="flex items-center justify-between w-full p-3 rounded-lg font-medium text-left transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset"
+            {/* Menu Content */}
+            <motion.div
+              className="relative h-full flex flex-col"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              {/* Header with Close Button */}
+              <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Image
+                    src="/images/hero/KCIC logo.png"
+                    alt="KCIC Logo"
+                    className="h-8 w-auto"
+                    width={80}
+                    height={32}
+                  />
+                </Link>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5 text-gray-600" weight="bold" />
+                </button>
+              </div>
+
+              {/* Navigation Links - Scrollable */}
+              <div className="flex-1 overflow-y-auto px-6 py-6">
+                <nav className="space-y-1">
+                  {navigation.map((item, index) => (
+                    <motion.div
+                      key={item.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
+                    >
+                      {item.subItems ? (
+                        <div className="mb-2">
+                          {/* Parent Item with Toggle */}
+                          <button
+                            onClick={() => setExpandedMobileItem(
+                              expandedMobileItem === item.label ? null : item.label
+                            )}
+                            className="flex items-center justify-between w-full py-4 text-left transition-colors"
+                            aria-expanded={expandedMobileItem === item.label}
+                          >
+                            <span
+                              className="text-xl font-semibold"
                               style={{
-                                fontFamily: typography.fonts.body,
-                                color: colors.secondary.gray[700],
-                                fontSize: typography.sizes.body.lg[0],
+                                color: expandedMobileItem === item.label
+                                  ? colors.primary.green.DEFAULT
+                                  : colors.secondary.gray[900],
                               }}
-                              aria-expanded={expandedMobileItem === item.label}
-                              aria-controls={`mobile-submenu-${item.label}`}
                             >
                               {item.label}
-                              <motion.div
-                                animate={{ rotate: expandedMobileItem === item.label ? 180 : 0 }}
-                                transition={{ duration: 0.2 }}
-                              >
-                                <CaretDown className="h-5 w-5" />
-                              </motion.div>
-                            </button>
+                            </span>
+                            <motion.div
+                              animate={{ rotate: expandedMobileItem === item.label ? 180 : 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <CaretDown
+                                className="h-5 w-5"
+                                style={{ color: colors.secondary.gray[400] }}
+                              />
+                            </motion.div>
+                          </button>
 
-                            <AnimatePresence>
-                              {expandedMobileItem === item.label && (
-                                <motion.div
-                                  id={`mobile-submenu-${item.label}`}
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: 'auto' }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="ml-4 space-y-1 overflow-hidden"
-                                >
+                          {/* Submenu Items */}
+                          <AnimatePresence>
+                            {expandedMobileItem === item.label && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.25 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="pb-4 space-y-1">
                                   {item.subItems.map((subItem, subIndex) => (
                                     <motion.a
                                       key={subItem.label}
                                       href={subItem.href}
-                                      initial={{ opacity: 0, x: 10 }}
+                                      initial={{ opacity: 0, x: -10 }}
                                       animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: subIndex * 0.05 }}
-                                      className="flex items-center p-2 rounded-md transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset"
+                                      transition={{ delay: subIndex * 0.03 }}
+                                      className="flex items-center py-3 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
                                       onClick={() => setIsMobileMenuOpen(false)}
                                     >
-                                      <div className="flex-shrink-0 w-6 h-6 bg-green-50 rounded-md flex items-center justify-center mr-2">
-                                        {React.createElement(getIcon(subItem.icon), { className: "w-3 h-3 text-green-600" })}
+                                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm">
+                                        {React.createElement(getIcon(subItem.icon), {
+                                          className: "w-5 h-5",
+                                          style: { color: colors.primary.green.DEFAULT }
+                                        })}
                                       </div>
                                       <div className="flex-1">
-                                        <div className="font-medium text-gray-900 text-sm">
+                                        <span className="text-base font-medium text-gray-900 block">
                                           {subItem.label}
-                                        </div>
+                                        </span>
+                                        {subItem.description && (
+                                          <span className="text-sm text-gray-500 line-clamp-1">
+                                            {subItem.description}
+                                          </span>
+                                        )}
                                       </div>
                                     </motion.a>
                                   ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        ) : (
-                          <a
-                            href={item.href}
-                            className="block p-3 rounded-lg font-medium transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset"
-                            style={{
-                              fontFamily: typography.fonts.body,
-                              color: colors.secondary.gray[700],
-                              fontSize: typography.sizes.body.lg[0],
-                            }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {item.label}
-                          </a>
-                        )}
-                      </motion.div>
-                    ))}
-                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ) : (
+                        <a
+                          href={item.href}
+                          className="flex items-center py-4 text-xl font-semibold transition-colors hover:text-green-600"
+                          style={{ color: colors.secondary.gray[900] }}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item.label}
+                        </a>
+                      )}
+                    </motion.div>
+                  ))}
+                </nav>
 
-                  {/* Mobile Language Switcher */}
-                  <div className="mt-6 px-6 pt-6 border-t border-gray-100">
-                    <LanguageSwitcher variant="mobile" />
-                  </div>
-                </div>
+                {/* Divider */}
+                <div className="my-6 border-t border-gray-100" />
 
-                {/* Mobile CTA Button */}
-                {ctaButton && (
-                  <div className="p-6 border-t border-gray-100">
+               
+              </div>
+
+              {/* Bottom CTA */}
+              {ctaButton && (
+                <div className="px-6 py-6 border-t border-gray-100 bg-gray-50">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
                     <Button
-                      className="w-full py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                      className="w-full py-4 rounded-2xl font-semibold text-lg shadow-lg"
                       style={{
-                        background: colors.primary.green.DEFAULT,
+                        background: `linear-gradient(135deg, ${colors.primary.green.DEFAULT}, ${colors.primary.green[600]})`,
                         color: 'white',
-                        fontFamily: typography.fonts.body,
                         border: 'none',
                       }}
                       asChild
@@ -444,9 +470,9 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         {ctaButton.text}
                       </a>
                     </Button>
-                  </div>
-                )}
-              </div>
+                  </motion.div>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
