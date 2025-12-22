@@ -93,12 +93,12 @@ export const homePageData: HomePageData = {
     ctaButtons: [
       {
         text: "Join Our Programs",
-        href: "/programs",
+        href: "/how-we-work/programs",
         variant: "primary"
       },
       {
         text: "Learn More",
-        href: "/about",
+        href: "/about/who-we-are",
         variant: "secondary"
       }
     ]
@@ -233,10 +233,10 @@ export const homePageData: HomePageData = {
   },
   footer: {
     quickLinks: [
-      { label: "About", href: "/about" },
-      { label: "Programmes", href: "/programmes" },
+      { label: "About", href: "/about/who-we-are" },
+      { label: "Programmes", href: "/how-we-work/programs" },
     
-      { label: "Contacts", href: "/contacts" },
+      { label: "Contacts", href: "/contact" },
     
     ],
     socialMedia: [
