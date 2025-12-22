@@ -485,7 +485,7 @@ function ProgrammeCard({
             {deleting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <a href={`/how-we-work/programmes/${programme.slug}`} target="_blank">
+            <a href={`/programmes/${programme.slug}`} target="_blank">
               <ExternalLink className="w-3 h-3" />
             </a>
           </Button>

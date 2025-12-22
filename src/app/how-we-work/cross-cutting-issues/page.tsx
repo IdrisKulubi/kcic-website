@@ -517,7 +517,7 @@ export default function CrossCuttingIssuesPage() {
                   Partner with Us
                 </Link>
                 <Link
-                  href="/how-we-work/programmes"
+                  href="/programmes"
                   className="inline-flex items-center px-8 py-3 bg-white text-green-600 font-semibold rounded-lg border border-green-600 hover:bg-green-50 transition-colors duration-200"
                 >
                   Explore Our Programs

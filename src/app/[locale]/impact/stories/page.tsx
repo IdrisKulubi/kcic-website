@@ -122,7 +122,7 @@ export default async function StoriesPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/how-we-work/programmes"
+                href="/programmes"
                 className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
                 Explore Our Programmes

@@ -195,7 +195,7 @@ export async function createProgramme(data: z.infer<typeof programmeInputSchema>
     });
 
     revalidatePath('/');
-    revalidatePath('/how-we-work/programmes');
+    revalidatePath('/programmes');
     revalidatePath('/admin/programmes');
 
     return { success: true, data: { id } };
@@ -240,8 +240,8 @@ export async function updateProgramme(id: string, data: Partial<z.infer<typeof p
       .where(eq(programmes.id, id));
 
     revalidatePath('/');
-    revalidatePath('/how-we-work/programmes');
-    revalidatePath(`/how-we-work/programmes/${existing.slug}`);
+    revalidatePath('/programmes');
+    revalidatePath(`/programmes/${existing.slug}`);
     revalidatePath('/admin/programmes');
 
     return { success: true };
@@ -281,7 +281,7 @@ export async function deleteProgramme(id: string): Promise<ActionResponse> {
     await db.delete(programmes).where(eq(programmes.id, id));
 
     revalidatePath('/');
-    revalidatePath('/how-we-work/programmes');
+    revalidatePath('/programmes');
     revalidatePath('/admin/programmes');
 
     return { success: true };

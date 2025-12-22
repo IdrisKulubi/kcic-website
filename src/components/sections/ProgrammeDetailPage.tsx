@@ -106,7 +106,7 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
                         {/* Back button */}
                         <Link
-                            href="/how-we-work/programmes"
+                            href="/programmes"
                             className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm mb-6 transition-colors"
                         >
                             <ArrowLeftIcon className="w-4 h-4" />
@@ -251,7 +251,7 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                         Discover other initiatives supporting climate innovation across Africa.
                     </p>
                     <Link
-                        href="/how-we-work/programmes"
+                        href="/programmes"
                         className="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-gray-900 text-white font-medium rounded-full hover:bg-gray-800 transition-colors"
                     >
                         <ArrowLeftIcon className="w-4 h-4" />

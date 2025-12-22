@@ -124,7 +124,7 @@ export default function ProgrammesPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
                 >
-                  <Link href={`/how-we-work/programmes/${programme.slug}`}>
+                  <Link href={`/programmes/${programme.slug}`}>
                     <article className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300">
 
                       {/* Active Badge */}

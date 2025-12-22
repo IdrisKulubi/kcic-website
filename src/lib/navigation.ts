@@ -64,9 +64,9 @@ export const navData = {
     },
     {
       label: "Our Programmes",
-      href: "/how-we-work/programmes",
+      href: "/programmes",
     },
-   
+
     // {
     //   label: "Newsroom",
     //   href: "/newsroom",

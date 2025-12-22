@@ -93,7 +93,7 @@ export const homePageData: HomePageData = {
     ctaButtons: [
       {
         text: "Join Our Programs",
-        href: "/how-we-work/programs",
+        href: "/programmes",
         variant: "primary"
       },
       {
@@ -234,10 +234,10 @@ export const homePageData: HomePageData = {
   footer: {
     quickLinks: [
       { label: "About", href: "/about/who-we-are" },
-      { label: "Programmes", href: "/how-we-work/programs" },
-    
+      { label: "Programmes", href: "/programmes" },
+
       { label: "Contacts", href: "/contact" },
-    
+
     ],
     socialMedia: [
       { platform: "Twitter", href: "https://x.com/KenyaCIC", icon: "twitter" },
