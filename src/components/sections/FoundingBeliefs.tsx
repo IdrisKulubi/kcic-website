@@ -46,7 +46,8 @@ export default function FoundingBeliefs({
   const { shouldDisableAnimations } = useAccessibilityClasses();
 
   const sectionRef = useRef<HTMLElement | null>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Note: cards are now selected via class name for better reliability with GSAP
 
   useLayoutEffect(() => {
     if (shouldDisableAnimations()) return;
@@ -55,56 +56,73 @@ export default function FoundingBeliefs({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Staggered slide-in animations with alternating directions
-      cardRefs.current.forEach((card, index) => {
-        if (card) {
-          // Alternate between left and right
-          const direction = index % 2 === 0 ? -60 : 60;
+      // Use class selector for reliability in React
+      const cards = sectionRef.current?.querySelectorAll('.belief-card');
 
-          gsap.fromTo(
-            card,
-            { opacity: 0, x: direction, rotateY: direction > 0 ? 10 : -10 },
-            {
-              opacity: 1,
-              x: 0,
-              rotateY: 0,
+      if (cards && cards.length > 0) {
+        cards.forEach((card, index) => {
+          // First card from left, second from bottom, third from right
+          let fromX = 0;
+          let fromY = 0;
+          let rotation = 0;
+
+          if (index === 0) {
+            fromX = -100; // Left
+            rotation = -5;
+          } else if (index === 1) {
+            fromY = 60; // Bottom
+            rotation = 0;
+          } else {
+            fromX = 100; // Right
+            rotation = 5;
+          }
+
+          // Important: Set initial state immediately to avoid flash or non-animation
+          gsap.set(card, {
+            opacity: 0,
+            x: fromX,
+            y: fromY,
+            scale: 0.9,
+            rotateY: rotation,
+          });
+
+          gsap.to(card, {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotateY: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            delay: index * 0.2, // Staggered start
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%", // Triggers when top of section hits 75% down viewport
+              once: true,
+              toggleActions: "play none none none",
+            },
+          });
+
+          // Animate icon with bouncy pop-in
+          const icon = card.querySelector('.belief-icon');
+          if (icon) {
+            gsap.set(icon, { scale: 0, rotation: -180 });
+
+            gsap.to(icon, {
+              scale: 1,
+              rotation: 0,
               duration: 0.8,
-              ease: "power3.out",
-              delay: index * 0.15,
+              ease: "back.out(1.7)",
+              delay: index * 0.2 + 0.3,
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
-                end: "top 55%",
                 once: true,
-                toggleActions: "play none none none",
-                invalidateOnRefresh: true,
               },
-            }
-          );
-
-          // Animate icon with rotation
-          const icon = card.querySelector('.belief-icon');
-          if (icon) {
-            gsap.fromTo(
-              icon,
-              { scale: 0, rotation: -180 },
-              {
-                scale: 1,
-                rotation: 0,
-                duration: 0.6,
-                ease: "back.out(1.7)",
-                delay: index * 0.15 + 0.3,
-                scrollTrigger: {
-                  trigger: sectionRef.current,
-                  start: "top 75%",
-                  once: true,
-                  toggleActions: "play none none none",
-                },
-              }
-            );
+            });
           }
-        }
-      });
+        });
+      }
 
       ScrollTrigger.refresh();
     }, sectionRef);
@@ -155,10 +173,7 @@ export default function FoundingBeliefs({
           {beliefs.map((belief, index) => (
             <div
               key={index}
-              ref={(el) => {
-                cardRefs.current[index] = el;
-              }}
-              className="group relative p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+              className="belief-card group relative p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
               style={{
                 borderColor: "hsl(var(--border))",
                 borderWidth: "1px",

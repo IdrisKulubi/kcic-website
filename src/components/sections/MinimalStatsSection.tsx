@@ -207,31 +207,33 @@ export function MinimalStatsSection({
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
             <div className="flex flex-col items-center mb-12">
-              <TabsList className="shadow-sm rounded-full p-1.5 bg-white/90 dark:bg-white/10 backdrop-blur">
+              <TabsList className="relative h-auto p-2 rounded-full border border-white/10 bg-black/5 dark:bg-black/20 backdrop-blur-md">
                 <TabsTrigger
                   value="impact"
-                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${isDark
-                    ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white'
-                    : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
+                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
+                    data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
+                    ${isDark
+                      ? 'data-[state=active]:bg-climate-green data-[state=active]:text-white text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                      : 'data-[state=active]:bg-white data-[state=active]:text-climate-green data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
                     }`}
-                  style={{ fontFamily: typography.fonts.heading }}
                 >
-                  <span className="flex flex-col items-center">
-                    <span>2010 - Today</span>
-                    <span className="text-xs font-normal opacity-75">13 Years of Impact</span>
+                  <span className="flex flex-col items-center gap-1">
+                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2010 - Today</span>
+                    <span className="text-xs sm:text-sm font-medium opacity-80 whitespace-nowrap">13 Years of Impact</span>
                   </span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="targets"
-                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${isDark
-                    ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white'
-                    : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
+                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
+                    data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
+                    ${isDark
+                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                      : 'data-[state=active]:bg-white data-[state=active]:text-[#FFA500] data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
                     }`}
-                  style={{ fontFamily: typography.fonts.heading }}
                 >
-                  <span className="flex flex-col items-center">
-                    <span>2025 - 2030</span>
-                    <span className="text-xs font-normal opacity-75">Our Targets</span>
+                  <span className="flex flex-col items-center gap-1">
+                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2025 - 2030</span>
+                    <span className="text-xs sm:text-sm font-medium opacity-80 whitespace-nowrap">Our Targets</span>
                   </span>
                 </TabsTrigger>
               </TabsList>
