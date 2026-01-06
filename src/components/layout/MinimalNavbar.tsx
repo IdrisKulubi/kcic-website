@@ -147,10 +147,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
           : 'bg-white/90 backdrop-blur-sm shadow-sm'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-6 sm:px-10 lg:px-12">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
-            <div className="flex-shrink-0 -ml-4 sm:-ml-6 lg:-ml-8">
+            <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <Image
                   src="/images/hero/KCIC logo.png"
@@ -443,7 +443,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                 {/* Divider */}
                 <div className="my-6 border-t border-gray-100" />
 
-               
+
               </div>
 
               {/* Bottom CTA */}

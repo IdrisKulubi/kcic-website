@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { colors, typography } from "@/lib/design-system";
+import { typography } from "@/lib/design-system";
 import { Target, Eye, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 interface WhatWeDoSectionProps {
