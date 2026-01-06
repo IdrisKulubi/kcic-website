@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, CaretDown } from "@phosphor-icons/react";
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 
@@ -35,7 +35,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
       {/* Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Title */}
-        <h1 
+        <h1
           className={`font-bold mb-6 ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000')}`}
           style={{
             fontSize: 'clamp(2.5rem, 8vw, 5rem)',
@@ -49,7 +49,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
         </h1>
 
         {/* Subtitle */}
-        <h2 
+        <h2
           className={`font-medium mb-4 ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200')}`}
           style={{
             fontSize: 'clamp(1.25rem, 4vw, 2rem)',
@@ -62,7 +62,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
         </h2>
 
         {/* Description */}
-        <p 
+        <p
           className={`text-lg sm:text-xl mb-6 max-w-2xl mx-auto ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400')}`}
           style={{
             fontFamily: typography.fonts.body,
@@ -74,10 +74,10 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
         </p>
 
         {/* Stats */}
-        <div 
+        <div
           className={`mb-12 ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600')}`}
         >
-          <p 
+          <p
             className="text-sm sm:text-base font-medium tracking-wider"
             style={{
               color: colors.primary.green.DEFAULT,
@@ -90,7 +90,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
         </div>
 
         {/* CTA Buttons */}
-        <div 
+        <div
           className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-800')}`}
         >
           {data.ctaButtons.map((button) => (
@@ -105,20 +105,20 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
               style={
                 button.variant === 'primary'
                   ? {
-                      background: colors.primary.green.DEFAULT,
-                      color: '#FFFFFF',
-                      fontFamily: typography.fonts.body,
-                    }
+                    background: colors.primary.green.DEFAULT,
+                    color: '#FFFFFF',
+                    fontFamily: typography.fonts.body,
+                  }
                   : {
-                      borderColor: colors.primary.blue.DEFAULT,
-                      color: colors.primary.blue.DEFAULT,
-                      fontFamily: typography.fonts.body,
-                      backgroundColor: 'transparent',
-                    }
+                    borderColor: colors.primary.blue.DEFAULT,
+                    color: colors.primary.blue.DEFAULT,
+                    fontFamily: typography.fonts.body,
+                    backgroundColor: 'transparent',
+                  }
               }
               asChild
             >
-              <a 
+              <a
                 href={button.href}
                 className="flex items-center justify-center space-x-2 min-w-[200px]"
               >
@@ -139,7 +139,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
           style={{ color: colors.secondary.gray[600] }}
         >
           <div className="flex flex-col items-center space-y-2">
-            <span 
+            <span
               className={`text-sm font-medium tracking-wide ${getMotionSafeClasses('group-hover:opacity-80 transition-colors duration-300')}`}
               style={{
                 fontFamily: typography.fonts.body,
@@ -149,7 +149,7 @@ export function MinimalHeroSection({ data }: MinimalHeroSectionProps) {
             >
               Discover Our Impact
             </span>
-            <ChevronDown 
+            <CaretDown
               className={`h-6 w-6 ${getMotionSafeClasses('group-hover:translate-y-1 transition-transform duration-300 animate-bounce')}`}
               style={{ color: colors.primary.green.DEFAULT }}
             />

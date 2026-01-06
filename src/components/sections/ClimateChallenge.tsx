@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { AlertTriangle, Droplet, Trees, Wind } from "lucide-react";
+import { Warning, Drop, Plant, Wind } from "@phosphor-icons/react";
 
 interface ClimateChallengeSectionProps {
   className?: string;
@@ -77,7 +77,7 @@ export default function ClimateChallenge({
       if (statNumberRef.current) {
         const target = 2.6;
         const obj = { value: 0 };
-        
+
         gsap.to(obj, {
           value: target,
           duration: 1.5,
@@ -216,9 +216,9 @@ export default function ClimateChallenge({
               </h3>
               <ul className="space-y-3">
                 {[
-                  { label: "Environmental Degradation", icon: AlertTriangle },
-                  { label: "Biodiversity Loss", icon: Trees },
-                  { label: "Water & Air Pollution", icon: Droplet },
+                  { label: "Environmental Degradation", icon: Warning },
+                  { label: "Biodiversity Loss", icon: Plant },
+                  { label: "Water & Air Pollution", icon: Drop },
                 ].map((item, index) => (
                   <li
                     key={index}
@@ -257,17 +257,17 @@ export default function ClimateChallenge({
                   color: colors.primary.blue.DEFAULT,
                 },
                 {
-                  icon: Trees,
+                  icon: Plant,
                   label: "Ecosystem Restoration",
                   color: colors.primary.green.DEFAULT,
                 },
                 {
-                  icon: Droplet,
+                  icon: Drop,
                   label: "Water Security",
                   color: colors.primary.blue.DEFAULT,
                 },
                 {
-                  icon: AlertTriangle,
+                  icon: Warning,
                   label: "Risk Mitigation",
                   color: colors.semantic.warning,
                 },

@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ArrowRight, CaretLeft, CaretRight, Pause, Play } from "@phosphor-icons/react";
 import { colors, typography } from "@/lib/design-system";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 
@@ -102,8 +102,8 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                   shouldDisableAnimations()
                     ? "w-full h-full"
                     : `w-full h-full will-change-transform ${getMotionSafeClasses(
-                        `overflow-hidden`
-                      )}`
+                      `overflow-hidden`
+                    )}`
                 }
               >
                 <Image
@@ -116,8 +116,8 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                     shouldDisableAnimations()
                       ? "object-cover"
                       : `object-cover scale-105 ${getMotionSafeClasses(
-                          `transition-transform ease-out ${panX} ${panY} scale-110`
-                        )}`
+                        `transition-transform ease-out ${panX} ${panY} scale-110`
+                      )}`
                   }
                   style={
                     shouldDisableAnimations()
@@ -182,16 +182,16 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                 style={
                   button.variant === "primary"
                     ? {
-                        backgroundColor: colors.primary.green.DEFAULT,
-                        color: "#FFFFFF",
-                        fontFamily: typography.fonts.body,
-                      }
+                      backgroundColor: colors.primary.green.DEFAULT,
+                      color: "#FFFFFF",
+                      fontFamily: typography.fonts.body,
+                    }
                     : {
-                        borderColor: colors.primary.blue.DEFAULT,
-                        color: colors.primary.blue.DEFAULT,
-                        fontFamily: typography.fonts.body,
-                        backgroundColor: "transparent",
-                      }
+                      borderColor: colors.primary.blue.DEFAULT,
+                      color: colors.primary.blue.DEFAULT,
+                      fontFamily: typography.fonts.body,
+                      backgroundColor: "transparent",
+                    }
                 }
                 asChild
               >
@@ -218,7 +218,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
               }}
               className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur px-3 py-3 transition-colors"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <CaretLeft className="h-5 w-5" />
             </button>
             <button
               aria-label="Next slide"
@@ -228,20 +228,20 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
               }}
               className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur px-3 py-3 transition-colors"
             >
-              <ChevronRight className="h-5 w-5" />
+              <CaretRight className="h-5 w-5" />
             </button>
           </div>
 
           {/* Dots + Pause */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/30 backdrop-blur px-1 py-1 rounded-full">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/30 backdrop-blur px-1 py-1 rounded-full">
             <button
               aria-label={paused ? "Play slideshow" : "Pause slideshow"}
               onClick={() => setPaused((p) => !p)}
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white/90 hover:text-white transition-colors"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white/90 hover:text-white transition-colors"
             >
-                {paused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
+              {paused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
             </button>
-              <div className="flex gap-1">
+            <div className="flex gap-1">
               {slides.map((_, i) => (
                 <button
                   key={i}
@@ -250,9 +250,8 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                     setIndex(i);
                     setPaused(true);
                   }}
-                    className={`h-2 w-2 rounded-full transition-all ${
-                      i === index ? "w-3 bg-white" : "bg-white/60 hover:bg-white"
-                  }`}
+                  className={`h-2 w-2 rounded-full transition-all ${i === index ? "w-3 bg-white" : "bg-white/60 hover:bg-white"
+                    }`}
                 />
               ))}
             </div>

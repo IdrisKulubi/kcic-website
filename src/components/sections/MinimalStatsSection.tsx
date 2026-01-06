@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from "@phosphor-icons/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface StatItem {
@@ -28,9 +28,9 @@ interface MinimalStatsSectionProps {
   imageSide?: 'left' | 'right';
 }
 
-export function MinimalStatsSection({ 
-  stats, 
-  targets, 
+export function MinimalStatsSection({
+  stats,
+  targets,
   variant = 'light',
   title,
   subtitle,
@@ -82,7 +82,7 @@ export function MinimalStatsSection({
               </div>
               <p
                 className="text-sm sm:text-base font-medium text-gray-800 dark:text-white/90"
-                style={{ 
+                style={{
                   fontFamily: typography.fonts.body,
                   lineHeight: typography.lineHeights.snug,
                 }}
@@ -167,7 +167,7 @@ export function MinimalStatsSection({
   const isDark = variant === 'dark';
 
   return (
-    <section 
+    <section
       id="impact-section"
       ref={sectionRef}
       className={`py-20 sm:py-32 relative`}
@@ -175,7 +175,7 @@ export function MinimalStatsSection({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 
+          <h2
             className="font-bold mb-4"
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
@@ -187,7 +187,7 @@ export function MinimalStatsSection({
             {title || 'Our Impact'}
           </h2>
           {subtitle && (
-            <p 
+            <p
               className="mt-4 text-gray-600"
               style={{
                 fontSize: '1.25rem',
@@ -198,7 +198,7 @@ export function MinimalStatsSection({
               {subtitle}
             </p>
           )}
-          <div 
+          <div
             className="w-24 h-1 mx-auto rounded-full mt-4"
             style={{ background: colors.primary.green.DEFAULT }}
           />
@@ -208,13 +208,12 @@ export function MinimalStatsSection({
           <Tabs defaultValue="impact" className="w-full">
             <div className="flex flex-col items-center mb-12">
               <TabsList className="shadow-sm rounded-full p-1.5 bg-white/90 dark:bg-white/10 backdrop-blur">
-                <TabsTrigger 
+                <TabsTrigger
                   value="impact"
-                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${
-                    isDark 
-                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white' 
-                      : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
-                  }`}
+                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${isDark
+                    ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white'
+                    : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
+                    }`}
                   style={{ fontFamily: typography.fonts.heading }}
                 >
                   <span className="flex flex-col items-center">
@@ -222,13 +221,12 @@ export function MinimalStatsSection({
                     <span className="text-xs font-normal opacity-75">13 Years of Impact</span>
                   </span>
                 </TabsTrigger>
-                <TabsTrigger 
+                <TabsTrigger
                   value="targets"
-                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${
-                    isDark 
-                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white' 
-                      : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
-                  }`}
+                  className={`text-base sm:text-lg font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition-all ${isDark
+                    ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-700 hover:text-gray-900 dark:text-white/70 dark:hover:text-white'
+                    : 'data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm'
+                    }`}
                   style={{ fontFamily: typography.fonts.heading }}
                 >
                   <span className="flex flex-col items-center">
@@ -260,7 +258,7 @@ export function MinimalStatsSection({
                   <TabsContent value="impact" className="mt-0">
                     {renderStats(stats, false)}
                   </TabsContent>
-                  
+
                   <TabsContent value="targets" className="mt-0">
                     {renderStats(targets, true)}
                   </TabsContent>
@@ -271,17 +269,16 @@ export function MinimalStatsSection({
                 <TabsContent value="impact" className="mt-0">
                   {renderStats(stats, false)}
                 </TabsContent>
-                
+
                 <TabsContent value="targets" className="mt-0">
                   {renderStats(targets, true)}
                 </TabsContent>
               </>
             )}
 
-            <div className={`mt-16 pt-12 ${
-              isDark ? 'border-t border-white/10' : 'border-t border-gray-200'
-            }`}>
-             
+            <div className={`mt-16 pt-12 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'
+              }`}>
+
             </div>
           </Tabs>
         ) : (
@@ -305,7 +302,7 @@ export function MinimalStatsSection({
                 {/* Stats side */}
                 <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
                   <div className="mb-10 text-center lg:text-left">
-                    <h2 
+                    <h2
                       className="font-bold mb-4"
                       style={{
                         fontSize: 'clamp(2rem, 5vw, 3.2rem)',
@@ -317,7 +314,7 @@ export function MinimalStatsSection({
                       {title || 'Our Impact'}
                     </h2>
                     {subtitle && (
-                      <p 
+                      <p
                         className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                         style={{
                           fontSize: '1.1rem',
@@ -328,7 +325,7 @@ export function MinimalStatsSection({
                         {subtitle}
                       </p>
                     )}
-                    <div 
+                    <div
                       className={`w-24 h-1 mt-5 rounded-full ${isDark ? '' : ''} ${imageSide === 'right' ? 'lg:ml-0 mx-auto' : 'lg:ml-0 mx-auto'}`}
                       style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
                     />
@@ -340,7 +337,7 @@ export function MinimalStatsSection({
             ) : (
               <>
                 <div className="text-center mb-12">
-                  <h2 
+                  <h2
                     className="font-bold mb-4"
                     style={{
                       fontSize: 'clamp(2rem, 5vw, 3.5rem)',
@@ -352,7 +349,7 @@ export function MinimalStatsSection({
                     {title || 'Our Impact'}
                   </h2>
                   {subtitle && (
-                    <p 
+                    <p
                       className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                       style={{
                         fontSize: '1.25rem',
@@ -363,7 +360,7 @@ export function MinimalStatsSection({
                       {subtitle}
                     </p>
                   )}
-                  <div 
+                  <div
                     className="w-24 h-1 mx-auto rounded-full mt-4"
                     style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
                   />

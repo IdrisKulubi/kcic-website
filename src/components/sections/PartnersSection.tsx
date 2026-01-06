@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useMemo, memo } from "react";
-import Link from "next/link";
 import { colors, typography } from "@/lib/design-system";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
-  Sparkles,
-  Globe2,
+  Sparkle as Sparkles,
+  Globe as Globe2,
   Users,
-  Award,
-  Building2,
-  type LucideIcon,
-} from "lucide-react";
+  Medal as Award,
+  Buildings as Building2,
+  type Icon as LucideIcon,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -71,7 +68,7 @@ export function PartnersSection({
     const cats: Array<{ value: string; label: string; count: number; IconComponent: LucideIcon | null }> = [
       { value: "all", label: "All", count: partners.length, IconComponent: null },
     ];
-    
+
     Object.entries(categorizedPartners).forEach(([key, items]) => {
       const config = CATEGORY_CONFIG[key];
       if (config) {
@@ -83,7 +80,7 @@ export function PartnersSection({
         });
       }
     });
-    
+
     return cats;
   }, [partners.length, categorizedPartners]);
 
@@ -188,51 +185,7 @@ export function PartnersSection({
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-20">
-          <div
-            className="rounded-3xl p-12 text-center"
-            style={{
-              backgroundColor: colors.primary.green[50],
-              border: `1px solid ${colors.primary.green[200]}`,
-            }}
-          >
-            <h3
-              className="font-bold mb-4"
-              style={{
-                fontSize: typography.sizes.heading.h3[0],
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-              }}
-            >
-              Join Our Network
-            </h3>
-            <p
-              className="text-lg mb-8 max-w-2xl mx-auto"
-              style={{
-                fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-              }}
-            >
-              Partner with us to accelerate climate innovation and create
-              lasting impact across Africa.
-            </p>
-            <Button
-              className="px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
-              style={{
-                background: colors.primary.green.DEFAULT,
-                color: "white",
-                fontFamily: typography.fonts.body,
-              }}
-              asChild
-            >
-              <Link href="/contact">
-                Become a Partner
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
+
       </div>
 
       <style jsx>{`
@@ -252,10 +205,10 @@ export function PartnersSection({
   );
 }
 
-const PartnerGrid = memo(function PartnerGrid({ 
-  partners 
-}: { 
-  partners: PartnerData[] 
+const PartnerGrid = memo(function PartnerGrid({
+  partners
+}: {
+  partners: PartnerData[]
 }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">

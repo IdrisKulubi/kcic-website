@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { Calendar, ArrowUpRight, TrendingUp } from "lucide-react";
+import { CalendarBlank as Calendar, ArrowUpRight, TrendUp as TrendingUp } from "@phosphor-icons/react";
 import { colors, typography } from "@/lib/design-system";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { Badge } from "@/components/ui/badge";
@@ -121,51 +121,51 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               </div>
 
               <Link href={`/news/${item.slug}`} className="block group">
-                  <Card className="overflow-hidden border border-gray-100 bg-white/95 dark:bg-white/5 shadow-sm hover:shadow-md transition-all duration-300">
-                    {item.imageUrl && (
-                      <div className="relative aspect-[4/3] w-full overflow-hidden">
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.title}
-                          fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    )}
+                <Card className="overflow-hidden border border-gray-100 bg-white/95 dark:bg-white/5 shadow-sm hover:shadow-md transition-all duration-300">
+                  {item.imageUrl && (
+                    <div className="relative aspect-[4/3] w-full overflow-hidden">
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
 
-                    <CardContent className="flex flex-col gap-2 p-4 sm:p-5">
-                      <p className="flex items-center gap-2 text-xs text-foreground/60">
-                        <Calendar className="h-3 w-3" />
-                        <span>{formatDate(item.publishedAt)}</span>
-                        {item.readTime && (
-                          <>
-                            <span>•</span>
-                            <span>{item.readTime}</span>
-                          </>
-                        )}
-                      </p>
+                  <CardContent className="flex flex-col gap-2 p-4 sm:p-5">
+                    <p className="flex items-center gap-2 text-xs text-foreground/60">
+                      <Calendar className="h-3 w-3" />
+                      <span>{formatDate(item.publishedAt)}</span>
+                      {item.readTime && (
+                        <>
+                          <span>•</span>
+                          <span>{item.readTime}</span>
+                        </>
+                      )}
+                    </p>
 
-                      <h4
-                        className="text-sm sm:text-base font-semibold text-foreground line-clamp-2 group-hover:text-emerald-700 transition-colors"
-                        style={{
-                          fontFamily: typography.fonts.heading,
-                        }}
-                      >
-                        {item.title}
-                      </h4>
+                    <h4
+                      className="text-sm sm:text-base font-semibold text-foreground line-clamp-2 group-hover:text-emerald-700 transition-colors"
+                      style={{
+                        fontFamily: typography.fonts.heading,
+                      }}
+                    >
+                      {item.title}
+                    </h4>
 
-                     
 
-                      <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 group-hover:text-emerald-800">
-                        Read more
-                        <ArrowUpRight className="h-3 w-3" />
-                      </span>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </div>
-            ))}
+
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 group-hover:text-emerald-800">
+                      Read more
+                      <ArrowUpRight className="h-3 w-3" />
+                    </span>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          ))}
 
           {topNews.length === 0 && (
             <p className="col-span-full text-center text-sm text-foreground/60">

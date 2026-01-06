@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { Lightbulb, Rocket, Shield } from "lucide-react";
+import { Lightbulb, RocketLaunch, Shield } from "@phosphor-icons/react";
 
 interface BeliefCard {
   title: string;
@@ -26,7 +26,7 @@ const beliefs: BeliefCard[] = [
   {
     title: "Innovation Meets Entrepreneurship",
     description: "Climate action and economic prosperity go hand in hand. We bridge the gap between environmental impact and business success.",
-    icon: Rocket,
+    icon: RocketLaunch,
   },
   {
     title: "SMEs as Warriors",

@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { HeroData } from '@/data/home';
-import { 
-  touchTargetUtils, 
+import {
+  touchTargetUtils,
   colorUtils
 } from '@/lib/accessibility';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { CaretDown, ArrowRight } from '@phosphor-icons/react';
 import { useState } from 'react';
 
 interface HeroSectionProps {
@@ -42,10 +42,10 @@ export function HeroSection({ data }: HeroSectionProps) {
           {/* Fallback for browsers that don't support video */}
           Your browser does not support the video tag.
         </video>
-        
+
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-black/40" />
-        
+
         {/* Gradient overlay for better text readability on left side */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
       </div>
@@ -56,7 +56,7 @@ export function HeroSection({ data }: HeroSectionProps) {
           {/* Left side - Text Content */}
           <div className="text-white space-y-6 sm:space-y-8 text-center lg:text-left max-w-4xl lg:max-w-none mx-auto lg:mx-0">
             {/* Main Headline */}
-            <h1 
+            <h1
               id="hero-heading"
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight"
             >
@@ -89,7 +89,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                   }
                   asChild
                 >
-                  <a 
+                  <a
                     href={button.href}
                     className="flex items-center justify-center space-x-2"
                   >
@@ -121,7 +121,7 @@ export function HeroSection({ data }: HeroSectionProps) {
           <span className="text-sm font-medium tracking-wide group-hover:text-white transition-colors duration-300">
             Discover Our Impact
           </span>
-          <ChevronDown className="h-6 w-6 group-hover:translate-y-1 transition-transform duration-300 animate-bounce" />
+          <CaretDown className="h-6 w-6 group-hover:translate-y-1 transition-transform duration-300 animate-bounce" />
         </div>
       </div>
     </section>

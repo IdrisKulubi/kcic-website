@@ -9,7 +9,7 @@ import {
   AccessibleContainer,
 } from "@/components/accessibility";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { CaretDown, ArrowRight } from "@phosphor-icons/react";
 import { useState } from "react";
 
 interface AccessibleHeroSectionProps {
@@ -57,18 +57,16 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
 
         {/* Dark overlay for better text readability */}
         <div
-          className={`absolute inset-0 ${
-            settings.highContrast ? "bg-black/80" : "bg-black/40"
-          }`}
+          className={`absolute inset-0 ${settings.highContrast ? "bg-black/80" : "bg-black/40"
+            }`}
         />
 
         {/* Gradient overlay for better text readability on left side */}
         <div
-          className={`absolute inset-0 ${
-            settings.highContrast
-              ? "bg-gradient-to-r from-black via-black/80 to-black/60"
-              : "bg-gradient-to-r from-black/60 via-black/30 to-transparent"
-          }`}
+          className={`absolute inset-0 ${settings.highContrast
+            ? "bg-gradient-to-r from-black via-black/80 to-black/60"
+            : "bg-gradient-to-r from-black/60 via-black/30 to-transparent"
+            }`}
         />
       </div>
 
@@ -81,9 +79,8 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
             <AccessibleHeading
               level={1}
               id="hero-heading"
-              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight ${
-                settings.highContrast ? "text-white" : "text-white"
-              }`}
+              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight ${settings.highContrast ? "text-white" : "text-white"
+                }`}
             >
               <span className="block text-white mb-2">Empowering</span>
               <span className="block text-white mb-2">Climate Innovation</span>
@@ -92,9 +89,8 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
 
             {/* Subtext */}
             <AccessibleText
-              className={`text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-light ${
-                settings.highContrast ? "text-white" : "text-white/90"
-              }`}
+              className={`text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-light ${settings.highContrast ? "text-white" : "text-white/90"
+                }`}
             >
               Accelerating green growth through innovative climate solutions,
               supporting SMEs, and building a sustainable future for africa.
@@ -109,22 +105,21 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
                   className={getInteractiveClasses(
                     button.variant === "primary"
                       ? `bg-climate-green hover:bg-climate-green-dark text-white px-8 py-4 text-lg font-semibold transition-all duration-300 ${getMotionSafeClasses(
-                          "hover:scale-105"
-                        )} ${touchTargetUtils.getTouchClasses()} ${colorUtils.getFocusRingClasses()}`
+                        "hover:scale-105"
+                      )} ${touchTargetUtils.getTouchClasses()} ${colorUtils.getFocusRingClasses()}`
                       : `border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg font-semibold bg-transparent transition-all duration-300 ${getMotionSafeClasses(
-                          "hover:scale-105"
-                        )} ${touchTargetUtils.getTouchClasses()} ${colorUtils.getFocusRingClasses()}`
+                        "hover:scale-105"
+                      )} ${touchTargetUtils.getTouchClasses()} ${colorUtils.getFocusRingClasses()}`
                   )}
                   asChild
                 >
                   <a
                     href={button.href}
                     className="flex items-center justify-center space-x-2"
-                    aria-label={`${button.text} - ${
-                      button.variant === "primary"
-                        ? "Primary action"
-                        : "Secondary action"
-                    }`}
+                    aria-label={`${button.text} - ${button.variant === "primary"
+                      ? "Primary action"
+                      : "Secondary action"
+                      }`}
                   >
                     <span>{button.text}</span>
                     <ArrowRight className="h-5 w-5" aria-hidden="true" />
@@ -185,7 +180,7 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
             >
               Discover Our Impact
             </AccessibleText>
-            <ChevronDown
+            <CaretDown
               className={`h-6 w-6 ${getMotionSafeClasses(
                 "group-hover:translate-y-1 transition-transform duration-300 animate-bounce"
               )}`}
@@ -223,7 +218,7 @@ export function AccessibleHeroSection({ data }: AccessibleHeroSectionProps) {
             >
               Discover Our Impact
             </AccessibleText>
-            <ChevronDown className="h-6 w-6" aria-hidden="true" />
+            <CaretDown className="h-6 w-6" aria-hidden="true" />
           </div>
         </div>
       )}

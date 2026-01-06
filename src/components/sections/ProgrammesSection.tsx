@@ -8,12 +8,12 @@ import { homePageData } from "@/data/home";
 import { ANIMATION_CONFIG, staggerContainer } from "@/lib/animations";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { 
-  touchTargetUtils, 
-  colorUtils, 
+import { ArrowRight } from "@phosphor-icons/react";
+import {
+  touchTargetUtils,
+  colorUtils,
   motionUtils,
-  ARIA_LABELS 
+  ARIA_LABELS
 } from '@/lib/accessibility';
 
 interface Programme {
@@ -90,14 +90,14 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <ScrollReveal direction="up" className="text-center mb-12 sm:mb-16">
-          <h2 
+          <h2
             id="programmes-heading"
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-gradient-climate"
           >
             Our Programmes
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-            Discover our innovative programmes designed to accelerate climate solutions 
+            Discover our innovative programmes designed to accelerate climate solutions
             and empower sustainable entrepreneurship across Kenya.
           </p>
         </ScrollReveal>
@@ -114,7 +114,7 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
         >
           {programmes.map((programme, index) => {
             const colorClasses = getColorClasses(programme.color);
-            
+
             // Create staggered, non-uniform grid layout
             const getGridClasses = (index: number) => {
               switch (index) {
@@ -140,7 +140,7 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
                 }}
                 role="listitem"
               >
-                <Card 
+                <Card
                   className={`
                     h-full overflow-hidden border-2 border-transparent
                     transition-all duration-500 ease-out
@@ -169,10 +169,10 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
                       />
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" aria-hidden="true" />
-                      
+
                       {/* Programme badge */}
                       <div className="absolute top-4 left-4">
-                        <div 
+                        <div
                           className={`
                             px-3 py-1 rounded-full text-xs font-semibold
                             bg-white/20 backdrop-blur-sm border border-white/30
@@ -188,13 +188,13 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
                     {/* Programme Content */}
                     <div className="p-4 sm:p-6 lg:p-8 flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 
+                        <h3
                           id={`programme-${programme.id}-title`}
                           className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 group-hover:text-primary transition-colors duration-300"
                         >
                           {programme.title}
                         </h3>
-                        <p 
+                        <p
                           id={`programme-${programme.id}-description`}
                           className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base lg:text-lg"
                         >
@@ -203,13 +203,13 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
                       </div>
 
                       {/* CTA Button */}
-                      <Link 
-                        href={programme.href} 
+                      <Link
+                        href={programme.href}
                         className="self-start"
                         aria-label={`${ARIA_LABELS.learnMore} ${programme.title} programme`}
                       >
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className={`
                             group/btn border-2 hover:border-current
                             transition-all duration-300
@@ -220,7 +220,7 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
                           `}
                         >
                           Learn More
-                          <ArrowRight 
+                          <ArrowRight
                             className={`ml-2 h-4 w-4 transition-transform duration-300 ${!motionUtils.prefersReducedMotion() && 'group-hover/btn:translate-x-1'}`}
                             aria-hidden="true"
                           />
@@ -239,12 +239,12 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
           <p className="text-muted-foreground mb-4 sm:mb-6 text-base sm:text-lg px-4 sm:px-0">
             Ready to join one of our programmes?
           </p>
-          <Link 
+          <Link
             href="/programs"
             aria-label="Apply now to join KCIC programmes"
           >
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className={`
                 bg-hero-gradient hover:opacity-90 transition-opacity duration-300 
                 text-white font-semibold px-6 sm:px-8 py-3 
@@ -254,8 +254,8 @@ export default function ProgrammesSection({ programmes: programmesProp }: Progra
               `}
             >
               Apply Now
-              <ArrowRight 
-                className="ml-2 h-5 w-5" 
+              <ArrowRight
+                className="ml-2 h-5 w-5"
                 aria-hidden="true"
               />
             </Button>
