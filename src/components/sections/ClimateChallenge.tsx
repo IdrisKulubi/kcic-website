@@ -33,19 +33,35 @@ export default function ClimateChallenge({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Fade-in-left animation for text content
+      // Parallax background gradient
+      const bgGradient = sectionRef.current?.querySelector('.bg-gradient');
+      if (bgGradient) {
+        gsap.to(bgGradient, {
+          y: -50,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
+
+      // Fade-in-left animation for text content with slight scale
       gsap.fromTo(
         textContentRef.current,
-        { opacity: 0, x: -30 },
+        { opacity: 0, x: -50, scale: 0.98 },
         {
           opacity: 1,
           x: 0,
-          duration: 0.8,
-          ease: "power2.out",
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "top 60%",
+            start: "top 75%",
+            end: "top 55%",
             once: true,
             toggleActions: "play none none none",
             invalidateOnRefresh: true,
@@ -53,25 +69,30 @@ export default function ClimateChallenge({
         }
       );
 
-      // Fade-in-right animation for visual content
-      gsap.fromTo(
-        visualContentRef.current,
-        { opacity: 0, x: 30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            end: "top 60%",
-            once: true,
-            toggleActions: "play none none none",
-            invalidateOnRefresh: true,
-          },
-        }
-      );
+      // Staggered animation for icon cards (visual content children)
+      const iconCards = visualContentRef.current?.querySelectorAll('.icon-card');
+      if (iconCards && iconCards.length > 0) {
+        gsap.fromTo(
+          iconCards,
+          { opacity: 0, y: 40, scale: 0.9, rotateY: 15 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            rotateY: 0,
+            duration: 0.7,
+            stagger: 0.15,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: visualContentRef.current,
+              start: "top 80%",
+              once: true,
+              toggleActions: "play none none none",
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
 
       // Counter-up animation for statistics
       if (statNumberRef.current) {
@@ -80,7 +101,7 @@ export default function ClimateChallenge({
 
         gsap.to(obj, {
           value: target,
-          duration: 1.5,
+          duration: 2,
           ease: "power2.out",
           scrollTrigger: {
             trigger: statNumberRef.current,
@@ -97,6 +118,28 @@ export default function ClimateChallenge({
         });
       }
 
+      // Staggered reveal for impact area list items
+      const listItems = textContentRef.current?.querySelectorAll('li');
+      if (listItems && listItems.length > 0) {
+        gsap.fromTo(
+          listItems,
+          { opacity: 0, x: -20 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: listItems[0],
+              start: "top 90%",
+              once: true,
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
       ScrollTrigger.refresh();
     }, sectionRef);
 
@@ -107,11 +150,11 @@ export default function ClimateChallenge({
     <section
       ref={sectionRef}
       aria-labelledby="climate-challenge-heading"
-      className={`relative min-h-screen flex items-center py-20 sm:py-28 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
     >
       {/* Subtle background gradient shift */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="bg-gradient pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(50% 40% at 50% 50%, rgba(245,158,11,0.05) 0%, rgba(245,158,11,0) 70%)",
@@ -274,7 +317,7 @@ export default function ClimateChallenge({
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="relative p-8 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  className="icon-card relative p-8 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
                   style={{
                     background: "rgba(255, 255, 255, 0.05)",
                     borderColor: "rgba(255, 255, 255, 0.1)",

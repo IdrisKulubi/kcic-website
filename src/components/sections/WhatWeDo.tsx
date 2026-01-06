@@ -42,20 +42,41 @@ export default function WhatWeDo({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Fade-in for mission
+      // Animate left column heading and text
+      const leftContent = sectionRef.current?.querySelector('.left-content');
+      if (leftContent) {
+        gsap.fromTo(
+          leftContent,
+          { opacity: 0, x: -40 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+              once: true,
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // Mission card with 3D flip effect
       if (missionRef.current) {
         gsap.fromTo(
           missionRef.current,
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: 30, rotateX: 15 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.6,
-            ease: "power2.out",
+            rotateX: 0,
+            duration: 0.7,
+            ease: "power3.out",
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
-              end: "top 55%",
               once: true,
               toggleActions: "play none none none",
               invalidateOnRefresh: true,
@@ -64,21 +85,21 @@ export default function WhatWeDo({
         );
       }
 
-      // Fade-in for vision (100ms delay)
+      // Vision card with delayed 3D flip
       if (visionRef.current) {
         gsap.fromTo(
           visionRef.current,
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: 30, rotateX: 15 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            delay: 0.1,
+            rotateX: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            delay: 0.15,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
-              end: "top 55%",
               once: true,
               toggleActions: "play none none none",
               invalidateOnRefresh: true,
@@ -87,22 +108,22 @@ export default function WhatWeDo({
         );
       }
 
-      // Staggered fade-in for value badges (50ms delay each)
+      // Bouncy staggered reveal for value badges
       valuesRefs.current.forEach((badge, index) => {
         if (badge) {
           gsap.fromTo(
             badge,
-            { opacity: 0, scale: 0.9 },
+            { opacity: 0, scale: 0.5, y: 20 },
             {
               opacity: 1,
               scale: 1,
-              duration: 0.5,
-              ease: "power2.out",
-              delay: 0.2 + index * 0.05, // Start after mission/vision, 50ms stagger
+              y: 0,
+              duration: 0.4,
+              ease: "back.out(1.7)",
+              delay: 0.3 + index * 0.06,
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
-                end: "top 55%",
                 once: true,
                 toggleActions: "play none none none",
                 invalidateOnRefresh: true,
@@ -142,7 +163,7 @@ export default function WhatWeDo({
         >
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1.5fr] p-6 sm:p-8 lg:p-10">
             {/* Left: heading and short narrative */}
-            <div className="flex flex-col justify-between gap-6">
+            <div className="left-content flex flex-col justify-between gap-6">
               <div>
                 <p
                   className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-climate-green-dark mb-3"

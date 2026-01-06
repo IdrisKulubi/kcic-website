@@ -133,7 +133,7 @@ export default function KeySectors({
     <section
       ref={sectionRef}
       aria-labelledby="key-sectors-heading"
-      className={`relative min-h-screen flex items-center py-20 sm:py-28 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
     >
       {/* Neutral background with subtle pattern */}
       <div

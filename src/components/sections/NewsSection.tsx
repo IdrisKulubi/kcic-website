@@ -54,7 +54,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   };
 
   return (
-    <section className={cn("py-20 sm:py-32 bg-transparent", className)}>
+    <section className={cn("py-12 sm:py-16 bg-transparent", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16">

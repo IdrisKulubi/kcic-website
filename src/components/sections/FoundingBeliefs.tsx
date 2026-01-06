@@ -55,18 +55,22 @@ export default function FoundingBeliefs({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Staggered fade-in-up animations for cards (0ms, 150ms, 300ms delays)
+      // Staggered slide-in animations with alternating directions
       cardRefs.current.forEach((card, index) => {
         if (card) {
+          // Alternate between left and right
+          const direction = index % 2 === 0 ? -60 : 60;
+
           gsap.fromTo(
             card,
-            { opacity: 0, y: 30 },
+            { opacity: 0, x: direction, rotateY: direction > 0 ? 10 : -10 },
             {
               opacity: 1,
-              y: 0,
-              duration: 0.6,
-              ease: "power2.out",
-              delay: index * 0.15, // 150ms stagger
+              x: 0,
+              rotateY: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              delay: index * 0.15,
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
@@ -77,6 +81,28 @@ export default function FoundingBeliefs({
               },
             }
           );
+
+          // Animate icon with rotation
+          const icon = card.querySelector('.belief-icon');
+          if (icon) {
+            gsap.fromTo(
+              icon,
+              { scale: 0, rotation: -180 },
+              {
+                scale: 1,
+                rotation: 0,
+                duration: 0.6,
+                ease: "back.out(1.7)",
+                delay: index * 0.15 + 0.3,
+                scrollTrigger: {
+                  trigger: sectionRef.current,
+                  start: "top 75%",
+                  once: true,
+                  toggleActions: "play none none none",
+                },
+              }
+            );
+          }
         }
       });
 
@@ -90,7 +116,7 @@ export default function FoundingBeliefs({
     <section
       ref={sectionRef}
       aria-labelledby="founding-beliefs-heading"
-      className={`relative min-h-screen flex items-center py-20 sm:py-28 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
     >
       {/* Subtle background gradient shift to climate-blue */}
       <div
@@ -142,7 +168,7 @@ export default function FoundingBeliefs({
             >
               {/* Icon at top (48x48px, climate-green) */}
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
+                className="belief-icon w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
                 style={{
                   background: `${colors.primary.green.DEFAULT}15`,
                 }}

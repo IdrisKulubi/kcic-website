@@ -122,7 +122,7 @@ export default function HistoryTimeline({
     <section
       ref={sectionRef}
       aria-labelledby="history-timeline-heading"
-      className={`relative min-h-screen flex items-center py-20 sm:py-28 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
     >
       {/* Subtle background gradient shift */}
       <div

@@ -233,15 +233,15 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
           </div>
 
           {/* Dots + Pause */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/30 backdrop-blur px-1 py-1 rounded-full">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-0.5 bg-black/30 backdrop-blur px-1 py-0.5 rounded-full">
             <button
               aria-label={paused ? "Play slideshow" : "Pause slideshow"}
               onClick={() => setPaused((p) => !p)}
-              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white/90 hover:text-white transition-colors"
+              className="inline-flex h-5 w-5 items-center justify-center rounded-full text-white/90 hover:text-white transition-colors"
             >
-              {paused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
+              {paused ? <Play className="h-2.5 w-2.5" /> : <Pause className="h-2.5 w-2.5" />}
             </button>
-            <div className="flex gap-1">
+            <div className="flex gap-0.5">
               {slides.map((_, i) => (
                 <button
                   key={i}
@@ -250,7 +250,7 @@ export function HeroCarousel({ data, images, intervalMs = 6000 }: HeroCarouselPr
                     setIndex(i);
                     setPaused(true);
                   }}
-                  className={`h-2 w-2 rounded-full transition-all ${i === index ? "w-3 bg-white" : "bg-white/60 hover:bg-white"
+                  className={`h-1.5 w-1.5 rounded-full transition-all ${i === index ? "w-2 bg-white" : "bg-white/60 hover:bg-white"
                     }`}
                 />
               ))}

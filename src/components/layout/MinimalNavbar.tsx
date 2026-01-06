@@ -156,9 +156,9 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   src="/images/hero/KCIC logo.png"
                   alt="logo"
                   aria-label="KCIC - Kenya Climate Innovation Centre - Go to homepage"
-                  className="h-8 sm:h-10 w-auto"
-                  width={100}
-                  height={100}
+                  className="h-12 sm:h-14 w-auto"
+                  width={140}
+                  height={140}
                 />
               </Link>
             </div>

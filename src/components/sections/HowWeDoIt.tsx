@@ -153,7 +153,7 @@ export default function HowWeDoIt({
     <section
       ref={sectionRef}
       aria-labelledby="how-we-do-it-heading"
-      className={`relative min-h-screen flex items-center py-20 sm:py-28 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
     >
       {/* Subtle background gradient shift to climate-green */}
       <div

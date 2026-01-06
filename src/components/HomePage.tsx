@@ -10,6 +10,7 @@ import {
   PartnerData,
 } from "@/components/sections/PartnersSection";
 import { HeroCarousel, DEFAULT_HERO_IMAGES } from "@/components/sections/HeroCarousel";
+import { ScrollProgress, SectionReveal } from "@/components/animations/SectionReveal";
 
 import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
@@ -171,58 +172,58 @@ export default function HomePage({
   // Transform hero data from database or use translations as fallback
   const translatedHeroData = hero
     ? {
-        title: hero.headline,
-        description: hero.subtext,
-        stats: t("hero.stats"),
-        ctaButtons: hero.buttons.map((btn) => ({
-          text: btn.text,
-          href: btn.href,
-          variant: btn.variant as "primary" | "secondary",
-        })),
-      }
+      title: hero.headline,
+      description: hero.subtext,
+      stats: t("hero.stats"),
+      ctaButtons: hero.buttons.map((btn) => ({
+        text: btn.text,
+        href: btn.href,
+        variant: btn.variant as "primary" | "secondary",
+      })),
+    }
     : {
-        title: t("hero.title"),
-        description: t("hero.description"),
-        stats: t("hero.stats"),
-        ctaButtons: [
-          {
-            text: t("hero.cta.programs"),
-            href: "/programs",
-            variant: "primary" as const,
-          },
-          {
-            text: t("hero.cta.learn"),
-            href: "/about",
-            variant: "secondary" as const,
-          },
-        ],
-      };
+      title: t("hero.title"),
+      description: t("hero.description"),
+      stats: t("hero.stats"),
+      ctaButtons: [
+        {
+          text: t("hero.cta.programs"),
+          href: "/programs",
+          variant: "primary" as const,
+        },
+        {
+          text: t("hero.cta.learn"),
+          href: "/about",
+          variant: "secondary" as const,
+        },
+      ],
+    };
 
   // Transform stats data from database or use translations as fallback
   const translatedStatsData =
     stats.length > 0
       ? stats.map((stat) => ({
-          value: `${stat.value}${stat.suffix || "+"}`,
-          description: stat.label,
-        }))
+        value: `${stat.value}${stat.suffix || "+"}`,
+        description: stat.label,
+      }))
       : [
-          {
-            value: "450+",
-            description: t("stats.smes"),
-          },
-          {
-            value: "$25M+",
-            description: t("stats.investment"),
-          },
-          {
-            value: "2,500+",
-            description: t("stats.jobs"),
-          },
-          {
-            value: "15+",
-            description: t("stats.solutions"),
-          },
-        ];
+        {
+          value: "450+",
+          description: t("stats.smes"),
+        },
+        {
+          value: "$25M+",
+          description: t("stats.investment"),
+        },
+        {
+          value: "2,500+",
+          description: t("stats.jobs"),
+        },
+        {
+          value: "15+",
+          description: t("stats.solutions"),
+        },
+      ];
 
   // Transform news data from database
   const newsItems = news
@@ -258,59 +259,59 @@ export default function HomePage({
   // Transform footer data from database
   const footerData = footer
     ? {
-        quickLinks: (footer.links || []).map((link) => ({
-          label: link.label,
-          href: link.href,
-        })),
-        socialMedia: (footer.socialMedia || []).map((sm) => ({
-          platform: sm.platform,
-          href: sm.href,
-          icon: sm.icon,
-        })),
-        contact: {
-          address: footer.section.contactAddress,
-          phone: footer.section.contactPhone,
-          email: footer.section.contactEmail,
-        },
-        newsletter: {
-          title: footer.section.newsletterTitle,
-          description: footer.section.newsletterDescription,
-          placeholder: footer.section.newsletterPlaceholder,
-        },
-        copyright: footer.section.copyright,
-      }
+      quickLinks: (footer.links || []).map((link) => ({
+        label: link.label,
+        href: link.href,
+      })),
+      socialMedia: (footer.socialMedia || []).map((sm) => ({
+        platform: sm.platform,
+        href: sm.href,
+        icon: sm.icon,
+      })),
+      contact: {
+        address: footer.section.contactAddress,
+        phone: footer.section.contactPhone,
+        email: footer.section.contactEmail,
+      },
+      newsletter: {
+        title: footer.section.newsletterTitle,
+        description: footer.section.newsletterDescription,
+        placeholder: footer.section.newsletterPlaceholder,
+      },
+      copyright: footer.section.copyright,
+    }
     : {
-        quickLinks: [
-          { label: "About", href: "/about" },
-          { label: "Programmes", href: "/programmes" },
-          { label: "Media Centre", href: "/media" },
-          { label: "Contacts", href: "/contacts" },
-        ],
-        socialMedia: [
-          {
-            platform: "Twitter",
-            href: "https://twitter.com/kcic_kenya",
-            icon: "twitter",
-          },
-          {
-            platform: "LinkedIn",
-            href: "https://linkedin.com/company/kcic-kenya",
-            icon: "linkedin",
-          },
-        ],
-        contact: {
-          address: "Kenya Climate Innovation Centre, Nairobi, Kenya",
-          phone: "+254 20 123 4567",
-          email: "info@kenyacic.org",
+      quickLinks: [
+        { label: "About", href: "/about" },
+        { label: "Programmes", href: "/programmes" },
+        { label: "Media Centre", href: "/media" },
+        { label: "Contacts", href: "/contacts" },
+      ],
+      socialMedia: [
+        {
+          platform: "Twitter",
+          href: "https://twitter.com/kcic_kenya",
+          icon: "twitter",
         },
-        newsletter: {
-          title: "Stay Updated",
-          description: "Get the latest news on climate innovation.",
-          placeholder: "Enter your email address",
+        {
+          platform: "LinkedIn",
+          href: "https://linkedin.com/company/kcic-kenya",
+          icon: "linkedin",
         },
-        copyright:
-          "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
-      };
+      ],
+      contact: {
+        address: "Kenya Climate Innovation Centre, Nairobi, Kenya",
+        phone: "+254 20 123 4567",
+        email: "info@kenyacic.org",
+      },
+      newsletter: {
+        title: "Stay Updated",
+        description: "Get the latest news on climate innovation.",
+        placeholder: "Enter your email address",
+      },
+      copyright:
+        "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
+    };
 
   // Hero images for the carousel (can be moved to CMS/DB later)
   const heroImages = DEFAULT_HERO_IMAGES;
@@ -401,6 +402,9 @@ export default function HomePage({
         {/* Navigation */}
         <MinimalNavbar {...navData} />
 
+        {/* Scroll Progress Indicator */}
+        <ScrollProgress />
+
         {/* Hero Section - modern slideshow */}
         <HeroCarousel data={translatedHeroData} images={heroImages} />
 
@@ -418,17 +422,17 @@ export default function HomePage({
           </div>
 
           {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
-          <div className="bg-gradient-to-b from-gray-50 to-white py-20 sm:py-32">
+          <div className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
             <WhatWeDo />
-            <div className="mt-16">
+            <div className="mt-12">
               <HowWeDoIt />
             </div>
           </div>
 
           {/* SECTION 3: Focus Areas & Programs - Combined */}
-          <div className="bg-white py-20 sm:py-32">
+          <div className="bg-white py-12 sm:py-16">
             <KeySectors />
-            <div className="mt-20">
+            <div className="mt-12">
               <ProgramsShowcase />
             </div>
           </div>
@@ -452,7 +456,7 @@ export default function HomePage({
           </div>
 
           {/* SECTION 5: News */}
-          <div className="bg-gray-50 py-20 sm:py-32">
+          <div className="bg-gray-50 py-12 sm:py-16">
             <NewsSection news={newsItems} />
           </div>
 
