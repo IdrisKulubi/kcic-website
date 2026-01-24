@@ -144,7 +144,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
           ? 'bg-white/95 backdrop-blur-md shadow-lg'
-          : 'bg-white/90 backdrop-blur-sm shadow-sm'
+          : 'bg-black/20 backdrop-blur-md'
           }`}
       >
         <div className="w-full px-6 sm:px-10 lg:px-12">
@@ -173,11 +173,15 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${activeDropdown === item.label ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-gray-900'
+                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                      isScrolled
+                        ? `hover:bg-gray-50 ${activeDropdown === item.label ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-gray-900'}`
+                        : `hover:bg-white/10 ${activeDropdown === item.label ? 'bg-white/20 text-white' : 'text-white hover:text-white'}`
                       }`}
                     style={{
                       fontFamily: typography.fonts.body,
                       fontSize: typography.sizes.body.base[0],
+                      textShadow: isScrolled ? 'none' : '0 1px 3px rgba(0,0,0,0.3)',
                     }}
                     aria-expanded={item.subItems ? activeDropdown === item.label : undefined}
                     aria-controls={item.subItems ? `dropdown-${item.label}` : undefined}
@@ -270,9 +274,11 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                  isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
+                }`}
                 style={{
-                  color: colors.secondary.gray[700],
+                  color: isScrolled ? colors.secondary.gray[700] : '#FFFFFF',
                 }}
                 aria-label="Toggle mobile menu"
                 aria-expanded={isMobileMenuOpen}

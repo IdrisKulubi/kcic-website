@@ -9,7 +9,7 @@ import {
   PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
-import { HeroCarousel, DEFAULT_HERO_IMAGES } from "@/components/sections/HeroCarousel";
+import { HeroVideo } from "@/components/sections/HeroVideo";
 import { ScrollProgress, SectionReveal } from "@/components/animations/SectionReveal";
 
 import Footer from "@/components/layout/Footer";
@@ -313,8 +313,7 @@ export default function HomePage({
         "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
     };
 
-  // Hero images for the carousel (can be moved to CMS/DB later)
-  const heroImages = DEFAULT_HERO_IMAGES;
+  // Hero video configuration
 
   return (
     <>
@@ -405,8 +404,8 @@ export default function HomePage({
         {/* Scroll Progress Indicator */}
         <ScrollProgress />
 
-        {/* Hero Section - modern slideshow */}
-        <HeroCarousel data={translatedHeroData} images={heroImages} />
+        {/* Hero Section - cinematic video background */}
+        <HeroVideo data={translatedHeroData} />
 
         {/* Main Content Sections with proper spacing */}
         <div className="space-y-0">

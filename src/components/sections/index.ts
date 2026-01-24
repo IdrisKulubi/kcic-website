@@ -4,6 +4,7 @@
  */
 
 export { HeroSection } from "./HeroSection";
+export { HeroVideo } from "./HeroVideo";
 export { StatsSection } from "./StatsSection";
 export { default as ProgrammesSection } from "./ProgrammesSection";
 export { LatestNewsSection } from "./LatestNewsSection";
