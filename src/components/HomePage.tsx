@@ -31,7 +31,7 @@ import HistoryTimeline from "./sections/HistoryTimeline";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
 import WhatWeDo from "./sections/WhatWeDo";
 import HowWeDoIt from "./sections/HowWeDoIt";
-import KeySectors from "./sections/KeySectors";
+import KeySectorsParallax from "./sections/KeySectorsParallax";
 import ProgramsShowcase from "./sections/ProgramsShowcase";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -443,12 +443,12 @@ export default function HomePage({
             </div>
           </div>
 
-          {/* SECTION 3: Focus Areas & Programs - Combined */}
+          {/* SECTION 3: Focus Areas - Full Parallax Experience */}
+          <KeySectorsParallax />
+
+          {/* SECTION 3B: Programs Showcase */}
           <div className="bg-white py-12 sm:py-16">
-            <KeySectors />
-            <div className="mt-12">
-              <ProgramsShowcase />
-            </div>
+            <ProgramsShowcase />
           </div>
 
           {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
