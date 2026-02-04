@@ -95,13 +95,16 @@ export default function KeySectorsParallax({
     if (!containerRef.current || !contentRef.current) return;
 
     const ctx = gsap.context(() => {
+      // Compact scroll distance: ~200px per sector
+      const scrollDistance = sectors.length * 200;
+      
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
-        end: `+=${(sectors.length - 1) * window.innerHeight}`,
+        end: `+=${scrollDistance}`,
         pin: contentRef.current,
         pinSpacing: true,
-        scrub: 0.5,
+        scrub: 0.2,
         anticipatePin: 1,
         onUpdate: (self) => {
           setScrollProgress(self.progress);
@@ -156,8 +159,26 @@ export default function KeySectorsParallax({
           />
         </div>
 
-        <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full py-16">
+        <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+          {/* Section Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm mb-4">
+              <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                Our Focus Areas
+              </span>
+            </div>
+            <h2
+              className="text-3xl sm:text-4xl font-bold text-gray-900"
+              style={{
+                fontFamily: typography.fonts.heading,
+                lineHeight: 1.15,
+              }}
+            >
+              Key Sectors We Support
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
             {/* Left side - Content */}
             <div className="order-2 lg:order-1">
               {/* Section label */}
@@ -171,15 +192,15 @@ export default function KeySectorsParallax({
               </div>
 
               {/* Sector title - simple CSS transition */}
-              <h2
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 transition-all duration-300"
+              <h3
+                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 transition-all duration-300"
                 style={{
                   fontFamily: typography.fonts.heading,
                   lineHeight: 1.15,
                 }}
               >
                 {activeSector.title}
-              </h2>
+              </h3>
 
               {/* Description */}
               <p

@@ -5,14 +5,22 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { FaDollarSign, FaGraduationCap, FaDatabase, FaBuilding } from "react-icons/fa6";
+import { 
+  FaDollarSign, 
+  FaGraduationCap, 
+  FaDatabase, 
+  FaBuilding,
+  FaArrowRight 
+} from "react-icons/fa6";
 
 interface ServiceCard {
   title: string;
+  tagline: string;
   description: string;
   services: string[];
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-  gradientColor: string;
+  accentColor: string;
+  number: string;
 }
 
 interface HowWeDoItSectionProps {
@@ -22,55 +30,59 @@ interface HowWeDoItSectionProps {
 const services: ServiceCard[] = [
   {
     title: "Innovative Financing",
-    description: "Providing diverse financial solutions to support climate entrepreneurs at every stage",
+    tagline: "Fuel Your Growth",
+    description: "Diverse financial solutions to support climate entrepreneurs at every stage of their journey",
     services: [
       "Risk capital for early-stage ventures",
       "Proof of concept funding",
-      "Early-stage financing",
       "Revenue-based financing (RBF)",
       "Investment syndication",
     ],
     icon: FaDollarSign,
-    gradientColor: colors.primary.green.DEFAULT,
+    accentColor: "#10B981", // emerald
+    number: "01",
   },
   {
     title: "Capacity Building",
-    description: "Empowering entrepreneurs with knowledge and skills for sustainable growth",
+    tagline: "Empower Your Team",
+    description: "Knowledge and skills development for sustainable growth and lasting impact",
     services: [
       "Business development training",
-      "Technical skills training",
-      "Advisory services",
-      "Mentorship programs",
+      "Technical skills workshops",
+      "Advisory & mentorship",
       "Leadership development",
     ],
     icon: FaGraduationCap,
-    gradientColor: colors.primary.blue.DEFAULT,
+    accentColor: "#3B82F6", // blue
+    number: "02",
   },
   {
     title: "Access to Information",
-    description: "Connecting entrepreneurs with critical data and market intelligence",
+    tagline: "Stay Informed",
+    description: "Critical data and market intelligence to drive strategic decisions",
     services: [
-      "Technology data and trends",
-      "Market intelligence",
-      "Finance information",
+      "Technology trends & data",
+      "Market intelligence reports",
       "Industry insights",
-      "Best practices sharing",
+      "Best practices library",
     ],
     icon: FaDatabase,
-    gradientColor: colors.primary.green.DEFAULT,
+    accentColor: "#8B5CF6", // violet
+    number: "03",
   },
   {
     title: "Enabling Environment",
-    description: "Creating supportive ecosystems for climate innovation to thrive",
+    tagline: "Build Together",
+    description: "Supportive ecosystems where climate innovation can truly thrive",
     services: [
-      "Policy advocacy and support",
-      "Facilities and infrastructure access",
-      "Regional outreach programs",
+      "Policy advocacy & support",
+      "Infrastructure access",
       "Partnership facilitation",
-      "Ecosystem development",
+      "Regional outreach",
     ],
     icon: FaBuilding,
-    gradientColor: colors.primary.blue.DEFAULT,
+    accentColor: "#F59E0B", // amber
+    number: "04",
   },
 ];
 
@@ -153,52 +165,49 @@ export default function HowWeDoIt({
     <section
       ref={sectionRef}
       aria-labelledby="how-we-do-it-heading"
-      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
+      className={`relative py-20 sm:py-28 overflow-hidden ${className}`}
+      style={{ background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}
     >
-      {/* Subtle background gradient shift to climate-green */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(50% 40% at 50% 50%, rgba(127,209,52,0.06) 0%, rgba(127,209,52,0) 70%)",
-        }}
-        aria-hidden
-      />
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-green-500/5 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl" />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Section Heading */}
-        <div className="text-center mb-12 sm:mb-16">
+        {/* Section Header */}
+        <div className="text-center mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mb-6">
+            <div className="w-2 h-2 rounded-full bg-green-500" />
+            <span className="text-sm font-semibold text-green-700 uppercase tracking-wider">
+              Our Approach
+            </span>
+          </div>
           <h2
             id="how-we-do-it-heading"
-            className="font-bold text-foreground mb-4"
+            className="font-bold text-gray-900 mb-6"
             style={{
-              fontSize: "clamp(1.875rem, 5vw, 3rem)",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
               fontFamily: typography.fonts.heading,
-              lineHeight: typography.lineHeights.tight,
+              lineHeight: 1.1,
               letterSpacing: "-0.02em",
             }}
           >
             How We Do It
           </h2>
-          <div
-            className="w-16 h-1 rounded-full mx-auto mb-6"
-            style={{ background: colors.primary.green.DEFAULT }}
-            aria-hidden
-          />
           <p
             ref={introRef}
-            className="text-foreground/80 max-w-3xl mx-auto"
+            className="text-gray-600 max-w-2xl mx-auto text-lg sm:text-xl"
             style={{
-              fontSize: "clamp(1rem, 2vw, 1.25rem)",
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            Holistic, country-driven support to accelerate climate technologies
+            Holistic, country-driven support to accelerate climate technologies and sustainable enterprises
           </p>
         </div>
 
-        {/* 2x2 grid layout (single column on mobile) */}
+        {/* Services Grid - Modern Card Design */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <div
@@ -206,84 +215,93 @@ export default function HowWeDoIt({
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className="group relative rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              style={{
-                padding: "2rem",
-                background: "hsl(var(--card))",
-                backdropFilter: "blur(12px)",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: "16px",
-              }}
+              className="group relative bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-gray-200 overflow-hidden"
             >
-              {/* Gradient background circle (64x64px) with icon */}
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  background: `linear-gradient(135deg, ${service.gradientColor}20, ${service.gradientColor}40)`,
+              {/* Background number */}
+              <div 
+                className="absolute -right-4 -top-4 text-[120px] font-bold leading-none pointer-events-none select-none transition-all duration-500 group-hover:scale-110"
+                style={{ 
+                  color: `${service.accentColor}08`,
+                  fontFamily: typography.fonts.heading,
                 }}
               >
-                <service.icon
-                  className="w-8 h-8"
-                  style={{ color: service.gradientColor }}
-                  aria-hidden
-                />
+                {service.number}
               </div>
 
-              {/* Service heading (1.5rem, climate-green) */}
-              <h3
-                className="font-semibold mb-3"
-                style={{
-                  fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
-                  fontFamily: typography.fonts.heading,
-                  lineHeight: typography.lineHeights.snug,
-                  color: colors.primary.green.DEFAULT,
-                }}
-              >
-                {service.title}
-              </h3>
+              {/* Content */}
+              <div className="relative z-10">
+                {/* Icon with accent background */}
+                <div 
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${service.accentColor}15 0%, ${service.accentColor}25 100%)`,
+                  }}
+                >
+                  <service.icon
+                    className="w-7 h-7"
+                    style={{ color: service.accentColor }}
+                    aria-hidden
+                  />
+                </div>
 
-              {/* Description */}
-              <p
-                className="text-foreground/70 mb-4"
-                style={{
-                  fontSize: "clamp(0.875rem, 1.2vw, 0.9375rem)",
-                  fontFamily: typography.fonts.body,
-                  lineHeight: typography.lineHeights.relaxed,
-                }}
-              >
-                {service.description}
-              </p>
+                {/* Tagline */}
+                <span 
+                  className="text-xs font-bold uppercase tracking-wider mb-2 block"
+                  style={{ color: service.accentColor }}
+                >
+                  {service.tagline}
+                </span>
 
-              {/* Bullet list with custom climate-green bullets */}
-              <ul className="space-y-2">
-                {service.services.map((item, itemIndex) => (
-                  <li
-                    key={itemIndex}
-                    className="flex items-start text-foreground/80"
-                    style={{
-                      fontSize: "clamp(0.8125rem, 1.1vw, 0.9375rem)",
-                      fontFamily: typography.fonts.body,
-                      lineHeight: typography.lineHeights.relaxed,
-                    }}
-                  >
-                    <span
-                      className="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0"
-                      style={{ background: colors.primary.green.DEFAULT }}
-                      aria-hidden
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+                {/* Title */}
+                <h3
+                  className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    lineHeight: typography.lineHeights.snug,
+                  }}
+                >
+                  {service.title}
+                </h3>
 
-              {/* Hover glow effect */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10"
-                style={{
-                  background: `radial-gradient(circle at center, ${service.gradientColor}15, transparent 70%)`,
-                  filter: "blur(20px)",
-                }}
-                aria-hidden
+                {/* Description */}
+                <p
+                  className="text-gray-600 mb-6 text-sm sm:text-base"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                    lineHeight: typography.lineHeights.relaxed,
+                  }}
+                >
+                  {service.description}
+                </p>
+
+                {/* Services list with modern styling */}
+                <ul className="space-y-3">
+                  {service.services.map((item, itemIndex) => (
+                    <li
+                      key={itemIndex}
+                      className="flex items-center gap-3 text-gray-700 text-sm group/item"
+                    >
+                      <div 
+                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover/item:scale-110"
+                        style={{ background: `${service.accentColor}15` }}
+                      >
+                        <FaArrowRight 
+                          className="w-2.5 h-2.5" 
+                          style={{ color: service.accentColor }}
+                        />
+                      </div>
+                      <span style={{ fontFamily: typography.fonts.body }}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Bottom accent line */}
+              <div 
+                className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ background: `linear-gradient(90deg, ${service.accentColor}, ${service.accentColor}60)` }}
               />
             </div>
           ))}

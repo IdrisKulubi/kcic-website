@@ -4,13 +4,12 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { colors, typography } from "@/lib/design-system";
-import { Lightbulb, RocketLaunch, Shield } from "@phosphor-icons/react";
+import { typography } from "@/lib/design-system";
 
 interface BeliefCard {
   title: string;
   description: string;
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  iconBg: string;
 }
 
 interface FoundingBeliefsSectionProps {
@@ -20,25 +19,27 @@ interface FoundingBeliefsSectionProps {
 const beliefs: BeliefCard[] = [
   {
     title: "Challenges as Opportunities",
-    description: "No challenge is too big, not even climate change. We see every obstacle as a chance to innovate and create lasting solutions.",
-    icon: Lightbulb,
+    description:
+      "No challenge is too big, not even climate change. We see every obstacle as a chance to innovate and create lasting solutions that matter.",
+    iconBg: "#10B981",
   },
   {
     title: "Innovation Meets Entrepreneurship",
-    description: "Climate action and economic prosperity go hand in hand. We bridge the gap between environmental impact and business success.",
-    icon: RocketLaunch,
+    description:
+      "Climate action and economic prosperity go hand in hand. We bridge the gap between environmental impact and business success.",
+    iconBg: "#3B82F6",
   },
   {
-    title: "SMEs as Warriors",
-    description: "Small and medium enterprises are frontline fighters innovating sustainable practices that transform communities and economies.",
-    icon: Shield,
+    title: "SMEs as Climate Warriors",
+    description:
+      "Small and medium enterprises are frontline fighters innovating sustainable practices that transform communities and economies.",
+    iconBg: "#8B5CF6",
   },
 ];
 
 /**
  * Founding Beliefs Section
  * Connects emotionally with visitors through core values and philosophy
- * Requirements: 1.4, 7.4, 5.5, 9.2, 6.4
  */
 export default function FoundingBeliefs({
   className = "",
@@ -47,8 +48,6 @@ export default function FoundingBeliefs({
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  // Note: cards are now selected via class name for better reliability with GSAP
-
   useLayoutEffect(() => {
     if (shouldDisableAnimations()) return;
     if (!sectionRef.current) return;
@@ -56,64 +55,41 @@ export default function FoundingBeliefs({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Use class selector for reliability in React
-      const cards = sectionRef.current?.querySelectorAll('.belief-card');
+      const cards = sectionRef.current?.querySelectorAll(".belief-card");
 
       if (cards && cards.length > 0) {
         cards.forEach((card, index) => {
-          // First card from left, second from bottom, third from right
-          let fromX = 0;
-          let fromY = 0;
-          let rotation = 0;
-
-          if (index === 0) {
-            fromX = -100; // Left
-            rotation = -5;
-          } else if (index === 1) {
-            fromY = 60; // Bottom
-            rotation = 0;
-          } else {
-            fromX = 100; // Right
-            rotation = 5;
-          }
-
-          // Important: Set initial state immediately to avoid flash or non-animation
           gsap.set(card, {
             opacity: 0,
-            x: fromX,
-            y: fromY,
-            scale: 0.9,
-            rotateY: rotation,
+            y: 40,
+            scale: 0.98,
           });
 
           gsap.to(card, {
             opacity: 1,
-            x: 0,
             y: 0,
             scale: 1,
-            rotateY: 0,
             duration: 0.8,
             ease: "power3.out",
-            delay: index * 0.2, // Staggered start
+            delay: index * 0.12,
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 75%", // Triggers when top of section hits 75% down viewport
+              start: "top 75%",
               once: true,
               toggleActions: "play none none none",
             },
           });
 
-          // Animate icon with bouncy pop-in
-          const icon = card.querySelector('.belief-icon');
+          const icon = card.querySelector(".belief-icon");
           if (icon) {
-            gsap.set(icon, { scale: 0, rotation: -180 });
-
+            gsap.set(icon, { scale: 0.6, rotation: -8, opacity: 0 });
             gsap.to(icon, {
               scale: 1,
               rotation: 0,
-              duration: 0.8,
-              ease: "back.out(1.7)",
-              delay: index * 0.2 + 0.3,
+              opacity: 1,
+              duration: 0.6,
+              ease: "back.out(1.6)",
+              delay: index * 0.12 + 0.15,
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
@@ -134,100 +110,119 @@ export default function FoundingBeliefs({
     <section
       ref={sectionRef}
       aria-labelledby="founding-beliefs-heading"
-      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
+      className={`relative py-20 sm:py-28 overflow-hidden ${className}`}
     >
-      {/* Subtle background gradient shift to climate-blue */}
+      {/* Soft background + techy pattern */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(50% 40% at 50% 50%, rgba(0,173,221,0.05) 0%, rgba(0,173,221,0) 70%)",
+            "radial-gradient(60% 50% at 50% 0%, rgba(16,185,129,0.10) 0%, rgba(16,185,129,0) 70%)," +
+            "radial-gradient(40% 40% at 80% 80%, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0) 70%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(15,23,42,0.25) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
         }}
         aria-hidden
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Section Heading */}
-        <div className="text-center mb-16 sm:mb-20">
+        {/* Section Header */}
+        <div className="text-center mb-14 sm:mb-18">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm mb-6">
+            <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+              Our Philosophy
+            </span>
+          </div>
+
           <h2
             id="founding-beliefs-heading"
-            className="font-bold text-foreground mb-4"
+            className="font-bold text-gray-900 mb-5"
             style={{
-              fontSize: "clamp(1.875rem, 5vw, 3rem)",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
               fontFamily: typography.fonts.heading,
-              lineHeight: typography.lineHeights.tight,
+              lineHeight: 1.1,
               letterSpacing: "-0.02em",
             }}
           >
             What We Believe
           </h2>
-          <div
-            className="w-16 h-1 rounded-full mx-auto"
-            style={{ background: colors.primary.green.DEFAULT }}
-            aria-hidden
-          />
+
+          <p
+            className="text-gray-600 max-w-2xl mx-auto text-lg"
+            style={{
+              fontFamily: typography.fonts.body,
+              lineHeight: typography.lineHeights.relaxed,
+            }}
+          >
+            The core principles that drive everything we do
+          </p>
         </div>
 
-        {/* Three-column grid (single column on mobile) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Beliefs Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {beliefs.map((belief, index) => (
-            <div
-              key={index}
-              className="belief-card group relative p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-              style={{
-                borderColor: "hsl(var(--border))",
-                borderWidth: "1px",
-                borderRadius: "16px",
-                background: "hsl(var(--card))",
-              }}
-            >
-              {/* Icon at top (48x48px, climate-green) */}
-              <div
-                className="belief-icon w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  background: `${colors.primary.green.DEFAULT}15`,
-                }}
-              >
-                <belief.icon
-                  className="w-6 h-6"
-                  style={{ color: colors.primary.green.DEFAULT }}
+            <div key={index} className="belief-card group relative">
+              <div className="relative h-full p-8 rounded-3xl border border-gray-100 bg-white shadow-sm transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                {/* Accent bar */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl"
+                  style={{ background: belief.iconBg }}
+                />
+
+                {/* Content */}
+                <h3
+                  className="font-bold text-gray-900 mb-3"
+                  style={{
+                    fontSize: "clamp(1.2rem, 2.3vw, 1.5rem)",
+                    fontFamily: typography.fonts.heading,
+                    lineHeight: typography.lineHeights.snug,
+                  }}
+                >
+                  {belief.title}
+                </h3>
+                <p
+                  className="text-gray-600"
+                  style={{
+                    fontSize: "1rem",
+                    fontFamily: typography.fonts.body,
+                    lineHeight: typography.lineHeights.relaxed,
+                  }}
+                >
+                  {belief.description}
+                </p>
+
+                {/* Bottom meta */}
+                <div className="mt-6 pt-5 border-t border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-0.5 rounded-full"
+                      style={{ background: belief.iconBg }}
+                    />
+                    <span
+                      className="text-xs font-semibold uppercase tracking-wider"
+                      style={{ color: belief.iconBg }}
+                    >
+                      Core Value
+                    </span>
+                  </div>
+                </div>
+
+                {/* Hover glow */}
+                <div
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(60% 60% at 50% 0%, ${belief.iconBg}12, transparent 70%)`,
+                  }}
                   aria-hidden
                 />
               </div>
-
-              {/* Card heading */}
-              <h3
-                className="font-semibold text-foreground mb-4"
-                style={{
-                  fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
-                  fontFamily: typography.fonts.heading,
-                  lineHeight: typography.lineHeights.snug,
-                }}
-              >
-                {belief.title}
-              </h3>
-
-              {/* Card description */}
-              <p
-                className="text-foreground/80"
-                style={{
-                  fontSize: "clamp(0.9375rem, 1.2vw, 1rem)",
-                  fontFamily: typography.fonts.body,
-                  lineHeight: typography.lineHeights.relaxed,
-                }}
-              >
-                {belief.description}
-              </p>
-
-              {/* Hover glow effect */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10"
-                style={{
-                  background: `radial-gradient(circle at center, ${colors.primary.green.DEFAULT}10, transparent 70%)`,
-                  filter: "blur(20px)",
-                }}
-                aria-hidden
-              />
             </div>
           ))}
         </div>
