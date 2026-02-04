@@ -39,9 +39,7 @@ const contactInfo = [
     title: "Email Us",
     details: [
       "info@kenyacic.org",
-      "programs@kenyacic.org",
-      "partnerships@kenyacic.org",
-      "media@kenyacic.org",
+     
     ],
     color: colors.primary.green.DEFAULT,
   },
