@@ -26,7 +26,6 @@ import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LanguageSwitcher } from '@/components/language-switcher';
 
 interface SubNavItem {
   label: string;

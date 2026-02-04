@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
@@ -11,6 +11,8 @@ import {
 } from "@/components/sections/PartnersSection";
 import { HeroVideo } from "@/components/sections/HeroVideo";
 import { ScrollProgress, SectionReveal } from "@/components/animations/SectionReveal";
+import { TeamSection } from "@/components/sections/TeamSection";
+import type { TeamMember } from "@/components/sections/TeamSection";
 
 import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
@@ -140,6 +142,19 @@ export default function HomePage({
 }: HomePageProps) {
   const { t, locale } = useTranslation();
   const bgRef = useRef<HTMLDivElement | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+
+  // Fetch team members on mount
+  useEffect(() => {
+    async function fetchTeam() {
+      const { listTeamMembers } = await import("@/lib/actions/team");
+      const result = await listTeamMembers();
+      if (result.success && result.data) {
+        setTeamMembers(result.data as TeamMember[]);
+      }
+    }
+    fetchTeam();
+  }, []);
 
   // Update document title based on locale
   useEffect(() => {
@@ -459,7 +474,19 @@ export default function HomePage({
             <NewsSection news={newsItems} />
           </div>
 
-          {/* SECTION 6: Partners */}
+          {/* SECTION 6: Meet Our Team */}
+          {teamMembers.length > 0 && (
+            <div className="bg-white">
+              <TeamSection
+                members={teamMembers}
+                title="Meet Our Team"
+                subtitle="The dedicated professionals driving climate innovation across Kenya and Africa"
+                preferredOrder={["Management", "Board"]}
+              />
+            </div>
+          )}
+
+          {/* SECTION 7: Partners */}
           <div className="bg-white">
             <PartnersSection partners={partnersDataTransformed} />
           </div>

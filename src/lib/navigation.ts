@@ -16,13 +16,7 @@ export const navData = {
             "Learn about our mission, vision, and impact in climate innovation",
           icon: "Building2",
         },
-        {
-          label: "Our team",
-          href: "/about/our-team",
-          description:
-            "Meet the dedicated professionals driving climate solutions",
-          icon: "Users",
-        },
+     
         // {
         //   label: "Policies and disclosures",
         //   href: "/about/policies-disclosures",
