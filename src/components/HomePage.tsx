@@ -10,7 +10,9 @@ import {
   PartnerData,
 } from "@/components/sections/PartnersSection";
 import { HeroVideo } from "@/components/sections/HeroVideo";
-import { ScrollProgress, SectionReveal } from "@/components/animations/SectionReveal";
+import { ScrollProgress } from "@/components/animations/SectionReveal";
+import { ScrollOrchestrator, AnimatedSection, ScrollProgressIndicator } from "@/components/animations/ScrollOrchestrator";
+import { SectionDivider, FloatingElements } from "@/components/animations/SectionDivider";
 import { TeamSection } from "@/components/sections/TeamSection";
 import type { TeamMember } from "@/components/sections/TeamSection";
 
@@ -413,84 +415,124 @@ export default function HomePage({
           />
         </div>
 
+        {/* Floating decorative elements for depth */}
+        <FloatingElements variant="mixed" color="#7FD134" count={8} />
+
         {/* Navigation */}
         <MinimalNavbar {...navData} />
 
         {/* Scroll Progress Indicator */}
         <ScrollProgress />
 
-        {/* Hero Section - cinematic video background */}
-        <HeroVideo data={translatedHeroData} />
+        {/* Section Progress Dots */}
+        <ScrollProgressIndicator
+          sections={[
+            { id: "hero", label: "Home" },
+            { id: "about", label: "About Us" },
+            { id: "approach", label: "Our Approach" },
+            { id: "sectors", label: "Focus Sectors" },
+            { id: "impact", label: "Impact" },
+            { id: "news", label: "News" },
+            { id: "partners", label: "Partners" },
+          ]}
+          showLabels
+        />
 
-        {/* Main Content Sections with proper spacing */}
-        <div className="space-y-0">
-          {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
-          <div className="bg-white">
-            <ClimateChallenge />
-            <div className="border-t border-gray-100">
-              <HistoryTimeline />
+        <ScrollOrchestrator>
+          {/* Hero Section - cinematic video background */}
+          <div id="hero">
+            <HeroVideo data={translatedHeroData} />
+          </div>
+
+          {/* Main Content Sections with smooth transitions */}
+          <div className="space-y-0">
+            {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
+            <div id="about">
+              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={60} />
+              <AnimatedSection direction="up" className="bg-white">
+                <ClimateChallenge />
+              </AnimatedSection>
+              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
+                <HistoryTimeline />
+              </AnimatedSection>
+              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
+                <FoundingBeliefs />
+              </AnimatedSection>
             </div>
-            <div className="border-t border-gray-100">
-              <FoundingBeliefs />
+
+            {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
+            <div id="approach">
+              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
+              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
+                <WhatWeDo />
+                <div className="mt-12">
+                  <HowWeDoIt />
+                </div>
+              </AnimatedSection>
+            </div>
+
+            {/* SECTION 3: Focus Areas - Full Parallax Experience */}
+            <div id="sectors">
+              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#f9fafb" height={60} flip />
+              <KeySectorsParallax />
+            </div>
+
+            {/* SECTION 3B: Programs Showcase */}
+            <AnimatedSection direction="scale" className="bg-white py-12 sm:py-16">
+              <ProgramsShowcase />
+            </AnimatedSection>
+
+            {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+            <div id="impact">
+              <SectionDivider variant="angle" fromColor="#ffffff" toColor="#0f172a" height={80} />
+              <div className="relative">
+                <MinimalStatsSection
+                  stats={thirteenYearsOnData}
+                  targets={targetsData}
+                  variant="dark"
+                  title="Our Impact Journey"
+                  subtitle="From 13 years of achievements to our ambitious 2030 vision"
+                  imageSrc="/images/KCIC-Map.png"
+                  imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
+                  imageSide="left"
+                  showToggle={true}
+                />
+                <AnimatedSection direction="up" className="border-t border-white/10 relative">
+                  <AwardsSection />
+                </AnimatedSection>
+              </div>
+            </div>
+
+            {/* SECTION 5: News */}
+            <div id="news">
+              <SectionDivider variant="curve" fromColor="#0f172a" toColor="#f9fafb" height={70} />
+              <AnimatedSection direction="up" className="bg-gray-50 py-12 sm:py-16">
+                <NewsSection news={newsItems} />
+              </AnimatedSection>
+            </div>
+
+            {/* SECTION 6: Meet Our Team */}
+            {teamMembers.length > 0 && (
+              <AnimatedSection direction="up" className="bg-white">
+                <SectionDivider variant="wave" fromColor="#f9fafb" toColor="#ffffff" height={50} />
+                <TeamSection
+                  members={teamMembers}
+                  title="Meet Our Team"
+                  subtitle="The dedicated professionals driving climate innovation across Kenya and Africa"
+                  preferredOrder={["Management", "Board"]}
+                />
+              </AnimatedSection>
+            )}
+
+            {/* SECTION 7: Partners */}
+            <div id="partners">
+              <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
+              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white">
+                <PartnersSection partners={partnersDataTransformed} />
+              </AnimatedSection>
             </div>
           </div>
-
-          {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
-          <div className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
-            <WhatWeDo />
-            <div className="mt-12">
-              <HowWeDoIt />
-            </div>
-          </div>
-
-          {/* SECTION 3: Focus Areas - Full Parallax Experience */}
-          <KeySectorsParallax />
-
-          {/* SECTION 3B: Programs Showcase */}
-          <div className="bg-white py-12 sm:py-16">
-            <ProgramsShowcase />
-          </div>
-
-          {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
-          <div className="relative">
-            <MinimalStatsSection
-              stats={thirteenYearsOnData}
-              targets={targetsData}
-              variant="dark"
-              title="Our Impact Journey"
-              subtitle="From 13 years of achievements to our ambitious 2030 vision"
-              imageSrc="/images/KCIC-Map.png"
-              imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
-              imageSide="left"
-              showToggle={true}
-            />
-            <div className="border-t border-white/10 relative">
-              <AwardsSection />
-            </div>
-          </div>
-
-          {/* SECTION 5: News */}
-          <div className="bg-gray-50 py-12 sm:py-16">
-            <NewsSection news={newsItems} />
-          </div>
-
-          {/* SECTION 6: Meet Our Team */}
-          {teamMembers.length > 0 && (
-            <div className="bg-white">
-              <TeamSection
-                members={teamMembers}
-                title="Meet Our Team"
-                subtitle="The dedicated professionals driving climate innovation across Kenya and Africa"
-                preferredOrder={["Management", "Board"]}
-              />
-            </div>
-          )}
-
-          {/* SECTION 7: Partners */}
-          <div className="bg-white">
-            <PartnersSection partners={partnersDataTransformed} />
-          </div>
-        </div>
+        </ScrollOrchestrator>
 
         {/* Footer */}
         <Footer data={footerData} />
