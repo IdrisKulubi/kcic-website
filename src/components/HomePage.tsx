@@ -424,20 +424,6 @@ export default function HomePage({
         {/* Scroll Progress Indicator */}
         <ScrollProgress />
 
-        {/* Section Progress Dots */}
-        <ScrollProgressIndicator
-          sections={[
-            { id: "hero", label: "Home" },
-            { id: "about", label: "About Us" },
-            { id: "approach", label: "Our Approach" },
-            { id: "sectors", label: "Focus Sectors" },
-            { id: "impact", label: "Impact" },
-            { id: "news", label: "News" },
-            { id: "partners", label: "Partners" },
-          ]}
-          showLabels
-        />
-
         <ScrollOrchestrator>
           {/* Hero Section - cinematic video background */}
           <div id="hero">
