@@ -123,19 +123,19 @@ function CollapsibleSection({
         >
             <button
                 onClick={onToggle}
-                className="w-full p-5 flex items-center gap-4 text-left hover:bg-gray-50/50 transition-colors"
+                className="w-full p-4 flex items-center gap-3 text-left hover:bg-gray-50/50 transition-colors"
                 aria-expanded={isOpen}
                 aria-controls={`section-${id}`}
             >
                 <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
                     style={{ backgroundColor: `${accentColor}15` }}
                 >
-                    <IconComponent className="w-6 h-6" color={accentColor} />
+                    <IconComponent className="w-5 h-5" color={accentColor} />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-                    <p className="text-sm text-gray-500 truncate">{description}</p>
+                    <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+                    <p className="text-xs text-gray-500 truncate">{description}</p>
                 </div>
                 <div className="shrink-0">
                     {isOpen ? (
@@ -158,18 +158,18 @@ function CollapsibleSection({
                     >
                         <div className="px-5 pb-5 pt-2 border-t border-gray-100">
                             <div
-                                className="prose prose-sm max-w-none text-gray-600
-                                    [&_p]:mb-3 [&_p]:leading-relaxed
-                                    [&_ul]:my-3 [&_ul]:pl-5 [&_ul]:list-disc
-                                    [&_ol]:my-3 [&_ol]:pl-5 [&_ol]:list-decimal
-                                    [&_li]:mb-1.5 [&_li]:leading-relaxed
+                                className="max-w-none text-gray-600 text-sm leading-relaxed
+                                    [&_p]:mb-3 [&_p]:text-sm [&_p]:leading-relaxed
+                                    [&_ul]:my-3 [&_ul]:pl-5 [&_ul]:list-disc [&_ul]:text-sm
+                                    [&_ol]:my-3 [&_ol]:pl-5 [&_ol]:list-decimal [&_ol]:text-sm
+                                    [&_li]:mb-1.5 [&_li]:leading-relaxed [&_li]:text-sm
                                     [&_strong]:text-gray-800 [&_strong]:font-semibold
                                     [&_a]:text-green-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:hover:text-green-700
-                                    [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-5 [&_h3]:mb-2
-                                    [&_h4]:text-sm [&_h4]:font-semibold [&_h4]:text-gray-700 [&_h4]:mt-4 [&_h4]:mb-2
-                                    [&_table]:w-full [&_table]:my-4 [&_table]:text-sm
-                                    [&_th]:text-left [&_th]:py-2 [&_th]:px-3 [&_th]:bg-gray-50 [&_th]:font-semibold [&_th]:text-gray-700
-                                    [&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-gray-100"
+                                    [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-2
+                                    [&_h4]:text-xs [&_h4]:font-semibold [&_h4]:text-gray-700 [&_h4]:mt-3 [&_h4]:mb-1
+                                    [&_table]:w-full [&_table]:my-4 [&_table]:text-xs
+                                    [&_th]:text-left [&_th]:py-1.5 [&_th]:px-2 [&_th]:bg-gray-50 [&_th]:font-semibold [&_th]:text-gray-700 [&_th]:text-xs
+                                    [&_td]:py-1.5 [&_td]:px-2 [&_td]:border-b [&_td]:border-gray-100 [&_td]:text-xs"
                                 dangerouslySetInnerHTML={{ __html: content }}
                             />
                         </div>
@@ -193,15 +193,15 @@ function BenefitCard({
     color: string;
 }) {
     return (
-        <div className="p-5 bg-white rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
+        <div className="p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow">
             <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
                 style={{ backgroundColor: `${color}15` }}
             >
-                <IconComponent className="w-6 h-6" color={color} weight="duotone" />
+                <IconComponent className="w-5 h-5" color={color} weight="duotone" />
             </div>
-            <h4 className="font-semibold text-gray-900 mb-2">{title}</h4>
-            <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
+            <h4 className="text-sm font-semibold text-gray-900 mb-1">{title}</h4>
+            <p className="text-xs text-gray-500 leading-relaxed">{description}</p>
         </div>
     );
 }
@@ -294,33 +294,33 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                                 </span>
                             )}
 
-                            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
                                 {programme.title}
                             </h1>
 
-                            <p className="text-lg text-white/80 leading-relaxed mb-8 max-w-xl">
+                            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-6 max-w-xl">
                                 {programme.description}
                             </p>
 
                             {/* CTA Buttons */}
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-wrap gap-3">
                                 {programme.isActive && programme.applicationLink && (
                                     <a
                                         href={programme.applicationLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full transition-all hover:scale-105 shadow-lg shadow-green-600/30"
+                                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-sm text-white font-semibold rounded-full transition-all hover:scale-105 shadow-lg shadow-green-600/30"
                                     >
                                         Apply Now
-                                        <ArrowSquareOutIcon className="w-5 h-5" />
+                                        <ArrowSquareOutIcon className="w-4 h-4" />
                                     </a>
                                 )}
                                 <button
                                     onClick={() => document.getElementById('programme-details')?.scrollIntoView({ behavior: 'smooth' })}
-                                    className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full transition-all backdrop-blur-sm"
+                                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-sm text-white font-semibold rounded-full transition-all backdrop-blur-sm"
                                 >
                                     Learn More
-                                    <ArrowRightIcon className="w-5 h-5" />
+                                    <ArrowRightIcon className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
@@ -375,12 +375,12 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                 
                 {/* What You Get Section */}
                 <section className="mb-16">
-                    <div className="text-center mb-10">
-                        <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-4">
-                            <LightbulbIcon className="w-4 h-4" />
+                    <div className="text-center mb-8">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-semibold uppercase tracking-wider mb-3">
+                            <LightbulbIcon className="w-3 h-3" />
                             Programme Benefits
                         </span>
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                        <h2 className="text-lg md:text-xl font-bold text-gray-900">
                             What This Programme Offers
                         </h2>
                     </div>
@@ -408,10 +408,10 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                 {/* Programme Details Accordion */}
                 {availableSections.length > 0 && (
                     <section>
-                        <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center justify-between mb-6">
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-900">Programme Details</h2>
-                                <p className="text-gray-500 text-sm mt-1">
+                                <h2 className="text-lg font-bold text-gray-900">Programme Details</h2>
+                                <p className="text-gray-500 text-xs mt-1">
                                     Click each section to expand and learn more
                                 </p>
                             </div>
@@ -476,16 +476,16 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                             </div>
 
                             <div className="relative z-10 text-center">
-                                <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 text-white rounded-full text-sm font-semibold mb-6">
-                                    <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 text-white rounded-full text-xs font-semibold mb-4">
+                                    <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                                     Applications Now Open
                                 </span>
                                 
-                                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
                                     Ready to Make an Impact?
                                 </h3>
                                 
-                                <p className="text-white/90 text-lg max-w-2xl mx-auto mb-8">
+                                <p className="text-white/90 text-sm md:text-base max-w-2xl mx-auto mb-6">
                                     Join {programme.title} and take the next step in your climate innovation journey.
                                 </p>
 
@@ -493,10 +493,10 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                                     href={programme.applicationLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 font-bold rounded-full hover:scale-105 transition-transform shadow-xl"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 text-sm font-bold rounded-full hover:scale-105 transition-transform shadow-xl"
                                 >
                                     Apply Now
-                                    <ArrowSquareOutIcon className="w-5 h-5" />
+                                    <ArrowSquareOutIcon className="w-4 h-4" />
                                 </a>
                             </div>
                         </div>
@@ -505,17 +505,17 @@ export default function ProgrammeDetailPage({ programme }: Props) {
             </div>
 
             {/* Explore More Programmes */}
-            <div className="bg-white border-t border-gray-100 py-16">
+            <div className="bg-white border-t border-gray-100 py-12">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-base font-bold text-gray-900 mb-2">
                         Explore More Programmes
                     </h3>
-                    <p className="text-gray-500 mb-8">
+                    <p className="text-gray-500 text-sm mb-6">
                         Discover other initiatives supporting climate innovation across Africa.
                     </p>
                     <Link
                         href="/programmes"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-800 transition-colors"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors"
                     >
                         <ArrowLeftIcon className="w-4 h-4" />
                         View All Programmes
@@ -543,10 +543,10 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                         href={programme.applicationLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full shadow-lg shadow-green-600/30 transition-all hover:scale-105"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-sm text-white font-semibold rounded-full shadow-lg shadow-green-600/30 transition-all hover:scale-105"
                     >
                         Apply Here
-                        <ArrowSquareOutIcon className="w-5 h-5" />
+                        <ArrowSquareOutIcon className="w-4 h-4" />
                     </a>
                 </motion.div>
             )}
