@@ -262,7 +262,60 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
           )}
         </div>
 
-       
+        {/* Newsletter CTA */}
+        <div ref={ctaRef} className="mt-16">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-white via-green-50/70 to-white shadow-lg border border-green-100">
+            <div
+              className="absolute -top-12 -left-6 h-48 w-48 rounded-full bg-green-500/10 blur-3xl"
+              aria-hidden
+            />
+            <div
+              className="absolute -bottom-16 right-0 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl"
+              aria-hidden
+            />
+            <div className="relative z-10 flex flex-col gap-8 p-8 md:p-12 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-xl text-center md:text-left">
+                <h3
+                  className="font-bold text-2xl md:text-3xl"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    color: colors.secondary.gray[900],
+                  }}
+                >
+                  Never miss an update
+                </h3>
+                <p
+                  className="mt-3 text-sm md:text-base text-gray-600"
+                  style={{
+                    fontFamily: typography.fonts.body,
+                  }}
+                >
+                  Subscribe to our newsletter and get the latest climate
+                  innovation news delivered straight to your inbox.
+                </p>
+              </div>
+              <form
+                className="w-full max-w-lg md:flex md:items-center md:justify-end"
+                aria-label="Newsletter subscription"
+              >
+                <div className="flex w-full flex-col gap-3 sm:flex-row">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 rounded-full border border-green-200 bg-white px-5 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100"
+                  />
+                  <Button
+                    type="submit"
+                    className="sm:w-auto rounded-full px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
+                    style={{ backgroundColor: colors.primary.green.DEFAULT }}
+                  >
+                    Subscribe
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
