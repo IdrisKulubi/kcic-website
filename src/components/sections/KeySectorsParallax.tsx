@@ -288,7 +288,7 @@ export default function KeySectorsParallax({
               {/* Main image container */}
               <div 
                 ref={imageContainerRef}
-                className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl aspect-[4/5]"
+                className="relative w-full max-w-xs sm:max-w-sm lg:max-w-md aspect-[3/4]"
               >
                 {/* Stacked frame effect - back */}
                 <div 
