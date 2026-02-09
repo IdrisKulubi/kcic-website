@@ -166,6 +166,7 @@ export const programmes = pgTable("programmes", {
   color: text("color").notNull(),
   order: integer("order").notNull(),
   isActive: boolean("is_active").default(false).notNull(),
+  category: text("category").notNull().default('flagship'), // 'flagship' | 'special'
   applicationLink: text("application_link"),
   // Rich text content sections (stored as HTML)
   introduction: text("introduction"),

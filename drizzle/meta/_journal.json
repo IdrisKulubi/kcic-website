@@ -29,6 +29,13 @@
       "when": 1765910387729,
       "tag": "0003_natural_magneto",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770675649248,
+      "tag": "0004_clumsy_mach_iv",
+      "breakpoints": true
     }
   ]
 }

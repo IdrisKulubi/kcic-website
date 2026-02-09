@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -9,7 +9,7 @@ import { getFooterSection } from '@/lib/actions/footer';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
 import Footer from '@/components/layout/Footer';
 import { navData } from '@/lib/navigation';
-import { ArrowRightIcon, RocketIcon } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRightIcon, RocketIcon, StarIcon, LightbulbIcon } from '@phosphor-icons/react/dist/ssr';
 
 type FooterData = {
   quickLinks: { label: string; href: string }[];
@@ -19,10 +19,132 @@ type FooterData = {
   copyright: string;
 };
 
+// Programme Card Component
+function ProgrammeCard({ 
+  programme, 
+  index, 
+  variant 
+}: { 
+  programme: ProgrammeData; 
+  index: number; 
+  variant: 'flagship' | 'special';
+}) {
+  const accentColor = variant === 'flagship' ? 'green' : 'blue';
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08, duration: 0.4 }}
+    >
+      <Link href={`/programmes/${programme.slug}`}>
+        <article className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300 h-full">
+          
+          {/* Active Badge */}
+          {programme.isActive && (
+            <div className="absolute top-3 left-3 z-20">
+              <span className={`px-2.5 py-1 text-white text-xs font-semibold rounded-full shadow-sm flex items-center gap-1.5 ${
+                variant === 'flagship' ? 'bg-emerald-500' : 'bg-blue-500'
+              }`}>
+                <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                Accepting Applications
+              </span>
+            </div>
+          )}
+
+          {/* Image Container */}
+          <div className="relative h-44 overflow-hidden">
+            <Image
+              src={programme.image}
+              alt={programme.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            
+            {/* Color accent */}
+            <div
+              className="absolute bottom-0 left-0 right-0 h-1"
+              style={{ backgroundColor: programme.color }}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="p-5">
+            <h3 className={`text-lg font-bold text-gray-900 mb-2 group-hover:text-${accentColor}-600 transition-colors line-clamp-1`}>
+              {programme.title}
+            </h3>
+
+            <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-3">
+              {programme.description}
+            </p>
+
+            {/* CTA */}
+            <div className={`flex items-center text-sm font-medium ${
+              variant === 'flagship' ? 'text-emerald-600' : 'text-blue-600'
+            }`}>
+              <span>Learn more</span>
+              <ArrowRightIcon className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+        </article>
+      </Link>
+    </motion.div>
+  );
+}
+
 export default function ProgrammesPage() {
   const [programmes, setProgrammes] = useState<ProgrammeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [footerData, setFooterData] = useState<FooterData | null>(null);
+
+  // Define the preferred order for each category
+  const flagshipOrder = [
+    'agribiz-programme',
+    'greenbiz-programme', 
+    'puse-programme',
+    'swift-programme',
+    'dreem-hub'
+  ];
+  
+  const specialOrder = [
+    'sheria-ya-vijana',
+    'e-mobility-programme',
+    'africa-meets-bavaria',
+    'in-country-youth-adapt',
+    'cleantech-innovation-programme',
+    'climatelaunchpad',
+    'vijana-na-agribiz',
+    'greyap',
+    'wusc'
+  ];
+
+  // Sort programmes by category and preferred order
+  const { flagshipProgrammes, specialProgrammes } = useMemo(() => {
+    const flagship = programmes
+      .filter(p => p.category === 'flagship' || !p.category)
+      .sort((a, b) => {
+        const aIndex = flagshipOrder.indexOf(a.slug);
+        const bIndex = flagshipOrder.indexOf(b.slug);
+        if (aIndex === -1 && bIndex === -1) return a.order - b.order;
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+        return aIndex - bIndex;
+      });
+
+    const special = programmes
+      .filter(p => p.category === 'special')
+      .sort((a, b) => {
+        const aIndex = specialOrder.indexOf(a.slug);
+        const bIndex = specialOrder.indexOf(b.slug);
+        if (aIndex === -1 && bIndex === -1) return a.order - b.order;
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+        return aIndex - bIndex;
+      });
+
+    return { flagshipProgrammes: flagship, specialProgrammes: special };
+  }, [programmes]);
 
   useEffect(() => {
     async function fetchData() {
@@ -100,81 +222,77 @@ export default function ProgrammesPage() {
 
           {/* Loading State */}
           {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-gray-50 rounded-3xl overflow-hidden animate-pulse">
-                  <div className="h-64 bg-gray-200" />
-                  <div className="p-8 space-y-4">
-                    <div className="h-8 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-full" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                  </div>
+            <div className="space-y-16">
+              <div>
+                <div className="h-8 bg-gray-200 rounded w-64 mb-6 animate-pulse" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="bg-gray-50 rounded-2xl overflow-hidden animate-pulse">
+                      <div className="h-40 bg-gray-200" />
+                      <div className="p-4 space-y-3">
+                        <div className="h-6 bg-gray-200 rounded w-3/4" />
+                        <div className="h-4 bg-gray-200 rounded w-full" />
+                        <div className="h-4 bg-gray-200 rounded w-2/3" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           )}
 
-          {/* Programmes Grid */}
-          {!loading && programmes.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {programmes.map((programme, index) => (
-                <motion.div
-                  key={programme.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
-                >
-                  <Link href={`/programmes/${programme.slug}`}>
-                    <article className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300">
+          {/* Flagship Programmes Section */}
+          {!loading && flagshipProgrammes.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-16"
+            >
+              {/* Section Header */}
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-2 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl shadow-lg shadow-emerald-500/20">
+                  <StarIcon className="w-5 h-5 text-white" weight="fill" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Flagship Programmes</h2>
+                  <p className="text-sm text-gray-500">Our core programmes driving climate innovation</p>
+                </div>
+              </div>
 
-                      {/* Active Badge */}
-                      {programme.isActive && (
-                        <div className="absolute top-3 left-3 z-20">
-                          <span className="px-2.5 py-1 bg-green-500 text-white text-xs font-semibold rounded-full shadow-sm flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                            Accepting Applications
-                          </span>
-                        </div>
-                      )}
+              {/* Flagship Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {flagshipProgrammes.map((programme, index) => (
+                  <ProgrammeCard key={programme.id} programme={programme} index={index} variant="flagship" />
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-                      {/* Image Container */}
-                      <div className="relative h-40 overflow-hidden">
-                        <Image
-                          src={programme.image}
-                          alt={programme.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          {/* Special Projects Section */}
+          {!loading && specialProgrammes.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {/* Section Header */}
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20">
+                  <LightbulbIcon className="w-5 h-5 text-white" weight="fill" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Special Projects & Initiatives</h2>
+                  <p className="text-sm text-gray-500">Targeted programmes addressing specific challenges</p>
+                </div>
+              </div>
 
-                        {/* Color accent */}
-                        <div
-                          className="absolute bottom-0 left-0 right-0 h-0.5"
-                          style={{ backgroundColor: programme.color }}
-                        />
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-4">
-                        <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors line-clamp-1">
-                          {programme.title}
-                        </h3>
-
-                        <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2">
-                          {programme.description}
-                        </p>
-
-                        {/* CTA */}
-                        <div className="flex items-center text-sm text-green-600 font-medium">
-                          <span>Learn more</span>
-                          <ArrowRightIcon className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </article>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+              {/* Special Projects Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {specialProgrammes.map((programme, index) => (
+                  <ProgrammeCard key={programme.id} programme={programme} index={index} variant="special" />
+                ))}
+              </div>
+            </motion.div>
           )}
 
           {/* Empty State */}

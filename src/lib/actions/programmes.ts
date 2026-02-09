@@ -17,6 +17,7 @@ export type ProgrammeData = {
   color: string;
   order: number;
   isActive: boolean;
+  category: 'flagship' | 'special';
   applicationLink: string | null;
   introduction: string | null;
   applicationProcess: string | null;
@@ -58,6 +59,7 @@ const programmeInputSchema = z.object({
   color: z.string().min(1, "Color is required"),
   order: z.number().int().min(0),
   isActive: z.boolean().default(false),
+  category: z.enum(['flagship', 'special']).default('flagship'),
   applicationLink: z.string().nullable().optional(),
   introduction: z.string().nullable().optional(),
   applicationProcess: z.string().nullable().optional(),

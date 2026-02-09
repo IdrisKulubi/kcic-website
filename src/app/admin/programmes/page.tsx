@@ -51,6 +51,7 @@ const programmeFormSchema = z.object({
   color: z.string().min(1, "Color is required"),
   order: z.number().int().min(0),
   isActive: z.boolean(),
+  category: z.enum(['flagship', 'special']),
   applicationLink: z.string().optional(),
   introduction: z.string().optional(),
   applicationProcess: z.string().optional(),
@@ -211,6 +212,7 @@ function ProgrammeEditor({
       color: programme.color,
       order: programme.order,
       isActive: programme.isActive,
+      category: programme.category || 'flagship',
       applicationLink: programme.applicationLink || '',
       introduction: programme.introduction || '',
       applicationProcess: programme.applicationProcess || '',
@@ -231,6 +233,7 @@ function ProgrammeEditor({
       color: '#22c55e',
       order: 0,
       isActive: false,
+      category: 'flagship' as const,
       applicationLink: '',
       introduction: '',
       applicationProcess: '',
@@ -361,6 +364,36 @@ function ProgrammeEditor({
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-4 mt-4">
+          {/* Category Selection */}
+          <div className="space-y-3 p-4 bg-muted rounded-lg">
+            <Label className="text-base font-semibold">Programme Category</Label>
+            <p className="text-sm text-muted-foreground">
+              Choose which section this programme belongs to
+            </p>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="flagship"
+                  checked={watch("category") === 'flagship'}
+                  onChange={() => setValue("category", 'flagship')}
+                  className="w-4 h-4 text-green-600"
+                />
+                <span className="text-sm font-medium">Flagship Programme</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="special"
+                  checked={watch("category") === 'special'}
+                  onChange={() => setValue("category", 'special')}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-sm font-medium">Special Project / Initiative</span>
+              </label>
+            </div>
+          </div>
+
           <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
             <div>
               <Label className="text-base">Active Programme</Label>
@@ -446,6 +479,16 @@ function ProgrammeCard({
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-3 left-3 right-3">
           <h3 className="text-white font-bold text-lg">{programme.title}</h3>
+        </div>
+        {/* Category badge */}
+        <div className="absolute top-3 left-3">
+          <span className={`px-2 py-1 text-xs font-bold rounded-full ${
+            programme.category === 'flagship' 
+              ? 'bg-emerald-500 text-white' 
+              : 'bg-blue-500 text-white'
+          }`}>
+            {programme.category === 'flagship' ? 'Flagship' : 'Special'}
+          </span>
         </div>
         {programme.isActive && (
           <div className="absolute top-3 right-3">
