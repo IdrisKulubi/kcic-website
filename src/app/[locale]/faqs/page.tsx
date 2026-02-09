@@ -3,7 +3,10 @@
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, Search, MessageCircleQuestion } from 'lucide-react';
+import { 
+  Question as QuestionIcon,
+  Plus as PlusIcon,
+} from '@phosphor-icons/react';
 import Link from 'next/link';
 
 const faqData = [
@@ -146,14 +149,14 @@ export default function FAQsPage() {
             className="mb-12"
           >
             {/* Search Bar */}
-            <div className="relative mb-8">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div className="relative mb-8 group">
+            
               <input
                 type="text"
                 placeholder="Search FAQs..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg"
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-base md:text-lg transition-all"
               />
             </div>
 
@@ -181,7 +184,7 @@ export default function FAQsPage() {
               animate={{ opacity: 1 }}
               className="text-center py-12"
             >
-              <MessageCircleQuestion className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <QuestionIcon size={64} className="text-gray-300 mx-auto mb-4" weight="light" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No FAQs found</h3>
               <p className="text-gray-600">Try adjusting your search terms or category filter.</p>
             </motion.div>
@@ -222,12 +225,12 @@ export default function FAQsPage() {
                           <motion.div
                             animate={{ rotate: isOpen ? 45 : 0 }}
                             transition={{ duration: 0.2 }}
-                            className="flex-shrink-0"
+                            className="shrink-0 ml-4"
                           >
                             {isOpen ? (
-                              <Minus className="w-5 h-5 text-green-600" />
+                              <PlusIcon size={20} weight="bold" className="text-green-600" />
                             ) : (
-                              <Plus className="w-5 h-5 text-green-600" />
+                              <PlusIcon size={20} weight="bold" className="text-gray-400" />
                             )}
                           </motion.div>
                         </button>

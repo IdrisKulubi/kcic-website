@@ -81,18 +81,17 @@ export default function ContactPage() {
             Kenya Climate Innovation Centre
           </span>
           <h1
-            className="font-bold mb-6"
+            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
             style={{
-              fontSize: "clamp(2.75rem, 7vw, 4.75rem)",
               fontFamily: typography.fonts.heading,
               color: colors.secondary.gray[900],
-              lineHeight: typography.lineHeights.tight,
+              lineHeight: 1.1,
             }}
           >
             Let&apos;s Build a Climate Resilient Future Together
           </h1>
           <p
-            className="text-xl mb-12 max-w-3xl mx-auto"
+            className="text-base md:text-lg mb-12 max-w-2xl mx-auto"
             style={{
               fontFamily: typography.fonts.body,
               color: colors.secondary.gray[600],
@@ -129,23 +128,22 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3
-                        className="font-semibold mb-3"
+                        className="text-lg font-semibold mb-2"
                         style={{
-                          fontSize: typography.sizes.heading.h4[0],
                           fontFamily: typography.fonts.heading,
                           color: colors.secondary.gray[900],
                         }}
                       >
                         {info.title}
                       </h3>
-                      <ul className="space-y-2">
+                      <ul className="space-y-1.5">
                         {info.details.map((detail) => (
                           <li
                             key={detail}
+                            className="text-sm"
                             style={{
                               fontFamily: typography.fonts.body,
                               color: colors.secondary.gray[600],
-                              fontSize: typography.sizes.body.sm[0],
                             }}
                           >
                             {detail}
@@ -162,13 +160,12 @@ export default function ContactPage() {
       </section>
 
       {/* Map Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-20 bg-gray-50 border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <h2
-              className="font-bold mb-4"
+              className="text-2xl md:text-3xl font-bold mb-4"
               style={{
-                fontSize: typography.sizes.heading.h2[0],
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
               }}
@@ -176,7 +173,7 @@ export default function ContactPage() {
               Visit Our Innovation Hub in Nairobi
             </h2>
             <p
-              className="max-w-3xl mx-auto"
+              className="text-sm md:text-base max-w-2xl mx-auto"
               style={{
                 fontFamily: typography.fonts.body,
                 color: colors.secondary.gray[600],
