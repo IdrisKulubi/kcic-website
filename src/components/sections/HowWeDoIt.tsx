@@ -5,21 +5,15 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-import { 
-  FaDollarSign, 
-  FaGraduationCap, 
-  FaDatabase, 
-  FaBuilding,
-  FaArrowRight 
-} from "react-icons/fa6";
 
 interface ServiceCard {
   title: string;
   tagline: string;
   description: string;
   services: string[];
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   accentColor: string;
+  gradientFrom: string;
+  gradientTo: string;
   number: string;
 }
 
@@ -38,8 +32,9 @@ const services: ServiceCard[] = [
       "Revenue-based financing (RBF)",
       "Investment syndication",
     ],
-    icon: FaDollarSign,
-    accentColor: "#10B981", // emerald
+    accentColor: colors.primary.green.DEFAULT,
+    gradientFrom: "#059669",
+    gradientTo: "#10B981",
     number: "01",
   },
   {
@@ -52,8 +47,9 @@ const services: ServiceCard[] = [
       "Advisory & mentorship",
       "Leadership development",
     ],
-    icon: FaGraduationCap,
-    accentColor: "#3B82F6", // blue
+    accentColor: colors.primary.blue.DEFAULT,
+    gradientFrom: "#1D4ED8",
+    gradientTo: "#3B82F6",
     number: "02",
   },
   {
@@ -66,8 +62,9 @@ const services: ServiceCard[] = [
       "Industry insights",
       "Best practices library",
     ],
-    icon: FaDatabase,
-    accentColor: "#8B5CF6", // violet
+    accentColor: "#8B5CF6",
+    gradientFrom: "#7C3AED",
+    gradientTo: "#A78BFA",
     number: "03",
   },
   {
@@ -80,8 +77,9 @@ const services: ServiceCard[] = [
       "Partnership facilitation",
       "Regional outreach",
     ],
-    icon: FaBuilding,
-    accentColor: "#F59E0B", // amber
+    accentColor: "#F59E0B",
+    gradientFrom: "#D97706",
+    gradientTo: "#FBBF24",
     number: "04",
   },
 ];
@@ -98,6 +96,7 @@ export default function HowWeDoIt({
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const introRef = useRef<HTMLParagraphElement | null>(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
@@ -107,6 +106,34 @@ export default function HowWeDoIt({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      // Header staggered reveal
+      if (headerRef.current) {
+        const badge = headerRef.current.querySelector('.hwd-badge');
+        const heading = headerRef.current.querySelector('h2');
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+
+        if (badge) {
+          tl.fromTo(badge,
+            { opacity: 0, y: 20, scale: 0.9 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.4)', force3D: true }
+          );
+        }
+        if (heading) {
+          tl.fromTo(heading,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true },
+            '-=0.3'
+          );
+        }
+      }
+
       // Fade-in for intro text
       if (introRef.current) {
         gsap.fromTo(
@@ -117,12 +144,12 @@ export default function HowWeDoIt({
             y: 0,
             duration: 0.6,
             ease: "power2.out",
+            force3D: true,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
               end: "top 55%",
-              once: true,
-              toggleActions: "play none none none",
+              toggleActions: "play none none reverse",
               invalidateOnRefresh: true,
             },
           }
@@ -141,13 +168,13 @@ export default function HowWeDoIt({
               y: 0,
               duration: 0.7,
               ease: "power2.out",
+              force3D: true,
               delay: index * 0.1, // 100ms stagger
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
                 end: "top 55%",
-                once: true,
-                toggleActions: "play none none none",
+                toggleActions: "play none none reverse",
                 invalidateOnRefresh: true,
               },
             }
@@ -176,8 +203,8 @@ export default function HowWeDoIt({
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
-        <div className="text-center mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mb-6">
+        <div ref={headerRef} className="text-center mb-16 sm:mb-20">
+          <div className="hwd-badge inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mb-6">
             <div className="w-2 h-2 rounded-full bg-green-500" />
             <span className="text-sm font-semibold text-green-700 uppercase tracking-wider">
               Our Approach
@@ -207,102 +234,109 @@ export default function HowWeDoIt({
           </p>
         </div>
 
-        {/* Services Grid - Modern Card Design */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {/* Services Grid - Clean Modern Design */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
           {services.map((service, index) => (
             <div
               key={index}
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className="group relative bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-gray-200 overflow-hidden"
+              className="group relative"
             >
-              {/* Background number */}
+              {/* Card with gradient border effect */}
               <div 
-                className="absolute -right-4 -top-4 text-[120px] font-bold leading-none pointer-events-none select-none transition-all duration-500 group-hover:scale-110"
+                className="absolute -inset-[1px] rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
                 style={{ 
-                  color: `${service.accentColor}08`,
-                  fontFamily: typography.fonts.heading,
+                  background: `linear-gradient(135deg, ${service.gradientFrom}, ${service.gradientTo})`,
                 }}
-              >
-                {service.number}
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10">
-                {/* Icon with accent background */}
-                <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${service.accentColor}15 0%, ${service.accentColor}25 100%)`,
-                  }}
-                >
-                  <service.icon
-                    className="w-7 h-7"
-                    style={{ color: service.accentColor }}
-                    aria-hidden
-                  />
-                </div>
-
-                {/* Tagline */}
-                <span 
-                  className="text-xs font-bold uppercase tracking-wider mb-2 block"
-                  style={{ color: service.accentColor }}
-                >
-                  {service.tagline}
-                </span>
-
-                {/* Title */}
-                <h3
-                  className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-800 transition-colors"
-                  style={{
-                    fontFamily: typography.fonts.heading,
-                    lineHeight: typography.lineHeights.snug,
-                  }}
-                >
-                  {service.title}
-                </h3>
-
-                {/* Description */}
-                <p
-                  className="text-gray-600 mb-6 text-sm sm:text-base"
-                  style={{
-                    fontFamily: typography.fonts.body,
-                    lineHeight: typography.lineHeights.relaxed,
-                  }}
-                >
-                  {service.description}
-                </p>
-
-                {/* Services list with modern styling */}
-                <ul className="space-y-3">
-                  {service.services.map((item, itemIndex) => (
-                    <li
-                      key={itemIndex}
-                      className="flex items-center gap-3 text-gray-700 text-sm group/item"
-                    >
-                      <div 
-                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover/item:scale-110"
-                        style={{ background: `${service.accentColor}15` }}
-                      >
-                        <FaArrowRight 
-                          className="w-2.5 h-2.5" 
-                          style={{ color: service.accentColor }}
-                        />
-                      </div>
-                      <span style={{ fontFamily: typography.fonts.body }}>
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Bottom accent line */}
-              <div 
-                className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ background: `linear-gradient(90deg, ${service.accentColor}, ${service.accentColor}60)` }}
               />
+              
+              <div className="relative bg-white rounded-[28px] p-8 lg:p-10 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_48px_-8px_rgba(0,0,0,0.12)] transition-all duration-500 border border-gray-100/80 overflow-hidden h-full">
+                {/* Top accent bar */}
+                <div 
+                  className="absolute top-0 left-8 right-8 h-[3px] rounded-b-full transition-all duration-500 group-hover:left-0 group-hover:right-0 group-hover:rounded-none"
+                  style={{ 
+                    background: `linear-gradient(90deg, ${service.gradientFrom}, ${service.gradientTo})`,
+                  }}
+                />
+
+                {/* Content */}
+                <div className="relative z-10 pt-4">
+                  {/* Number and Tagline row */}
+                  <div className="flex items-center justify-between mb-6">
+                    {/* Large number */}
+                    <span 
+                      className="text-5xl lg:text-6xl font-black tracking-tighter transition-transform duration-500 group-hover:scale-110"
+                      style={{ 
+                        fontFamily: typography.fonts.heading,
+                        background: `linear-gradient(135deg, ${service.gradientFrom}, ${service.gradientTo})`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      {service.number}
+                    </span>
+
+                    {/* Tagline badge */}
+                    <span 
+                      className="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition-all duration-300 group-hover:scale-105"
+                      style={{ 
+                        color: service.accentColor,
+                        background: `${service.accentColor}10`,
+                      }}
+                    >
+                      {service.tagline}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4"
+                    style={{
+                      fontFamily: typography.fonts.heading,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {service.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="text-gray-500 mb-8 text-base lg:text-lg leading-relaxed"
+                    style={{
+                      fontFamily: typography.fonts.body,
+                    }}
+                  >
+                    {service.description}
+                  </p>
+
+                  {/* Divider */}
+                  <div className="h-px bg-gray-100 mb-6" />
+
+                  {/* Services list - minimal style */}
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                    {service.services.map((item, itemIndex) => (
+                      <li
+                        key={itemIndex}
+                        className="flex items-start gap-3 text-gray-600 text-sm lg:text-base group/item"
+                      >
+                        <span 
+                          className="mt-2 w-1.5 h-1.5 rounded-full shrink-0 transition-transform duration-300 group-hover/item:scale-150"
+                          style={{ background: service.accentColor }}
+                        />
+                        <span 
+                          className="transition-colors duration-300 group-hover/item:text-gray-900"
+                          style={{ fontFamily: typography.fonts.body }}
+                        >
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           ))}
         </div>

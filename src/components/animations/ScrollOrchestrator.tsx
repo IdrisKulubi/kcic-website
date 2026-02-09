@@ -78,11 +78,11 @@ export function ScrollOrchestrator({ children }: ScrollOrchestratorProps) {
           duration,
           delay,
           ease: "power3.out",
+          force3D: true,
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
-            toggleActions: "play none none none",
-            once: true,
+            toggleActions: "play none none reverse",
           },
         });
       });
@@ -214,11 +214,11 @@ export function AnimatedSection({
         duration,
         delay,
         ease: "power3.out",
+        force3D: true,
         scrollTrigger: {
           trigger: ref.current,
           start: "top 85%",
-          toggleActions: "play none none none",
-          once: true,
+          toggleActions: "play none none reverse",
         },
       });
     }, ref);

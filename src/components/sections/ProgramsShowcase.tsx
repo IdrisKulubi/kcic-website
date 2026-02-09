@@ -170,6 +170,7 @@ export default function ProgramsShowcase({
             y: 0,
             duration: 0.8,
             ease: "power3.out",
+            force3D: true,
             scrollTrigger: {
               trigger: titleRef.current,
               start: "top 85%",
@@ -196,6 +197,7 @@ export default function ProgramsShowcase({
             scale: 1,
             duration: 0.7,
             ease: "power3.out",
+            force3D: true,
             delay: index * 0.15,
             scrollTrigger: {
               trigger: card,

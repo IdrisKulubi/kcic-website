@@ -37,6 +37,12 @@ export const navData = {
           icon: "Briefcase",
         },
         {
+          label: "Team",
+          href: "/about/staff",
+          description: "Meet the dedicated professionals behind KCIC",
+          icon: "Users",
+        },
+        {
           label: "Contact us",
           href: "/about/contact-us",
           description: "Get in touch with our team",

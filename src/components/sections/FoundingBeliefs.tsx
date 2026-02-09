@@ -47,6 +47,7 @@ export default function FoundingBeliefs({
   const { shouldDisableAnimations } = useAccessibilityClasses();
 
   const sectionRef = useRef<HTMLElement | null>(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (shouldDisableAnimations()) return;
@@ -55,6 +56,42 @@ export default function FoundingBeliefs({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      // Header animation
+      if (headerRef.current) {
+        const badge = headerRef.current.querySelector('.belief-badge');
+        const heading = headerRef.current.querySelector('h2');
+        const subtitle = headerRef.current.querySelector('p');
+
+        const headerTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+
+        if (badge) {
+          headerTimeline.fromTo(badge,
+            { opacity: 0, y: 20, scale: 0.9 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.4)', force3D: true }
+          );
+        }
+        if (heading) {
+          headerTimeline.fromTo(heading,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true },
+            '-=0.3'
+          );
+        }
+        if (subtitle) {
+          headerTimeline.fromTo(subtitle,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', force3D: true },
+            '-=0.3'
+          );
+        }
+      }
+
       const cards = sectionRef.current?.querySelectorAll(".belief-card");
 
       if (cards && cards.length > 0) {
@@ -71,12 +108,12 @@ export default function FoundingBeliefs({
             scale: 1,
             duration: 0.8,
             ease: "power3.out",
+            force3D: true,
             delay: index * 0.12,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
-              once: true,
-              toggleActions: "play none none none",
+              toggleActions: "play none none reverse",
             },
           });
 
@@ -89,11 +126,12 @@ export default function FoundingBeliefs({
               opacity: 1,
               duration: 0.6,
               ease: "back.out(1.6)",
+              force3D: true,
               delay: index * 0.12 + 0.15,
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 75%",
-                once: true,
+                toggleActions: "play none none reverse",
               },
             });
           }
@@ -134,8 +172,8 @@ export default function FoundingBeliefs({
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-18">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm mb-6">
+        <div ref={headerRef} className="text-center mb-14 sm:mb-18">
+          <div className="belief-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm mb-6">
             <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
               Our Philosophy
             </span>

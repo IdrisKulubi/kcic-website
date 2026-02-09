@@ -1,12 +1,18 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { colors, typography } from '@/lib/design-system';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from "@phosphor-icons/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface StatItem {
   value: string;
@@ -28,6 +34,27 @@ interface MinimalStatsSectionProps {
   imageSide?: 'left' | 'right';
 }
 
+/** Parse a stat value string like "$63M", "57,517", "67%", "3,500+" into numeric parts */
+function parseStatValue(raw: string): { prefix: string; number: number; suffix: string; decimals: number; hasComma: boolean } {
+  const match = raw.match(/^([^0-9]*?)([\d,.]+)(.*)$/);
+  if (!match) return { prefix: '', number: 0, suffix: raw, decimals: 0, hasComma: false };
+  const prefix = match[1]; // e.g. "$"
+  const numStr = match[2].replace(/,/g, ''); // strip commas
+  const suffix = match[3]; // e.g. "M", "%", "+"
+  const hasComma = match[2].includes(',');
+  const dotIdx = numStr.indexOf('.');
+  const decimals = dotIdx >= 0 ? numStr.length - dotIdx - 1 : 0;
+  return { prefix, number: parseFloat(numStr), suffix, decimals, hasComma };
+}
+
+function formatStatNumber(n: number, decimals: number, addComma: boolean): string {
+  const fixed = n.toFixed(decimals);
+  if (!addComma) return fixed;
+  const [intPart, decPart] = fixed.split('.');
+  const withCommas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart ? `${withCommas}.${decPart}` : withCommas;
+}
+
 export function MinimalStatsSection({
   stats,
   targets,
@@ -40,13 +67,102 @@ export function MinimalStatsSection({
 }: MinimalStatsSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const counterRefs = useRef<(HTMLElement | null)[]>([]);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  // Counter-up animation
+  const animateCounters = useCallback((statData: StatItem[]) => {
+    counterRefs.current.forEach((el, index) => {
+      if (!el || !statData[index]) return;
+      const parsed = parseStatValue(statData[index].value);
+      if (parsed.number === 0) return;
+
+      const proxy = { val: 0 };
+      gsap.to(proxy, {
+        val: parsed.number,
+        duration: 1.8,
+        delay: index * 0.1,
+        ease: 'power2.out',
+        onUpdate: () => {
+          el.textContent = `${parsed.prefix}${formatStatNumber(proxy.val, parsed.decimals, parsed.hasComma)}${parsed.suffix}`;
+        },
+      });
+    });
+  }, []);
 
   useLayoutEffect(() => {
-    // Simple fade-in without complex animations
-    if (sectionRef.current) {
-      sectionRef.current.style.opacity = '1';
-    }
-  }, []);
+    if (!sectionRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Header reveal
+      if (headerRef.current) {
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+            force3D: true,
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Image parallax
+      if (imageRef.current) {
+        gsap.fromTo(imageRef.current,
+          { opacity: 0, scale: 0.92, y: 40 },
+          {
+            opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power3.out',
+            force3D: true,
+            scrollTrigger: {
+              trigger: imageRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Stat cards stagger + counter trigger
+      const statCards = sectionRef.current?.querySelectorAll('.stat-card-item');
+      if (statCards && statCards.length > 0) {
+        gsap.fromTo(statCards,
+          { opacity: 0, y: 50, scale: 0.95 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: 'power3.out',
+            force3D: true,
+            scrollTrigger: {
+              trigger: statCards[0],
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              once: true,
+              onEnter: () => {
+                if (!hasAnimated.current) {
+                  hasAnimated.current = true;
+                  animateCounters(stats);
+                }
+              },
+            },
+          }
+        );
+      }
+
+      ScrollTrigger.refresh();
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [stats, animateCounters]);
 
 
 
@@ -64,7 +180,7 @@ export function MinimalStatsSection({
           aria-live="polite"
         >
           {data.map((stat, index) => (
-            <div key={index} className="space-y-3">
+            <div key={index} className="stat-card-item space-y-3">
               <div className="flex items-baseline gap-2">
                 <span
                   ref={(el) => {
@@ -115,7 +231,7 @@ export function MinimalStatsSection({
         {data.map((stat, index) => (
           <div
             key={index}
-            className="relative p-6 rounded-2xl transition-all duration-300 bg-white shadow-sm border border-gray-100 hover:shadow-md"
+            className="stat-card-item relative p-6 rounded-2xl transition-all duration-300 bg-white shadow-sm border border-gray-100 hover:shadow-md"
           >
             <h3
               ref={(el) => {
@@ -174,7 +290,7 @@ export function MinimalStatsSection({
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div ref={headerRef} className="text-center mb-12">
           <h2
             className="font-bold mb-4"
             style={{
@@ -243,7 +359,7 @@ export function MinimalStatsSection({
               <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
                 {/* Image side - stays the same */}
                 <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
+                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
                     <Image
                       src={imageSrc}
                       alt={imageAlt || ''}

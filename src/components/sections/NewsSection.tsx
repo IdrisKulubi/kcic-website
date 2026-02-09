@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { useRef, useLayoutEffect } from "react";
 import Link from "next/link";
 import { CalendarBlank as Calendar, ArrowUpRight, TrendUp as TrendingUp } from "@phosphor-icons/react";
 import { colors, typography } from "@/lib/design-system";
@@ -9,6 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export interface NewsItem {
   id: string;
@@ -33,7 +40,11 @@ interface NewsSectionProps {
 }
 
 export function NewsSection({ news, className = "" }: NewsSectionProps) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
+  const { getMotionSafeClasses, shouldDisableAnimations } = useAccessibilityClasses();
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   // Sort newest first and take the top few articles for the homepage snapshot.
   const sortedNews = [...news].sort(
@@ -53,16 +64,95 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     });
   };
 
+  // GSAP scroll-triggered animations
+  useLayoutEffect(() => {
+    if (shouldDisableAnimations?.() || !sectionRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Header reveal
+      if (headerRef.current) {
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0, duration: 0.8, ease: "power3.out", force3D: true,
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // Cards stagger with clip-path image reveal
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+
+        gsap.fromTo(card,
+          { opacity: 0, y: 50, scale: 0.96 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.7,
+            ease: "power3.out",
+            force3D: true,
+            delay: index * 0.1,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        // Image clip-path reveal
+        const img = card.querySelector(".news-image-wrapper");
+        if (img) {
+          gsap.fromTo(img,
+            { clipPath: "inset(0 100% 0 0)" },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              duration: 0.9,
+              ease: "power3.inOut",
+              delay: index * 0.1 + 0.15,
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+      });
+
+      // Newsletter CTA reveal
+      if (ctaRef.current) {
+        gsap.fromTo(ctaRef.current,
+          { opacity: 0, y: 40, scale: 0.97 },
+          {
+            opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out", force3D: true,
+            scrollTrigger: {
+              trigger: ctaRef.current,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      ScrollTrigger.refresh();
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [shouldDisableAnimations]);
+
   return (
-    <section className={cn("py-12 sm:py-16 bg-transparent", className)}>
+    <section ref={sectionRef} className={cn("py-12 sm:py-16 bg-transparent", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div
-            className={getMotionSafeClasses(
-              "animate-in fade-in slide-in-from-bottom-8 duration-700"
-            )}
-          >
+        <div ref={headerRef} className="text-center mb-12 sm:mb-16">
+          <div>
             <Badge
               className="mb-4 inline-flex items-center gap-1 px-4 py-1.5 border rounded-full"
               style={{
@@ -104,9 +194,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
           {topNews.map((item, index) => (
             <div
               key={item.id}
-              className={getMotionSafeClasses(
-                `animate-in fade-in slide-in-from-bottom duration-700 delay-${(index + 1) * 75}`
-              )}
+              ref={(el) => { cardsRef.current[index] = el; }}
             >
               <div className="mb-4">
                 <h3
@@ -123,7 +211,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               <Link href={`/news/${item.slug}`} className="block group">
                 <Card className="overflow-hidden border border-gray-100 bg-white/95 dark:bg-white/5 shadow-sm hover:shadow-md transition-all duration-300">
                   {item.imageUrl && (
-                    <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <div className="news-image-wrapper relative aspect-[4/3] w-full overflow-hidden">
                       <Image
                         src={item.imageUrl}
                         alt={item.title}
@@ -175,7 +263,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         </div>
 
         {/* Newsletter CTA */}
-        <div className="mt-16">
+        <div ref={ctaRef} className="mt-16">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-white via-green-50/70 to-white shadow-lg border border-green-100">
             <div
               className="absolute -top-12 -left-6 h-48 w-48 rounded-full bg-green-500/10 blur-3xl"
