@@ -55,6 +55,20 @@
   --color-climate-yellow: var(--climate-yellow);
   --color-climate-yellow-light: var(--climate-yellow-light);
   --color-climate-yellow-dark: var(--climate-yellow-dark);
+
+  /* Brand Orange */
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-light: var(--brand-orange-light);
+  --color-brand-orange-dark: var(--brand-orange-dark);
+
+  /* Section Backgrounds */
+  --color-section-dark: var(--section-bg-dark);
+  --color-section-green: var(--section-bg-green);
+  --color-section-teal: var(--section-bg-teal);
+  --color-section-warm: var(--section-bg-warm);
+  --color-section-green-tint: var(--section-bg-green-tint);
+  --color-section-cyan-tint: var(--section-bg-cyan-tint);
+  --color-section-cream: var(--section-bg-cream);
   
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -122,7 +136,8 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  /* Warm cream page background instead of pure white */
+  --background: #faf8f5;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -159,6 +174,18 @@
   --brand-blue: #00addd;
   --brand-gray: #8b8d90;
   --brand-white: #ffffff;
+  --brand-orange: #E97451;
+  --brand-orange-light: #F0906F;
+  --brand-orange-dark: #D05A35;
+
+  /* Section Background Tokens */
+  --section-bg-dark: #1a1f2e;
+  --section-bg-green: #1b3a1a;
+  --section-bg-teal: #0a2a33;
+  --section-bg-warm: #faf6f0;
+  --section-bg-green-tint: #f0f9e8;
+  --section-bg-cyan-tint: #e8f8fd;
+  --section-bg-cream: #faf8f5;
   
   /* Climate-inspired color palette - Brand aligned */
   --climate-green: #80c738;

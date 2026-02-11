@@ -11,6 +11,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // KCIC Official Brand Colors
+        brand: {
+          green: "var(--brand-green)",
+          blue: "var(--brand-blue)",
+          gray: "var(--brand-gray)",
+          white: "var(--brand-white)",
+          orange: {
+            DEFAULT: "var(--brand-orange)",
+            light: "var(--brand-orange-light)",
+            dark: "var(--brand-orange-dark)",
+          },
+        },
+        // Section Background Colors
+        section: {
+          dark: "var(--section-bg-dark)",
+          green: "var(--section-bg-green)",
+          teal: "var(--section-bg-teal)",
+          warm: "var(--section-bg-warm)",
+          "green-tint": "var(--section-bg-green-tint)",
+          "cyan-tint": "var(--section-bg-cyan-tint)",
+          cream: "var(--section-bg-cream)",
+        },
         // Climate-inspired color palette
         climate: {
           green: {

@@ -9,7 +9,7 @@ import {
   PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
-import { HeroVideo } from "@/components/sections/HeroVideo";
+import { HeroImageCarousel } from "@/components/sections/HeroImageCarousel";
 import { ScrollProgress } from "@/components/animations/SectionReveal";
 import { ScrollOrchestrator, AnimatedSection, ScrollProgressIndicator } from "@/components/animations/ScrollOrchestrator";
 import { SectionDivider, FloatingElements } from "@/components/animations/SectionDivider";
@@ -171,35 +171,12 @@ export default function HomePage({
   }, []);
 
 
-  // Transform hero data from database or use translations as fallback
-  const translatedHeroData = hero
-    ? {
-      title: hero.headline,
-      description: hero.subtext,
-      stats: t("hero.stats"),
-      ctaButtons: hero.buttons.map((btn) => ({
-        text: btn.text,
-        href: btn.href,
-        variant: btn.variant as "primary" | "secondary",
-      })),
-    }
-    : {
-      title: t("hero.title"),
-      description: t("hero.description"),
-      stats: t("hero.stats"),
-      ctaButtons: [
-        {
-          text: t("hero.cta.programs"),
-          href: "/programs",
-          variant: "primary" as const,
-        },
-        {
-          text: t("hero.cta.learn"),
-          href: "/about",
-          variant: "secondary" as const,
-        },
-      ],
-    };
+  // Hero data — single centered message
+  const translatedHeroData = {
+    title: "Catalyzing Climate Entrepreneurship in Africa",
+    description: "",
+    ctaButtons: [] as Array<{ text: string; href: string; variant: "primary" | "secondary" }>,
+  };
 
   // Transform stats data from database or use translations as fallback
   const translatedStatsData =
@@ -410,9 +387,9 @@ export default function HomePage({
         <ScrollProgress />
 
         <ScrollOrchestrator>
-          {/* Hero Section - cinematic video background */}
+          {/* Hero Section - GSAP image carousel */}
           <div id="hero">
-            <HeroVideo data={translatedHeroData} />
+            <HeroImageCarousel data={translatedHeroData} />
           </div>
 
           {/* Main Content Sections with smooth transitions */}
