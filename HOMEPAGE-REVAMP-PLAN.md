@@ -127,11 +127,6 @@ Before touching any component, establish the design tokens.
 
 ---
 
-### Tab 6: FAQs
-
-| Slide | Page/Section | Details | Implementation |
-|---|---|---|---|
-| **FAQs** | **Frequently Asked Questions** | Searchable FAQ section | Accordion-style Q&A with category filtering, GSAP expand/collapse animation, search input |
 
 ---
 

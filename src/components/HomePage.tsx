@@ -397,7 +397,7 @@ export default function HomePage({
             {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
             <div id="about">
               <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={60} />
-              <AnimatedSection direction="up" className="bg-white">
+              <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
               <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">

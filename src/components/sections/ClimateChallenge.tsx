@@ -33,6 +33,27 @@ export default function ClimateChallenge({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      const interactiveCleanup: Array<() => void> = [];
+
+      const bgImageLayer = sectionRef.current?.querySelector('.bg-image-layer');
+      if (bgImageLayer) {
+        gsap.fromTo(
+          bgImageLayer,
+          { scale: 1.04, y: 0 },
+          {
+            scale: 1.1,
+            y: -40,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
+      }
+
       // Parallax background gradient
       const bgGradient = sectionRef.current?.querySelector('.bg-gradient');
       if (bgGradient) {
@@ -72,17 +93,31 @@ export default function ClimateChallenge({
       // Staggered animation for icon cards (visual content children)
       const iconCards = visualContentRef.current?.querySelectorAll('.icon-card');
       if (iconCards && iconCards.length > 0) {
+        const cardOffsets = [
+          { x: -48, y: 32, rotate: -8 },
+          { x: 48, y: 22, rotate: 8 },
+          { x: -32, y: 40, rotate: -6 },
+          { x: 36, y: 26, rotate: 6 },
+        ];
+
         gsap.fromTo(
           iconCards,
-          { opacity: 0, y: 40, scale: 0.9, rotateY: 15 },
+          {
+            opacity: 0,
+            scale: 0.88,
+            x: (index) => cardOffsets[index % cardOffsets.length].x,
+            y: (index) => cardOffsets[index % cardOffsets.length].y,
+            rotate: (index) => cardOffsets[index % cardOffsets.length].rotate,
+          },
           {
             opacity: 1,
             y: 0,
+            x: 0,
             scale: 1,
-            rotateY: 0,
-            duration: 0.7,
-            stagger: 0.15,
-            ease: "back.out(1.2)",
+            rotate: 0,
+            duration: 0.75,
+            stagger: 0.12,
+            ease: "back.out(1.4)",
             scrollTrigger: {
               trigger: visualContentRef.current,
               start: "top 80%",
@@ -92,23 +127,121 @@ export default function ClimateChallenge({
             },
           }
         );
+
+        iconCards.forEach((card) => {
+          const cardElement = card as HTMLElement;
+          const iconElement = cardElement.querySelector('.icon-card-icon') as HTMLElement | null;
+
+          const handleMouseMove = (event: MouseEvent) => {
+            const bounds = cardElement.getBoundingClientRect();
+            const relativeX = (event.clientX - bounds.left) / bounds.width;
+            const relativeY = (event.clientY - bounds.top) / bounds.height;
+
+            gsap.to(cardElement, {
+              rotateY: (relativeX - 0.5) * 10,
+              rotateX: -(relativeY - 0.5) * 8,
+              transformPerspective: 700,
+              transformOrigin: "center center",
+              duration: 0.25,
+              ease: "power2.out",
+            });
+
+            if (iconElement) {
+              gsap.to(iconElement, {
+                y: -3,
+                scale: 1.04,
+                duration: 0.25,
+                ease: "power2.out",
+              });
+            }
+          };
+
+          const handleMouseLeave = () => {
+            gsap.to(cardElement, {
+              rotateY: 0,
+              rotateX: 0,
+              duration: 0.35,
+              ease: "power3.out",
+            });
+            if (iconElement) {
+              gsap.to(iconElement, {
+                y: 0,
+                scale: 1,
+                duration: 0.3,
+                ease: "power3.out",
+              });
+            }
+          };
+
+          cardElement.addEventListener('mousemove', handleMouseMove);
+          cardElement.addEventListener('mouseleave', handleMouseLeave);
+
+          interactiveCleanup.push(() => {
+            cardElement.removeEventListener('mousemove', handleMouseMove);
+            cardElement.removeEventListener('mouseleave', handleMouseLeave);
+          });
+        });
       }
 
       // Counter-up animation for statistics
       if (statNumberRef.current) {
         const target = 2.6;
         const obj = { value: 0 };
+        const statCallout = sectionRef.current?.querySelector('.stat-callout');
+        const burstParticles = sectionRef.current?.querySelectorAll('.counter-burst-particle');
 
-        gsap.to(obj, {
-          value: target,
-          duration: 2,
-          ease: "power2.out",
+        if (burstParticles && burstParticles.length > 0) {
+          gsap.set(burstParticles, { opacity: 0, scale: 0, x: 0, y: 0 });
+        }
+
+        const counterTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: statNumberRef.current,
             start: "top 85%",
             once: true,
             toggleActions: "play none none none",
             invalidateOnRefresh: true,
+          },
+        });
+
+        counterTimeline.to(obj, {
+          value: target,
+          duration: 2,
+          ease: "power2.out",
+          onStart: () => {
+            if (statCallout) {
+              gsap.fromTo(
+                statCallout,
+                { boxShadow: "0 0 0 rgba(128, 199, 56, 0)" },
+                {
+                  boxShadow: "0 0 30px rgba(128, 199, 56, 0.35)",
+                  duration: 0.45,
+                  yoyo: true,
+                  repeat: 1,
+                  ease: "power2.out",
+                }
+              );
+            }
+
+            if (burstParticles && burstParticles.length > 0) {
+              burstParticles.forEach((particle, index) => {
+                const angle = (Math.PI * 2 * index) / burstParticles.length;
+                const distance = 22 + index * 4;
+                gsap.fromTo(
+                  particle,
+                  { opacity: 0.9, scale: 0.2, x: 0, y: 0 },
+                  {
+                    opacity: 0,
+                    scale: 1.1,
+                    x: Math.cos(angle) * distance,
+                    y: Math.sin(angle) * distance,
+                    duration: 0.7,
+                    ease: "power2.out",
+                    delay: index * 0.02,
+                  }
+                );
+              });
+            }
           },
           onUpdate: () => {
             if (statNumberRef.current) {
@@ -140,7 +273,25 @@ export default function ClimateChallenge({
         );
       }
 
+      const ambientDots = sectionRef.current?.querySelectorAll('.ambient-dot');
+      if (ambientDots && ambientDots.length > 0) {
+        ambientDots.forEach((dot, index) => {
+          gsap.to(dot, {
+            y: index % 2 === 0 ? -12 : 10,
+            x: index % 2 === 0 ? 6 : -6,
+            duration: 3 + index * 0.4,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+          });
+        });
+      }
+
       ScrollTrigger.refresh();
+
+      return () => {
+        interactiveCleanup.forEach((cleanup) => cleanup());
+      };
     }, sectionRef);
 
     return () => ctx.revert();
@@ -150,14 +301,27 @@ export default function ClimateChallenge({
     <section
       ref={sectionRef}
       aria-labelledby="climate-challenge-heading"
-      className={`relative py-16 sm:py-20 overflow-hidden ${className}`}
+      className={`relative py-16 sm:py-20 overflow-hidden bg-section-green text-white ${className}`}
     >
+      {/* Environmental image with dark branded overlay */}
+      <div
+        className="bg-image-layer pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(27,58,26,0.92) 0%, rgba(27,58,26,0.84) 45%, rgba(128,199,56,0.22) 100%), url('/images/sectors/nature.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+        aria-hidden
+      />
+
       {/* Subtle background gradient shift */}
       <div
         className="bg-gradient pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(50% 40% at 50% 50%, rgba(245,158,11,0.05) 0%, rgba(245,158,11,0) 70%)",
+            "radial-gradient(52% 45% at 80% 20%, rgba(128,199,56,0.24) 0%, rgba(128,199,56,0) 70%), radial-gradient(45% 38% at 15% 85%, rgba(0,173,221,0.12) 0%, rgba(0,173,221,0) 70%)",
         }}
         aria-hidden
       />
@@ -168,7 +332,7 @@ export default function ClimateChallenge({
           <div ref={textContentRef} className="space-y-8">
             <h2
               id="climate-challenge-heading"
-              className="font-bold text-foreground"
+              className="font-bold text-white"
               style={{
                 fontSize: "clamp(1.875rem, 5vw, 3rem)",
                 fontFamily: typography.fonts.heading,
@@ -186,7 +350,7 @@ export default function ClimateChallenge({
             />
 
             <p
-              className="text-foreground/90"
+              className="text-white/85"
               style={{
                 fontSize: "clamp(1rem, 1.5vw, 1.125rem)",
                 fontFamily: typography.fonts.body,
@@ -203,12 +367,22 @@ export default function ClimateChallenge({
 
             {/* Key Statistic Callout */}
             <div
-              className="relative p-6 rounded-2xl border"
+              className="stat-callout relative p-6 rounded-2xl border"
               style={{
-                background: "rgba(245, 158, 11, 0.05)",
-                borderColor: "rgba(245, 158, 11, 0.2)",
+                background: "rgba(255, 255, 255, 0.08)",
+                borderColor: "rgba(255, 255, 255, 0.24)",
+                backdropFilter: "blur(8px)",
               }}
             >
+              <div className="pointer-events-none absolute inset-0" aria-hidden>
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#80c738]/80" />
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#00addd]/80" />
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#80c738]/80" />
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#00addd]/80" />
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#80c738]/80" />
+                <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#00addd]/80" />
+              </div>
+
               <div className="flex items-baseline gap-2 mb-2">
                 <span
                   ref={statNumberRef}
@@ -216,7 +390,7 @@ export default function ClimateChallenge({
                   style={{
                     fontSize: "clamp(2rem, 5vw, 2.5rem)",
                     fontFamily: typography.fonts.heading,
-                    color: colors.semantic.warning,
+                    color: colors.primary.green.DEFAULT,
                     lineHeight: 1,
                   }}
                   aria-label="2.6 percent"
@@ -228,14 +402,14 @@ export default function ClimateChallenge({
                   style={{
                     fontSize: "clamp(1.5rem, 3vw, 2rem)",
                     fontFamily: typography.fonts.heading,
-                    color: colors.semantic.warning,
+                    color: colors.primary.green.DEFAULT,
                   }}
                 >
                   %
                 </span>
               </div>
               <p
-                className="text-foreground/80"
+                className="text-white/80"
                 style={{
                   fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
                   fontFamily: typography.fonts.body,
@@ -249,7 +423,7 @@ export default function ClimateChallenge({
             {/* Impact Areas */}
             <div className="space-y-4">
               <h3
-                className="font-semibold text-foreground"
+                className="font-semibold text-white"
                 style={{
                   fontSize: "clamp(1.125rem, 2vw, 1.25rem)",
                   fontFamily: typography.fonts.heading,
@@ -265,7 +439,7 @@ export default function ClimateChallenge({
                 ].map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-center gap-3 text-foreground/80"
+                    className="flex items-center gap-3 text-white/80"
                     style={{
                       fontSize: "clamp(0.9375rem, 1.2vw, 1rem)",
                       fontFamily: typography.fonts.body,
@@ -274,7 +448,7 @@ export default function ClimateChallenge({
                     <div
                       className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
                       style={{
-                        background: `${colors.primary.green.DEFAULT}15`,
+                        background: `${colors.primary.green.DEFAULT}22`,
                       }}
                     >
                       <item.icon
@@ -319,12 +493,12 @@ export default function ClimateChallenge({
                   key={index}
                   className="icon-card relative p-8 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
                   style={{
-                    background: "rgba(255, 255, 255, 0.05)",
-                    borderColor: "rgba(255, 255, 255, 0.1)",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    borderColor: "rgba(255, 255, 255, 0.22)",
                   }}
                 >
                   <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 mx-auto"
+                    className="icon-card-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-4 mx-auto"
                     style={{
                       background: `${item.color}15`,
                     }}
@@ -336,7 +510,7 @@ export default function ClimateChallenge({
                     />
                   </div>
                   <p
-                    className="text-center text-foreground/80 font-medium"
+                    className="text-center text-white/90 font-medium"
                     style={{
                       fontSize: "clamp(0.875rem, 1vw, 0.9375rem)",
                       fontFamily: typography.fonts.body,
@@ -352,10 +526,18 @@ export default function ClimateChallenge({
             <div
               className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full opacity-20 blur-3xl"
               style={{
-                background: `radial-gradient(circle, ${colors.semantic.warning}, transparent)`,
+                background: `radial-gradient(circle, ${colors.primary.blue.DEFAULT}, transparent)`,
               }}
               aria-hidden
             />
+
+            {/* Subtle green/cyan particles */}
+            <div className="pointer-events-none absolute inset-0" aria-hidden>
+              <span className="ambient-dot absolute top-8 right-8 h-2 w-2 rounded-full bg-[#80c738]/70" />
+              <span className="ambient-dot absolute top-1/3 right-1/4 h-1.5 w-1.5 rounded-full bg-[#00addd]/70" />
+              <span className="ambient-dot absolute bottom-10 right-6 h-2.5 w-2.5 rounded-full bg-[#00addd]/60" />
+              <span className="ambient-dot absolute bottom-1/4 left-6 h-1.5 w-1.5 rounded-full bg-[#80c738]/60" />
+            </div>
           </div>
         </div>
       </div>
