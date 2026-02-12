@@ -293,8 +293,8 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className="fixed rounded-2xl overflow-hidden z-50"
                         style={{ 
-                          // About Us dropdown: position below its nav item; others: right side of page
-                          top: item.label === 'About Us' ? '84px' : '80px',
+                          // Keep dropdown close to navbar with tighter vertical spacing
+                          top: item.label === 'About Us' ? '68px' : '68px',
                           left: item.label === 'About Us' ? '24px' : 'auto',
                           right: item.label === 'About Us' ? '24px' : '40px',
                           transform: 'none',
@@ -307,7 +307,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         }}
                       >
                         {/* Header with category label */}
-                        <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/80">
+                        <div className="px-4 py-1.5 border-b border-gray-100 bg-gray-50/80">
                           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {item.label}
                           </span>
@@ -315,7 +315,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
 
                         {/* Menu Items Grid */}
                         <div 
-                          className="p-2"
+                          className="px-2 pb-2 pt-0.5"
                           style={{
                             display: 'grid',
                             gridTemplateColumns: item.subItems.length > 4 ? 'repeat(2, 1fr)' : '1fr',
