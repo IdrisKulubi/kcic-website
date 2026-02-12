@@ -293,19 +293,21 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className="fixed rounded-2xl overflow-hidden z-50"
                         style={{ 
-                          // Position all dropdowns on the right side of the page so they don't cover hero content
-                          top: '80px',
-                          right: '40px',
-                          left: 'auto',
+                          // About Us dropdown: position below its nav item; others: right side of page
+                          top: item.label === 'About Us' ? '84px' : '80px',
+                          left: item.label === 'About Us' ? '24px' : 'auto',
+                          right: item.label === 'About Us' ? '24px' : '40px',
+                          transform: 'none',
+                          marginTop: '0',
                           width: 'auto',
-                          minWidth: item.subItems.length > 4 ? '620px' : '340px',
+                          minWidth: item.subItems.length > 4 ? '580px' : '300px',
                           maxWidth: 'calc(100vw - 80px)',
                           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05)',
                           background: '#ffffff',
                         }}
                       >
                         {/* Header with category label */}
-                        <div className="px-5 py-3 border-b border-gray-100 bg-gray-50/80">
+                        <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/80">
                           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {item.label}
                           </span>
@@ -313,11 +315,11 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
 
                         {/* Menu Items Grid */}
                         <div 
-                          className="p-4"
+                          className="p-2"
                           style={{
                             display: 'grid',
                             gridTemplateColumns: item.subItems.length > 4 ? 'repeat(2, 1fr)' : '1fr',
-                            gap: '4px',
+                            gap: '2px',
                           }}
                         >
                           {item.subItems.map((subItem, index) => (
@@ -329,21 +331,27 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                               initial={{ opacity: 0, y: 5 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: index * 0.03 }}
-                              className="group flex items-center p-3 rounded-xl transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
+                              className="group flex items-center p-2 rounded-lg transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
                               onKeyDown={(e) => handleKeyNavigation(e, subItem.href)}
                             >
-                              <div className="shrink-0 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-[#80c738]/10 transition-colors duration-200">
+                              <div className="shrink-0 w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-[#80c738]/10 transition-colors duration-200">
                                 {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-gray-600 group-hover:text-[#80c738] transition-colors" })}
                               </div>
                               <div className="ml-3 flex-1 min-w-0">
                                 <span
-                                  className="text-sm font-semibold text-gray-900 group-hover:text-[#80c738] transition-colors duration-200 block whitespace-nowrap"
+                                  className={`text-sm font-semibold text-gray-900 group-hover:text-[#80c738] transition-colors duration-200 block ${
+                                    item.label === 'About Us' ? 'whitespace-normal wrap-break-word' : 'whitespace-nowrap'
+                                  }`}
                                   style={{ fontFamily: typography.fonts.body }}
                                 >
                                   {subItem.label}
                                 </span>
                                 {subItem.description && (
-                                  <span className="text-xs text-gray-500 group-hover:text-gray-600 mt-0.5 block leading-relaxed whitespace-nowrap">
+                                  <span
+                                    className={`text-xs text-gray-500 group-hover:text-gray-600 mt-0.5 block leading-relaxed ${
+                                      item.label === 'About Us' ? 'whitespace-normal wrap-break-word' : 'whitespace-nowrap'
+                                    }`}
+                                  >
                                     {subItem.description}
                                   </span>
                                 )}
