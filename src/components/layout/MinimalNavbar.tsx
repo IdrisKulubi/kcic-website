@@ -281,57 +281,69 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                     )}
                   </button>
 
-                  {/* Desktop Dropdown Menu */}
+                  {/* Desktop Mega Menu - Vimeo Style */}
                   <AnimatePresence>
                     {item.subItems && activeDropdown === item.label && (
                       <motion.div
                         id={`dropdown-${item.label}`}
                         role="menu"
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-80 rounded-xl overflow-hidden z-50 border border-white/20"
+                        className="fixed rounded-2xl overflow-hidden z-50"
                         style={{ 
-                          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.1)',
-                          background: 'linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%)',
-                          backdropFilter: 'blur(20px)',
+                          // Position all dropdowns on the right side of the page so they don't cover hero content
+                          top: '80px',
+                          right: '40px',
+                          left: 'auto',
+                          width: 'auto',
+                          minWidth: item.subItems.length > 4 ? '620px' : '340px',
+                          maxWidth: 'calc(100vw - 80px)',
+                          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05)',
+                          background: '#ffffff',
                         }}
                       >
-                        {/* Arrow pointer */}
+                        {/* Header with category label */}
+                        <div className="px-5 py-3 border-b border-gray-100 bg-gray-50/80">
+                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            {item.label}
+                          </span>
+                        </div>
+
+                        {/* Menu Items Grid */}
                         <div 
-                          className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45 border-l border-t border-white/20"
-                          style={{ background: '#0f1419' }}
-                        ></div>
-
-                        {/* Green accent line at top */}
-                        <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #80c738, #00addd, #80c738)' }}></div>
-
-                        <div className="p-3" style={{ background: 'rgba(15, 20, 25, 0.98)' }}>
+                          className="p-4"
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: item.subItems.length > 4 ? 'repeat(2, 1fr)' : '1fr',
+                            gap: '4px',
+                          }}
+                        >
                           {item.subItems.map((subItem, index) => (
                             <motion.a
                               key={subItem.label}
                               href={subItem.href}
                               role="menuitem"
                               tabIndex={0}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.04 }}
-                              className="group flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.03 }}
+                              className="group flex items-center p-3 rounded-xl transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
                               onKeyDown={(e) => handleKeyNavigation(e, subItem.href)}
                             >
-                              <div className="shrink-0 w-10 h-10 bg-[#80c738]/15 rounded-lg flex items-center justify-center group-hover:bg-[#80c738]/25 transition-colors duration-200 border border-[#80c738]/30">
-                                {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-[#80c738]" })}
+                              <div className="shrink-0 w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-[#80c738]/10 transition-colors duration-200">
+                                {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-gray-600 group-hover:text-[#80c738] transition-colors" })}
                               </div>
-                              <div className="ml-3 flex-1">
+                              <div className="ml-3 flex-1 min-w-0">
                                 <span
-                                  className="text-sm font-semibold text-white group-hover:text-[#80c738] transition-colors duration-200 block"
+                                  className="text-sm font-semibold text-gray-900 group-hover:text-[#80c738] transition-colors duration-200 block whitespace-nowrap"
                                   style={{ fontFamily: typography.fonts.body }}
                                 >
                                   {subItem.label}
                                 </span>
                                 {subItem.description && (
-                                  <span className="text-xs text-gray-400 group-hover:text-gray-300 mt-0.5 block leading-relaxed">
+                                  <span className="text-xs text-gray-500 group-hover:text-gray-600 mt-0.5 block leading-relaxed whitespace-nowrap">
                                     {subItem.description}
                                   </span>
                                 )}
