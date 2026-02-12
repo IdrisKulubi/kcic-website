@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   List,
@@ -19,13 +19,23 @@ import {
   TrendUp,
   Calendar,
   Megaphone,
-  ClipboardText
+  ClipboardText,
+  Star,
+  Rocket,
+  Archive,
+  Newspaper,
+  Article,
+  Microphone,
+  Handshake,
+  TreeStructure
 } from '@phosphor-icons/react';
 import { colors, typography } from '@/lib/design-system';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface SubNavItem {
   label: string;
@@ -71,7 +81,21 @@ const iconMap = {
   Megaphone,
   ClipboardList: ClipboardText,
   ClipboardText,
+  Star,
+  Rocket,
+  Archive,
+  Newspaper,
+  Article,
+  Microphone,
+  Handshake,
+  Diagram: TreeStructure,
+  TreeStructure,
 };
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -81,10 +105,57 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
   const { getMotionSafeClasses } = useAccessibilityClasses();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const navItemsRef = useRef<HTMLDivElement>(null);
 
   const getIcon = (iconName: string) => {
     return iconMap[iconName as keyof typeof iconMap] || Buildings;
   };
+
+  // GSAP entrance animation for nav items
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const ctx = gsap.context(() => {
+      // Animate nav items on mount
+      const navItems = navItemsRef.current?.children;
+      if (navItems && navItems.length > 0) {
+        gsap.fromTo(
+          navItems,
+          { opacity: 0, y: -20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: 'power2.out',
+            delay: 0.3,
+          }
+        );
+      }
+
+      // Smooth navbar background transition on scroll
+      ScrollTrigger.create({
+        start: 'top top',
+        end: '+=100',
+        onUpdate: (self) => {
+          const progress = self.progress;
+          if (navRef.current) {
+            const navElement = navRef.current;
+            if (progress > 0.5) {
+              navElement.classList.add('nav-scrolled');
+              navElement.classList.remove('nav-top');
+            } else {
+              navElement.classList.remove('nav-scrolled');
+              navElement.classList.add('nav-top');
+            }
+          }
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -140,9 +211,22 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
 
   return (
     <>
+      {/* CSS for GSAP scroll states */}
+      <style jsx global>{`
+        .nav-scrolled {
+          background: rgba(26, 31, 46, 0.95) !important;
+          backdrop-filter: blur(12px) !important;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+        .nav-top {
+          background: rgba(0, 0, 0, 0.2) !important;
+          backdrop-filter: blur(8px) !important;
+        }
+      `}</style>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg'
+        ref={navRef}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'bg-[#1a1f2e]/95 backdrop-blur-md shadow-xl'
           : 'bg-black/20 backdrop-blur-md'
           }`}
       >
@@ -163,7 +247,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1" ref={dropdownRef}>
+            <div className="hidden md:flex items-center space-x-1" ref={(el) => { dropdownRef.current = el; navItemsRef.current = el; }}>
               {navigation.map((item) => (
                 <div
                   key={item.label}
@@ -172,15 +256,15 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-offset-2 ${
                       isScrolled
-                        ? `hover:bg-gray-50 ${activeDropdown === item.label ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-gray-900'}`
+                        ? `hover:bg-white/10 ${activeDropdown === item.label ? 'bg-white/15 text-[#80c738]' : 'text-white/90 hover:text-white'}`
                         : `hover:bg-white/10 ${activeDropdown === item.label ? 'bg-white/20 text-white' : 'text-white hover:text-white'}`
                       }`}
                     style={{
                       fontFamily: typography.fonts.body,
                       fontSize: typography.sizes.body.base[0],
-                      textShadow: isScrolled ? 'none' : '0 1px 3px rgba(0,0,0,0.3)',
+                      textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     }}
                     aria-expanded={item.subItems ? activeDropdown === item.label : undefined}
                     aria-controls={item.subItems ? `dropdown-${item.label}` : undefined}
@@ -206,14 +290,24 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50"
-                        style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.15)' }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-80 rounded-xl overflow-hidden z-50 border border-white/20"
+                        style={{ 
+                          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.1)',
+                          background: 'linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%)',
+                          backdropFilter: 'blur(20px)',
+                        }}
                       >
                         {/* Arrow pointer */}
-                        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                        <div 
+                          className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45 border-l border-t border-white/20"
+                          style={{ background: '#0f1419' }}
+                        ></div>
 
-                        <div className="p-1">
+                        {/* Green accent line at top */}
+                        <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #80c738, #00addd, #80c738)' }}></div>
+
+                        <div className="p-3" style={{ background: 'rgba(15, 20, 25, 0.98)' }}>
                           {item.subItems.map((subItem, index) => (
                             <motion.a
                               key={subItem.label}
@@ -222,20 +316,25 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                               tabIndex={0}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.05 }}
-                              className="group flex items-center p-2 rounded-md transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-inset"
+                              transition={{ delay: index * 0.04 }}
+                              className="group flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
                               onKeyDown={(e) => handleKeyNavigation(e, subItem.href)}
                             >
-                              <div className="flex-shrink-0 w-6 h-6 bg-green-50 rounded-md flex items-center justify-center group-hover:bg-green-100 transition-colors duration-200">
-                                {React.createElement(getIcon(subItem.icon), { className: "w-3 h-3 text-green-600" })}
+                              <div className="shrink-0 w-10 h-10 bg-[#80c738]/15 rounded-lg flex items-center justify-center group-hover:bg-[#80c738]/25 transition-colors duration-200 border border-[#80c738]/30">
+                                {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-[#80c738]" })}
                               </div>
-                              <div className="ml-2 flex-1">
+                              <div className="ml-3 flex-1">
                                 <span
-                                  className="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors duration-200 block"
+                                  className="text-sm font-semibold text-white group-hover:text-[#80c738] transition-colors duration-200 block"
                                   style={{ fontFamily: typography.fonts.body }}
                                 >
                                   {subItem.label}
                                 </span>
+                                {subItem.description && (
+                                  <span className="text-xs text-gray-400 group-hover:text-gray-300 mt-0.5 block leading-relaxed">
+                                    {subItem.description}
+                                  </span>
+                                )}
                               </div>
                             </motion.a>
                           ))}
@@ -273,11 +372,9 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
-                  isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
-                }`}
+                className="p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-offset-2 hover:bg-white/10"
                 style={{
-                  color: isScrolled ? colors.secondary.gray[700] : '#FFFFFF',
+                  color: '#FFFFFF',
                 }}
                 aria-label="Toggle mobile menu"
                 aria-expanded={isMobileMenuOpen}
@@ -299,7 +396,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
         </div>
       </nav>
 
-      {/* Mobile Menu - Apple-Style Full-Screen Overlay */}
+      {/* Mobile Menu - Dark Themed Full-Screen Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -312,7 +409,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
           >
             {/* Backdrop */}
             <motion.div
-              className="absolute inset-0 bg-white"
+              className="absolute inset-0 bg-[#1a1f2e]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -327,7 +424,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
               transition={{ delay: 0.1 }}
             >
               {/* Header with Close Button */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <Image
                     src="/images/hero/KCIC logo.png"
@@ -339,10 +436,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                   aria-label="Close menu"
                 >
-                  <X className="h-5 w-5 text-gray-600" weight="bold" />
+                  <X className="h-5 w-5 text-white" weight="bold" />
                 </button>
               </div>
 
@@ -370,8 +467,8 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                               className="text-xl font-semibold"
                               style={{
                                 color: expandedMobileItem === item.label
-                                  ? colors.primary.green.DEFAULT
-                                  : colors.secondary.gray[900],
+                                  ? '#80c738'
+                                  : '#ffffff',
                               }}
                             >
                               {item.label}
@@ -382,7 +479,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                             >
                               <CaretDown
                                 className="h-5 w-5"
-                                style={{ color: colors.secondary.gray[400] }}
+                                style={{ color: expandedMobileItem === item.label ? '#80c738' : '#8b8d90' }}
                               />
                             </motion.div>
                           </button>
@@ -397,7 +494,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                 transition={{ duration: 0.25 }}
                                 className="overflow-hidden"
                               >
-                                <div className="pb-4 space-y-1">
+                                <div className="pb-4 space-y-2">
                                   {item.subItems.map((subItem, subIndex) => (
                                     <motion.a
                                       key={subItem.label}
@@ -405,21 +502,21 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                       initial={{ opacity: 0, x: -10 }}
                                       animate={{ opacity: 1, x: 0 }}
                                       transition={{ delay: subIndex * 0.03 }}
-                                      className="flex items-center py-3 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                                      className="flex items-center py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/10"
                                       onClick={() => setIsMobileMenuOpen(false)}
                                     >
-                                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm">
+                                      <div className="w-10 h-10 rounded-xl bg-[#80c738]/10 flex items-center justify-center mr-4 border border-[#80c738]/20">
                                         {React.createElement(getIcon(subItem.icon), {
                                           className: "w-5 h-5",
-                                          style: { color: colors.primary.green.DEFAULT }
+                                          style: { color: '#80c738' }
                                         })}
                                       </div>
                                       <div className="flex-1">
-                                        <span className="text-base font-medium text-gray-900 block">
+                                        <span className="text-base font-medium text-white block">
                                           {subItem.label}
                                         </span>
                                         {subItem.description && (
-                                          <span className="text-sm text-gray-500 line-clamp-1">
+                                          <span className="text-sm text-gray-400 line-clamp-1">
                                             {subItem.description}
                                           </span>
                                         )}
@@ -434,8 +531,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                       ) : (
                         <a
                           href={item.href}
-                          className="flex items-center py-4 text-xl font-semibold transition-colors hover:text-green-600"
-                          style={{ color: colors.secondary.gray[900] }}
+                          className="flex items-center py-4 text-xl font-semibold transition-colors text-white hover:text-[#80c738]"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {item.label}
@@ -446,14 +542,14 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                 </nav>
 
                 {/* Divider */}
-                <div className="my-6 border-t border-gray-100" />
+                <div className="my-6 border-t border-white/10" />
 
 
               </div>
 
               {/* Bottom CTA */}
               {ctaButton && (
-                <div className="px-6 py-6 border-t border-gray-100 bg-gray-50">
+                <div className="px-6 py-6 border-t border-white/10 bg-white/5">
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -462,7 +558,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                     <Button
                       className="w-full py-4 rounded-2xl font-semibold text-lg shadow-lg"
                       style={{
-                        background: `linear-gradient(135deg, ${colors.primary.green.DEFAULT}, ${colors.primary.green[600]})`,
+                        background: 'linear-gradient(135deg, #80c738, #5da628)',
                         color: 'white',
                         border: 'none',
                       }}
