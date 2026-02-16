@@ -211,6 +211,7 @@ export default function HomePage({
       id: article.id!,
       title: article.title,
       excerpt: article.excerpt,
+      content: article.content,
       publishedAt:
         typeof article.publishedAt === "string"
           ? article.publishedAt
@@ -220,6 +221,8 @@ export default function HomePage({
       slug: article.slug!,
       readTime: article.readTime || "5 min",
       featured: article.featured,
+      type: (article.category?.toLowerCase().includes("podcast") ? "podcast" : "article") as "podcast" | "article",
+      youtubeUrl: article.content || "",
     }));
 
   // Transform partners data from database
@@ -400,40 +403,16 @@ export default function HomePage({
               <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
-              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
-                <HistoryTimeline />
-              </AnimatedSection>
-              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
+            
+              <AnimatedSection direction="up" delay={0.1} className="border-t border-cyan-100 bg-[#d8f1fb]">
                 <FoundingBeliefs />
               </AnimatedSection>
             </div>
 
-            {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
-            <div id="approach">
-              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
-              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
-                <WhatWeDo />
-                <div className="mt-12">
-                  <HowWeDoIt />
-                </div>
-              </AnimatedSection>
-            </div>
-
-            {/* SECTION 3: Focus Areas - Full Parallax Experience */}
-            <div id="sectors">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#f9fafb" height={60} flip />
-              <KeySectorsParallax />
-            </div>
-
-            {/* SECTION 3B: Programs Showcase */}
-            <AnimatedSection direction="scale" className="bg-white py-12 sm:py-16">
-              <ProgramsShowcase />
-            </AnimatedSection>
-
-            {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+            {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
             <div id="impact">
-              <SectionDivider variant="angle" fromColor="#ffffff" toColor="#0f172a" height={80} />
-              <div className="relative">
+              <SectionDivider variant="angle" fromColor="#d8f1fb" toColor="#1b3a1a" height={80} />
+              <div className="relative" style={{ background: "linear-gradient(180deg, #1b3a1a 0%, #1a2e1a 50%, #0f2010 100%)" }}>
                 <MinimalStatsSection
                   stats={thirteenYearsOnData}
                   targets={targetsData}
@@ -445,24 +424,53 @@ export default function HomePage({
                   imageSide="left"
                   showToggle={true}
                 />
-                <AnimatedSection direction="up" className="border-t border-white/10 relative">
+              </div>
+            </div>
+
+            {/* SECTION 2B: Awards & Recognition (Slide 5) */}
+            <div id="awards">
+              <SectionDivider variant="wave" fromColor="#0f2010" toColor="#0f172a" height={70} />
+              <div className="relative" style={{ background: "linear-gradient(180deg, #0f172a 0%, #1b3a1a 50%, #0f172a 100%)" }}>
+                <AnimatedSection direction="up">
                   <AwardsSection />
                 </AnimatedSection>
               </div>
             </div>
 
-            {/* SECTION 5: News */}
+            {/* SECTION 3: Our Approach - Combined (What We Do + How We Do It) */}
+            <div id="approach">
+              <SectionDivider variant="curve" fromColor="#0f2010" toColor="#f9fafb" height={70} />
+              <AnimatedSection direction="up" className="bg-linear-to-b from-gray-50 to-white py-12 sm:py-16">
+                <WhatWeDo />
+                <div className="mt-12">
+                  <HowWeDoIt />
+                </div>
+              </AnimatedSection>
+            </div>
+
+            {/* SECTION 4: Focus Areas - Full Parallax Experience */}
+            <div id="sectors">
+              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#f9fafb" height={60} flip />
+              <KeySectorsParallax />
+            </div>
+
+            {/* SECTION 5: Programs Showcase */}
+            <AnimatedSection direction="scale" className="bg-white py-12 sm:py-16">
+              <ProgramsShowcase />
+            </AnimatedSection>
+
+            {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#0f172a" toColor="#f9fafb" height={70} />
+              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
               <AnimatedSection direction="up" className="bg-gray-50 py-12 sm:py-16">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
             </div>
 
-            {/* SECTION 6: Partners */}
+            {/* SECTION 7: Partners */}
             <div id="partners">
               <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
-              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white">
+              <AnimatedSection direction="up" className="bg-linear-to-b from-gray-50 to-white">
                 <PartnersSection partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>

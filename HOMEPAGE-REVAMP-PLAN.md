@@ -298,8 +298,8 @@ These animations apply across all sections and the overall scroll experience.
 | **4** | Navigation restructure + mega-menu | Nav 1.0, Tabs 1–6 | 🟠 High | Large | ⬜ |
 | **5** | Climate Challenge: dark bg + fix cards | Slide 2 | 🟠 High | Medium | ⬜ |
 | **6** | Footer: dark bg + compact + GSAP | Footer 3.1–3.9 | 🟠 High | Medium | ⬜ |
-| **7** | What We Believe: warm bg + icons | Slide 3 | 🟡 Medium | Medium | ⬜ |
-| **8** | Impact Journey: dark bg + counters | Slide 4 | 🟡 Medium | Medium | ⬜ |
+| **7** | What We Believe: warm bg + icons | Slide 3 | 🟡 Medium | Medium | ✅ |
+| **8** | Impact Journey: dark bg + counters | Slide 4 | 🟡 Medium | Medium | ✅ |
 | **9** | Awards: dark green bg + glow | Slide 5 | 🟡 Medium | Small | ⬜ |
 | **10** | News & Insights: warm bg + branded cards | Slide 6 | 🟡 Medium | Medium | ⬜ |
 | **11** | About Us pages: Who We Are + equal cards | Tab 1 Slide 1 | 🟡 Medium | Medium | ⬜ |

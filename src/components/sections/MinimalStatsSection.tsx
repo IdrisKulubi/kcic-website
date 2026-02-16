@@ -186,31 +186,36 @@ export function MinimalStatsSection({
                   ref={(el) => {
                     if (!isTargets) counterRefs.current[index] = el;
                   }}
-                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-climate-green dark:text-[#FFC94A] block"
+                  className="font-bold block"
                   style={{
+                    fontSize: 'clamp(1.875rem, 4vw, 3rem)',
                     fontFamily: typography.fonts.heading,
                     lineHeight: 1.1,
-                    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
+                    color: '#80c738',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.25)',
                   }}
                 >
                   {stat.value}
                 </span>
               </div>
               <p
-                className="text-sm sm:text-base font-medium text-gray-800 dark:text-white/90"
+                className="font-medium"
                 style={{
+                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
                   fontFamily: typography.fonts.body,
                   lineHeight: typography.lineHeights.snug,
+                  color: 'rgba(255,255,255,0.9)',
                 }}
               >
                 {stat.description}
               </p>
               {stat.subdescription && (
                 <p
-                  className="text-xs sm:text-sm text-gray-600 dark:text-white/60"
                   style={{
+                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
                     fontFamily: typography.fonts.body,
                     lineHeight: typography.lineHeights.relaxed,
+                    color: 'rgba(255,255,255,0.55)',
                   }}
                 >
                   {stat.subdescription}
@@ -296,7 +301,7 @@ export function MinimalStatsSection({
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               fontFamily: typography.fonts.heading,
-              color: colors.secondary.gray[900],
+              color: isDark ? '#ffffff' : colors.secondary.gray[900],
               lineHeight: typography.lineHeights.tight,
             }}
           >
@@ -304,11 +309,12 @@ export function MinimalStatsSection({
           </h2>
           {subtitle && (
             <p
-              className="mt-4 text-gray-600"
               style={{
                 fontSize: '1.25rem',
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
+                color: isDark ? 'rgba(255,255,255,0.75)' : '#4b5563',
+                marginTop: '1rem',
               }}
             >
               {subtitle}
@@ -316,20 +322,20 @@ export function MinimalStatsSection({
           )}
           <div
             className="w-24 h-1 mx-auto rounded-full mt-4"
-            style={{ background: colors.primary.green.DEFAULT }}
+            style={{ background: isDark ? '#80c738' : colors.primary.green.DEFAULT }}
           />
         </div>
 
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
             <div className="flex flex-col items-center mb-12">
-              <TabsList className="relative h-auto p-2 rounded-full border border-white/10 bg-black/5 dark:bg-black/20 backdrop-blur-md">
+              <TabsList className="relative h-auto p-2 rounded-full border border-white/15 backdrop-blur-md" style={{ background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
                 <TabsTrigger
                   value="impact"
                   className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
                     data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                     ${isDark
-                      ? 'data-[state=active]:bg-climate-green data-[state=active]:text-white text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                      ? 'data-[state=active]:bg-climate-green data-[state=active]:text-white text-white/60 hover:text-white/90'
                       : 'data-[state=active]:bg-white data-[state=active]:text-climate-green data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
                     }`}
                 >
@@ -343,7 +349,7 @@ export function MinimalStatsSection({
                   className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
                     data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                     ${isDark
-                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-white/60 hover:text-white/90'
                       : 'data-[state=active]:bg-white data-[state=active]:text-[#FFA500] data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
                     }`}
                 >
@@ -359,13 +365,14 @@ export function MinimalStatsSection({
               <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
                 {/* Image side - stays the same */}
                 <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
+                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-lg" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     <Image
                       src={imageSrc}
                       alt={imageAlt || ''}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                      className="object-contain object-center"
+                      className="object-contain object-center mix-blend-luminosity"
+                      style={{ filter: isDark ? 'invert(1) hue-rotate(180deg) brightness(1.1)' : 'none' }}
                       priority={variant === 'dark'}
                     />
                   </div>
@@ -394,8 +401,7 @@ export function MinimalStatsSection({
               </>
             )}
 
-            <div className={`mt-16 pt-12 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'
-              }`}>
+            <div className={`mt-16 pt-12 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'}`} style={{ marginBottom: 0 }}>
 
             </div>
           </Tabs>
