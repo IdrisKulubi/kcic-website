@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -20,6 +20,9 @@ import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
 import { colors } from "@/lib/design-system";
 import { WhistleblowerModal } from "@/components/whistleblower/WhistleblowerModal";
+import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface FooterProps {
   data: FooterData;
@@ -38,6 +41,62 @@ export default function Footer({ data }: FooterProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isWhistleblowerOpen, setIsWhistleblowerOpen] = useState(false);
+  const { shouldDisableAnimations } = useAccessibilityClasses();
+
+  const footerRef = useRef<HTMLElement | null>(null);
+  const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const bottomBarRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    if (shouldDisableAnimations?.() || !footerRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      columnRefs.current.forEach((column, index) => {
+        if (!column) return;
+
+        gsap.fromTo(
+          column,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            delay: index * 0.1,
+            scrollTrigger: {
+              trigger: column,
+              start: "top 92%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+      if (bottomBarRef.current) {
+        gsap.fromTo(
+          bottomBarRef.current,
+          { opacity: 0, y: 18 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: bottomBarRef.current,
+              start: "top 95%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      ScrollTrigger.refresh();
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, [shouldDisableAnimations]);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,129 +128,128 @@ export default function Footer({ data }: FooterProps) {
   };
 
   return (
-    <footer className="bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Brand and Contact Info */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="mb-6 inline-block" aria-label="Kenya Climate Innovation Centre home">
+    <footer ref={footerRef} className="relative overflow-hidden bg-[#1a1f2e] text-white">
+      <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+      </div>
+
+      <div
+        className="pointer-events-none absolute top-0 left-0 h-[3px] w-full"
+        style={{
+          background:
+            "linear-gradient(90deg, #80c738 0%, #00addd 55%, #80c738 100%)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div ref={(el) => { columnRefs.current[0] = el; }}>
+            <Link href="/" className="inline-flex items-center rounded-xl bg-white/95 px-3 py-2 mb-6" aria-label="Kenya Climate Innovation Centre home">
               <Image
                 src="/images/hero/KCIC logo.png"
                 alt="Kenya Climate Innovation Centre logo"
-                width={160}
-                height={48}
-                className="h-12 w-auto"
+                width={150}
+                height={44}
+                className="h-10 w-auto"
                 priority
               />
             </Link>
 
-            <address className="space-y-3 text-gray-600 not-italic">
-              <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
-                <span className="text-sm leading-relaxed">
-                  {data.contact.address}
-                </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-blue-400 shrink-0" />
-                <a
-                  href={`tel:${data.contact.phone}`}
-                  className="text-sm hover:text-blue-600 transition-colors"
-                >
-                  {data.contact.phone}
-                </a>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Envelope className="h-5 w-5 text-yellow-400 shrink-0" />
-                <a
-                  href={`mailto:${data.contact.email}`}
-                  className="text-sm hover:text-yellow-600 transition-colors"
-                >
-                  {data.contact.email}
-                </a>
-              </div>
-            </address>
-          </div>
-
-          {/* Quick Links */}
-          <nav className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-gray-900">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
+            <h3 className="text-base font-semibold text-white mb-4">Quicklinks</h3>
+            <ul className="space-y-2">
               {data.quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-green-600 transition-colors duration-300 text-sm block py-1"
+                    className="text-sm text-white/80 hover:text-[#80c738] transition-colors"
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </nav>
+          </div>
 
-          {/* Social Media */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-gray-900">Follow Us</h3>
-            <div className="flex flex-wrap gap-3">
+          <div ref={(el) => { columnRefs.current[1] = el; }}>
+            <h3 className="text-base font-semibold text-white mb-4">Office Address</h3>
+
+            <address className="space-y-3 not-italic text-sm text-white/80 mb-6">
+              <div className="flex items-start gap-3">
+                <MapPin className="h-4 w-4 text-[#80c738] mt-1 shrink-0" />
+                <span>{data.contact.address}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-[#00addd] shrink-0" />
+                <a href={`tel:${data.contact.phone}`} className="hover:text-white transition-colors">
+                  {data.contact.phone}
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Envelope className="h-4 w-4 text-[#E97451] shrink-0" />
+                <a href={`mailto:${data.contact.email}`} className="hover:text-white transition-colors">
+                  {data.contact.email}
+                </a>
+              </div>
+            </address>
+
+            <h3 className="text-base font-semibold text-white mb-3">Social Media</h3>
+            <div className="flex flex-wrap gap-2.5">
               {data.socialMedia.map((social) => {
-                const IconComponent =
-                  socialIcons[social.icon as keyof typeof socialIcons];
+                const IconComponent = socialIcons[social.icon as keyof typeof socialIcons] || XLogo;
+
                 return (
                   <a
                     key={social.platform}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 group flex items-center justify-center"
                     aria-label={`Follow KCIC on ${social.platform}`}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/85 transition-all hover:border-[#80c738] hover:text-[#80c738] hover:shadow-[0_0_18px_rgba(128,199,56,0.35)]"
                   >
-                    <IconComponent className="h-5 w-5 text-gray-600 group-hover:text-green-600 transition-colors duration-300" />
+                    <IconComponent className="h-4 w-4" />
                   </a>
                 );
               })}
             </div>
           </div>
 
-          {/* Newsletter Signup */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-gray-900">
-              {data.newsletter.title}
-            </h3>
-            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+          <div ref={(el) => { columnRefs.current[2] = el; }}>
+            <h3 className="text-base font-semibold text-white mb-3">Mailing List Subscription</h3>
+            <p className="text-sm text-white/75 mb-4 leading-relaxed">
               {data.newsletter.description}
             </p>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-              <div className="relative">
+            <form onSubmit={handleNewsletterSubmit} className="space-y-3" aria-label="Mailing list subscription">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={data.newsletter.placeholder}
-                  className="bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-green-500 focus:ring-green-500 pr-12"
                   disabled={isSubmitting}
+                  className="h-11 rounded-full border-white/25 bg-white/10 text-white placeholder:text-white/50 focus-visible:ring-[#80c738] focus-visible:border-[#80c738]"
                 />
                 <Button
                   type="submit"
-                  size="sm"
                   disabled={isSubmitting}
-                  className="absolute right-1 top-1/2 h-10 w-10 -translate-y-1/2 p-0 text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
+                  className="h-11 rounded-full px-6 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
                   style={{ backgroundColor: colors.primary.green.DEFAULT }}
                 >
-                  <PaperPlaneTilt className="h-4 w-4" />
+                  <PaperPlaneTilt className="h-4 w-4 mr-2" />
+                  Subscribe
                 </Button>
               </div>
 
               {submitMessage && (
-                <div
-                  className={`text-xs ${submitMessage.includes("Thank you")
-                    ? "text-green-400"
-                    : "text-red-400"
-                    }`}
-                >
+                <div className={`text-xs ${submitMessage.includes("Thank you") ? "text-[#80c738]" : "text-[#ffb3a1]"}`}>
                   {submitMessage}
                 </div>
               )}
@@ -199,27 +257,24 @@ export default function Footer({ data }: FooterProps) {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-500 text-sm text-center sm:text-left">
+        <div ref={bottomBarRef} className="mt-10 pt-6 border-t border-white/15">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs sm:text-sm text-white/65 text-center sm:text-left">
               {data.copyright}
             </p>
 
-            {/* Whistleblower Button */}
             <button
               onClick={() => setIsWhistleblowerOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200 rounded-lg transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
               style={{ backgroundColor: colors.primary.green.DEFAULT }}
             >
-              <ShieldCheck className="w-4 h-4" />
+              <ShieldCheck className="h-4 w-4" />
               Whistleblower
             </button>
           </div>
         </div>
       </div>
 
-      {/* Whistleblower Modal */}
       <WhistleblowerModal
         isOpen={isWhistleblowerOpen}
         onClose={() => setIsWhistleblowerOpen(false)}

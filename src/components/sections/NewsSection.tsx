@@ -64,11 +64,58 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   const isPodcastItem = (item: NewsItem) =>
     item.type === "podcast" || item.category.toLowerCase().includes("podcast");
 
+  const extractYouTubeVideoId = (rawUrl?: string | null) => {
+    if (!rawUrl) return null;
+
+    try {
+      const normalized = rawUrl.trim().replace(/[),.;]+$/, "");
+      const url = new URL(normalized);
+      const host = url.hostname.replace("www.", "").toLowerCase();
+
+      if (host === "youtu.be") {
+        const id = url.pathname.split("/").filter(Boolean)[0];
+        return id?.slice(0, 11) || null;
+      }
+
+      if (host === "youtube.com" || host === "m.youtube.com") {
+        if (url.pathname.startsWith("/watch")) {
+          const id = url.searchParams.get("v");
+          return id?.slice(0, 11) || null;
+        }
+
+        if (url.pathname.startsWith("/embed/")) {
+          const id = url.pathname.split("/embed/")[1]?.split("/")[0];
+          return id?.slice(0, 11) || null;
+        }
+
+        if (url.pathname.startsWith("/shorts/")) {
+          const id = url.pathname.split("/shorts/")[1]?.split("/")[0];
+          return id?.slice(0, 11) || null;
+        }
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
   const resolvePodcastEmbed = (item: NewsItem) => {
     const parsedFromYoutubeField = toEmbedUrl(item.youtubeUrl);
     const parsedFromContent = toEmbedUrl(extractYouTubeUrl(item.content));
     const parsedFromExcerpt = toEmbedUrl(extractYouTubeUrl(item.excerpt));
     return parsedFromYoutubeField || parsedFromContent || parsedFromExcerpt;
+  };
+
+  const resolvePodcastThumbnail = (item: NewsItem) => {
+    if (item.imageUrl) return item.imageUrl;
+
+    const fromYoutubeField = extractYouTubeVideoId(item.youtubeUrl);
+    const fromContent = extractYouTubeVideoId(extractYouTubeUrl(item.content));
+    const fromExcerpt = extractYouTubeVideoId(extractYouTubeUrl(item.excerpt));
+    const videoId = fromYoutubeField || fromContent || fromExcerpt;
+
+    return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
   };
 
   const extractYouTubeUrl = (rawText?: string) => {
@@ -82,36 +129,10 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   };
 
   const toEmbedUrl = (rawUrl?: string | null) => {
-    if (!rawUrl) return null;
-
-    try {
-      const url = new URL(rawUrl.trim());
-
-      if (url.hostname.includes("youtu.be")) {
-        const videoId = url.pathname.replace("/", "").slice(0, 11);
-        return videoId
-          ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
-          : null;
-      }
-
-      if (url.hostname.includes("youtube.com")) {
-        if (url.pathname.startsWith("/embed/")) {
-          const videoId = url.pathname.split("/embed/")[1]?.slice(0, 11);
-          return videoId
-            ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
-            : null;
-        }
-
-        const videoId = url.searchParams.get("v")?.slice(0, 11);
-        return videoId
-          ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
-          : null;
-      }
-
-      return null;
-    } catch {
-      return null;
-    }
+    const videoId = extractYouTubeVideoId(rawUrl);
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+      : null;
   };
 
   const sortedNews = useMemo(
@@ -135,7 +156,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         category: "Podcast",
         slug: "podcast-episode-1",
         type: "podcast",
-        youtubeUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        youtubeUrl: "https://youtu.be/wA7P2Y3ZOao?si=RSomYM59Wx2vioyb",
       },
       {
         id: "fallback-podcast-2",
@@ -145,7 +166,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         category: "Podcast",
         slug: "podcast-episode-2",
         type: "podcast",
-        youtubeUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+        youtubeUrl: "https://youtu.be/yeBGRz16lkM?si=L4CUlwZ2SGctZU6u",
       },
     ];
   }, []);
@@ -182,6 +203,9 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   }, [featuredPodcasts]);
 
   const currentPodcast = featuredPodcasts[activePodcastIndex] ?? featuredPodcasts[0] ?? null;
+  const currentPodcastThumbnail = currentPodcast
+    ? resolvePodcastThumbnail(currentPodcast)
+    : null;
 
   const handlePodcastOpen = (item?: NewsItem | null) => {
     if (!item) return;
@@ -422,29 +446,40 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 className="group block w-full text-left"
                 aria-label={`Play podcast: ${currentPodcast?.title || "Featured podcast"}`}
               >
-                <div className="relative aspect-square overflow-hidden rounded-2xl bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] shadow-md">
-                  {currentPodcast?.imageUrl ? (
-                    <Image
-                      src={currentPodcast.imageUrl}
-                      alt={currentPodcast.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/95">
-                      <Headphones className="h-14 w-14" weight="duotone" />
-                      <span className="text-sm font-semibold tracking-wide uppercase">Podcast Episode</span>
-                    </div>
-                  )}
+                <div className="relative aspect-square overflow-hidden rounded-2xl bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] shadow-md p-4 sm:p-5">
+                  <div className="relative h-full w-full overflow-hidden rounded-xl bg-black/35">
+                    {currentPodcastThumbnail ? (
+                      currentPodcastThumbnail.startsWith("http") ? (
+                        <img
+                          src={currentPodcastThumbnail}
+                          alt={currentPodcast?.title || "Podcast preview"}
+                          className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <Image
+                          src={currentPodcastThumbnail}
+                          alt={currentPodcast?.title || "Podcast preview"}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+                      )
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/95">
+                        <Headphones className="h-14 w-14" weight="duotone" />
+                        <span className="text-sm font-semibold tracking-wide uppercase">Podcast Episode</span>
+                      </div>
+                    )}
+                  </div>
 
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-4 sm:inset-5 rounded-xl bg-linear-to-t from-black/65 via-black/15 to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transition-transform duration-300 group-hover:scale-105">
                       <PlayCircle className="h-9 w-9" weight="fill" />
                     </span>
                   </div>
-                  <div className="absolute left-4 right-4 bottom-4 text-white">
+                  <div className="absolute left-8 right-8 bottom-8 text-white">
                     <span className="block uppercase tracking-wider text-white/80 mb-1" style={{ fontSize: "11px", lineHeight: "14px" }}>Podcast</span>
                     <div className="font-semibold leading-tight line-clamp-2" style={{ fontSize: "16px", lineHeight: "20px", margin: 0 }}>
                       {currentPodcast?.title || "Podcast Episode"}

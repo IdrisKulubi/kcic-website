@@ -437,27 +437,10 @@ export default function HomePage({
               </div>
             </div>
 
-            {/* SECTION 3: Our Approach - Combined (What We Do + How We Do It) */}
-            <div id="approach">
-              <SectionDivider variant="curve" fromColor="#0f2010" toColor="#f9fafb" height={70} />
-              <AnimatedSection direction="up" className="bg-linear-to-b from-gray-50 to-white py-12 sm:py-16">
-                <WhatWeDo />
-                <div className="mt-12">
-                  <HowWeDoIt />
-                </div>
-              </AnimatedSection>
-            </div>
 
-            {/* SECTION 4: Focus Areas - Full Parallax Experience */}
-            <div id="sectors">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#f9fafb" height={60} flip />
-              <KeySectorsParallax />
-            </div>
+           
 
-            {/* SECTION 5: Programs Showcase */}
-            <AnimatedSection direction="scale" className="bg-white py-12 sm:py-16">
-              <ProgramsShowcase />
-            </AnimatedSection>
+          
 
             {/* SECTION 6: News */}
             <div id="news">
@@ -470,7 +453,7 @@ export default function HomePage({
             {/* SECTION 7: Partners */}
             <div id="partners">
               <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
-              <AnimatedSection direction="up" className="bg-linear-to-b from-gray-50 to-white">
+              <AnimatedSection direction="up" className="bg-linear-to-b from-[#e8f8fd] to-[#f2fbfe]">
                 <PartnersSection partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>

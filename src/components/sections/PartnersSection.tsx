@@ -48,7 +48,7 @@ export function PartnersSection({
 
   return (
     <>
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-gray-50/50 to-white overflow-hidden">
+      <section className="py-16 sm:py-20 bg-linear-to-b from-[#e8f8fd] to-[#f2fbfe] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -89,8 +89,8 @@ export function PartnersSection({
           {/* Dual Marquee Container */}
           <div className="relative">
             {/* Edge Gradients */}
-            <div className="absolute inset-y-0 left-0 w-20 sm:w-32 bg-gradient-to-r from-gray-50/80 via-gray-50/50 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-20 sm:w-32 bg-gradient-to-l from-gray-50/80 via-gray-50/50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-20 sm:w-32 bg-linear-to-r from-[#e8f8fd]/90 via-[#e8f8fd]/60 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-20 sm:w-32 bg-linear-to-l from-[#e8f8fd]/90 via-[#e8f8fd]/60 to-transparent z-10 pointer-events-none" />
 
             {/* Top Row - Scrolls Left */}
             <div className="relative overflow-hidden py-4">
@@ -98,7 +98,7 @@ export function PartnersSection({
                 {topRow.map((partner, index) => (
                   <div
                     key={`top-${partner.id}-${index}`}
-                    className="flex-shrink-0 mx-6 sm:mx-8"
+                    className="shrink-0 mx-6 sm:mx-8"
                   >
                     <div className="relative h-12 sm:h-14 w-24 sm:w-32 flex items-center justify-center transition-transform duration-300 hover:scale-110">
                       <Image
@@ -120,7 +120,7 @@ export function PartnersSection({
                 {bottomRow.map((partner, index) => (
                   <div
                     key={`bottom-${partner.id}-${index}`}
-                    className="flex-shrink-0 mx-6 sm:mx-8"
+                    className="shrink-0 mx-6 sm:mx-8"
                   >
                     <div className="relative h-12 sm:h-14 w-24 sm:w-32 flex items-center justify-center transition-transform duration-300 hover:scale-110">
                       <Image
