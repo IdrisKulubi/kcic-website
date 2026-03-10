@@ -48,10 +48,10 @@ export function PartnersSection({
 
   return (
     <>
-      <section className="py-16 sm:py-20 bg-linear-to-b from-[#e8f8fd] to-[#f2fbfe] overflow-hidden">
+      <section className="overflow-hidden bg-linear-to-b from-[#edf7fb] to-[#f5fbfd] py-12 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-12">
+          <div className="mb-10 text-center">
             <Badge
               className="mb-4 px-4 py-1.5 border rounded-full inline-flex items-center gap-1.5"
               style={{
@@ -64,9 +64,9 @@ export function PartnersSection({
               Trusted by Industry Leaders
             </Badge>
             <h2
-              className="font-bold mb-3"
+              className="mb-3 font-bold"
               style={{
-                fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+                fontSize: "clamp(1.75rem, 4vw, 2.35rem)",
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
                 lineHeight: typography.lineHeights.tight,
@@ -75,8 +75,9 @@ export function PartnersSection({
               {title}
             </h2>
             <p
-              className="text-base sm:text-lg max-w-2xl mx-auto"
+              className="mx-auto max-w-2xl"
               style={{
+                fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
                 fontFamily: typography.fonts.body,
                 color: colors.secondary.gray[500],
                 lineHeight: typography.lineHeights.relaxed,
@@ -138,10 +139,10 @@ export function PartnersSection({
           </div>
 
           {/* View All Button */}
-          <div className="text-center mt-10">
+          <div className="mt-8 text-center">
             <button
               onClick={openModal}
-              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full hover:border-[#80c738] hover:text-[#80c738] transition-all duration-300 hover:shadow-md"
+              className="group inline-flex items-center gap-2 border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-all duration-300 hover:border-[#80c738] hover:text-[#80c738] hover:shadow-md"
             >
               View All {partners.length} Partners
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -195,7 +196,7 @@ export function PartnersSection({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-4xl max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="relative max-h-[80vh] w-full max-w-4xl overflow-hidden bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
@@ -221,7 +222,7 @@ export function PartnersSection({
                       href={partner.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-center p-4 bg-gray-50 hover:bg-white rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all duration-300 aspect-square"
+                      className="group aspect-square border border-transparent bg-gray-50 p-4 transition-all duration-300 hover:border-gray-200 hover:bg-white hover:shadow-lg flex items-center justify-center"
                     >
                       <Image
                         src={partner.logo || "/images/placeholder-logo.png"}

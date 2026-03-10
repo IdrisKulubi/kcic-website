@@ -354,7 +354,7 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
   }, []);
 
   return (
-    <section ref={sectionRef} aria-labelledby="awards-heading" className="relative isolate py-24 sm:py-32">
+    <section ref={sectionRef} aria-labelledby="awards-heading" className="relative isolate py-12 sm:py-14">
       {/* Atmospheric gradient base */}
       <div
         className="absolute inset-0 -z-10"
@@ -367,13 +367,13 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14 sm:mb-20" data-awards-title>
+        <div className="mb-10 text-center sm:mb-12" data-awards-title>
           <h2
             id="awards-heading"
             className="font-bold tracking-tight inline-block"
             style={{
               fontFamily: typography.fonts.heading,
-              fontSize: "clamp(2rem, 4.5vw, 3.2rem)",
+              fontSize: "clamp(1.9rem, 4vw, 2.8rem)",
               background: colors.gradients.primary,
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -382,23 +382,30 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
           >
             Awards & Recognition
           </h2>
-          <div className="mt-3 text-gray-600" style={{ fontFamily: typography.fonts.body }}>
+          <div
+            className="mt-3 text-gray-300"
+            style={{
+              fontFamily: typography.fonts.body,
+              fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
+              lineHeight: typography.lineHeights.relaxed,
+            }}
+          >
             Celebrating milestones from our ecosystem partners and industry bodies
           </div>
         </div>
 
         {/* Awards grid */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 relative">
+        <div ref={gridRef} className="relative grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
           {awards.map((award, i) => (
             <article
               key={i}
               data-award-card
-              className="group relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-sm hover:shadow-xl transition-shadow"
+              className="group relative overflow-hidden border border-white/12 bg-white shadow-sm transition-shadow hover:shadow-xl"
               style={{ backdropFilter: `blur(6px)` }}
             >
               {/* Glow border on hover */}
               <div
-                className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity"
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
                 style={{ boxShadow: effects.shadows.glow.mixed }}
               />
 
@@ -414,12 +421,26 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
                 />
               </div>
 
-              <div className="p-6">
-                <h3 className="text-xl font-bold" style={{ fontFamily: typography.fonts.heading }}>
+              <div className="p-5 sm:p-6">
+                <h3
+                  className="font-bold text-slate-900"
+                  style={{
+                    fontFamily: typography.fonts.heading,
+                    fontSize: "clamp(1.05rem, 1.35vw, 1.2rem)",
+                    lineHeight: 1.3,
+                  }}
+                >
                   {award.title}
                 </h3>
                 {award.subtitle && (
-                  <p className="mt-1 text-sm text-gray-600" style={{ fontFamily: typography.fonts.body }}>
+                  <p
+                    className="mt-2 text-slate-600"
+                    style={{
+                      fontFamily: typography.fonts.body,
+                      fontSize: "0.875rem",
+                      lineHeight: typography.lineHeights.normal,
+                    }}
+                  >
                     {award.subtitle}
                   </p>
                 )}

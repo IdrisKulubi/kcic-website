@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
@@ -27,12 +27,7 @@ import type {
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
 import ClimateChallenge from "./sections/ClimateChallenge";
-import HistoryTimeline from "./sections/HistoryTimeline";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
-import WhatWeDo from "./sections/WhatWeDo";
-import HowWeDoIt from "./sections/HowWeDoIt";
-import KeySectorsParallax from "./sections/KeySectorsParallax";
-import ProgramsShowcase from "./sections/ProgramsShowcase";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -381,7 +376,7 @@ export default function HomePage({
         </div>
 
         {/* Floating decorative elements for depth */}
-        <FloatingElements variant="mixed" color="#7FD134" count={8} />
+        <FloatingElements variant="mixed" color="#7FD134" count={5} />
 
         {/* Navigation */}
         <MinimalNavbar {...navData} />
@@ -399,26 +394,26 @@ export default function HomePage({
           <div className="space-y-0">
             {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
             <div id="about">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={60} />
+              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={36} />
               <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
             
-              <AnimatedSection direction="up" delay={0.1} className="border-t border-cyan-100 bg-[#d8f1fb]">
+              <AnimatedSection direction="up" delay={0.1} className="border-t border-cyan-200/70 bg-[#eef8fb]">
                 <FoundingBeliefs />
               </AnimatedSection>
             </div>
 
             {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
             <div id="impact">
-              <SectionDivider variant="angle" fromColor="#d8f1fb" toColor="#1b3a1a" height={80} />
-              <div className="relative" style={{ background: "linear-gradient(180deg, #1b3a1a 0%, #1a2e1a 50%, #0f2010 100%)" }}>
+              <SectionDivider variant="angle" fromColor="#eef8fb" toColor="#17351b" height={52} />
+              <div className="relative" style={{ background: "linear-gradient(180deg, #17351b 0%, #14311b 52%, #102717 100%)" }}>
                 <MinimalStatsSection
                   stats={thirteenYearsOnData}
                   targets={targetsData}
                   variant="dark"
                   title="Our Impact Journey"
-                  subtitle="From 13 years of achievements to our ambitious 2030 vision"
+                  subtitle="Thirteen years of measurable progress and the targets guiding our next phase of growth."
                   imageSrc="/images/KCIC-Map.png"
                   imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
                   imageSide="left"
@@ -429,8 +424,8 @@ export default function HomePage({
 
             {/* SECTION 2B: Awards & Recognition (Slide 5) */}
             <div id="awards">
-              <SectionDivider variant="wave" fromColor="#0f2010" toColor="#0f172a" height={70} />
-              <div className="relative" style={{ background: "linear-gradient(180deg, #0f172a 0%, #1b3a1a 50%, #0f172a 100%)" }}>
+              <SectionDivider variant="wave" fromColor="#102717" toColor="#10243d" height={46} />
+              <div className="relative" style={{ background: "linear-gradient(180deg, #10243d 0%, #14311b 55%, #10243d 100%)" }}>
                 <AnimatedSection direction="up">
                   <AwardsSection />
                 </AnimatedSection>
@@ -444,16 +439,16 @@ export default function HomePage({
 
             {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
-              <AnimatedSection direction="up" className="bg-gray-50 py-12 sm:py-16">
+              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f7fbf8" height={42} />
+              <AnimatedSection direction="up" className="bg-[#f7fbf8] py-10 sm:py-12">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
             </div>
 
             {/* SECTION 7: Partners */}
             <div id="partners">
-              <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
-              <AnimatedSection direction="up" className="bg-linear-to-b from-[#e8f8fd] to-[#f2fbfe]">
+              <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#edf7fb" height={38} />
+              <AnimatedSection direction="up" className="bg-linear-to-b from-[#edf7fb] to-[#f5fbfd]">
                 <PartnersSection partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>

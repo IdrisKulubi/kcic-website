@@ -176,7 +176,7 @@ export function MinimalStatsSection({
     if (isDark) {
       return (
         <div
-          className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:gap-x-10 lg:gap-y-14"
+          className="grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-7 sm:gap-y-10 lg:gap-x-8 lg:gap-y-10"
           aria-live="polite"
         >
           {data.map((stat, index) => (
@@ -201,7 +201,7 @@ export function MinimalStatsSection({
               <p
                 className="font-medium"
                 style={{
-                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
+                    fontSize: 'clamp(0.8125rem, 1vw, 0.875rem)',
                   fontFamily: typography.fonts.body,
                   lineHeight: typography.lineHeights.snug,
                   color: 'rgba(255,255,255,0.9)',
@@ -212,7 +212,7 @@ export function MinimalStatsSection({
               {stat.subdescription && (
                 <p
                   style={{
-                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
+                    fontSize: 'clamp(0.75rem, 0.95vw, 0.8125rem)',
                     fontFamily: typography.fonts.body,
                     lineHeight: typography.lineHeights.relaxed,
                     color: 'rgba(255,255,255,0.55)',
@@ -236,7 +236,7 @@ export function MinimalStatsSection({
         {data.map((stat, index) => (
           <div
             key={index}
-            className="stat-card-item relative p-6 rounded-2xl transition-all duration-300 bg-white shadow-sm border border-gray-100 hover:shadow-md"
+            className="stat-card-item relative border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md"
           >
             <h3
               ref={(el) => {
@@ -260,7 +260,7 @@ export function MinimalStatsSection({
             <p
               className="text-gray-700"
               style={{
-                fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
+                fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)',
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
               }}
@@ -291,11 +291,11 @@ export function MinimalStatsSection({
     <section
       id="impact-section"
       ref={sectionRef}
-      className={`py-12 sm:py-16 relative`}
+      className={`relative py-10 sm:py-12`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={headerRef} className="text-center mb-12">
+        <div ref={headerRef} className="mb-10 text-center">
           <h2
             className="font-bold mb-4"
             style={{
@@ -310,11 +310,11 @@ export function MinimalStatsSection({
           {subtitle && (
             <p
               style={{
-                fontSize: '1.25rem',
+              fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
                 color: isDark ? 'rgba(255,255,255,0.75)' : '#4b5563',
-                marginTop: '1rem',
+                marginTop: '0.75rem',
               }}
             >
               {subtitle}
@@ -328,11 +328,11 @@ export function MinimalStatsSection({
 
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
-            <div className="flex flex-col items-center mb-12">
-              <TabsList className="relative h-auto p-2 rounded-full border border-white/15 backdrop-blur-md" style={{ background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
+            <div className="mb-10 flex flex-col items-center">
+              <TabsList className="relative h-auto border border-white/15 p-2 backdrop-blur-md" style={{ background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
                 <TabsTrigger
                   value="impact"
-                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
+                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 transition-all duration-300
                     data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                     ${isDark
                       ? 'data-[state=active]:bg-climate-green data-[state=active]:text-white text-white/60 hover:text-white/90'
@@ -346,7 +346,7 @@ export function MinimalStatsSection({
                 </TabsTrigger>
                 <TabsTrigger
                   value="targets"
-                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 rounded-full transition-all duration-300
+                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 transition-all duration-300
                     data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                     ${isDark
                       ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-white/60 hover:text-white/90'
@@ -365,7 +365,7 @@ export function MinimalStatsSection({
               <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
                 {/* Image side - stays the same */}
                 <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-lg" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-4/5 overflow-hidden border border-white/10 shadow-lg" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     <Image
                       src={imageSrc}
                       alt={imageAlt || ''}
@@ -401,7 +401,7 @@ export function MinimalStatsSection({
               </>
             )}
 
-            <div className={`mt-16 pt-12 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'}`} style={{ marginBottom: 0 }}>
+            <div className={`mt-12 pt-8 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'}`} style={{ marginBottom: 0 }}>
 
             </div>
           </Tabs>
@@ -411,7 +411,7 @@ export function MinimalStatsSection({
               <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
                 {/* Image side */}
                 <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative mx-auto max-w-xl w-full aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/20 shadow-lg">
+                  <div className="relative mx-auto max-w-xl w-full aspect-4/5 overflow-hidden border border-white/10 bg-black/20 shadow-lg">
                     <Image
                       src={imageSrc}
                       alt={imageAlt || ''}
@@ -441,7 +441,7 @@ export function MinimalStatsSection({
                       <p
                         className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                         style={{
-                          fontSize: '1.1rem',
+                        fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
                           fontFamily: typography.fonts.body,
                           lineHeight: typography.lineHeights.relaxed,
                         }}
@@ -476,7 +476,7 @@ export function MinimalStatsSection({
                     <p
                       className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                       style={{
-                        fontSize: '1.25rem',
+                        fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
                         fontFamily: typography.fonts.body,
                         lineHeight: typography.lineHeights.relaxed,
                       }}

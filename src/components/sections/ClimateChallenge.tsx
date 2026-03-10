@@ -301,7 +301,7 @@ export default function ClimateChallenge({
     <section
       ref={sectionRef}
       aria-labelledby="climate-challenge-heading"
-      className={`relative py-16 sm:py-20 overflow-hidden bg-section-green text-white ${className}`}
+      className={`relative overflow-hidden bg-section-green py-12 sm:py-14 text-white ${className}`}
     >
       {/* Environmental image with dark branded overlay */}
       <div
@@ -327,9 +327,9 @@ export default function ClimateChallenge({
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[60%_40%] lg:gap-14">
           {/* Left: Text Content */}
-          <div ref={textContentRef} className="space-y-8">
+          <div ref={textContentRef} className="space-y-7">
             <h2
               id="climate-challenge-heading"
               className="font-bold text-white"
@@ -352,7 +352,7 @@ export default function ClimateChallenge({
             <p
               className="text-white/85"
               style={{
-                fontSize: "clamp(1rem, 1.5vw, 1.125rem)",
+                fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
               }}
@@ -367,7 +367,7 @@ export default function ClimateChallenge({
 
             {/* Key Statistic Callout */}
             <div
-              className="stat-callout relative p-6 rounded-2xl border"
+              className="stat-callout relative border p-5 sm:p-6"
               style={{
                 background: "rgba(255, 255, 255, 0.08)",
                 borderColor: "rgba(255, 255, 255, 0.24)",
@@ -411,7 +411,7 @@ export default function ClimateChallenge({
               <p
                 className="text-white/80"
                 style={{
-                  fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
+                  fontSize: "clamp(0.8125rem, 1vw, 0.875rem)",
                   fontFamily: typography.fonts.body,
                   lineHeight: typography.lineHeights.normal,
                 }}
@@ -441,7 +441,7 @@ export default function ClimateChallenge({
                     key={index}
                     className="flex items-center gap-3 text-white/80"
                     style={{
-                      fontSize: "clamp(0.9375rem, 1.2vw, 1rem)",
+                      fontSize: "clamp(0.875rem, 1vw, 0.9375rem)",
                       fontFamily: typography.fonts.body,
                     }}
                   >
@@ -466,7 +466,7 @@ export default function ClimateChallenge({
 
           {/* Right: Visual Content - Icon Grid */}
           <div ref={visualContentRef} className="relative">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
               {[
                 {
                   icon: Wind,
@@ -491,16 +491,17 @@ export default function ClimateChallenge({
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="icon-card relative p-8 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  className="icon-card relative border p-6 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
                   style={{
                     background: "rgba(255, 255, 255, 0.1)",
                     borderColor: "rgba(255, 255, 255, 0.22)",
                   }}
                 >
                   <div
-                    className="icon-card-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-4 mx-auto"
+                    className="icon-card-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center border"
                     style={{
                       background: `${item.color}15`,
+                      borderColor: `${item.color}30`,
                     }}
                   >
                     <item.icon
@@ -512,8 +513,9 @@ export default function ClimateChallenge({
                   <p
                     className="text-center text-white/90 font-medium"
                     style={{
-                      fontSize: "clamp(0.875rem, 1vw, 0.9375rem)",
+                      fontSize: "clamp(0.8125rem, 0.95vw, 0.875rem)",
                       fontFamily: typography.fonts.body,
+                      lineHeight: typography.lineHeights.normal,
                     }}
                   >
                     {item.label}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import Image from "next/image";
+import { Eye, FlagBanner, UsersThree } from "@phosphor-icons/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
@@ -11,10 +11,9 @@ interface BeliefCard {
   title: string;
   description: string;
   accent: string;
-  imageSrc: string;
-  imageAlt: string;
-  focus: string;
-  evidence: string;
+  icon: typeof Eye;
+  supportingText?: string;
+  values?: string[];
 }
 
 interface FoundingBeliefsSectionProps {
@@ -25,32 +24,35 @@ const beliefs: BeliefCard[] = [
   {
     title: "Vision",
     description:
-      "A climate-resilient and prosperous Africa powered by practical, scalable green enterprise solutions.",
+      "Sustainable Enterprises and Climate Resilient Communities",
     accent: "#80c738",
-    imageSrc: "/images/sectors/agriculture.webp",
-    imageAlt: "Farm landscape representing regenerative and climate-smart enterprise solutions",
-    focus: "Resilient livelihoods",
-    evidence: "Climate-smart agriculture and nature-based adaptation",
+    icon: Eye,
+    supportingText:
+      "We envision thriving enterprises driving inclusive growth while strengthening the resilience of communities.",
   },
   {
     title: "Mission",
     description:
-      "We enable innovators, SMEs, and partners to build market-ready climate solutions for communities and cities.",
+      "Catalyzing Climate Entrepreneurship in Africa",
     accent: "#00addd",
-    imageSrc: "/images/sectors/mobility.jpg",
-    imageAlt: "Sustainable transport corridor representing scalable climate innovation",
-    focus: "Market transformation",
-    evidence: "Enterprise acceleration, finance readiness, and ecosystem partnerships",
+    icon: FlagBanner,
+    supportingText:
+      "We back entrepreneurs, partners, and market actors building practical climate solutions with long-term impact.",
   },
   {
-    title: "Values",
+    title: "Core Values",
     description:
-      "Integrity, collaboration, innovation, and measurable impact guide how we design, support, and scale solutions.",
+      "People-centric, Inclusivity, Professionalism, Integrity, Innovation and Collaboration",
     accent: "#E97451",
-    imageSrc: "/images/sectors/crosscutting.jpg",
-    imageAlt: "Community-centered sustainability work showing inclusion and collaboration",
-    focus: "People-centered impact",
-    evidence: "Inclusive growth, accountability, and long-term climate outcomes",
+    icon: UsersThree,
+    values: [
+      "People-centric",
+      "Inclusivity",
+      "Professionalism",
+      "Integrity",
+      "Innovation",
+      "Collaboration",
+    ],
   },
 ];
 
@@ -113,53 +115,22 @@ export default function FoundingBeliefs({
 
       if (cards && cards.length > 0) {
         gsap.set(cards, {
-          y: 36,
-          rotateX: -6,
-          transformPerspective: 900,
+          opacity: 0,
+          y: 28,
         });
 
         gsap.to(cards, {
+          opacity: 1,
           y: 0,
-          rotateX: 0,
-          duration: 0.95,
+          duration: 0.8,
           ease: "power3.out",
           force3D: true,
-          stagger: 0.14,
+          stagger: 0.12,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 75%",
+            start: "top 80%",
             toggleActions: "play none none reverse",
           },
-        });
-
-        cards.forEach((card, index) => {
-          const image = card.querySelector(".belief-image");
-          if (!image) return;
-
-          gsap.set(image, { scale: 1.08 });
-          gsap.to(image, {
-            scale: 1,
-            duration: 0.85,
-            ease: "power3.out",
-            force3D: true,
-            delay: index * 0.14 + 0.18,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 75%",
-              toggleActions: "play none none reverse",
-            },
-          });
-
-          gsap.to(image, {
-            yPercent: -6,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-          });
         });
       }
 
@@ -173,15 +144,15 @@ export default function FoundingBeliefs({
     <section
       ref={sectionRef}
       aria-labelledby="founding-beliefs-heading"
-      className={`relative py-20 sm:py-28 overflow-hidden bg-[#d8f1fb] ${className}`}
+      className={`relative overflow-hidden bg-[#eef8fb] py-14 sm:py-16 ${className}`}
     >
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,173,221,0.16) 0%, rgba(0,173,221,0.08) 55%, rgba(0,173,221,0.12) 100%)," +
-            "radial-gradient(60% 55% at 50% 0%, rgba(0,173,221,0.26) 0%, rgba(0,173,221,0) 72%)," +
-            "radial-gradient(40% 45% at 80% 85%, rgba(0,173,221,0.18) 0%, rgba(0,173,221,0) 75%)",
+            "linear-gradient(180deg, rgba(0,173,221,0.07) 0%, rgba(128,199,56,0.05) 100%)," +
+            "radial-gradient(55% 55% at 50% 0%, rgba(0,173,221,0.12) 0%, rgba(0,173,221,0) 72%)," +
+            "radial-gradient(36% 40% at 80% 85%, rgba(128,199,56,0.12) 0%, rgba(128,199,56,0) 75%)",
         }}
         aria-hidden
       />
@@ -197,188 +168,151 @@ export default function FoundingBeliefs({
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
-        <div ref={headerRef} className="text-center mb-14 sm:mb-18">
-          <div className="belief-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-gray-100 shadow-sm mb-6">
+        <div ref={headerRef} className="text-center mb-10 sm:mb-12">
+          <div className="belief-badge inline-flex items-center gap-2 rounded-full border border-[#b9dfe8] bg-white/85 px-4 py-2 shadow-sm mb-5">
             <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-              Our Philosophy
+              Our Foundation
             </span>
           </div>
 
           <h2
             id="founding-beliefs-heading"
-            className="font-bold text-gray-900 mb-5"
+            className="font-bold text-gray-900 mb-4"
             style={{
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              fontSize: "clamp(1.9rem, 4.5vw, 3rem)",
               fontFamily: typography.fonts.heading,
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
             }}
           >
-            What We Believe
+            Vision, Mission & Values
           </h2>
 
           <p
-            className="text-gray-600 max-w-2xl mx-auto text-lg"
+            className="mx-auto max-w-3xl text-gray-600"
             style={{
+              fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            The core principles that drive everything we do
+            The purpose and principles that shape how KCIC serves enterprises, ecosystems, and climate-resilient communities.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {beliefs.map((belief, index) => (
             <article key={index} className="belief-card group relative">
               <div
-                className="relative rounded-3xl overflow-hidden shadow-xl transition-all duration-600 hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
-                style={{ height: "520px" }}
+                className="relative flex h-full min-h-[320px] flex-col border border-white/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(17,24,39,0.12)]"
+                style={{ borderTop: `4px solid ${belief.accent}` }}
               >
-                {/* ── FULL-BLEED IMAGE ── fills entire card ── */}
-                <Image
-                  src={belief.imageSrc}
-                  alt={belief.imageAlt}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                  className="belief-image object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                />
-
-                {/* Cinematic gradient — darker at bottom for text legibility */}
                 <div
-                  className="absolute inset-0 z-1"
+                  className="absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 30%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.82) 100%)",
+                      "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.92) 100%)",
                   }}
                   aria-hidden
                 />
 
-                {/* Subtle brand color wash */}
                 <div
-                  className="absolute inset-0 z-1 opacity-40 mix-blend-multiply"
+                  className="absolute right-0 top-0 h-24 w-24 opacity-10"
                   style={{
-                    background: `linear-gradient(160deg, ${belief.accent}45 0%, transparent 55%)`,
+                    background: `radial-gradient(circle at top right, ${belief.accent} 0%, transparent 72%)`,
                   }}
                   aria-hidden
                 />
 
-                {/* ── TOP: Sequence number + Focus tag ── */}
-                <div className="absolute top-5 left-5 right-5 z-10 flex items-center justify-between">
-                  {/* Large sequence number */}
-                  <span
-                    className="font-black leading-none select-none"
-                    style={{
-                      fontSize: "54px",
-                      color: "rgba(255,255,255,0.15)",
-                      fontFamily: typography.fonts.heading,
-                      WebkitTextStroke: `1.5px ${belief.accent}80`,
-                    }}
-                  >
-                    {`0${index + 1}`}
-                  </span>
-
-                  {/* Focus pill */}
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-bold uppercase text-white backdrop-blur-md"
-                    style={{
-                      background: `${belief.accent}CC`,
-                      fontSize: "11px",
-                      letterSpacing: "0.1em",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full bg-white/80"
-                      aria-hidden
-                    />
-                    {belief.focus}
-                  </span>
-                </div>
-
-                {/* ── BOTTOM: Frosted glass content panel ── */}
-                <div className="absolute bottom-0 left-0 right-0 z-10" style={{ maxHeight: "58%", overflow: "hidden" }}>
-                  {/* Brand accent bar */}
+                <div className="relative z-10 flex h-full flex-col">
                   <div
-                    className="h-[3px] w-full"
+                    className="mb-6 flex h-14 w-14 items-center justify-center border"
                     style={{
-                      background: `linear-gradient(90deg, ${belief.accent} 0%, ${belief.accent}60 60%, transparent 100%)`,
-                    }}
-                    aria-hidden
-                  />
-
-                  <div
-                    className="px-6 pt-5 pb-6 backdrop-blur-xl transition-all duration-500 group-hover:backdrop-blur-2xl"
-                    style={{
-                      background: "rgba(255,255,255,0.12)",
+                      color: belief.accent,
+                      borderColor: `${belief.accent}33`,
+                      background: `${belief.accent}12`,
                     }}
                   >
-                    {/* Title */}
+                    <belief.icon className="h-7 w-7" weight="duotone" aria-hidden />
+                  </div>
+
+                  <div className="mb-4 flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
                     <h3
-                      className="font-extrabold mb-2.5 tracking-tight"
+                      className="font-bold text-slate-900"
                       style={{
-                        color: "#ffffff",
-                        fontSize: "34px",
+                        fontSize: "clamp(1.35rem, 2vw, 1.75rem)",
                         fontFamily: typography.fonts.heading,
                         lineHeight: 1.15,
-                        textShadow: "0 2px 12px rgba(0,0,0,0.3)",
                       }}
                     >
                       {belief.title}
                     </h3>
-
-                    {/* Description */}
-                    <p
-                      className="mb-3"
+                    <span
+                      className="font-semibold"
                       style={{
-                        color: "rgba(255,255,255,0.92)",
-                        fontSize: "15px",
+                        fontSize: "0.875rem",
+                        color: belief.accent,
                         fontFamily: typography.fonts.body,
-                        lineHeight: 1.55,
-                        textShadow: "0 1px 4px rgba(0,0,0,0.2)",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
                       }}
                     >
-                      {belief.description}
-                    </p>
+                      {`0${index + 1}`}
+                    </span>
+                  </div>
 
-                    {/* Evidence line with brand dot */}
-                    <div className="flex items-start gap-2 pt-2.5 border-t border-white/15">
-                      <span
-                        className="mt-1.5 w-2 h-2 rounded-full shrink-0"
-                        style={{ background: belief.accent }}
-                        aria-hidden
-                      />
-                      <p
-                        className=""
-                        style={{
-                          color: "rgba(255,255,255,0.78)",
-                          fontSize: "13px",
-                          fontFamily: typography.fonts.body,
-                          lineHeight: 1.45,
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {belief.evidence}
-                      </p>
+                  <p
+                    className="text-slate-900"
+                    style={{
+                      fontSize: "clamp(1rem, 1.3vw, 1.125rem)",
+                      fontFamily: typography.fonts.body,
+                      lineHeight: 1.5,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {belief.description}
+                  </p>
+
+                  {belief.supportingText ? (
+                    <p
+                      className="mt-4 text-slate-600"
+                      style={{
+                        fontSize: "0.95rem",
+                        fontFamily: typography.fonts.body,
+                        lineHeight: typography.lineHeights.relaxed,
+                      }}
+                    >
+                      {belief.supportingText}
+                    </p>
+                  ) : null}
+
+                  {belief.values ? (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {belief.values.map((value) => (
+                        <span
+                          key={value}
+                          className="inline-flex border px-3 py-2 text-sm text-slate-700"
+                          style={{
+                            borderColor: `${belief.accent}30`,
+                            background: `${belief.accent}10`,
+                            fontFamily: typography.fonts.body,
+                          }}
+                        >
+                          {value}
+                        </span>
+                      ))}
                     </div>
+                  ) : null}
+
+                  <div
+                    className="mt-auto pt-6"
+                    style={{
+                      fontSize: "0.875rem",
+                      color: "#475569",
+                      fontFamily: typography.fonts.body,
+                    }}
+                  >
+                    Grounded in enterprise growth, resilient communities, and accountable partnerships.
                   </div>
                 </div>
-
-                {/* Inner highlight ring on hover */}
-                <div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-2"
-                  style={{
-                    boxShadow: `inset 0 0 0 2px ${belief.accent}50, inset 0 0 30px ${belief.accent}15`,
-                  }}
-                  aria-hidden
-                />
               </div>
             </article>
           ))}

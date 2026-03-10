@@ -1,11 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useRef, useLayoutEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  CalendarBlank as Calendar,
   ArrowUpRight,
-  TrendUp as TrendingUp,
   PlayCircle,
   CaretLeft,
   CaretRight,
@@ -13,7 +11,6 @@ import {
 } from "@phosphor-icons/react";
 import { colors, typography } from "@/lib/design-system";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
@@ -206,6 +203,23 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   const currentPodcastThumbnail = currentPodcast
     ? resolvePodcastThumbnail(currentPodcast)
     : null;
+  const newsroomLinks = [
+    {
+      title: "Press Releases",
+      description: "Official KCIC announcements, partner updates, and organization news.",
+      href: "/newsroom/press-release",
+    },
+    {
+      title: "Events",
+      description: "Forums, showcases, and upcoming opportunities to engage with the ecosystem.",
+      href: "/newsroom/events",
+    },
+    {
+      title: "Publications",
+      description: "Reports, insights, and knowledge products from our work across the region.",
+      href: "/newsroom/publications",
+    },
+  ] as const;
 
   const handlePodcastOpen = (item?: NewsItem | null) => {
     if (!item) return;
@@ -363,25 +377,14 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className={cn("py-12 sm:py-16 bg-[#faf6f0]", className)}>
+    <section ref={sectionRef} className={cn("bg-[#f7fbf8] py-10 sm:py-12", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div ref={headerRef} className="text-center mb-12 sm:mb-16">
+        <div ref={headerRef} className="mb-10 text-center sm:mb-12">
           <div>
-            <Badge
-              className="mb-4 inline-flex items-center gap-1 px-4 py-1.5 border rounded-full"
-              style={{
-                backgroundColor: colors.primary.green[50],
-                borderColor: colors.primary.green[200],
-                color: colors.primary.green[700],
-              }}
-            >
-              <TrendingUp className="h-3 w-3" />
-              Latest updates
-            </Badge>
             <h2
               className="font-bold mb-4"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                fontSize: "clamp(1.9rem, 4.5vw, 3rem)",
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
                 lineHeight: typography.lineHeights.tight,
@@ -390,8 +393,9 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               News & Insights
             </h2>
             <p
-              className="text-base sm:text-lg max-w-3xl mx-auto"
+              className="mx-auto max-w-3xl"
               style={{
+                fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
                 fontFamily: typography.fonts.body,
                 color: colors.secondary.gray[600],
                 lineHeight: typography.lineHeights.relaxed,
@@ -404,27 +408,85 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
         <div
           ref={panelRef}
-          className="rounded-4xl border border-[#e7e1d8] bg-white/70 p-5 sm:p-8 lg:p-10 shadow-[0_20px_50px_rgba(26,31,46,0.12)]"
+          className="border border-[#d4e1d8] bg-white/92 p-0 shadow-[0_20px_50px_rgba(26,31,46,0.08)]"
         >
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-            <div ref={leftRef} className="space-y-5">
-              <div className="flex items-center justify-between gap-4">
+          <div className="grid lg:grid-cols-3 lg:divide-x-2 lg:divide-[#c7d5cb]">
+            <div ref={leftRef} className="p-6 sm:p-8">
+              <div
+                className="mb-5 font-bold leading-tight"
+                style={{
+                  fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
+                  fontFamily: typography.fonts.heading,
+                  color: colors.secondary.gray[900],
+                }}
+              >
+                News
+              </div>
+
+              <div className="space-y-0 border-y-2 border-[#d6e1d8]">
+                {latestArticles.map((item, index) => (
+                  <Link
+                    key={item.id}
+                    href={`/news/${item.slug}`}
+                    ref={(el) => { rowsRef.current[index] = el; }}
+                    className="group block border-b border-[#d6e1d8] py-4 last:border-b-0"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 uppercase tracking-wider text-gray-500" style={{ fontSize: "11px", lineHeight: "14px", margin: 0 }}>
+                          <span className={cn("font-semibold", resolveCategoryTone(item.category || "News"))}>
+                            {item.category || "News"}
+                          </span>
+                          <span>•</span>
+                          <span>{formatDate(item.publishedAt)}</span>
+                        </div>
+                        <div
+                          className="line-clamp-3 font-semibold leading-snug text-gray-900 group-hover:underline decoration-[#80c738] underline-offset-4"
+                          style={{ fontSize: "clamp(1rem, 1.25vw, 1.15rem)", margin: 0 }}
+                        >
+                          {item.title}
+                        </div>
+
+                        {item.excerpt && (
+                          <div className="mt-2 line-clamp-2 text-gray-700" style={{ fontSize: "14px", lineHeight: "22px", margin: 0 }}>
+                            {item.excerpt}
+                          </div>
+                        )}
+                      </div>
+
+                      <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
+                        <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+
+                {latestArticles.length === 0 && (
+                  <p className="border border-dashed border-gray-300 bg-[#f6f6f6] p-5 text-sm text-gray-600">
+                    No latest updates available yet.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div ref={rightRef} className="border-t-2 border-[#c7d5cb] p-6 sm:p-8 lg:border-t-0">
+              <div className="mb-5 flex items-center justify-between gap-4">
                 <div
                   className="font-bold leading-tight"
                   style={{
-                    fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)",
+                    fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
                     fontFamily: typography.fonts.heading,
                     color: colors.secondary.gray[900],
                   }}
                 >
-                  Featured Podcast
+                  Podcasts
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={showPreviousPodcast}
-                    className="h-10 w-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:text-black hover:border-gray-400 transition"
+                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
                     aria-label="Previous podcast"
                   >
                     <CaretLeft className="mx-auto h-4 w-4" />
@@ -432,7 +494,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   <button
                     type="button"
                     onClick={showNextPodcast}
-                    className="h-10 w-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:text-black hover:border-gray-400 transition"
+                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
                     aria-label="Next podcast"
                   >
                     <CaretRight className="mx-auto h-4 w-4" />
@@ -446,8 +508,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 className="group block w-full text-left"
                 aria-label={`Play podcast: ${currentPodcast?.title || "Featured podcast"}`}
               >
-                <div className="relative aspect-square overflow-hidden rounded-2xl bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] shadow-md p-4 sm:p-5">
-                  <div className="relative h-full w-full overflow-hidden rounded-xl bg-black/35">
+                <div className="relative aspect-4/5 overflow-hidden border border-[#d6e1d8] bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] p-4 sm:p-5 shadow-md">
+                  <div className="relative h-full w-full overflow-hidden bg-black/35">
                     {currentPodcastThumbnail ? (
                       currentPodcastThumbnail.startsWith("http") ? (
                         <img
@@ -461,7 +523,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           src={currentPodcastThumbnail}
                           alt={currentPodcast?.title || "Podcast preview"}
                           fill
-                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          sizes="(max-width: 1024px) 100vw, 33vw"
                           className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                       )
@@ -473,95 +535,95 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                     )}
                   </div>
 
-                  <div className="absolute inset-4 sm:inset-5 rounded-xl bg-linear-to-t from-black/65 via-black/15 to-transparent" />
+                  <div className="absolute inset-4 bg-linear-to-t from-black/65 via-black/15 to-transparent sm:inset-5" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transition-transform duration-300 group-hover:scale-105">
+                    <span className="inline-flex h-16 w-16 items-center justify-center border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
                       <PlayCircle className="h-9 w-9" weight="fill" />
                     </span>
                   </div>
-                  <div className="absolute left-8 right-8 bottom-8 text-white">
-                    <span className="block uppercase tracking-wider text-white/80 mb-1" style={{ fontSize: "11px", lineHeight: "14px" }}>Podcast</span>
-                    <div className="font-semibold leading-tight line-clamp-2" style={{ fontSize: "16px", lineHeight: "20px", margin: 0 }}>
+                  <div className="absolute bottom-8 left-8 right-8 text-white">
+                    <span className="mb-1 block uppercase tracking-wider text-white/80" style={{ fontSize: "11px", lineHeight: "14px" }}>Podcast</span>
+                    <div className="line-clamp-2 font-semibold leading-tight" style={{ fontSize: "16px", lineHeight: "20px", margin: 0 }}>
                       {currentPodcast?.title || "Podcast Episode"}
                     </div>
                   </div>
                 </div>
               </button>
 
-              <Link href="/newsroom">
-                <Button
-                  className="rounded-full pl-2 pr-5 py-2 h-auto text-sm font-semibold text-gray-900 bg-transparent hover:bg-transparent"
-                >
-                  <span className="mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-b from-[#f8a23d] to-[#e97451] text-white shadow-sm">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                  View all news
-                </Button>
-              </Link>
+              <div className="mt-4 space-y-2 border-t-2 border-[#d6e1d8] pt-4">
+                {featuredPodcasts.slice(0, 2).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handlePodcastOpen(item)}
+                    className="flex w-full items-start justify-between gap-3 border border-[#d6e1d8] px-4 py-3 text-left transition hover:border-[#80c738]"
+                  >
+                    <span className="min-w-0">
+                      <span className="block line-clamp-2 text-sm font-medium leading-5 text-slate-900">
+                        {item.title}
+                      </span>
+                      {item.publishedAt ? (
+                        <span className="mt-1 block text-xs leading-5 text-slate-500">
+                          {formatDate(item.publishedAt)}
+                        </span>
+                      ) : null}
+                    </span>
+                    <PlayCircle className="mt-1 h-5 w-5 shrink-0 text-[#80c738]" weight="fill" />
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div ref={rightRef} className="lg:pl-2">
+            <div className="border-t-2 border-[#c7d5cb] p-6 sm:p-8 lg:border-t-0">
               <div
-                className="font-bold mb-5"
+                className="mb-5 font-bold leading-tight"
                 style={{
-                  fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)",
+                  fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
                   fontFamily: typography.fonts.heading,
                   color: colors.secondary.gray[900],
                 }}
               >
-                Latest Updates
+                Newsroom Categories
               </div>
 
-              <div className="space-y-0">
-                {latestArticles.map((item, index) => (
+              <div className="space-y-0 border-y-2 border-[#d6e1d8]">
+                {newsroomLinks.map((item) => (
                   <Link
-                    key={item.id}
-                    href={`/news/${item.slug}`}
-                    ref={(el) => { rowsRef.current[index] = el; }}
-                    className="group block border-b border-[#d9e2c7] py-4 first:pt-1 last:border-b-0"
+                    key={item.href}
+                    href={item.href}
+                    className="group block border-b border-[#d6e1d8] py-4 last:border-b-0"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 uppercase tracking-wider text-gray-500" style={{ fontSize: "11px", lineHeight: "14px", margin: 0 }}>
-                          <span className={cn("font-semibold", resolveCategoryTone(item.category || "News"))}>
-                            {item.category || "News"}
-                          </span>
-                          <span>•</span>
-                          <span>{formatDate(item.publishedAt)}</span>
-                          {item.readTime && (
-                            <>
-                              <span>•</span>
-                              <span>{item.readTime}</span>
-                            </>
-                          )}
-                        </div>
                         <div
-                          className="font-semibold text-gray-900 leading-snug line-clamp-3 group-hover:underline decoration-[#80c738] underline-offset-4"
-                          style={{ fontSize: "clamp(1rem, 1.45vw, 1.45rem)", margin: 0 }}
+                          className="font-semibold leading-snug text-slate-900 group-hover:underline decoration-[#80c738] underline-offset-4"
+                          style={{ fontSize: "clamp(1rem, 1.2vw, 1.1rem)" }}
                         >
                           {item.title}
                         </div>
-
-                        {item.excerpt && (
-                          <div className="mt-2 text-gray-700 line-clamp-2" style={{ fontSize: "14px", lineHeight: "22px", margin: 0 }}>
-                            {item.excerpt}
-                          </div>
-                        )}
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                          {item.description}
+                        </p>
                       </div>
 
-                      <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gray-300 text-gray-500 group-hover:border-[#80c738] group-hover:text-[#80c738] transition">
+                      <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
                         <ArrowUpRight className="h-4 w-4" />
                       </span>
                     </div>
                   </Link>
                 ))}
-
-                {latestArticles.length === 0 && (
-                  <p className="rounded-xl border border-dashed border-gray-300 bg-[#f6f6f6] p-5 text-sm text-gray-600">
-                    No latest updates available yet.
-                  </p>
-                )}
               </div>
+
+              <Link href="/newsroom">
+                <Button
+                  className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-semibold text-gray-900 hover:bg-transparent"
+                >
+                  <span className="mr-3 inline-flex h-10 w-10 items-center justify-center bg-linear-to-b from-[#f8a23d] to-[#e97451] text-white shadow-sm">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                  Explore newsroom
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

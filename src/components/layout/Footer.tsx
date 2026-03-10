@@ -15,10 +15,7 @@ import {
   PaperPlaneTilt,
   ShieldCheck,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
-import { colors } from "@/lib/design-system";
 import { WhistleblowerModal } from "@/components/whistleblower/WhistleblowerModal";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { gsap } from "gsap";
@@ -36,242 +33,293 @@ const socialIcons = {
   youtube: YoutubeLogo,
 };
 
+// Fixed colour palette so the footer is never affected by page light/dark theme
+const C = {
+  bg:          "#141922",
+  border:      "rgba(255,255,255,0.10)",
+  borderHover: "rgba(128,199,56,0.55)",
+  label:       "rgba(255,255,255,0.40)",
+  body:        "rgba(255,255,255,0.68)",
+  muted:       "rgba(255,255,255,0.48)",
+  white:       "#ffffff",
+  green:       "#80c738",
+  blue:        "#00addd",
+  orange:      "#e97451",
+} as const;
+
 export default function Footer({ data }: FooterProps) {
-  const [email, setEmail] = useState("");
+  const [email, setEmail]               = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isWhistleblowerOpen, setIsWhistleblowerOpen] = useState(false);
   const { shouldDisableAnimations } = useAccessibilityClasses();
 
   const footerRef = useRef<HTMLElement | null>(null);
-  const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const bottomBarRef = useRef<HTMLDivElement | null>(null);
+  const innerRef  = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    if (shouldDisableAnimations?.() || !footerRef.current) return;
-
+    if (shouldDisableAnimations?.() || !innerRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
-
     const ctx = gsap.context(() => {
-      columnRefs.current.forEach((column, index) => {
-        if (!column) return;
-
-        gsap.fromTo(
-          column,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: "power3.out",
-            delay: index * 0.1,
-            scrollTrigger: {
-              trigger: column,
-              start: "top 92%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-
-      if (bottomBarRef.current) {
-        gsap.fromTo(
-          bottomBarRef.current,
-          { opacity: 0, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: bottomBarRef.current,
-              start: "top 95%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      ScrollTrigger.refresh();
+      gsap.fromTo(
+        innerRef.current,
+        { opacity: 0, y: 14 },
+        {
+          opacity: 1, y: 0, duration: 0.65, ease: "power3.out",
+          scrollTrigger: { trigger: innerRef.current, start: "top 96%", toggleActions: "play none none reverse" },
+        }
+      );
     }, footerRef);
-
     return () => ctx.revert();
   }, [shouldDisableAnimations]);
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!email) {
-      setSubmitMessage("Please enter your email address");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setSubmitMessage("Please enter a valid email address");
-      return;
-    }
-
+    if (!email) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
     setIsSubmitting(true);
-    setSubmitMessage("");
-
-    // Simulate API call
     setTimeout(() => {
-      setSubmitMessage("Thank you for subscribing!");
+      setSubmitMessage("Subscribed ✓");
       setEmail("");
       setIsSubmitting(false);
-    }, 1000);
+      setTimeout(() => setSubmitMessage(""), 3500);
+    }, 900);
   };
 
   return (
-    <footer ref={footerRef} className="relative overflow-hidden bg-[#1a1f2e] text-white">
-      <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-          }}
-        />
-      </div>
-
+    <footer
+      ref={footerRef}
+      style={{ backgroundColor: C.bg, colorScheme: "dark", color: C.white, position: "relative" }}
+    >
+      {/* top brand line */}
       <div
-        className="pointer-events-none absolute top-0 left-0 h-[3px] w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, #80c738 0%, #00addd 55%, #80c738 100%)",
-        }}
         aria-hidden
+        style={{
+          position: "absolute", top: 0, left: 0, height: 2, width: "100%",
+          background: "linear-gradient(90deg,#80c738 0%,#00addd 55%,#80c738 100%)",
+        }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div ref={(el) => { columnRefs.current[0] = el; }}>
-            <Link href="/" className="inline-flex items-center rounded-xl bg-white/95 px-3 py-2 mb-6" aria-label="Kenya Climate Innovation Centre home">
-              <Image
-                src="/images/hero/KCIC logo.png"
-                alt="Kenya Climate Innovation Centre logo"
-                width={150}
-                height={44}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
+      <div ref={innerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <h3 className="text-base font-semibold text-white mb-4">Quicklinks</h3>
-            <ul className="space-y-2">
-              {data.quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/80 hover:text-[#80c738] transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+        {/* ── MAIN ROW ── */}
+        <div className="flex flex-col gap-8 py-8 lg:flex-row lg:items-start lg:gap-10 lg:py-9">
+
+          {/* 1 · Logo + tagline */}
+          <div className="shrink-0 lg:w-44">
+            <Link href="/" aria-label="KCIC home">
+              <span
+                className="mb-3 inline-flex px-2.5 py-1.5"
+                style={{ backgroundColor: "rgba(255,255,255,0.96)" }}
+              >
+                <Image
+                  src="/images/hero/KCIC logo.png"
+                  alt="KCIC"
+                  width={110}
+                  height={32}
+                  className="h-8 w-auto"
+                  priority
+                />
+              </span>
+            </Link>
+            <p style={{ fontSize: 11, lineHeight: "18px", letterSpacing: "0.12em", color: C.muted, textTransform: "uppercase", marginTop: 6 }}>
+              Climate Innovation<br />Centre — Kenya
+            </p>
           </div>
 
-          <div ref={(el) => { columnRefs.current[1] = el; }}>
-            <h3 className="text-base font-semibold text-white mb-4">Office Address</h3>
+          {/* 2 · Nav links */}
+          <div className="flex flex-col gap-1.5 lg:w-28 lg:pt-0.5">
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase", marginBottom: 4 }}>
+              Pages
+            </span>
+            {data.quickLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{ fontSize: 13, lineHeight: "24px", color: C.body, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.green)}
+                onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
-            <address className="space-y-3 not-italic text-sm text-white/80 mb-6">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 text-[#80c738] mt-1 shrink-0" />
+          {/* 3 · Contact */}
+          <div className="flex flex-col gap-2 lg:flex-1 lg:pt-0.5">
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase", marginBottom: 4 }}>
+              Contact
+            </span>
+            <address className="not-italic" style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, lineHeight: "22px", color: C.body }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                <MapPin style={{ marginTop: 3, width: 14, height: 14, flexShrink: 0, color: C.green }} />
                 <span>{data.contact.address}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-[#00addd] shrink-0" />
-                <a href={`tel:${data.contact.phone}`} className="hover:text-white transition-colors">
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Phone style={{ width: 14, height: 14, flexShrink: 0, color: C.blue }} />
+                <a href={`tel:${data.contact.phone}`} style={{ color: C.body, textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.white)}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}>
                   {data.contact.phone}
                 </a>
               </div>
-              <div className="flex items-center gap-3">
-                <Envelope className="h-4 w-4 text-[#E97451] shrink-0" />
-                <a href={`mailto:${data.contact.email}`} className="hover:text-white transition-colors">
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Envelope style={{ width: 14, height: 14, flexShrink: 0, color: C.orange }} />
+                <a href={`mailto:${data.contact.email}`} style={{ color: C.body, textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.white)}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}>
                   {data.contact.email}
                 </a>
               </div>
             </address>
+          </div>
 
-            <h3 className="text-base font-semibold text-white mb-3">Social Media</h3>
-            <div className="flex flex-wrap gap-2.5">
+          {/* 4 · Newsletter + social */}
+          <div className="flex flex-col gap-3 lg:w-72 lg:pt-0.5">
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase" }}>
+              Stay Updated
+            </span>
+            <p style={{ fontSize: 13, lineHeight: "22px", color: C.body, margin: 0 }}>
+              {data.newsletter.description}
+            </p>
+
+            <form
+              onSubmit={handleNewsletterSubmit}
+              style={{ display: "flex", gap: 0, height: 38 }}
+              aria-label="Newsletter signup"
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={data.newsletter.placeholder}
+                disabled={isSubmitting}
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  height: 38,
+                  border: `1px solid ${C.border}`,
+                  borderRight: "none",
+                  background: "rgba(255,255,255,0.06)",
+                  color: C.white,
+                  fontSize: 13,
+                  padding: "0 12px",
+                  outline: "none",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = C.green)}
+                onBlur={(e)  => (e.target.style.borderColor = C.border)}
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  height: 38,
+                  padding: "0 14px",
+                  background: C.green,
+                  border: "none",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  opacity: isSubmitting ? 0.6 : 1,
+                  transition: "opacity 0.2s",
+                }}
+              >
+                <PaperPlaneTilt style={{ width: 16, height: 16, color: C.white }} />
+              </button>
+            </form>
+
+            {submitMessage && (
+              <span style={{ fontSize: 12, color: C.green }}>{submitMessage}</span>
+            )}
+
+            {/* Social icons */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
               {data.socialMedia.map((social) => {
-                const IconComponent = socialIcons[social.icon as keyof typeof socialIcons] || XLogo;
-
+                const Icon = socialIcons[social.icon as keyof typeof socialIcons] || XLogo;
                 return (
                   <a
                     key={social.platform}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Follow KCIC on ${social.platform}`}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/85 transition-all hover:border-[#80c738] hover:text-[#80c738] hover:shadow-[0_0_18px_rgba(128,199,56,0.35)]"
+                    aria-label={`KCIC on ${social.platform}`}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 28,
+                      height: 28,
+                      border: `1px solid ${C.border}`,
+                      background: "rgba(255,255,255,0.04)",
+                      color: C.muted,
+                      transition: "border-color 0.2s, color 0.2s",
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLAnchorElement;
+                      el.style.borderColor = C.green;
+                      el.style.color = C.green;
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLAnchorElement;
+                      el.style.borderColor = C.border;
+                      el.style.color = C.muted;
+                    }}
                   >
-                    <IconComponent className="h-4 w-4" />
+                    <Icon style={{ width: 13, height: 13 }} />
                   </a>
                 );
               })}
             </div>
           </div>
-
-          <div ref={(el) => { columnRefs.current[2] = el; }}>
-            <h3 className="text-base font-semibold text-white mb-3">Mailing List Subscription</h3>
-            <p className="text-sm text-white/75 mb-4 leading-relaxed">
-              {data.newsletter.description}
-            </p>
-
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3" aria-label="Mailing list subscription">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={data.newsletter.placeholder}
-                  disabled={isSubmitting}
-                  className="h-11 rounded-full border-white/25 bg-white/10 text-white placeholder:text-white/50 focus-visible:ring-[#80c738] focus-visible:border-[#80c738]"
-                />
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="h-11 rounded-full px-6 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
-                  style={{ backgroundColor: colors.primary.green.DEFAULT }}
-                >
-                  <PaperPlaneTilt className="h-4 w-4 mr-2" />
-                  Subscribe
-                </Button>
-              </div>
-
-              {submitMessage && (
-                <div className={`text-xs ${submitMessage.includes("Thank you") ? "text-[#80c738]" : "text-[#ffb3a1]"}`}>
-                  {submitMessage}
-                </div>
-              )}
-            </form>
-          </div>
         </div>
 
-        <div ref={bottomBarRef} className="mt-10 pt-6 border-t border-white/15">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs sm:text-sm text-white/65 text-center sm:text-left">
-              {data.copyright}
-            </p>
-
-            <button
-              onClick={() => setIsWhistleblowerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
-              style={{ backgroundColor: colors.primary.green.DEFAULT }}
-            >
-              <ShieldCheck className="h-4 w-4" />
-              Whistleblower
-            </button>
-          </div>
+        {/* ── BOTTOM BAR ── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            borderTop: `1px solid ${C.border}`,
+            padding: "12px 0",
+            flexWrap: "wrap",
+          }}
+        >
+          <p style={{ fontSize: 11, color: C.label, margin: 0 }}>
+            {data.copyright}
+          </p>
+          <button
+            onClick={() => setIsWhistleblowerOpen(true)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              border: `1px solid ${C.border}`,
+              background: "transparent",
+              padding: "6px 12px",
+              fontSize: 11,
+              fontWeight: 500,
+              color: C.muted,
+              cursor: "pointer",
+              transition: "border-color 0.2s, color 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLButtonElement;
+              el.style.borderColor = C.borderHover;
+              el.style.color = C.white;
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLButtonElement;
+              el.style.borderColor = C.border;
+              el.style.color = C.muted;
+            }}
+          >
+            <ShieldCheck style={{ width: 13, height: 13, color: C.green }} />
+            Whistleblower
+          </button>
         </div>
       </div>
 
