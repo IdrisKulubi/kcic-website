@@ -124,7 +124,6 @@ export function ImageUpload({
                   setIsUploading(true);
                 }}
                 disabled={disabled}
-                config={{ mode: "auto" }}
                 appearance={{
                   container: "w-full border-none p-0",
                   uploadIcon: "hidden",
