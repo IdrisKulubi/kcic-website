@@ -33,6 +33,31 @@ export function ImageUpload({
 
   const isDocument = preset === "document" || endpoint === "documentUploader";
 
+  const getMaxSizeLabel = () => {
+    if (isDocument) return "PDF, DOCX up to 16MB";
+    if (endpoint === "logoUploader") return "PNG, JPG up to 4MB";
+    if (endpoint === "videoUploader") return "MP4, WEBM up to 32MB";
+    return "PNG, JPG up to 12MB";
+  };
+
+  const getFriendlyError = (error: Error) => {
+    const msg = error.message || "";
+    if (msg.includes("FileSizeMismatch") || msg.includes("file size") || msg.includes("too large")) {
+      if (isDocument) return "File is too large. Maximum size is 16MB.";
+      if (endpoint === "logoUploader") return "Image is too large. Maximum size is 4MB. Please resize your image and try again.";
+      if (endpoint === "videoUploader") return "Video is too large. Maximum size is 32MB.";
+      return "Image is too large. Maximum size is 12MB. Please resize your image and try again.";
+    }
+    if (msg.includes("InvalidFileType") || msg.includes("file type")) {
+      if (isDocument) return "Invalid file type. Please upload a PDF or DOCX file.";
+      return "Invalid file type. Please upload a PNG or JPG image.";
+    }
+    if (msg.includes("Unauthorized")) {
+      return "You must be logged in as an admin to upload files.";
+    }
+    return `Upload failed. Please try again. (${msg})`;
+  };
+
   return (
     <div className={cn("space-y-4", className)}>
       {value ? (
@@ -103,7 +128,7 @@ export function ImageUpload({
                     {isDocument ? "Drop document here" : "Drop image here"}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {isDocument ? "PDF, DOCX up to 16MB" : "PNG, JPG up to 4MB"}
+                    {getMaxSizeLabel()}
                   </p>
                 </div>
               </div>
@@ -117,7 +142,7 @@ export function ImageUpload({
                 }}
                 onUploadError={(error: Error) => {
                   console.error("Upload error:", error);
-                  alert(`Upload failed: ${error.message}`);
+                  alert(getFriendlyError(error));
                   setIsUploading(false);
                 }}
                 onUploadBegin={() => {

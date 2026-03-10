@@ -23,7 +23,7 @@ export const ourFileRouter = {
   // Image uploader for general images (news thumbnails, team photos, etc.)
   imageUploader: f({
     image: {
-      maxFileSize: "4MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -40,7 +40,7 @@ export const ourFileRouter = {
   // Logo uploader for partner logos
   logoUploader: f({
     image: {
-      maxFileSize: "2MB",
+      maxFileSize: "4MB",
       maxFileCount: 1,
     },
   })
