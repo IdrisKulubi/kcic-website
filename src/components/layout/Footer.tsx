@@ -107,20 +107,15 @@ export default function Footer({ data }: FooterProps) {
 
           {/* 1 · Logo + tagline */}
           <div className="shrink-0 lg:w-44">
-            <Link href="/" aria-label="KCIC home">
-              <span
-                className="mb-3 inline-flex px-2.5 py-1.5"
-                style={{ backgroundColor: "rgba(255,255,255,0.96)" }}
-              >
-                <Image
-                  src="/images/hero/KCIC logo.png"
-                  alt="KCIC"
-                  width={110}
-                  height={32}
-                  className="h-8 w-auto"
-                  priority
-                />
-              </span>
+            <Link href="/" aria-label="KCIC home" style={{ display: "inline-flex", marginBottom: 10 }}>
+              <Image
+                src="/images/hero/KCIC logo.png"
+                alt="KCIC"
+                width={110}
+                height={32}
+                className="h-8 w-auto"
+                priority
+              />
             </Link>
             <p style={{ fontSize: 11, lineHeight: "18px", letterSpacing: "0.12em", color: C.muted, textTransform: "uppercase", marginTop: 6 }}>
               Climate Innovation<br />Centre — Kenya
