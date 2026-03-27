@@ -1,17 +1,15 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import { Eye, FlagBanner, UsersThree } from "@phosphor-icons/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { typography } from "@/lib/design-system";
+import { FocusCards } from "@/components/ui/focus-cards";
 
 interface BeliefCard {
   title: string;
   description: string;
-  accent: string;
-  icon: typeof Eye;
   supportingText?: string;
 }
 
@@ -24,8 +22,6 @@ const beliefs: BeliefCard[] = [
     title: "Vision",
     description:
       "Sustainable Enterprises and Climate Resilient Communities",
-    accent: "#80c738",
-    icon: Eye,
     supportingText:
       "We envision thriving enterprises driving inclusive growth while strengthening the resilience of communities.",
   },
@@ -33,8 +29,6 @@ const beliefs: BeliefCard[] = [
     title: "Mission",
     description:
       "Catalyzing Climate Entrepreneurship in Africa",
-    accent: "#00addd",
-    icon: FlagBanner,
     supportingText:
       "We back entrepreneurs, partners, and market actors building practical climate solutions with long-term impact.",
   },
@@ -42,8 +36,6 @@ const beliefs: BeliefCard[] = [
     title: "Core Values",
     description:
       "The principles that shape how we serve, partner, and deliver impact.",
-    accent: "#E97451",
-    icon: UsersThree,
     supportingText:
       "People-centric, inclusivity, professionalism, integrity, innovation, and collaboration guide our decisions and relationships.",
   },
@@ -193,95 +185,69 @@ export default function FoundingBeliefs({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {beliefs.map((belief, index) => (
-            <article key={index} className="belief-card group relative">
-              <div
-                className="relative flex h-full min-h-[280px] flex-col border border-white/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(17,24,39,0.12)]"
-                style={{ borderTop: `4px solid ${belief.accent}` }}
-              >
+        <FocusCards
+          items={beliefs.map((belief, index) => ({
+            key: belief.title,
+            content: (
+              <article className="belief-card group relative h-full">
                 <div
-                  className="absolute inset-0"
+                  className="relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl border border-teal-200/45 p-7 sm:p-8 shadow-[0_1px_0_rgba(22,101,90,0.05),0_22px_44px_-18px_rgba(15,60,55,0.09)] ring-1 ring-teal-900/5 transition-[box-shadow,border-color] duration-300 hover:border-teal-300/55 hover:shadow-[0_1px_0_rgba(22,101,90,0.06),0_28px_56px_-20px_rgba(15,60,55,0.11)]"
                   style={{
                     background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.92) 100%)",
+                      "linear-gradient(165deg, #f3f9f6 0%, #eef6f7 42%, #ecf5f2 100%)",
                   }}
-                  aria-hidden
-                />
+                >
+                  <div className="relative z-10 flex h-full flex-col">
+                    <div className="mb-6 border-b border-teal-200/35 pb-5">
+                      <span
+                        className="mb-3 block tabular-nums text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-teal-700/45"
+                        aria-hidden
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <h3
+                        className="font-bold text-slate-900"
+                        style={{
+                          fontSize: "clamp(1.12rem, 1.55vw, 1.35rem)",
+                          fontFamily: typography.fonts.heading,
+                          lineHeight: 1.12,
+                          letterSpacing: "-0.025em",
+                        }}
+                      >
+                        {belief.title}
+                      </h3>
+                    </div>
 
-                <div
-                  className="absolute right-0 top-0 h-24 w-24 opacity-10"
-                  style={{
-                    background: `radial-gradient(circle at top right, ${belief.accent} 0%, transparent 72%)`,
-                  }}
-                  aria-hidden
-                />
-
-                <div className="relative z-10 flex h-full flex-col">
-                  <div
-                    className="mb-6 flex h-14 w-14 items-center justify-center border"
-                    style={{
-                      color: belief.accent,
-                      borderColor: `${belief.accent}33`,
-                      background: `${belief.accent}12`,
-                    }}
-                  >
-                    <belief.icon className="h-7 w-7" weight="duotone" aria-hidden />
-                  </div>
-
-                  <div className="mb-4 flex items-center justify-between gap-4">
-                    <h3
-                      className="font-bold text-slate-900"
-                      style={{
-                        fontSize: "clamp(1.1rem, 1.6vw, 1.35rem)",
-                        fontFamily: typography.fonts.heading,
-                        lineHeight: 1.15,
-                      }}
-                    >
-                      {belief.title}
-                    </h3>
-                    <span
-                      className="font-semibold"
-                      style={{
-                        fontSize: "0.875rem",
-                        color: belief.accent,
-                        fontFamily: typography.fonts.body,
-                      }}
-                    >
-                      {`0${index + 1}`}
-                    </span>
-                  </div>
-
-                  <p
-                    className="text-slate-900"
-                    style={{
-                      fontSize: "clamp(0.98rem, 1.1vw, 1.05rem)",
-                      fontFamily: typography.fonts.body,
-                      lineHeight: 1.5,
-                      fontWeight: 600,
-                    }}
-                  >
-                    {belief.description}
-                  </p>
-
-                  {belief.supportingText ? (
                     <p
-                      className="mt-4 text-slate-600"
+                      className="text-slate-800"
                       style={{
-                        fontSize: "0.92rem",
+                        fontSize: "clamp(0.95rem, 1.02vw, 1.02rem)",
                         fontFamily: typography.fonts.body,
-                        lineHeight: typography.lineHeights.relaxed,
+                        lineHeight: 1.52,
+                        fontWeight: 600,
                       }}
                     >
-                      {belief.supportingText}
+                      {belief.description}
                     </p>
-                  ) : null}
 
+                    {belief.supportingText ? (
+                      <p
+                        className="mt-auto pt-6 text-slate-600"
+                        style={{
+                          fontSize: "0.9375rem",
+                          fontFamily: typography.fonts.body,
+                          lineHeight: typography.lineHeights.relaxed,
+                        }}
+                      >
+                        {belief.supportingText}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ),
+          }))}
+        />
       </div>
     </section>
   );
