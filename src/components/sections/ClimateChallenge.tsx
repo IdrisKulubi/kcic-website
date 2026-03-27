@@ -301,7 +301,7 @@ export default function ClimateChallenge({
     <section
       ref={sectionRef}
       aria-labelledby="climate-challenge-heading"
-      className={`relative overflow-hidden bg-section-green py-12 sm:py-14 text-white ${className}`}
+      className={`relative overflow-hidden bg-section-green py-9 sm:py-10 text-white ${className}`}
     >
       {/* Environmental image with dark branded overlay */}
       <div
@@ -334,7 +334,7 @@ export default function ClimateChallenge({
               id="climate-challenge-heading"
               className="font-bold text-white"
               style={{
-                fontSize: "clamp(1.875rem, 5vw, 3rem)",
+                fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
                 fontFamily: typography.fonts.heading,
                 lineHeight: typography.lineHeights.tight,
                 letterSpacing: "-0.02em",
@@ -352,7 +352,7 @@ export default function ClimateChallenge({
             <p
               className="text-white/85"
               style={{
-                fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
+                fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
               }}
@@ -425,7 +425,7 @@ export default function ClimateChallenge({
               <h3
                 className="font-semibold text-white"
                 style={{
-                  fontSize: "clamp(1.125rem, 2vw, 1.25rem)",
+                  fontSize: "clamp(1rem, 1.3vw, 1.1rem)",
                   fontFamily: typography.fonts.heading,
                 }}
               >
@@ -513,7 +513,7 @@ export default function ClimateChallenge({
                   <p
                     className="text-center text-white/90 font-medium"
                     style={{
-                      fontSize: "clamp(0.8125rem, 0.95vw, 0.875rem)",
+                      fontSize: "clamp(0.78rem, 0.9vw, 0.84rem)",
                       fontFamily: typography.fonts.body,
                       lineHeight: typography.lineHeights.normal,
                     }}

@@ -138,7 +138,7 @@ export function HeroImageCarousel({
           <h1
             style={{
               fontFamily: typography.fonts.heading,
-              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+              fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: "-0.02em",

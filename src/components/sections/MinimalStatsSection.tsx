@@ -291,7 +291,7 @@ export function MinimalStatsSection({
     <section
       id="impact-section"
       ref={sectionRef}
-      className={`relative py-10 sm:py-12`}
+      className={`relative py-8 sm:py-10`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -299,7 +299,7 @@ export function MinimalStatsSection({
           <h2
             className="font-bold mb-4"
             style={{
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontSize: 'clamp(1.6rem, 3.2vw, 2.45rem)',
               fontFamily: typography.fonts.heading,
               color: isDark ? '#ffffff' : colors.secondary.gray[900],
               lineHeight: typography.lineHeights.tight,
@@ -310,7 +310,7 @@ export function MinimalStatsSection({
           {subtitle && (
             <p
               style={{
-              fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
+                fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
                 fontFamily: typography.fonts.body,
                 lineHeight: typography.lineHeights.relaxed,
                 color: isDark ? 'rgba(255,255,255,0.75)' : '#4b5563',
@@ -429,7 +429,7 @@ export function MinimalStatsSection({
                     <h2
                       className="font-bold mb-4"
                       style={{
-                        fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+                        fontSize: 'clamp(1.6rem, 3vw, 2.35rem)',
                         fontFamily: typography.fonts.heading,
                         color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
                         lineHeight: typography.lineHeights.tight,
@@ -441,7 +441,7 @@ export function MinimalStatsSection({
                       <p
                         className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                         style={{
-                        fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
+                          fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
                           fontFamily: typography.fonts.body,
                           lineHeight: typography.lineHeights.relaxed,
                         }}
@@ -464,7 +464,7 @@ export function MinimalStatsSection({
                   <h2
                     className="font-bold mb-4"
                     style={{
-                      fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                      fontSize: 'clamp(1.6rem, 3.2vw, 2.45rem)',
                       fontFamily: typography.fonts.heading,
                       color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
                       lineHeight: typography.lineHeights.tight,
@@ -476,7 +476,7 @@ export function MinimalStatsSection({
                     <p
                       className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
                       style={{
-                        fontSize: 'clamp(0.95rem, 1.2vw, 1rem)',
+                        fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
                         fontFamily: typography.fonts.body,
                         lineHeight: typography.lineHeights.relaxed,
                       }}

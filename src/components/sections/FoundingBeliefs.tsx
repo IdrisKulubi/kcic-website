@@ -13,7 +13,6 @@ interface BeliefCard {
   accent: string;
   icon: typeof Eye;
   supportingText?: string;
-  values?: string[];
 }
 
 interface FoundingBeliefsSectionProps {
@@ -42,17 +41,11 @@ const beliefs: BeliefCard[] = [
   {
     title: "Core Values",
     description:
-      "People-centric, Inclusivity, Professionalism, Integrity, Innovation and Collaboration",
+      "The principles that shape how we serve, partner, and deliver impact.",
     accent: "#E97451",
     icon: UsersThree,
-    values: [
-      "People-centric",
-      "Inclusivity",
-      "Professionalism",
-      "Integrity",
-      "Innovation",
-      "Collaboration",
-    ],
+    supportingText:
+      "People-centric, inclusivity, professionalism, integrity, innovation, and collaboration guide our decisions and relationships.",
   },
 ];
 
@@ -144,7 +137,7 @@ export default function FoundingBeliefs({
     <section
       ref={sectionRef}
       aria-labelledby="founding-beliefs-heading"
-      className={`relative overflow-hidden bg-[#eef8fb] py-14 sm:py-16 ${className}`}
+      className={`relative overflow-hidden bg-[#eef8fb] py-10 sm:py-12 ${className}`}
     >
       <div
         className="absolute inset-0"
@@ -168,7 +161,7 @@ export default function FoundingBeliefs({
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
-        <div ref={headerRef} className="text-center mb-10 sm:mb-12">
+        <div ref={headerRef} className="text-center mb-8 sm:mb-10">
           <div className="belief-badge inline-flex items-center gap-2 rounded-full border border-[#b9dfe8] bg-white/85 px-4 py-2 shadow-sm mb-5">
             <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
               Our Foundation
@@ -179,24 +172,24 @@ export default function FoundingBeliefs({
             id="founding-beliefs-heading"
             className="font-bold text-gray-900 mb-4"
             style={{
-              fontSize: "clamp(1.9rem, 4.5vw, 3rem)",
+              fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
               fontFamily: typography.fonts.heading,
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
             }}
           >
-            Vision, Mission & Values
+            The purpose and principles
           </h2>
 
           <p
             className="mx-auto max-w-3xl text-gray-600"
             style={{
-              fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
+              fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
               fontFamily: typography.fonts.body,
               lineHeight: typography.lineHeights.relaxed,
             }}
           >
-            The purpose and principles that shape how KCIC serves enterprises, ecosystems, and climate-resilient communities.
+            The purpose and principles that shape how KCIC supports enterprises, ecosystems, and climate-resilient communities.
           </p>
         </div>
 
@@ -204,7 +197,7 @@ export default function FoundingBeliefs({
           {beliefs.map((belief, index) => (
             <article key={index} className="belief-card group relative">
               <div
-                className="relative flex h-full min-h-[320px] flex-col border border-white/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(17,24,39,0.12)]"
+                className="relative flex h-full min-h-[280px] flex-col border border-white/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(17,24,39,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(17,24,39,0.12)]"
                 style={{ borderTop: `4px solid ${belief.accent}` }}
               >
                 <div
@@ -236,11 +229,11 @@ export default function FoundingBeliefs({
                     <belief.icon className="h-7 w-7" weight="duotone" aria-hidden />
                   </div>
 
-                  <div className="mb-4 flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                  <div className="mb-4 flex items-center justify-between gap-4">
                     <h3
                       className="font-bold text-slate-900"
                       style={{
-                        fontSize: "clamp(1.35rem, 2vw, 1.75rem)",
+                        fontSize: "clamp(1.1rem, 1.6vw, 1.35rem)",
                         fontFamily: typography.fonts.heading,
                         lineHeight: 1.15,
                       }}
@@ -262,7 +255,7 @@ export default function FoundingBeliefs({
                   <p
                     className="text-slate-900"
                     style={{
-                      fontSize: "clamp(1rem, 1.3vw, 1.125rem)",
+                      fontSize: "clamp(0.98rem, 1.1vw, 1.05rem)",
                       fontFamily: typography.fonts.body,
                       lineHeight: 1.5,
                       fontWeight: 600,
@@ -275,7 +268,7 @@ export default function FoundingBeliefs({
                     <p
                       className="mt-4 text-slate-600"
                       style={{
-                        fontSize: "0.95rem",
+                        fontSize: "0.92rem",
                         fontFamily: typography.fonts.body,
                         lineHeight: typography.lineHeights.relaxed,
                       }}
@@ -284,34 +277,6 @@ export default function FoundingBeliefs({
                     </p>
                   ) : null}
 
-                  {belief.values ? (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {belief.values.map((value) => (
-                        <span
-                          key={value}
-                          className="inline-flex border px-3 py-2 text-sm text-slate-700"
-                          style={{
-                            borderColor: `${belief.accent}30`,
-                            background: `${belief.accent}10`,
-                            fontFamily: typography.fonts.body,
-                          }}
-                        >
-                          {value}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-
-                  <div
-                    className="mt-auto pt-6"
-                    style={{
-                      fontSize: "0.875rem",
-                      color: "#475569",
-                      fontFamily: typography.fonts.body,
-                    }}
-                  >
-                    Grounded in enterprise growth, resilient communities, and accountable partnerships.
-                  </div>
                 </div>
               </div>
             </article>

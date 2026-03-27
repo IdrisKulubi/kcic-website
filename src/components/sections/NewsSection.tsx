@@ -97,6 +97,23 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     }
   };
 
+  const extractYouTubeUrl = (rawText?: string) => {
+    if (!rawText) return null;
+
+    const matched = rawText.match(
+      /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)[\w-]{11}[^\s]*|youtu\.be\/[\w-]{11}[^\s]*))/i
+    );
+
+    return matched?.[1] ?? null;
+  };
+
+  const toEmbedUrl = (rawUrl?: string | null) => {
+    const videoId = extractYouTubeVideoId(rawUrl);
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+      : null;
+  };
+
   const resolvePodcastEmbed = (item: NewsItem) => {
     const parsedFromYoutubeField = toEmbedUrl(item.youtubeUrl);
     const parsedFromContent = toEmbedUrl(extractYouTubeUrl(item.content));
@@ -115,23 +132,6 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
   };
 
-  const extractYouTubeUrl = (rawText?: string) => {
-    if (!rawText) return null;
-
-    const matched = rawText.match(
-      /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)[\w-]{11}[^\s]*|youtu\.be\/[\w-]{11}[^\s]*))/i
-    );
-
-    return matched?.[1] ?? null;
-  };
-
-  const toEmbedUrl = (rawUrl?: string | null) => {
-    const videoId = extractYouTubeVideoId(rawUrl);
-    return videoId
-      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
-      : null;
-  };
-
   const sortedNews = useMemo(
     () =>
       [...news].sort(
@@ -147,7 +147,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return [
       {
         id: "fallback-podcast-1",
-        title: "Climate Innovation Conversations — Episode 01",
+        title: "Climate Innovation Conversations - Episode 01",
         excerpt: "A deep-dive on financing climate-smart enterprises in Africa.",
         publishedAt: today,
         category: "Podcast",
@@ -157,7 +157,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
       },
       {
         id: "fallback-podcast-2",
-        title: "Green Growth Dialogues — Episode 02",
+        title: "Green Growth Dialogues - Episode 02",
         excerpt: "How founders scale clean technology from pilot to market.",
         publishedAt: today,
         category: "Podcast",
@@ -169,7 +169,9 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   }, []);
 
   const featuredPodcasts = useMemo(() => {
-    const podcasts = sortedNews.filter((item) => isPodcastItem(item) && Boolean(resolvePodcastEmbed(item)));
+    const podcasts = sortedNews.filter(
+      (item) => isPodcastItem(item) && Boolean(resolvePodcastEmbed(item))
+    );
     const ensured = [...podcasts];
 
     if (ensured.length < 2) {
@@ -181,7 +183,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
   const latestArticles = useMemo(() => {
     const nonPodcasts = sortedNews.filter((item) => !isPodcastItem(item));
-    return nonPodcasts.slice(0, 2);
+    return nonPodcasts.slice(0, 3);
   }, [sortedNews]);
 
   const podcastEmbedMap = useMemo(() => {
@@ -199,27 +201,11 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return map;
   }, [featuredPodcasts]);
 
-  const currentPodcast = featuredPodcasts[activePodcastIndex] ?? featuredPodcasts[0] ?? null;
+  const currentPodcast =
+    featuredPodcasts[activePodcastIndex] ?? featuredPodcasts[0] ?? null;
   const currentPodcastThumbnail = currentPodcast
     ? resolvePodcastThumbnail(currentPodcast)
     : null;
-  const newsroomLinks = [
-    {
-      title: "Press Releases",
-      description: "Official KCIC announcements, partner updates, and organization news.",
-      href: "/newsroom/press-release",
-    },
-    {
-      title: "Events",
-      description: "Forums, showcases, and upcoming opportunities to engage with the ecosystem.",
-      href: "/newsroom/events",
-    },
-    {
-      title: "Publications",
-      description: "Reports, insights, and knowledge products from our work across the region.",
-      href: "/newsroom/publications",
-    },
-  ] as const;
 
   const handlePodcastOpen = (item?: NewsItem | null) => {
     if (!item) return;
@@ -243,7 +229,6 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     });
   };
 
-  // GSAP scroll-triggered animations
   useLayoutEffect(() => {
     if (shouldDisableAnimations?.() || !sectionRef.current) return;
 
@@ -285,7 +270,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               start: "top 85%",
               toggleActions: "play none none reverse",
             },
-          },
+          }
         );
       }
 
@@ -303,7 +288,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               start: "top 88%",
               toggleActions: "play none none reverse",
             },
-          },
+          }
         );
       }
 
@@ -321,7 +306,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               start: "top 88%",
               toggleActions: "play none none reverse",
             },
-          },
+          }
         );
       }
 
@@ -341,7 +326,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               start: "top 92%",
               toggleActions: "play none none reverse",
             },
-          },
+          }
         );
       });
 
@@ -370,6 +355,9 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     if (normalized.includes("blog")) {
       return "text-[#0b6f8b]";
     }
+    if (normalized.includes("feature")) {
+      return "text-[#1f7a3f]";
+    }
     if (normalized.includes("event")) {
       return "text-[#c35b3f]";
     }
@@ -377,14 +365,17 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   };
 
   return (
-    <section ref={sectionRef} className={cn("bg-[#f7fbf8] py-10 sm:py-12", className)}>
+    <section
+      ref={sectionRef}
+      className={cn("bg-[#f7fbf8] py-8 sm:py-10", className)}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div ref={headerRef} className="mb-10 text-center sm:mb-12">
+        <div ref={headerRef} className="mb-8 text-center sm:mb-10">
           <div>
             <h2
               className="font-bold mb-4"
               style={{
-                fontSize: "clamp(1.9rem, 4.5vw, 3rem)",
+                fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
                 fontFamily: typography.fonts.heading,
                 color: colors.secondary.gray[900],
                 lineHeight: typography.lineHeights.tight,
@@ -395,13 +386,14 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
             <p
               className="mx-auto max-w-3xl"
               style={{
-                fontSize: "clamp(0.95rem, 1.2vw, 1rem)",
+                fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
                 fontFamily: typography.fonts.body,
                 color: colors.secondary.gray[600],
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              Latest from our newsroom with featured podcast episodes and top stories.
+              A featured podcast preview on one side, with our latest stories
+              stacked alongside it.
             </p>
           </div>
         </div>
@@ -410,71 +402,13 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
           ref={panelRef}
           className="border border-[#d4e1d8] bg-white/92 p-0 shadow-[0_20px_50px_rgba(26,31,46,0.08)]"
         >
-          <div className="grid lg:grid-cols-3 lg:divide-x-2 lg:divide-[#c7d5cb]">
-            <div ref={leftRef} className="p-6 sm:p-8">
-              <div
-                className="mb-5 font-bold leading-tight"
-                style={{
-                  fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                }}
-              >
-                News
-              </div>
-
-              <div className="space-y-0 border-y-2 border-[#d6e1d8]">
-                {latestArticles.map((item, index) => (
-                  <Link
-                    key={item.id}
-                    href={`/news/${item.slug}`}
-                    ref={(el) => { rowsRef.current[index] = el; }}
-                    className="group block border-b border-[#d6e1d8] py-4 last:border-b-0"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 uppercase tracking-wider text-gray-500" style={{ fontSize: "11px", lineHeight: "14px", margin: 0 }}>
-                          <span className={cn("font-semibold", resolveCategoryTone(item.category || "News"))}>
-                            {item.category || "News"}
-                          </span>
-                          <span>•</span>
-                          <span>{formatDate(item.publishedAt)}</span>
-                        </div>
-                        <div
-                          className="line-clamp-3 font-semibold leading-snug text-gray-900 group-hover:underline decoration-[#80c738] underline-offset-4"
-                          style={{ fontSize: "clamp(1rem, 1.25vw, 1.15rem)", margin: 0 }}
-                        >
-                          {item.title}
-                        </div>
-
-                        {item.excerpt && (
-                          <div className="mt-2 line-clamp-2 text-gray-700" style={{ fontSize: "14px", lineHeight: "22px", margin: 0 }}>
-                            {item.excerpt}
-                          </div>
-                        )}
-                      </div>
-
-                      <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
-                        <ArrowUpRight className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-
-                {latestArticles.length === 0 && (
-                  <p className="border border-dashed border-gray-300 bg-[#f6f6f6] p-5 text-sm text-gray-600">
-                    No latest updates available yet.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div ref={rightRef} className="border-t-2 border-[#c7d5cb] p-6 sm:p-8 lg:border-t-0">
+          <div className="grid lg:grid-cols-[1.18fr_0.82fr] lg:divide-x-2 lg:divide-[#c7d5cb]">
+            <div ref={leftRef} className="p-5 sm:p-6 lg:p-7">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <div
                   className="font-bold leading-tight"
                   style={{
-                    fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
+                    fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
                     fontFamily: typography.fonts.heading,
                     color: colors.secondary.gray[900],
                   }}
@@ -506,16 +440,18 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 type="button"
                 onClick={() => handlePodcastOpen(currentPodcast)}
                 className="group block w-full text-left"
-                aria-label={`Play podcast: ${currentPodcast?.title || "Featured podcast"}`}
+                aria-label={`Play podcast: ${
+                  currentPodcast?.title || "Featured podcast"
+                }`}
               >
-                <div className="relative aspect-4/5 overflow-hidden border border-[#d6e1d8] bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] p-4 sm:p-5 shadow-md">
+                <div className="relative aspect-[16/11] overflow-hidden border border-[#d6e1d8] bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] p-4 sm:p-5 shadow-md">
                   <div className="relative h-full w-full overflow-hidden bg-black/35">
                     {currentPodcastThumbnail ? (
                       currentPodcastThumbnail.startsWith("http") ? (
                         <img
                           src={currentPodcastThumbnail}
                           alt={currentPodcast?.title || "Podcast preview"}
-                          className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
                           loading="lazy"
                         />
                       ) : (
@@ -523,14 +459,16 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           src={currentPodcastThumbnail}
                           alt={currentPodcast?.title || "Podcast preview"}
                           fill
-                          sizes="(max-width: 1024px) 100vw, 33vw"
-                          className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                          sizes="(max-width: 1024px) 100vw, 60vw"
+                          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                       )
                     ) : (
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/95">
                         <Headphones className="h-14 w-14" weight="duotone" />
-                        <span className="text-sm font-semibold tracking-wide uppercase">Podcast Episode</span>
+                        <span className="text-sm font-semibold tracking-wide uppercase">
+                          Podcast Episode
+                        </span>
                       </div>
                     )}
                   </div>
@@ -541,9 +479,21 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       <PlayCircle className="h-9 w-9" weight="fill" />
                     </span>
                   </div>
-                  <div className="absolute bottom-8 left-8 right-8 text-white">
-                    <span className="mb-1 block uppercase tracking-wider text-white/80" style={{ fontSize: "11px", lineHeight: "14px" }}>Podcast</span>
-                    <div className="line-clamp-2 font-semibold leading-tight" style={{ fontSize: "16px", lineHeight: "20px", margin: 0 }}>
+                  <div className="absolute bottom-6 left-6 right-6 text-white sm:bottom-8 sm:left-8 sm:right-8">
+                    <span
+                      className="mb-1 block uppercase tracking-wider text-white/80"
+                      style={{ fontSize: "11px", lineHeight: "14px" }}
+                    >
+                      Podcast
+                    </span>
+                    <div
+                      className="line-clamp-2 font-semibold leading-tight"
+                      style={{
+                        fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
+                        lineHeight: "1.2",
+                        margin: 0,
+                      }}
+                    >
                       {currentPodcast?.title || "Podcast Episode"}
                     </div>
                   </div>
@@ -568,56 +518,102 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         </span>
                       ) : null}
                     </span>
-                    <PlayCircle className="mt-1 h-5 w-5 shrink-0 text-[#80c738]" weight="fill" />
+                    <PlayCircle
+                      className="mt-1 h-5 w-5 shrink-0 text-[#80c738]"
+                      weight="fill"
+                    />
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="border-t-2 border-[#c7d5cb] p-6 sm:p-8 lg:border-t-0">
+            <div
+              ref={rightRef}
+              className="border-t-2 border-[#c7d5cb] p-5 sm:p-6 lg:border-t-0 lg:p-7"
+            >
               <div
-                className="mb-5 font-bold leading-tight"
+                className="mb-4 font-bold leading-tight"
                 style={{
-                  fontSize: "clamp(1.3rem, 2vw, 1.7rem)",
+                  fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
                   fontFamily: typography.fonts.heading,
                   color: colors.secondary.gray[900],
                 }}
               >
-                Newsroom Categories
+                Latest Stories
               </div>
 
               <div className="space-y-0 border-y-2 border-[#d6e1d8]">
-                {newsroomLinks.map((item) => (
+                {latestArticles.map((item, index) => (
                   <Link
-                    key={item.href}
-                    href={item.href}
+                    key={item.id}
+                    href={`/news/${item.slug}`}
+                    ref={(el) => {
+                      rowsRef.current[index] = el;
+                    }}
                     className="group block border-b border-[#d6e1d8] py-4 last:border-b-0"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-4">
                       <div className="min-w-0 flex-1">
                         <div
+                          className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1"
+                          style={{ fontSize: "11px", lineHeight: "14px" }}
+                        >
+                          <span
+                            className={cn(
+                              "font-semibold uppercase tracking-wider",
+                              resolveCategoryTone(item.category || "News")
+                            )}
+                          >
+                            {item.category || "News"}
+                          </span>
+                          <span className="text-gray-400">&middot;</span>
+                          <span className="text-gray-500">
+                            {formatDate(item.publishedAt)}
+                          </span>
+                        </div>
+                        <div
                           className="font-semibold leading-snug text-slate-900 group-hover:underline decoration-[#80c738] underline-offset-4"
-                          style={{ fontSize: "clamp(1rem, 1.2vw, 1.1rem)" }}
+                          style={{
+                            fontSize: "clamp(0.98rem, 1.1vw, 1.08rem)",
+                          }}
                         >
                           {item.title}
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                          {item.description}
-                        </p>
+                        {item.excerpt ? (
+                          <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
+                            {item.excerpt}
+                          </p>
+                        ) : null}
                       </div>
 
-                      <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
-                        <ArrowUpRight className="h-4 w-4" />
-                      </span>
+                      {item.imageUrl ? (
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden border border-[#d6e1d8] sm:h-28 sm:w-28">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.title}
+                            fill
+                            sizes="112px"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      ) : (
+                        <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
+                          <ArrowUpRight className="h-4 w-4" />
+                        </span>
+                      )}
                     </div>
                   </Link>
                 ))}
+
+                {latestArticles.length === 0 && (
+                  <p className="border border-dashed border-gray-300 bg-[#f6f6f6] p-5 text-sm text-gray-600">
+                    No latest updates available yet.
+                  </p>
+                )}
               </div>
 
               <Link href="/newsroom">
-                <Button
-                  className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-semibold text-gray-900 hover:bg-transparent"
-                >
+                <Button className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-semibold text-gray-900 hover:bg-transparent">
                   <span className="mr-3 inline-flex h-10 w-10 items-center justify-center bg-linear-to-b from-[#f8a23d] to-[#e97451] text-white shadow-sm">
                     <ArrowUpRight className="h-4 w-4" />
                   </span>
@@ -629,8 +625,14 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         </div>
       </div>
 
-      <Dialog open={Boolean(activePodcast)} onOpenChange={(open) => !open && closePodcastModal()}>
-        <DialogContent className="sm:max-w-4xl p-0 overflow-hidden" showCloseButton>
+      <Dialog
+        open={Boolean(activePodcast)}
+        onOpenChange={(open) => !open && closePodcastModal()}
+      >
+        <DialogContent
+          className="sm:max-w-4xl p-0 overflow-hidden"
+          showCloseButton
+        >
           <DialogTitle className="sr-only">Podcast Player</DialogTitle>
           <div className="bg-black">
             {podcastEmbedUrl && (
