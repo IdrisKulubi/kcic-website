@@ -400,12 +400,12 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
             <article
               key={i}
               data-award-card
-              className="group relative overflow-hidden border border-white/12 bg-white shadow-sm transition-shadow hover:shadow-xl"
+              className="group relative overflow-hidden rounded-2xl border border-white/22 bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.45),0_4px_12px_-4px_rgba(0,0,0,0.25)] ring-1 ring-white/30 transition-[box-shadow,border-color] duration-300 hover:border-white/35 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5),0_10px_24px_-8px_rgba(0,0,0,0.3)] hover:ring-white/40"
               style={{ backdropFilter: `blur(6px)` }}
             >
               {/* Glow border on hover */}
               <div
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
+                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity group-hover:opacity-100"
                 style={{ boxShadow: effects.shadows.glow.mixed }}
               />
 
