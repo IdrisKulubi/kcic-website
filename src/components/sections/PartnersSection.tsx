@@ -2,12 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { colors, typography } from "@/lib/design-system";
-import { Badge } from "@/components/ui/badge";
-import {
-  Sparkle as Sparkles,
-  ArrowRight,
-  X,
-} from "@phosphor-icons/react";
+import { ArrowRight, X } from "@phosphor-icons/react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -52,17 +47,6 @@ export function PartnersSection({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-10 text-center">
-            <Badge
-              className="mb-4 px-4 py-1.5 border rounded-full inline-flex items-center gap-1.5"
-              style={{
-                backgroundColor: colors.primary.green[50],
-                borderColor: colors.primary.green[200],
-                color: colors.primary.green[700],
-              }}
-            >
-              <Sparkles className="h-3.5 w-3.5" weight="fill" />
-              Trusted by Industry Leaders
-            </Badge>
             <h2
               className="mb-3 font-bold"
               style={{

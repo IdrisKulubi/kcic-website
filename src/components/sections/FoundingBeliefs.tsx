@@ -62,36 +62,30 @@ export default function FoundingBeliefs({
     const ctx = gsap.context(() => {
       // Header animation
       if (headerRef.current) {
-        const badge = headerRef.current.querySelector('.belief-badge');
-        const heading = headerRef.current.querySelector('h2');
-        const subtitle = headerRef.current.querySelector('p');
+        const heading = headerRef.current.querySelector("h2");
+        const subtitle = headerRef.current.querySelector("p");
 
         const headerTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: headerRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
+            start: "top 80%",
+            toggleActions: "play none none reverse",
           },
         });
 
-        if (badge) {
-          headerTimeline.fromTo(badge,
-            { opacity: 0, y: 20, scale: 0.9 },
-            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.4)', force3D: true }
-          );
-        }
         if (heading) {
-          headerTimeline.fromTo(heading,
+          headerTimeline.fromTo(
+            heading,
             { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', force3D: true },
-            '-=0.3'
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", force3D: true }
           );
         }
         if (subtitle) {
-          headerTimeline.fromTo(subtitle,
+          headerTimeline.fromTo(
+            subtitle,
             { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', force3D: true },
-            '-=0.3'
+            { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", force3D: true },
+            "-=0.35"
           );
         }
       }
@@ -154,12 +148,6 @@ export default function FoundingBeliefs({
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
         <div ref={headerRef} className="text-center mb-8 sm:mb-10">
-          <div className="belief-badge inline-flex items-center gap-2 rounded-full border border-[#b9dfe8] bg-white/85 px-4 py-2 shadow-sm mb-5">
-            <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-              Our Foundation
-            </span>
-          </div>
-
           <h2
             id="founding-beliefs-heading"
             className="font-bold text-gray-900 mb-4"
@@ -170,7 +158,7 @@ export default function FoundingBeliefs({
               letterSpacing: "-0.02em",
             }}
           >
-            The purpose and principles
+            Our Foundation
           </h2>
 
           <p

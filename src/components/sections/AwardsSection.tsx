@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { colors, typography, effects } from "@/lib/design-system";
@@ -22,276 +22,15 @@ const DEFAULT_AWARDS: AwardItem[] = [
   },
   {
     title: "Circular Economy Financier of the Year",
-    subtitle: "CE Conference",
+    subtitle: "2024 CE Conference",
     image: "/images/awards/financier.jpg",
   },
   {
     title: "Green Economy Champion of the Year",
-    subtitle: "ASSEK",
-    image: "/images/awards/assek.jpg",
+    subtitle: "2025",
+    image: "/images/awards/assekk.jpg",
   },
 ];
-
-// Lightweight "balloons" layer using CSS + GSAP (no Three.js dependency)
-function BalloonsLayer() {
-  const layerRef = useRef<HTMLDivElement | null>(null);
-
-  useLayoutEffect(() => {
-    if (!layerRef.current) return;
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      const balloons = gsap.utils.toArray<HTMLDivElement>(layerRef.current!.querySelectorAll("[data-balloon]"));
-
-      balloons.forEach((b) => {
-        const dur = gsap.utils.random(12, 22);
-
-        gsap.fromTo(
-          b,
-          // start near the bottom
-          { y: () => gsap.utils.random(0, 120), rotate: gsap.utils.random(-8, 8), opacity: gsap.utils.random(0.35, 0.7) },
-          {
-            // travel well past the top of the section
-            y: () => -window.innerHeight - gsap.utils.random(160, 320),
-            x: `+=${gsap.utils.random(-40, 40)}`,
-            duration: dur,
-            ease: "sine.inOut",
-            repeat: -1,
-            repeatRefresh: true,
-            delay: gsap.utils.random(0, 1.2),
-          }
-        );
-      });
-
-      // Subtle parallax with scroll
-      const node = layerRef.current!;
-      const triggerEl = node.closest("section");
-      if (triggerEl) {
-        gsap.to(node, {
-          y: -120,
-          ease: "none",
-          scrollTrigger: {
-            trigger: triggerEl,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
-      }
-    }, layerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const balloons = useMemo(() => {
-    // Pre-generate random positions/colors to avoid hydration mismatch
-    // Use Math.random() with a seed-like approach for consistency
-    return Array.from({ length: 28 }).map((_, i) => {
-      const seed = i * 0.123456; // Pseudo-seed for deterministic values
-      const left = Math.round(((Math.sin(seed * 1.1) + 1) / 2) * 100);
-      const size = Math.round(36 + ((Math.sin(seed * 2.3) + 1) / 2) * 60);
-      const hue = 85 + ((Math.sin(seed * 3.7) + 1) / 2) * 110; // green→cyan hues
-      const alpha = 0.25 + ((Math.sin(seed * 4.9) + 1) / 2) * 0.3;
-      return { id: i, left, size, hue, alpha };
-    });
-  }, []);
-
-  return (
-    <div
-      ref={layerRef}
-  className="absolute inset-0 z-800 pointer-events-none select-none overflow-hidden opacity-70 mix-blend-screen"
-      aria-hidden
-    >
-      {balloons.map((b) => (
-        <div
-          key={b.id}
-          data-balloon
-          className="absolute"
-          style={{
-            left: `${b.left}%`,
-            bottom: "-10%",
-            width: `${b.size}px`,
-            height: `${Math.round(b.size * 1.25)}px`,
-            filter: "blur(1px)",
-          }}
-        >
-          <div
-            className="w-full h-full rounded-full"
-            style={{
-              background: `radial-gradient(70% 65% at 30% 30%, hsla(${b.hue}, 80%, 65%, ${b.alpha}) 0%, hsla(${b.hue}, 80%, 50%, ${b.alpha * 1.1}) 45%, transparent 90%)`,
-              boxShadow: `0 16px 40px hsla(${b.hue}, 80%, 55%, ${b.alpha * 0.45})`,
-            }}
-          />
-          <div
-            className="mx-auto mt-0.5"
-            style={{
-              width: 2,
-              height: Math.round(b.size * 0.9),
-              background: `linear-gradient(to bottom, hsla(${b.hue}, 50%, 40%, ${b.alpha * 0.5}), transparent)`,
-            }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Confetti canvas overlay that triggers when the section scrolls into view
-function ConfettiLayer({
-  containerRef,
-  durationMs = 4500,
-  showOnce = true,
-}: {
-  containerRef: React.RefObject<HTMLElement | null>;
-  durationMs?: number;
-  showOnce?: boolean;
-}) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const triggeredRef = useRef(false);
-  const activeRef = useRef(false);
-
-  const resize = () => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-    const rect = container.getBoundingClientRect();
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    canvas.width = Math.floor(rect.width * dpr);
-    canvas.height = Math.floor(rect.height * dpr);
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
-
-  useEffect(() => {
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (showOnce && triggeredRef.current) return;
-            triggeredRef.current = true;
-            startConfetti();
-          }
-        });
-      },
-      { threshold: 0.35 }
-    );
-
-    observer.observe(container);
-    return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const startConfetti = () => {
-    if (activeRef.current) return;
-    activeRef.current = true;
-
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-
-    type P = {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      w: number;
-      h: number;
-      r: number;
-      vr: number;
-      color: string;
-      life: number;
-      ttl: number;
-    };
-
-    const palette = ["#7FD134", "#00AEEF", "#FFD166", "#FF6B6B", "#FFFFFF"];
-
-    const particles: P[] = [];
-    const emitCount = 220;
-
-    for (let i = 0; i < emitCount; i++) {
-      const angle = (-Math.PI / 2) + (Math.random() * Math.PI) / 2 - Math.PI / 4;
-      const speed = 6 + Math.random() * 7;
-      particles.push({
-        x: Math.random() * width,
-        y: height + 8,
-        vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 2,
-        vy: Math.sin(angle) * speed - 6,
-        w: 6 + Math.random() * 6,
-        h: 8 + Math.random() * 10,
-        r: Math.random() * Math.PI,
-        vr: (Math.random() - 0.5) * 0.5,
-        color: palette[Math.floor(Math.random() * palette.length)],
-        life: 0,
-        ttl: durationMs + 600 + Math.random() * 600,
-      });
-    }
-
-    const gravity = 0.25;
-    const drag = 0.0025;
-    const start = performance.now();
-
-    const frame = (now: number) => {
-      const elapsed = now - start;
-      ctx.clearRect(0, 0, width, height);
-
-      particles.forEach((p) => {
-        p.life += 16;
-        p.vy += gravity;
-        p.vx += Math.sin((p.life + p.x) * 0.003) * 0.08; // wind wiggle
-        p.vx *= 1 - drag;
-        p.vy *= 1 - drag;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.r += p.vr;
-
-        const alpha = Math.max(0, 1 - Math.max(0, p.life - durationMs) / 700);
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.r);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      });
-
-      if (elapsed < durationMs + 900) {
-        rafRef.current = requestAnimationFrame(frame);
-      } else {
-        activeRef.current = false;
-        ctx.clearRect(0, 0, width, height);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(frame);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-  className="absolute inset-0 z-999 pointer-events-none"
-      aria-hidden
-    />
-  );
-}
 
 export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: AwardItem[] }) {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -324,7 +63,7 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
       }
 
       // Cards stagger
-      const cards = gsap.utils.toArray<HTMLElement>('[data-award-card]');
+      const cards = gsap.utils.toArray<HTMLElement>("[data-award-card]");
       gsap.set(cards, { opacity: 0, y: 34, rotateX: -6 });
       ScrollTrigger.batch(cards, {
         start: "top 90%",
@@ -361,8 +100,8 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
         aria-hidden
         style={{
           background:
-            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green['50']} 0%, transparent 60%),` +
-            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.blue['50']} 0%, transparent 60%)`,
+            `radial-gradient(60% 50% at 20% 40%, ${colors.primary.green["50"]} 0%, transparent 60%),` +
+            `radial-gradient(60% 50% at 80% 60%, ${colors.primary.blue["50"]} 0%, transparent 60%)`,
         }}
       />
 
@@ -465,12 +204,6 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
           ))}
         </div>
       </div>
-
-      {/* Floating balloons layer (now above cards) */}
-      <BalloonsLayer />
-
-      {/* Confetti burst on entering the section */}
-      <ConfettiLayer containerRef={sectionRef} durationMs={4800} showOnce />
     </section>
   );
 }
