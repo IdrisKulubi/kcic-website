@@ -5,6 +5,7 @@ import { programmes, programmeSponsors } from '../../../db/schema';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, asc } from 'drizzle-orm';
+import { slugCandidatesForFlagship } from '@/data/flagship-programmes';
 
 // Types for the expanded programme data
 export type ProgrammeData = {
@@ -167,6 +168,23 @@ export async function getProgrammeBySlug(slug: string): Promise<ActionResponse<P
       error: error instanceof Error ? error.message : 'Failed to fetch programme'
     };
   }
+}
+
+/**
+ * Resolve a programme by URL slug, then try flagship alias slugs (e.g. `swift` → `swift-programme`)
+ * so editorial flagship pages still load when the database uses a shorter slug.
+ */
+export async function getProgrammeBySlugWithFlagshipFallback(
+  slug: string
+): Promise<ActionResponse<ProgrammeWithSponsors>> {
+  for (const candidate of slugCandidatesForFlagship(slug)) {
+    const result = await getProgrammeBySlug(candidate);
+    if (result.success) return result;
+  }
+  return {
+    success: false,
+    error: 'Programme not found',
+  };
 }
 
 /**

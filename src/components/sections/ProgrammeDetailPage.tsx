@@ -173,6 +173,19 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
 
     const flagshipContent = useMemo(() => getFlagshipContent(programme.slug), [programme.slug]);
 
+    const viewProgramme = useMemo((): ProgrammeWithSponsors => {
+        if (!flagshipContent?.shell) return programme;
+        const s = flagshipContent.shell;
+        return {
+            ...programme,
+            title: s.title,
+            description: s.description,
+            image: s.image,
+            headerImage: s.headerImage ?? s.image,
+            color: s.color,
+        };
+    }, [programme, flagshipContent]);
+
     const primaryApplyHref = useMemo(() => {
         if (!flagshipContent) return programme.applicationLink ?? null;
         const spec = flagshipContent.ctas.find((c) => c.key === 'apply');
@@ -209,67 +222,17 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
 
     if (flagshipContent) {
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-[#f4f2ee]">
                 <MinimalNavbar {...navData} />
-                <FlagshipHero programme={programme} flagship={flagshipContent} heroRef={heroRef} />
-                <FlagshipProgrammeSections programme={programme} flagship={flagshipContent} />
+                <FlagshipHero programme={viewProgramme} flagship={flagshipContent} heroRef={heroRef} />
+                <FlagshipProgrammeSections programme={viewProgramme} flagship={flagshipContent} />
 
-                {availableSections.length > 0 && (
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-                        <section aria-label="Additional programme documents">
-                            <div className="flex items-center justify-between mb-6">
-                                <div>
-                                    <h2 className="text-lg font-bold text-gray-900">Programme details</h2>
-                                    <p className="text-gray-500 text-xs mt-1">
-                                        Click each section to expand and learn more
-                                    </p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={expandAll}
-                                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        Expand all
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={collapseAll}
-                                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        Collapse all
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="space-y-4">
-                                {availableSections.map((sectionKey) => {
-                                    const config = sectionConfig[sectionKey];
-                                    const content = programme[sectionKey];
-                                    if (!content || typeof content !== 'string') return null;
-                                    return (
-                                        <CollapsibleSection
-                                            key={sectionKey}
-                                            id={sectionKey}
-                                            title={config.label}
-                                            description={config.description}
-                                            content={content}
-                                            isOpen={openSections.has(sectionKey)}
-                                            onToggle={() => toggleSection(sectionKey)}
-                                            accentColor={programme.color}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        </section>
-                    </div>
-                )}
-
-                {programme.isActive && primaryApplyHref && (
+                {viewProgramme.isActive && primaryApplyHref && (
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
                         <section aria-label="Apply call to action">
                             <div
                                 className="relative rounded-3xl p-8 md:p-12 overflow-hidden"
-                                style={{ backgroundColor: programme.color }}
+                                style={{ backgroundColor: viewProgramme.color }}
                             >
                                 <div className="absolute inset-0 opacity-10">
                                     <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
@@ -287,7 +250,7 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
                                     </p>
                                     <h3 className="text-xl md:text-2xl font-semibold text-white mb-3">Ready to apply?</h3>
                                     <p className="text-white/90 text-sm md:text-base max-w-2xl mx-auto mb-6">
-                                        Join {programme.title} and take the next step in your climate innovation journey.
+                                        Join {viewProgramme.title} and take the next step in your climate innovation journey.
                                     </p>
                                     <a
                                         href={primaryApplyHref}
@@ -304,15 +267,16 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
                     </div>
                 )}
 
-                <div className="bg-white border-t border-gray-100 py-12">
-                    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <h3 className="text-base font-bold text-gray-900 mb-2">Explore more programmes</h3>
-                        <p className="text-gray-500 text-sm mb-6">
-                            Discover other initiatives supporting climate innovation across Africa.
+                <div className="border-t border-stone-200/80 bg-[#faf9f7] py-14">
+                    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500 mb-3">More</p>
+                        <h3 className="text-xl font-semibold tracking-tight text-stone-900 mb-3">Explore other programmes</h3>
+                        <p className="text-stone-600 text-sm leading-relaxed mb-8">
+                            See flagship and special initiatives across climate innovation and enterprise support.
                         </p>
                         <Link
                             href="/programmes"
-                            className="inline-flex rounded-md bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800"
+                            className="inline-flex rounded-full border border-stone-900/90 bg-stone-900 px-6 py-2.5 text-sm font-medium text-white hover:bg-stone-800 transition-colors"
                         >
                             View all programmes
                         </Link>
@@ -321,7 +285,7 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
 
                 <Footer data={footerData} />
 
-                {programme.isActive && primaryApplyHref && (
+                {viewProgramme.isActive && primaryApplyHref && (
                     <motion.div
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -361,8 +325,10 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/95 to-gray-900/80" />
                 </div>
 
-                {/* Hero Content */}
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+                {/* Hero content: spacer clears fixed MinimalNavbar (h-16 sm:h-20) */}
+                <div className="relative z-10 flex flex-col">
+                    <div className="h-16 shrink-0 sm:h-20" aria-hidden />
+                    <div className="relative max-w-7xl mx-auto w-full px-4 pb-16 pt-6 sm:px-6 sm:pt-8 lg:px-8">
                     {/* Breadcrumb */}
                     <Link href="/programmes" className="mb-8 inline-block text-sm text-white/70 transition-colors hover:text-white">
                         ← Back to programmes
@@ -431,6 +397,7 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
                                 />
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

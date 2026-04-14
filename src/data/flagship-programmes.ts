@@ -17,11 +17,28 @@ export type FlagshipApproachBlock =
   | { kind: "list"; title?: string; items: string[] }
   | { kind: "sectors"; title: string; items: string[] }
   | { kind: "pathways"; title: string; columns: { title: string; body: string }[] }
-  | { kind: "components"; title: string; items: string[] };
+  | { kind: "components"; title: string; items: string[] }
+  | {
+      kind: "detailCards";
+      title: string;
+      lead?: string;
+      items: { title: string; body: string }[];
+    };
+
+export type FlagshipImpactIconKey =
+  | "hubs"
+  | "users"
+  | "jobs"
+  | "finance"
+  | "climate"
+  | "enterprises"
+  | "waste"
+  | "generic";
 
 export type FlagshipImpactMetric = {
   value: string;
   label: string;
+  icon?: FlagshipImpactIconKey;
 };
 
 export type FlagshipStoryLink = {
@@ -30,8 +47,25 @@ export type FlagshipStoryLink = {
   external?: boolean;
 };
 
+export type FlagshipFunderLogo = {
+  name: string;
+  logoSrc: string;
+};
+
+/** Hard-coded presentation layer so flagship pages do not depend on CMS copy for layout. */
+export type FlagshipPageShell = {
+  title: string;
+  description: string;
+  image: string;
+  headerImage?: string | null;
+  /** Hex or CSS color for accents (replaces DB `color` tokens on flagship pages) */
+  color: string;
+};
+
 export interface FlagshipProgrammeContent {
   slug: string;
+  /** Overrides programme title, hero imagery, and accent when set */
+  shell?: FlagshipPageShell;
   heroEyebrow?: string;
   heroLead?: string;
   ctas: FlagshipCtaSpec[];
@@ -41,6 +75,8 @@ export interface FlagshipProgrammeContent {
   outcomes: string[];
   impactTitle: string;
   impactMetrics: FlagshipImpactMetric[];
+  /** Optional note below the impact grid (e.g. SWIFT reporting cycle) */
+  impactNotes?: string;
   featuredStories?: {
     title: string;
     intro: string;
@@ -51,21 +87,38 @@ export interface FlagshipProgrammeContent {
     subtitle: string;
     partners: { role: string; name: string; logoSrc: string }[];
   };
+  /** Config-first funders strip (preferred over DB sponsors when set) */
+  fundedBy?: FlagshipFunderLogo[];
   /** Schematic Kenya BIH map (AgriBiz) */
   showBihMap?: boolean;
 }
 
-const explore = FLAGSHIP_URLS.exploreEnterprises;
+/** Route or legacy DB slugs → canonical flagship key in `FLAGSHIP_PROGRAMMES` */
+export const FLAGSHIP_SLUG_ALIASES: Record<string, string> = {
+  agribiz: "agribiz-programme",
+  greenbiz: "greenbiz-programme",
+  puse: "puse-programme",
+  swift: "swift-programme",
+  dreem: "dreem-hub",
+};
 
 export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
   "agribiz-programme": {
     slug: "agribiz-programme",
+    shell: {
+      title: "The AgriBiz Programme",
+      description:
+        "EU- and Danida-backed initiative catalysing women and youth participation in agricultural and livestock value chains across Kenya.",
+      image: "/images/programmes/agribiz.jpg",
+      headerImage: "/images/programmes/agribiz.jpg",
+      color: "#a16207",
+    },
     heroEyebrow: "Flagship programme",
     heroLead:
       "Commissioned in 2020 with support from the European Union (EU) and Danida, this five-year initiative catalyses greater participation of women and youth in agricultural and livestock value chains. It targets women and youth-owned early-stage agribusiness enterprises and SMEs.",
     ctas: [
       { key: "apply", label: "Apply", fallbackHref: FLAGSHIP_URLS.agribizApply, external: true },
-      { key: "explore", label: "Explore enterprises", href: explore },
+      { key: "explore", label: "Explore enterprises", href: FLAGSHIP_URLS.exploreStories },
       { key: "learnMore", label: "Learn more", href: FLAGSHIP_URLS.agribizWebsite, external: true },
     ],
     approachTitle: "Our approach",
@@ -87,15 +140,27 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
     ],
     impactTitle: "Impact to date",
     impactMetrics: [
-      { value: "8", label: "Business Incubation Hubs across eight counties" },
-      { value: "2,100", label: "Women and youth-led agribusiness enterprises supported" },
-      { value: "19,000", label: "Jobs created directly and indirectly" },
+      { value: "8", label: "Business Incubation Hubs across eight counties", icon: "hubs" },
+      { value: "2,100", label: "Women and youth-led agribusiness enterprises supported", icon: "enterprises" },
+      { value: "19,000", label: "Jobs created directly and indirectly", icon: "jobs" },
+    ],
+    fundedBy: [
+      { name: "European Union", logoSrc: "/images/funders/eu.svg" },
+      { name: "Danida", logoSrc: "/images/funders/danida.svg" },
     ],
     showBihMap: true,
   },
 
   "greenbiz-programme": {
     slug: "greenbiz-programme",
+    shell: {
+      title: "GreenBiz Programme",
+      description:
+        "Accelerating climate-smart innovations for sustainable growth—supporting entrepreneurs across renewable energy, water, agrifood, forestry, and waste.",
+      image: "/images/programmes/greenbiz.jpg",
+      headerImage: "/images/programmes/greenbiz.jpg",
+      color: "#15803d",
+    },
     heroEyebrow: "Flagship programme",
     heroLead:
       "Designed to accelerate the commercialisation and scale-up of climate-smart innovations for sustainable economic growth and climate resilience. The programme supports entrepreneurs and enterprises developing solutions that address climate change while creating economic opportunities.",
@@ -103,11 +168,11 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
       {
         key: "apply",
         label: "Apply",
-        fallbackHref: "https://kenyacic.org/",
+        fallbackHref: FLAGSHIP_URLS.corporateApplyFallback,
         external: true,
       },
-      { key: "explore", label: "Explore enterprises", href: explore },
-      { key: "learnMore", label: "Learn more", href: "https://kenyacic.org/", external: true },
+      { key: "explore", label: "Explore enterprises", href: FLAGSHIP_URLS.exploreStories },
+      { key: "learnMore", label: "Learn more", href: FLAGSHIP_URLS.greenbizLearnMore, external: true },
     ],
     approachTitle: "Our approach",
     approachBlocks: [
@@ -168,20 +233,29 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
     ],
     impactTitle: "Impact to date",
     impactMetrics: [
-      { value: "USD 20M", label: "Mobilized for the growth and scaling of green enterprises" },
-      { value: "150", label: "Enterprises supported through incubation and acceleration" },
-      { value: "3,000", label: "Jobs created across climate innovation sectors" },
+      { value: "USD 20M", label: "Mobilized for the growth and scaling of green enterprises", icon: "finance" },
+      { value: "150", label: "Enterprises supported through incubation and acceleration", icon: "enterprises" },
+      { value: "3,000", label: "Jobs created across climate innovation sectors", icon: "jobs" },
     ],
+    fundedBy: [{ name: "Danish International Development Agency (Danida)", logoSrc: "/images/funders/danida.svg" }],
   },
 
   "puse-programme": {
     slug: "puse-programme",
+    shell: {
+      title: "PUSE Pilot Programme",
+      description:
+        "Productive Use of Solar Energy across Kenya, Uganda, and Tanzania—financing and technical support for solar in agriculture.",
+      image: "/images/programmes/puse.jpg",
+      headerImage: "/images/programmes/puse.jpg",
+      color: "#c2410c",
+    },
     heroEyebrow: "Pilot programme (Jan 2023 – Dec 2024)",
     heroLead:
       "The Productive Use of Solar Energy (PUSE) Pilot Programme was implemented across Kenya, Uganda, and Tanzania under the initiative “Financing Solutions for Local Productive Use of Solar Energy Entrepreneurs in East Africa’s Agriculture Sector.”",
     ctas: [
-      { key: "explore", label: "Explore enterprises", href: explore },
-      { key: "learnMore", label: "Learn more", href: "https://kenyacic.org/", external: true },
+      { key: "explore", label: "Explore enterprises", href: FLAGSHIP_URLS.exploreStories },
+      { key: "learnMore", label: "Learn more", href: FLAGSHIP_URLS.puseLearnMore, external: true },
     ],
     approachTitle: "Our approach",
     approachBlocks: [
@@ -212,12 +286,13 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
     ],
     impactTitle: "Impact to date",
     impactMetrics: [
-      { value: "407", label: "Direct jobs created (target 160) and 1,200+ indirect jobs supported" },
-      { value: "23,516", label: "New customers reached — 68% increase in PUSE uptake (target 40%)" },
-      { value: "USD 2.05M", label: "Revenue growth among participating enterprises (19% increase)" },
-      { value: "USD 763,256", label: "External financing mobilised (target USD 50,000)" },
-      { value: "342,543 t", label: "CO₂e emissions reduced (target 100,000)" },
+      { value: "407", label: "Direct jobs created (target 160) and 1,200+ indirect jobs supported", icon: "jobs" },
+      { value: "23,516", label: "New customers reached — 68% increase in PUSE uptake (target 40%)", icon: "users" },
+      { value: "USD 2.05M", label: "Revenue growth among participating enterprises (19% increase)", icon: "finance" },
+      { value: "USD 763,256", label: "External financing mobilised (target USD 50,000)", icon: "generic" },
+      { value: "342,543 t", label: "CO₂e emissions reduced (target 100,000)", icon: "climate" },
     ],
+    fundedBy: [{ name: "Charles Stewart Mott Foundation", logoSrc: "/images/funders/mott.png" }],
     featuredStories: {
       title: "Featured enterprises",
       intro:
@@ -231,13 +306,21 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
 
   "swift-programme": {
     slug: "swift-programme",
+    shell: {
+      title: "SWIFT Programme",
+      description:
+        "Sustainable Waste Innovation for a Future in Transition—supporting Kenyan SMEs to scale circular economy solutions (2023–2026).",
+      image: "/images/programmes/swift.jpg",
+      headerImage: "/images/programmes/swift.jpg",
+      color: "#0f766e",
+    },
     heroEyebrow: "Transforming waste management",
     heroLead:
-      "The Sustainable Waste Innovation for a Future in Transition (SWIFT) Programme is a three-year initiative (2023–2026) targeting SMEs in Kenya’s waste management sector. It supports innovative circular economy solutions that transform waste into valuable resources while creating jobs and improving environmental sustainability.",
+      "The Sustainable Waste Innovation for a Future in Transition (SWIFT) Programme is a three-year initiative (2023–2026) targeting Small and Medium Enterprises (SMEs) in the waste management sector in Kenya. The programme supports SMEs to develop innovative circular economy solutions that transform waste into valuable resources while creating jobs and improving environmental sustainability.",
     ctas: [
-      { key: "apply", label: "Apply", fallbackHref: "https://kenyacic.org/", external: true },
-      { key: "explore", label: "Explore enterprises", href: explore },
-      { key: "learnMore", label: "Learn more", href: "https://kenyacic.org/", external: true },
+      { key: "apply", label: "Apply", fallbackHref: FLAGSHIP_URLS.corporateApplyFallback, external: true },
+      { key: "explore", label: "Explore enterprises", href: FLAGSHIP_URLS.exploreStories },
+      { key: "learnMore", label: "Learn more", href: FLAGSHIP_URLS.swiftLearnMore, external: true },
     ],
     approachTitle: "Our approach",
     approachBlocks: [
@@ -263,16 +346,38 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
         ],
       },
       {
-        kind: "components",
+        kind: "detailCards",
         title: "Key programme components",
+        lead: "SWIFT delivers targeted, end-to-end support to waste and circular economy enterprises through the following core components:",
         items: [
-          "Business advisory support — tailored incubation and acceleration services for strategy, operations, governance, and growth readiness.",
-          "Compliance for market access — regulatory, quality, and standards support for market entry, scale, and investment readiness.",
-          "Technical assistance — hands-on support for processes, product quality, operational efficiency, and environmental performance.",
-          "Access to finance — matching grants, repayable grants, leverage of external financing, and investment readiness support.",
-          "Sustainability integration — embedding circular economy principles into enterprise models and operations.",
-          "Policy and advocacy support — collaboration with national and county governments; close work with Nairobi, Kisumu, Mombasa, Nakuru, and Uasin Gishu counties.",
-          "Technology solutions — adoption, piloting, and scaling of innovations that improve waste recovery, processing, and circularity.",
+          {
+            title: "Business advisory support",
+            body: "Tailored incubation and acceleration services that strengthen enterprise strategy, operations, governance, and growth readiness.",
+          },
+          {
+            title: "Compliance for market access",
+            body: "Support to meet regulatory, quality, and standards requirements necessary for market entry, scale, and investment readiness.",
+          },
+          {
+            title: "Technical assistance",
+            body: "Hands-on technical support to improve processes, product quality, operational efficiency, and environmental performance.",
+          },
+          {
+            title: "Access to finance",
+            body: "Beyond comprehensive non-financial support, SWIFT provides financing options to successful enterprises admitted into the incubation or accelerator programmes. Financial support may include matching grants, repayable grants, and support to leverage external financing, alongside investment readiness support.",
+          },
+          {
+            title: "Sustainability integration",
+            body: "Embedding circular economy principles and sustainability practices into enterprise models, operations, and decision-making to ensure long-term environmental and economic value.",
+          },
+          {
+            title: "Policy and advocacy support",
+            body: "Collaboration with national and county governments to strengthen policies and regulatory frameworks that enable private sector participation. SWIFT works closely with Nairobi, Kisumu, Mombasa, Nakuru, and Uasin Gishu counties to support policy development, advocacy, and coordination.",
+          },
+          {
+            title: "Technology solutions",
+            body: "Support for the adoption, piloting, and scaling of innovative technologies that improve waste recovery, processing, and circularity across the value chain.",
+          },
         ],
       },
     ],
@@ -286,22 +391,33 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
     ],
     impactTitle: "Impact to date",
     impactMetrics: [
-      { value: "57 / 53", label: "Enterprises onboarded (year one / second cohort)" },
-      { value: "TBD", label: "Jobs created or sustained — figures to be confirmed" },
-      { value: "TBD", label: "Counties reached — figures to be confirmed" },
-      { value: "TBD", label: "Waste diverted or recycled — figures to be confirmed" },
-      { value: "TBD", label: "Women- and youth-led enterprises (%) — figures to be confirmed" },
+      { value: "57 / 53", label: "Enterprises onboarded (year one / second cohort)", icon: "enterprises" },
+      { value: "—", label: "Jobs created or sustained (figures to be published)", icon: "jobs" },
+      { value: "—", label: "Counties reached (figures to be published)", icon: "hubs" },
+      { value: "—", label: "Waste diverted or recycled (figures to be published)", icon: "waste" },
+      { value: "—", label: "Women- and youth-led enterprises (%) (figures to be published)", icon: "users" },
     ],
+    impactNotes:
+      "Detailed SWIFT impact metrics will be published after the current reporting cycle. Cohort onboarding figures are confirmed; other indicators are in verification.",
+    fundedBy: [{ name: "IKEA Foundation", logoSrc: "/images/funders/ikea-foundation.svg" }],
   },
 
   "dreem-hub": {
     slug: "dreem-hub",
+    shell: {
+      title: "DREEM Hub Programme",
+      description:
+        "Distributed Renewable Energy Ecosystem Model—solarising dairy and horticulture value chains in last-mile Kenya (2024–2027).",
+      image: "/images/programmes/biz.jpg",
+      headerImage: "/images/programmes/biz.jpg",
+      color: "#1d4ed8",
+    },
     heroEyebrow: "Solarising agriculture for rural transformation",
     heroLead:
       "The Distributed Renewable Energy Ecosystem Model (DREEM) Hub Programme is a three-year initiative (2024–2027) that seeks to solarise key agricultural value chains, particularly dairy and horticulture, within last-mile communities in Kenya—integrating renewable energy into production and processing to improve productivity, reduce post-harvest losses, and strengthen rural livelihoods.",
     ctas: [
       { key: "apply", label: "Apply", fallbackHref: "https://dreemhub.kenyacic.org/", external: true },
-      { key: "explore", label: "Explore enterprises", href: explore },
+      { key: "explore", label: "Explore enterprises", href: FLAGSHIP_URLS.dreemExploreEnterprises, external: true },
       { key: "learnMore", label: "Learn more", href: FLAGSHIP_URLS.dreemLearnMore, external: true },
     ],
     approachTitle: "Our approach",
@@ -335,10 +451,10 @@ export const FLAGSHIP_PROGRAMMES: Record<string, FlagshipProgrammeContent> = {
     ],
     impactTitle: "Impact to date",
     impactMetrics: [
-      { value: "1,000+", label: "Entrepreneurs supported" },
-      { value: "2,800+", label: "Jobs created" },
-      { value: "300,000", label: "Tons of CO₂e reduced" },
-      { value: "$800,000+", label: "Funding mobilized" },
+      { value: "1,000+", label: "Entrepreneurs supported", icon: "users" },
+      { value: "2,800+", label: "Jobs created", icon: "jobs" },
+      { value: "300,000", label: "Tons of CO₂e reduced", icon: "climate" },
+      { value: "$800,000+", label: "Funding mobilized", icon: "finance" },
     ],
     strategicPartners: {
       title: "Our strategic partners",
@@ -357,10 +473,64 @@ const flagshipRecord = FLAGSHIP_PROGRAMMES as Record<string, FlagshipProgrammeCo
 
 export const FLAGSHIP_SLUGS = new Set(Object.keys(FLAGSHIP_PROGRAMMES));
 
+/**
+ * All slug strings to try when matching CMS / URL slugs to flagship config.
+ * Handles casing, `the-` prefix, legacy `programmes-*` seed slugs, and `-programme` suffix.
+ */
+function collectFlagshipSlugVariants(input: string): string[] {
+  const trimmed = input.trim();
+  if (!trimmed) return [];
+  const n = trimmed.toLowerCase();
+  const out = new Set<string>();
+  const add = (s: string) => {
+    if (s) out.add(s);
+  };
+  add(trimmed);
+  add(n);
+  add(n.replace(/^the-/, ""));
+  add(n.replace(/^programmes-/, ""));
+  add(n.replace(/-programme$/, ""));
+  add(n.replace(/^the-/, "").replace(/^programmes-/, ""));
+  add(n.replace(/^the-/, "").replace(/-programme$/, ""));
+  const legacy = n.match(/^programmes-(.+)$/);
+  if (legacy) add(legacy[1]);
+  return [...out];
+}
+
 export function getFlagshipContent(slug: string): FlagshipProgrammeContent | null {
-  return flagshipRecord[slug] ?? null;
+  for (const v of collectFlagshipSlugVariants(slug)) {
+    if (v in flagshipRecord) return flagshipRecord[v];
+    const mapped = FLAGSHIP_SLUG_ALIASES[v];
+    if (mapped && mapped in flagshipRecord) return flagshipRecord[mapped];
+  }
+  return null;
+}
+
+/** Same as `getFlagshipContent` — resolves short slugs like `swift` → `swift-programme`. */
+export function getFlagshipContentForRouteSlug(slug: string): FlagshipProgrammeContent | null {
+  return getFlagshipContent(slug);
+}
+
+/** Ordered slug candidates to try against the database (URL slug first, then canonical). */
+export function slugCandidatesForFlagship(requested: string): string[] {
+  const order: string[] = [];
+  const add = (s: string) => {
+    const t = s.trim();
+    if (!t || order.includes(t)) return;
+    order.push(t);
+  };
+  add(requested);
+  const resolved = getFlagshipContent(requested);
+  if (resolved) add(resolved.slug);
+  for (const v of collectFlagshipSlugVariants(requested)) add(v);
+  if (resolved) {
+    for (const [alias, canon] of Object.entries(FLAGSHIP_SLUG_ALIASES)) {
+      if (canon === resolved.slug) add(alias);
+    }
+  }
+  return order;
 }
 
 export function isFlagshipSlug(slug: string): boolean {
-  return FLAGSHIP_SLUGS.has(slug);
+  return getFlagshipContent(slug) !== null;
 }

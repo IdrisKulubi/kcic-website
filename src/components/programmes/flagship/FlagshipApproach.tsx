@@ -84,6 +84,26 @@ export function FlagshipApproach({
                 </ol>
               </div>
             )}
+            {block.kind === "detailCards" && (
+              <div>
+                <h3 className="text-base font-semibold tracking-tight text-gray-900 mb-2">{block.title}</h3>
+                {block.lead ? (
+                  <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed max-w-3xl mb-8">{block.lead}</p>
+                ) : null}
+                <ul className="grid gap-5 sm:grid-cols-2">
+                  {block.items.map((item, j) => (
+                    <li
+                      key={j}
+                      className="rounded-xl border border-stone-200/90 bg-stone-50/40 p-5 sm:p-6 shadow-sm"
+                    >
+                      <div className="h-0.5 w-10 rounded-full mb-4" style={{ backgroundColor: accentColor }} aria-hidden />
+                      <h4 className="text-sm font-semibold text-gray-900 leading-snug">{item.title}</h4>
+                      <p className="mt-2 text-sm text-gray-600 leading-relaxed">{item.body}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>

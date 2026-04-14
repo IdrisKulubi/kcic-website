@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getProgrammeBySlug } from '@/lib/actions/programmes';
+import { getProgrammeBySlugWithFlagshipFallback } from '@/lib/actions/programmes';
+import { getFlagshipContent } from '@/data/flagship-programmes';
 import { getFooterSection } from '@/lib/actions/footer';
 import ProgrammeDetailPage from '@/components/sections/ProgrammeDetailPage';
 import type { FooterData } from '@/data/home';
@@ -35,7 +36,7 @@ async function getProgrammePageFooter(): Promise<FooterData> {
 
 export default async function ProgrammePage({ params }: PageProps) {
     const { slug } = await params;
-    const result = await getProgrammeBySlug(slug);
+    const result = await getProgrammeBySlugWithFlagshipFallback(slug);
 
     if (!result.success || !result.data) {
         notFound();
@@ -48,7 +49,7 @@ export default async function ProgrammePage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps) {
     const { slug } = await params;
-    const result = await getProgrammeBySlug(slug);
+    const result = await getProgrammeBySlugWithFlagshipFallback(slug);
 
     if (!result.success || !result.data) {
         return {
@@ -56,8 +57,12 @@ export async function generateMetadata({ params }: PageProps) {
         };
     }
 
+    const flagship = getFlagshipContent(slug) ?? getFlagshipContent(result.data.slug);
+    const displayTitle = flagship?.shell?.title ?? result.data.title;
+    const displayDescription = flagship?.shell?.description ?? result.data.description;
+
     return {
-        title: `${result.data.title} | KCIC Programmes`,
-        description: result.data.description,
+        title: `${displayTitle} | KCIC Programmes`,
+        description: displayDescription,
     };
 }
