@@ -6,7 +6,6 @@ import Link from "next/link";
 import { colors, typography } from "@/lib/design-system";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight } from "lucide-react";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -46,7 +45,7 @@ interface ProgramsShowcaseSectionProps {
 const programs: ProgramCard[] = [
   {
     name: "GreenBiz Programme",
-    slug: "greenbiz",
+    slug: "greenbiz-programme",
     image: "/images/programmes/greenbiz.jpg",
     fundingSource: "DANIDA",
     fundingAmount: "$10M",
@@ -69,7 +68,7 @@ const programs: ProgramCard[] = [
   },
   {
     name: "AgriBiz Programme",
-    slug: "agribiz",
+    slug: "agribiz-programme",
     image: "/images/programmes/biz.jpg",
     fundingSource: "EU & DANIDA",
     fundingAmount: "€18.9M",
@@ -92,16 +91,16 @@ const programs: ProgramCard[] = [
   },
   {
     name: "PUSE Programme",
-    slug: "puse",
+    slug: "puse-programme",
     image: "/images/programmes/puse.jpg",
     fundingSource: "Mott Foundation",
     fundingAmount: "$350K",
     overview:
-      "Promoting urban sustainability through support for SMEs developing innovative solutions for waste management, energy, and water in urban settings.",
+      "East Africa pilot supporting enterprises to deploy solar-powered productive use solutions in dairy, horticulture, and aquaculture value chains.",
     metrics: [
-      { value: "30", label: "SMEs Supported" },
-      { value: "261", label: "Jobs Created" },
-      { value: "18,221", label: "Customers Reached" },
+      { value: "30", label: "Enterprises supported (KE, UG, TZ)" },
+      { value: "407+", label: "Direct jobs created" },
+      { value: "23,516", label: "New customers reached" },
     ],
     enterprises: [
       { name: "Techwin", logo: "/images/enterprises/techwin.png" },
@@ -115,7 +114,7 @@ const programs: ProgramCard[] = [
   },
   {
     name: "SWIFT Programme",
-    slug: "swift",
+    slug: "swift-programme",
     image: "/images/programmes/swift.jpg",
     fundingSource: "IKEA Foundation",
     fundingAmount: "$5.1M",
@@ -350,13 +349,12 @@ export default function ProgramsShowcase({
                 {/* Learn More Link */}
                 <Link
                   href={`/programmes/${program.slug}`}
-                  className="mt-4 inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl text-sm font-semibold text-white transition-all duration-300 hover:shadow-lg hover:brightness-110"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${program.gradientFrom}, ${program.gradientTo})` 
+                  className="mt-4 inline-flex w-full items-center justify-center rounded-lg py-3 px-4 text-sm font-semibold text-white transition-opacity hover:opacity-95"
+                  style={{
+                    background: `linear-gradient(135deg, ${program.gradientFrom}, ${program.gradientTo})`,
                   }}
                 >
-                  Learn More
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  View programme
                 </Link>
               </div>
             </article>
@@ -368,10 +366,9 @@ export default function ProgramsShowcase({
           <div className="text-center mt-14">
             <Link
               href="/programmes"
-              className="group inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-full hover:border-[#80c738] hover:text-[#80c738] hover:shadow-lg transition-all duration-300"
+              className="inline-flex rounded-lg border border-gray-200 bg-white px-8 py-3.5 text-base font-semibold text-gray-800 transition-colors hover:border-gray-300 hover:bg-gray-50"
             >
-              View All Programmes
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              View all programmes
             </Link>
           </div>
         )}

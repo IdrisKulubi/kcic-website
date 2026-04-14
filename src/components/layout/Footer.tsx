@@ -61,12 +61,19 @@ export default function Footer({ data }: FooterProps) {
     if (shouldDisableAnimations?.() || !innerRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
+      // Animate y only — avoid opacity:0 so content is never hidden if ScrollTrigger misses (e.g. short viewport / HMR).
       gsap.fromTo(
         innerRef.current,
-        { opacity: 0, y: 14 },
+        { y: 12 },
         {
-          opacity: 1, y: 0, duration: 0.65, ease: "power3.out",
-          scrollTrigger: { trigger: innerRef.current, start: "top 96%", toggleActions: "play none none reverse" },
+          y: 0,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: innerRef.current,
+            start: "top bottom",
+            toggleActions: "play none none reverse",
+          },
         }
       );
     }, footerRef);

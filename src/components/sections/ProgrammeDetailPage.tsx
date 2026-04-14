@@ -1,113 +1,80 @@
 'use client';
 
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProgrammeWithSponsors } from '@/lib/actions/programmes';
+import { getFlagshipContent } from '@/data/flagship-programmes';
+import { FlagshipHero } from '@/components/programmes/flagship/FlagshipHero';
+import { FlagshipProgrammeSections } from '@/components/programmes/flagship/FlagshipProgrammeSections';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
 import Footer from '@/components/layout/Footer';
+import type { FooterData } from '@/data/home';
 import { navData } from '@/lib/navigation';
-import { 
-    ArrowLeft as ArrowLeftIcon, 
-    ArrowSquareOut as ArrowSquareOutIcon,
-    CheckCircle as CheckCircleIcon,
-    Info as InfoIcon,
-    FileText as FileTextIcon,
-    Users as UsersIcon,
-    Target as TargetIcon,
-    Gear as GearIcon,
-    BookOpen as BookOpenIcon,
-    ShieldCheck as ShieldCheckIcon,
-    ChartBar as ChartBarIcon,
-    Warning as WarningIcon,
-    CaretDown as CaretDownIcon,
-    CaretUp as CaretUpIcon,
-    ArrowRight as ArrowRightIcon,
-    Clock as ClockIcon,
-    CurrencyDollar as CurrencyDollarIcon,
-    GraduationCap as GraduationCapIcon,
-    RocketLaunch as RocketLaunchIcon,
-    Lightbulb as LightbulbIcon,
-    Handshake as HandshakeIcon,
-    IconProps,
-} from '@phosphor-icons/react';
-import type { Icon } from '@phosphor-icons/react';
+import { CaretDown as CaretDownIcon, CaretUp as CaretUpIcon } from '@phosphor-icons/react';
 
 interface Props {
     programme: ProgrammeWithSponsors;
+    footerData: FooterData;
 }
 
-// Section configuration with icons
 const sectionConfig = {
-    introduction: { 
-        label: 'About This Programme', 
-        icon: InfoIcon,
-        description: 'Learn about the programme objectives and scope'
+    introduction: {
+        label: 'About This Programme',
+        description: 'Learn about the programme objectives and scope',
     },
-    applicationProcess: { 
-        label: 'How to Apply', 
-        icon: FileTextIcon,
-        description: 'Step-by-step application guide'
+    applicationProcess: {
+        label: 'How to Apply',
+        description: 'Step-by-step application guide',
     },
-    criteria: { 
-        label: 'Requirements', 
-        icon: CheckCircleIcon,
-        description: 'What we look for in applicants'
+    criteria: {
+        label: 'Requirements',
+        description: 'What we look for in applicants',
     },
-    eligibility: { 
-        label: 'Who Can Apply', 
-        icon: UsersIcon,
-        description: 'Eligibility requirements'
+    eligibility: {
+        label: 'Who Can Apply',
+        description: 'Eligibility requirements',
     },
-    applicationSelection: { 
-        label: 'Selection Process', 
-        icon: TargetIcon,
-        description: 'How applications are evaluated'
+    applicationSelection: {
+        label: 'Selection Process',
+        description: 'How applications are evaluated',
     },
-    technicalSupport: { 
-        label: 'Support Provided', 
-        icon: GearIcon,
-        description: 'Resources and assistance available'
+    technicalSupport: {
+        label: 'Support Provided',
+        description: 'Resources and assistance available',
     },
-    definitions: { 
-        label: 'Key Terms', 
-        icon: BookOpenIcon,
-        description: 'Important definitions'
+    definitions: {
+        label: 'Key Terms',
+        description: 'Important definitions',
     },
-    terms: { 
-        label: 'Terms & Conditions', 
-        icon: ShieldCheckIcon,
-        description: 'Legal terms and agreements'
+    terms: {
+        label: 'Terms & Conditions',
+        description: 'Legal terms and agreements',
     },
-    scoringSystem: { 
-        label: 'Evaluation Criteria', 
-        icon: ChartBarIcon,
-        description: 'How applications are scored'
+    scoringSystem: {
+        label: 'Evaluation Criteria',
+        description: 'How applications are scored',
     },
-    fraudPolicy: { 
-        label: 'Integrity Policy', 
-        icon: WarningIcon,
-        description: 'Anti-fraud guidelines'
+    fraudPolicy: {
+        label: 'Integrity Policy',
+        description: 'Anti-fraud guidelines',
     },
 } as const;
 
 type SectionKey = keyof typeof sectionConfig;
 
-// Collapsible Section Component
-function CollapsibleSection({ 
+function CollapsibleSection({
     id,
-    title, 
-    icon: IconComponent, 
+    title,
     description,
-    content, 
-    isOpen, 
+    content,
+    isOpen,
     onToggle,
-    accentColor 
-}: { 
+    accentColor,
+}: {
     id: string;
     title: string;
-    icon: Icon;
     description: string;
     content: string;
     isOpen: boolean;
@@ -115,35 +82,31 @@ function CollapsibleSection({
     accentColor: string;
 }) {
     return (
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+        <motion.div
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            className="overflow-hidden rounded-lg border border-gray-200 bg-white transition-colors hover:border-gray-300"
         >
             <button
+                type="button"
                 onClick={onToggle}
-                className="w-full p-4 flex items-center gap-3 text-left hover:bg-gray-50/50 transition-colors"
+                className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-gray-50/80"
                 aria-expanded={isOpen}
                 aria-controls={`section-${id}`}
             >
-                <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: `${accentColor}15` }}
-                >
-                    <IconComponent className="w-5 h-5" color={accentColor} />
-                </div>
-                <div className="flex-1 min-w-0">
+                <span
+                    className="mt-1.5 h-8 w-0.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: accentColor }}
+                    aria-hidden
+                />
+                <div className="min-w-0 flex-1">
                     <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
-                    <p className="text-xs text-gray-500 truncate">{description}</p>
+                    <p className="mt-0.5 truncate text-xs text-gray-500">{description}</p>
                 </div>
-                <div className="shrink-0">
-                    {isOpen ? (
-                        <CaretUpIcon className="w-5 h-5 text-gray-400" />
-                    ) : (
-                        <CaretDownIcon className="w-5 h-5 text-gray-400" />
-                    )}
-                </div>
+                <span className="shrink-0 text-gray-400" aria-hidden>
+                    {isOpen ? <CaretUpIcon className="h-5 w-5" /> : <CaretDownIcon className="h-5 w-5" />}
+                </span>
             </button>
             
             <AnimatePresence>
@@ -180,33 +143,24 @@ function CollapsibleSection({
     );
 }
 
-// What You Get Card
-function BenefitCard({ 
-    icon: IconComponent, 
-    title, 
+function BenefitCard({
+    title,
     description,
-    color 
-}: { 
-    icon: Icon;
+    color,
+}: {
     title: string;
     description: string;
     color: string;
 }) {
     return (
-        <div className="p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow">
-            <div 
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-                style={{ backgroundColor: `${color}15` }}
-            >
-                <IconComponent className="w-5 h-5" color={color} weight="duotone" />
-            </div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-1">{title}</h4>
-            <p className="text-xs text-gray-500 leading-relaxed">{description}</p>
+        <div className="border-t-2 border-gray-100 bg-white p-4 pt-5 transition-colors hover:border-gray-200" style={{ borderTopColor: color }}>
+            <h4 className="text-sm font-semibold text-gray-900">{title}</h4>
+            <p className="mt-2 text-xs leading-relaxed text-gray-600">{description}</p>
         </div>
     );
 }
 
-export default function ProgrammeDetailPage({ programme }: Props) {
+export default function ProgrammeDetailPage({ programme, footerData }: Props) {
     const [openSections, setOpenSections] = useState<Set<string>>(new Set(['introduction']));
     const heroRef = useRef<HTMLDivElement>(null);
 
@@ -217,17 +171,21 @@ export default function ProgrammeDetailPage({ programme }: Props) {
         );
     }, [programme]);
 
+    const flagshipContent = useMemo(() => getFlagshipContent(programme.slug), [programme.slug]);
+
+    const primaryApplyHref = useMemo(() => {
+        if (!flagshipContent) return programme.applicationLink ?? null;
+        const spec = flagshipContent.ctas.find((c) => c.key === 'apply');
+        return programme.applicationLink ?? spec?.fallbackHref ?? null;
+    }, [flagshipContent, programme.applicationLink]);
+
     // Parse introduction for key highlights
-    const getHighlights = () => {
-        // Default highlights - can be enhanced with actual parsing
-        const highlights = [
-            { icon: RocketLaunchIcon, title: 'Accelerator Support', description: 'Business development and growth assistance' },
-            { icon: CurrencyDollarIcon, title: 'Funding Access', description: 'Connect with investors and financing options' },
-            { icon: GraduationCapIcon, title: 'Skills Training', description: 'Capacity building and mentorship' },
-            { icon: HandshakeIcon, title: 'Network Access', description: 'Connect with industry partners and peers' },
-        ];
-        return highlights;
-    };
+    const getHighlights = () => [
+        { title: 'Accelerator support', description: 'Business development and growth assistance.' },
+        { title: 'Funding access', description: 'Connections to investors and financing options.' },
+        { title: 'Skills training', description: 'Capacity building and mentorship.' },
+        { title: 'Network access', description: 'Introductions to industry partners and peers.' },
+    ];
 
     const toggleSection = (sectionId: string) => {
         setOpenSections(prev => {
@@ -248,6 +206,142 @@ export default function ProgrammeDetailPage({ programme }: Props) {
     const collapseAll = () => {
         setOpenSections(new Set());
     };
+
+    if (flagshipContent) {
+        return (
+            <div className="min-h-screen bg-gray-50">
+                <MinimalNavbar {...navData} />
+                <FlagshipHero programme={programme} flagship={flagshipContent} heroRef={heroRef} />
+                <FlagshipProgrammeSections programme={programme} flagship={flagshipContent} />
+
+                {availableSections.length > 0 && (
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                        <section aria-label="Additional programme documents">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h2 className="text-lg font-bold text-gray-900">Programme details</h2>
+                                    <p className="text-gray-500 text-xs mt-1">
+                                        Click each section to expand and learn more
+                                    </p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={expandAll}
+                                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                                    >
+                                        Expand all
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={collapseAll}
+                                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                                    >
+                                        Collapse all
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                {availableSections.map((sectionKey) => {
+                                    const config = sectionConfig[sectionKey];
+                                    const content = programme[sectionKey];
+                                    if (!content || typeof content !== 'string') return null;
+                                    return (
+                                        <CollapsibleSection
+                                            key={sectionKey}
+                                            id={sectionKey}
+                                            title={config.label}
+                                            description={config.description}
+                                            content={content}
+                                            isOpen={openSections.has(sectionKey)}
+                                            onToggle={() => toggleSection(sectionKey)}
+                                            accentColor={programme.color}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                {programme.isActive && primaryApplyHref && (
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                        <section aria-label="Apply call to action">
+                            <div
+                                className="relative rounded-3xl p-8 md:p-12 overflow-hidden"
+                                style={{ backgroundColor: programme.color }}
+                            >
+                                <div className="absolute inset-0 opacity-10">
+                                    <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                        <defs>
+                                            <pattern id="flagship-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1" />
+                                            </pattern>
+                                        </defs>
+                                        <rect width="100%" height="100%" fill="url(#flagship-grid)" />
+                                    </svg>
+                                </div>
+                                <div className="relative z-10 text-center">
+                                    <p className="text-xs font-medium uppercase tracking-wide text-white/80 mb-3">
+                                        Applications open
+                                    </p>
+                                    <h3 className="text-xl md:text-2xl font-semibold text-white mb-3">Ready to apply?</h3>
+                                    <p className="text-white/90 text-sm md:text-base max-w-2xl mx-auto mb-6">
+                                        Join {programme.title} and take the next step in your climate innovation journey.
+                                    </p>
+                                    <a
+                                        href={primaryApplyHref}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex rounded-md bg-white px-6 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100"
+                                    >
+                                        Apply now
+                                        <span className="sr-only"> (opens in new tab)</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                <div className="bg-white border-t border-gray-100 py-12">
+                    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <h3 className="text-base font-bold text-gray-900 mb-2">Explore more programmes</h3>
+                        <p className="text-gray-500 text-sm mb-6">
+                            Discover other initiatives supporting climate innovation across Africa.
+                        </p>
+                        <Link
+                            href="/programmes"
+                            className="inline-flex rounded-md bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800"
+                        >
+                            View all programmes
+                        </Link>
+                    </div>
+                </div>
+
+                <Footer data={footerData} />
+
+                {programme.isActive && primaryApplyHref && (
+                    <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 1, type: 'spring' }}
+                        className="fixed bottom-6 right-6 z-50"
+                    >
+                        <a
+                            href={primaryApplyHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded-md bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800"
+                        >
+                            Apply
+                            <span className="sr-only"> (opens in new tab)</span>
+                        </a>
+                    </motion.div>
+                )}
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -270,12 +364,8 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                 {/* Hero Content */}
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
                     {/* Breadcrumb */}
-                    <Link
-                        href="/programmes"
-                        className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-8 transition-colors group"
-                    >
-                        <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                        Back to Programmes
+                    <Link href="/programmes" className="mb-8 inline-block text-sm text-white/70 transition-colors hover:text-white">
+                        ← Back to programmes
                     </Link>
 
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -283,14 +373,12 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                         <div>
                             {/* Status Badge */}
                             {programme.isActive ? (
-                                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/20 text-green-400 rounded-full text-sm font-medium mb-6">
-                                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                                    Applications Open
+                                <span className="mb-6 inline-block border border-emerald-400/40 px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-emerald-200">
+                                    Applications open
                                 </span>
                             ) : (
-                                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-500/20 text-gray-400 rounded-full text-sm font-medium mb-6">
-                                    <ClockIcon className="w-4 h-4" />
-                                    Programme Overview
+                                <span className="mb-6 inline-block border border-white/20 px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-white/60">
+                                    Programme overview
                                 </span>
                             )}
 
@@ -309,25 +397,25 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                                         href={programme.applicationLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-sm text-white font-semibold rounded-full transition-all hover:scale-105 shadow-lg shadow-green-600/30"
+                                        className="rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100"
                                     >
-                                        Apply Now
-                                        <ArrowSquareOutIcon className="w-4 h-4" />
+                                        Apply
+                                        <span className="sr-only"> (opens in new tab)</span>
                                     </a>
                                 )}
                                 <button
+                                    type="button"
                                     onClick={() => document.getElementById('programme-details')?.scrollIntoView({ behavior: 'smooth' })}
-                                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-sm text-white font-semibold rounded-full transition-all backdrop-blur-sm"
+                                    className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10"
                                 >
-                                    Learn More
-                                    <ArrowRightIcon className="w-4 h-4" />
+                                    Learn more
                                 </button>
                             </div>
                         </div>
 
                         {/* Right: Featured Image Card */}
                         <div className="hidden lg:block">
-                            <div className="relative rounded-2xl overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                            <div className="relative overflow-hidden rounded-lg border border-white/10 shadow-lg">
                                 <div className="aspect-[4/3] relative">
                                     <Image
                                         src={programme.image}
@@ -351,12 +439,10 @@ export default function ProgrammeDetailPage({ programme }: Props) {
             {programme.sponsors.length > 0 && (
                 <div className="bg-white border-b border-gray-100 py-8">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <p className="text-xs text-gray-400 uppercase tracking-wider text-center mb-6">
-                            Supported By
-                        </p>
+                        <p className="mb-6 text-center text-xs font-medium uppercase tracking-wide text-gray-500">Funded by</p>
                         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
                             {programme.sponsors.map((sponsor) => (
-                                <div key={sponsor.id} className="relative h-12 w-32 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300">
+                                <div key={sponsor.id} className="relative h-12 w-32 opacity-90 transition-opacity hover:opacity-100">
                                     <Image
                                         src={sponsor.logo}
                                         alt={sponsor.name}
@@ -373,33 +459,19 @@ export default function ProgrammeDetailPage({ programme }: Props) {
             {/* Main Content */}
             <div id="programme-details" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 
-                {/* What You Get Section */}
-                <section className="mb-16">
-                    <div className="text-center mb-8">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-semibold uppercase tracking-wider mb-3">
-                            <LightbulbIcon className="w-3 h-3" />
-                            Programme Benefits
-                        </span>
-                        <h2 className="text-lg md:text-xl font-bold text-gray-900">
-                            What This Programme Offers
-                        </h2>
-                    </div>
-                    
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <section className="mb-16 border-t border-gray-200 pt-12">
+                    <h2 className="text-lg font-semibold tracking-tight text-gray-900">What this programme offers</h2>
+                    <p className="mt-1 text-sm text-gray-600">Typical support areas — details vary by intake.</p>
+                    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                         {getHighlights().map((benefit, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 8 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
+                                transition={{ delay: index * 0.05 }}
                             >
-                                <BenefitCard
-                                    icon={benefit.icon}
-                                    title={benefit.title}
-                                    description={benefit.description}
-                                    color={programme.color}
-                                />
+                                <BenefitCard title={benefit.title} description={benefit.description} color={programme.color} />
                             </motion.div>
                         ))}
                     </div>
@@ -443,7 +515,6 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                                         key={sectionKey}
                                         id={sectionKey}
                                         title={config.label}
-                                        icon={config.icon}
                                         description={config.description}
                                         content={content}
                                         isOpen={openSections.has(sectionKey)}
@@ -476,27 +547,19 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                             </div>
 
                             <div className="relative z-10 text-center">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 text-white rounded-full text-xs font-semibold mb-4">
-                                    <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                                    Applications Now Open
-                                </span>
-                                
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-                                    Ready to Make an Impact?
-                                </h3>
-                                
-                                <p className="text-white/90 text-sm md:text-base max-w-2xl mx-auto mb-6">
+                                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-white/80">Applications open</p>
+                                <h3 className="mb-3 text-xl font-semibold text-white md:text-2xl">Ready to apply?</h3>
+                                <p className="mx-auto mb-6 max-w-2xl text-sm text-white/90 md:text-base">
                                     Join {programme.title} and take the next step in your climate innovation journey.
                                 </p>
-
                                 <a
                                     href={programme.applicationLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 text-sm font-bold rounded-full hover:scale-105 transition-transform shadow-xl"
+                                    className="inline-flex rounded-md bg-white px-6 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100"
                                 >
-                                    Apply Now
-                                    <ArrowSquareOutIcon className="w-4 h-4" />
+                                    Apply now
+                                    <span className="sr-only"> (opens in new tab)</span>
                                 </a>
                             </div>
                         </div>
@@ -515,21 +578,14 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                     </p>
                     <Link
                         href="/programmes"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors"
+                        className="inline-flex rounded-md bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800"
                     >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        View All Programmes
+                        View all programmes
                     </Link>
                 </div>
             </div>
 
-            <Footer data={{
-                quickLinks: [{ label: 'Home', href: '/' }],
-                socialMedia: [],
-                contact: { address: '', phone: '', email: '' },
-                newsletter: { title: '', description: '', placeholder: '' },
-                copyright: '© 2024 KCIC'
-            }} />
+            <Footer data={footerData} />
 
             {/* Floating Apply Button - Always visible when active */}
             {programme.isActive && programme.applicationLink && (
@@ -543,10 +599,10 @@ export default function ProgrammeDetailPage({ programme }: Props) {
                         href={programme.applicationLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-sm text-white font-semibold rounded-full shadow-lg shadow-green-600/30 transition-all hover:scale-105"
+                        className="rounded-md bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800"
                     >
-                        Apply Here
-                        <ArrowSquareOutIcon className="w-4 h-4" />
+                        Apply
+                        <span className="sr-only"> (opens in new tab)</span>
                     </a>
                 </motion.div>
             )}
