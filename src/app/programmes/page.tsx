@@ -159,6 +159,21 @@ export default function ProgrammesPage() {
     fetchData();
   }, []);
 
+  // Scroll to #flagship | #projects | #past when landing with a hash or changing hash on same page
+  useEffect(() => {
+    function scrollToHash() {
+      const id = window.location.hash.replace(/^#/, '');
+      if (!id) return;
+      requestAnimationFrame(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+    scrollToHash();
+    window.addEventListener('hashchange', scrollToHash);
+    return () => window.removeEventListener('hashchange', scrollToHash);
+  }, [loading, programmes.length]);
+
   return (
     <div className="min-h-screen bg-white">
       <MinimalNavbar {...navData} />
@@ -199,7 +214,12 @@ export default function ProgrammesPage() {
           )}
 
           {!loading && flagshipProgrammes.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-16 sm:mb-20">
+            <motion.div
+              id="flagship"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-16 scroll-mt-28 sm:mb-20 sm:scroll-mt-32"
+            >
               <div className="mb-8 border-b border-gray-100 pb-6">
                 <h2 className="text-lg font-semibold tracking-tight text-gray-900">Flagship programmes</h2>
                 <p className="mt-1 text-sm text-gray-600">Core initiatives with dedicated delivery and reporting.</p>
@@ -213,7 +233,13 @@ export default function ProgrammesPage() {
           )}
 
           {!loading && specialProgrammes.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
+            <motion.div
+              id="projects"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 }}
+              className="scroll-mt-28 sm:scroll-mt-32"
+            >
               <div className="mb-8 border-b border-gray-100 pb-6">
                 <h2 className="text-lg font-semibold tracking-tight text-gray-900">Special projects</h2>
                 <p className="mt-1 text-sm text-gray-600">Focused partnerships and time-bound interventions.</p>
@@ -224,6 +250,36 @@ export default function ProgrammesPage() {
                 ))}
               </div>
             </motion.div>
+          )}
+
+          {!loading && programmes.length > 0 && (
+            <section
+              id="past"
+              className="scroll-mt-28 border-t border-gray-100 pt-14 sm:scroll-mt-32 sm:pt-16"
+              aria-labelledby="past-projects-heading"
+            >
+              <h2 id="past-projects-heading" className="text-lg font-semibold tracking-tight text-gray-900">
+                Past projects
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-gray-600">
+                Stories and outcomes from completed initiatives are captured through our impact work and newsroom. If
+                you are looking for a specific closed programme, contact us and we will point you to the right materials.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/impact"
+                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
+                >
+                  Impact overview
+                </Link>
+                <Link
+                  href="/newsroom/press-release"
+                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
+                >
+                  News & updates
+                </Link>
+              </div>
+            </section>
           )}
 
           {!loading && programmes.length === 0 && (

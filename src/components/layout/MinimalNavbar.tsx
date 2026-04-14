@@ -34,6 +34,7 @@ import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -98,6 +99,7 @@ if (typeof window !== 'undefined') {
 }
 
 export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -202,10 +204,34 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
     }, 150);
   };
 
+  /** When already on the target path, scroll to #id instead of full navigation (keeps SPA state, fixes hash on /programmes). */
+  const scrollToInPageSection = React.useCallback(
+    (href: string): boolean => {
+      if (typeof window === 'undefined') return false;
+      const hashIdx = href.indexOf('#');
+      if (hashIdx === -1) return false;
+      const path = href.slice(0, hashIdx) || pathname;
+      const hash = href.slice(hashIdx + 1);
+      if (!hash) return false;
+      if (pathname !== path) return false;
+      const el = document.getElementById(hash);
+      if (!el) return false;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.replaceState(null, '', href);
+      return true;
+    },
+    [pathname]
+  );
+
   const handleKeyNavigation = (event: React.KeyboardEvent, href: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      window.location.href = href;
+      if (scrollToInPageSection(href)) {
+        setActiveDropdown(null);
+        setIsMobileMenuOpen(false);
+      } else {
+        window.location.href = href;
+      }
     }
   };
 
@@ -333,6 +359,12 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                               transition={{ delay: index * 0.03 }}
                               className="group flex items-center p-2 rounded-lg transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
                               onKeyDown={(e) => handleKeyNavigation(e, subItem.href)}
+                              onClick={(e) => {
+                                if (scrollToInPageSection(subItem.href)) {
+                                  e.preventDefault();
+                                  setActiveDropdown(null);
+                                }
+                              }}
                             >
                               <div className="shrink-0 w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-[#80c738]/10 transition-colors duration-200">
                                 {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-gray-600 group-hover:text-[#80c738] transition-colors" })}
@@ -523,7 +555,12 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                       animate={{ opacity: 1, x: 0 }}
                                       transition={{ delay: subIndex * 0.03 }}
                                       className="flex items-center py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/10"
-                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      onClick={(e) => {
+                                        if (scrollToInPageSection(subItem.href)) {
+                                          e.preventDefault();
+                                        }
+                                        setIsMobileMenuOpen(false);
+                                      }}
                                     >
                                       <div className="w-10 h-10 rounded-xl bg-[#80c738]/10 flex items-center justify-center mr-4 border border-[#80c738]/20">
                                         {React.createElement(getIcon(subItem.icon), {
