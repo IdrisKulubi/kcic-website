@@ -92,15 +92,17 @@ export default function Footer({ data }: FooterProps) {
                   {data.contact.address}
                 </span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-blue-400 shrink-0" />
-                <a
-                  href={`tel:${data.contact.phone}`}
-                  className="text-sm hover:text-blue-600 transition-colors"
-                >
-                  {data.contact.phone}
-                </a>
-              </div>
+              {data.contact.phone && (
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-5 w-5 text-blue-400 shrink-0" />
+                  <a
+                    href={`tel:${data.contact.phone}`}
+                    className="text-sm hover:text-blue-600 transition-colors"
+                  >
+                    {data.contact.phone}
+                  </a>
+                </div>
+              )}
               <div className="flex items-center space-x-3">
                 <Envelope className="h-5 w-5 text-yellow-400 shrink-0" />
                 <a
