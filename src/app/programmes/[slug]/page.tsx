@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getProgrammeBySlugWithFlagshipFallback } from '@/lib/actions/programmes';
-import { getFlagshipContent } from '@/data/flagship-programmes';
+import { getFlagshipContent, getFlagshipContentForProgramme } from '@/data/flagship-programmes';
 import { getFooterSection } from '@/lib/actions/footer';
 import ProgrammeDetailPage from '@/components/sections/ProgrammeDetailPage';
 import type { FooterData } from '@/data/home';
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps) {
         };
     }
 
-    const flagship = getFlagshipContent(slug) ?? getFlagshipContent(result.data.slug);
+    const flagship = getFlagshipContent(slug) ?? getFlagshipContentForProgramme(result.data);
     const displayTitle = flagship?.shell?.title ?? result.data.title;
     const displayDescription = flagship?.shell?.description ?? result.data.description;
 

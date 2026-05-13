@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProgrammeWithSponsors } from '@/lib/actions/programmes';
-import { getFlagshipContent } from '@/data/flagship-programmes';
+import { getFlagshipContentForProgramme } from '@/data/flagship-programmes';
 import { FlagshipHero } from '@/components/programmes/flagship/FlagshipHero';
 import { FlagshipProgrammeSections } from '@/components/programmes/flagship/FlagshipProgrammeSections';
 import { MinimalNavbar } from '@/components/layout/MinimalNavbar';
@@ -171,7 +171,7 @@ export default function ProgrammeDetailPage({ programme, footerData }: Props) {
         );
     }, [programme]);
 
-    const flagshipContent = useMemo(() => getFlagshipContent(programme.slug), [programme.slug]);
+    const flagshipContent = useMemo(() => getFlagshipContentForProgramme(programme), [programme]);
 
     const viewProgramme = useMemo((): ProgrammeWithSponsors => {
         if (!flagshipContent?.shell) return programme;
