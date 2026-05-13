@@ -403,33 +403,12 @@ export default function HomePage({
               <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
                 <HistoryTimeline />
               </AnimatedSection>
-              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
-                <FoundingBeliefs />
-              </AnimatedSection>
+             
             </div>
 
-            {/* SECTION 2: Our Approach - Combined (What We Do + How We Do It) */}
-            <div id="approach">
-              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
-              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
-                <WhatWeDo />
-                <div className="mt-12">
-                  <HowWeDoIt />
-                </div>
-              </AnimatedSection>
-            </div>
+          
 
-            {/* SECTION 3: Focus Areas - Full Parallax Experience */}
-            <div id="sectors">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#f9fafb" height={60} flip />
-              <KeySectorsParallax />
-            </div>
-
-            {/* SECTION 3B: Programs Showcase */}
-            <AnimatedSection direction="scale" className="bg-white py-12 sm:py-16">
-              <ProgramsShowcase />
-            </AnimatedSection>
-
+           
             {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
             <div id="impact">
               <SectionDivider variant="angle" fromColor="#ffffff" toColor="#0f172a" height={80} />
