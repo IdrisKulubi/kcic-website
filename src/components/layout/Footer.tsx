@@ -2,24 +2,22 @@
 
 import React, { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
-  XLogo,
-  LinkedinLogo,
+  Envelope,
   FacebookLogo,
   InstagramLogo,
-  YoutubeLogo,
-  Envelope,
-  Phone,
+  LinkedinLogo,
   MapPin,
   PaperPlaneTilt,
+  Phone,
   ShieldCheck,
+  XLogo,
+  YoutubeLogo,
 } from "@phosphor-icons/react";
 import { FooterData } from "@/data/home";
 import { WhistleblowerModal } from "@/components/whistleblower/WhistleblowerModal";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, prefersReducedMotion, registerGsapFoundation } from "@/lib/gsap-foundation";
 
 interface FooterProps {
   data: FooterData;
@@ -33,210 +31,162 @@ const socialIcons = {
   youtube: YoutubeLogo,
 };
 
-// Fixed colour palette so the footer is never affected by page light/dark theme
-const C = {
-  bg:          "#141922",
-  border:      "rgba(255,255,255,0.10)",
-  borderHover: "rgba(128,199,56,0.55)",
-  label:       "rgba(255,255,255,0.40)",
-  body:        "rgba(255,255,255,0.68)",
-  muted:       "rgba(255,255,255,0.48)",
-  white:       "#ffffff",
-  green:       "#80c738",
-  blue:        "#00addd",
-  orange:      "#e97451",
-} as const;
-
 export default function Footer({ data }: FooterProps) {
-  const [email, setEmail]               = useState("");
+  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isWhistleblowerOpen, setIsWhistleblowerOpen] = useState(false);
   const { shouldDisableAnimations } = useAccessibilityClasses();
-
   const footerRef = useRef<HTMLElement | null>(null);
-  const innerRef  = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    if (shouldDisableAnimations?.() || !innerRef.current) return;
-    gsap.registerPlugin(ScrollTrigger);
+    if (!footerRef.current || prefersReducedMotion() || shouldDisableAnimations?.()) return;
+
+    registerGsapFoundation();
     const ctx = gsap.context(() => {
-      // Animate y only — avoid opacity:0 so content is never hidden if ScrollTrigger misses (e.g. short viewport / HMR).
-      gsap.fromTo(
-        innerRef.current,
-        { y: 12 },
-        {
-          y: 0,
-          duration: 0.65,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: innerRef.current,
-            start: "top bottom",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      gsap.from("[data-footer-item]", {
+        y: 14,
+        autoAlpha: 0,
+        duration: 0.55,
+        stagger: 0.04,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 92%",
+        },
+      });
     }, footerRef);
+
     return () => ctx.revert();
   }, [shouldDisableAnimations]);
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+  const handleNewsletterSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+
     setIsSubmitting(true);
     setTimeout(() => {
-      setSubmitMessage("Subscribed ✓");
+      setSubmitMessage("Subscribed");
       setEmail("");
       setIsSubmitting(false);
-      setTimeout(() => setSubmitMessage(""), 3500);
-    }, 900);
+      setTimeout(() => setSubmitMessage(""), 3000);
+    }, 700);
   };
 
   return (
-    <footer
-      ref={footerRef}
-      style={{ backgroundColor: C.bg, colorScheme: "dark", color: C.white, position: "relative" }}
-    >
-      {/* top brand line */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute", top: 0, left: 0, height: 2, width: "100%",
-          background: "linear-gradient(90deg,#80c738 0%,#00addd 55%,#80c738 100%)",
-        }}
-      />
+    <footer ref={footerRef} className="border-t border-[#101010]/10 bg-[#fff7df] text-[#101010]">
+      <style jsx>{`
+        .kcic-footer-grid {
+          display: grid;
+          grid-template-columns: minmax(180px, 1fr) 128px minmax(280px, 1.25fr) 280px;
+          gap: 24px;
+          align-items: start;
+        }
 
-      <div ref={innerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        .kcic-footer-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
 
-        {/* ── MAIN ROW ── */}
-        <div className="flex flex-col gap-8 py-8 lg:flex-row lg:items-start lg:gap-10 lg:py-9">
+        @media (max-width: 980px) {
+          .kcic-footer-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
 
-          {/* 1 · Logo + tagline */}
-          <div className="shrink-0 lg:w-44">
-            <Link href="/" aria-label="KCIC home" style={{ display: "inline-flex", marginBottom: 10 }}>
-              <Image
+        @media (max-width: 640px) {
+          .kcic-footer-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+          }
+        }
+      `}</style>
+
+      <div className="h-[3px] bg-[#80c738]" aria-hidden="true" />
+      <div className="mx-auto max-w-[1320px] px-4 py-4 sm:px-5">
+        <div className="kcic-footer-grid">
+          <section data-footer-item aria-label="KCIC footer summary">
+            <Link
+              href="/"
+              aria-label="KCIC home"
+              className="inline-flex items-center overflow-hidden"
+              style={{ width: 96, height: 34 }}
+            >
+              <img
                 src="/images/hero/KCIC logo.png"
                 alt="KCIC"
-                width={110}
-                height={32}
-                className="h-8 w-auto"
-                priority
+                className="block object-contain"
+                style={{ width: 96, maxWidth: 96, height: "auto", maxHeight: 34 }}
               />
             </Link>
-            <p style={{ fontSize: 11, lineHeight: "18px", letterSpacing: "0.12em", color: C.muted, textTransform: "uppercase", marginTop: 6 }}>
-              Climate Innovation<br />Centre — Kenya
+            <p className="mt-2 max-w-[260px] text-[13px] font-semibold leading-5 text-[#3d3a2f]">
+              Climate entrepreneurship and green growth across the world.
             </p>
-          </div>
+          </section>
 
-          {/* 2 · Nav links */}
-          <div className="flex flex-col gap-1.5 lg:w-28 lg:pt-0.5">
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase", marginBottom: 4 }}>
-              Pages
-            </span>
-            {data.quickLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                style={{ fontSize: 13, lineHeight: "24px", color: C.body, textDecoration: "none", transition: "color 0.2s" }}
-                onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.green)}
-                onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          <nav data-footer-item aria-label="Footer links">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Pages</p>
+            <div className="mt-2 grid gap-1">
+              {data.quickLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-[13px] font-bold leading-5 text-[#28261d] transition hover:text-[#4f8618]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </nav>
 
-          {/* 3 · Contact */}
-          <div className="flex flex-col gap-2 lg:flex-1 lg:pt-0.5">
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase", marginBottom: 4 }}>
-              Contact
-            </span>
-            <address className="not-italic" style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, lineHeight: "22px", color: C.body }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                <MapPin style={{ marginTop: 3, width: 14, height: 14, flexShrink: 0, color: C.green }} />
-                <span>{data.contact.address}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Phone style={{ width: 14, height: 14, flexShrink: 0, color: C.blue }} />
-                <a href={`tel:${data.contact.phone}`} style={{ color: C.body, textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.white)}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}>
-                  {data.contact.phone}
-                </a>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Envelope style={{ width: 14, height: 14, flexShrink: 0, color: C.orange }} />
-                <a href={`mailto:${data.contact.email}`} style={{ color: C.body, textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = C.white)}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = C.body)}>
-                  {data.contact.email}
-                </a>
-              </div>
-            </address>
-          </div>
+          <address data-footer-item className="not-italic">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Contact</p>
+            <div className="mt-2 grid gap-1.5 text-[13px] font-semibold leading-5 text-[#4d4a3d]">
+              <p className="flex gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span className="max-w-[52ch]">{data.contact.address}</span>
+              </p>
+              <a href={`tel:${data.contact.phone}`} className="flex gap-2 transition hover:text-[#4f8618]">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span>{data.contact.phone}</span>
+              </a>
+              <a href={`mailto:${data.contact.email}`} className="flex gap-2 transition hover:text-[#4f8618]">
+                <Envelope className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span>{data.contact.email}</span>
+              </a>
+            </div>
+          </address>
 
-          {/* 4 · Newsletter + social */}
-          <div className="flex flex-col gap-3 lg:w-72 lg:pt-0.5">
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", color: C.label, textTransform: "uppercase" }}>
-              Stay Updated
-            </span>
-            <p style={{ fontSize: 13, lineHeight: "22px", color: C.body, margin: 0 }}>
-              {data.newsletter.description}
-            </p>
-
+          <section data-footer-item aria-label="Newsletter and social links">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Stay Updated</p>
             <form
               onSubmit={handleNewsletterSubmit}
-              style={{ display: "flex", gap: 0, height: 38 }}
+              className="mt-2 flex h-9 max-w-[280px]"
               aria-label="Newsletter signup"
             >
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder={data.newsletter.placeholder}
                 disabled={isSubmitting}
-                style={{
-                  flex: 1,
-                  minWidth: 0,
-                  height: 38,
-                  border: `1px solid ${C.border}`,
-                  borderRight: "none",
-                  background: "rgba(255,255,255,0.06)",
-                  color: C.white,
-                  fontSize: 13,
-                  padding: "0 12px",
-                  outline: "none",
-                }}
-                onFocus={(e) => (e.target.style.borderColor = C.green)}
-                onBlur={(e)  => (e.target.style.borderColor = C.border)}
+                className="min-w-0 flex-1 border border-[#101010]/15 bg-[#fffdf3] px-3 text-[13px] font-semibold text-[#101010] outline-none transition placeholder:text-[#706b59] focus:border-[#80c738]"
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
-                style={{
-                  height: 38,
-                  padding: "0 14px",
-                  background: C.green,
-                  border: "none",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  opacity: isSubmitting ? 0.6 : 1,
-                  transition: "opacity 0.2s",
-                }}
+                className="grid w-10 place-items-center bg-[#80c738] text-[#101010] transition hover:bg-[#6fb52d] disabled:opacity-60"
+                aria-label="Subscribe"
               >
-                <PaperPlaneTilt style={{ width: 16, height: 16, color: C.white }} />
+                <PaperPlaneTilt className="h-4 w-4" weight="bold" />
               </button>
             </form>
+            {submitMessage && <p className="mt-2 text-[11px] font-black uppercase text-[#4f8618]">{submitMessage}</p>}
 
-            {submitMessage && (
-              <span style={{ fontSize: 12, color: C.green }}>{submitMessage}</span>
-            )}
-
-            {/* Social icons */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+            <div className="mt-3 flex flex-wrap gap-2">
               {data.socialMedia.map((social) => {
                 const Icon = socialIcons[social.icon as keyof typeof socialIcons] || XLogo;
                 return (
@@ -246,89 +196,30 @@ export default function Footer({ data }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`KCIC on ${social.platform}`}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 28,
-                      height: 28,
-                      border: `1px solid ${C.border}`,
-                      background: "rgba(255,255,255,0.04)",
-                      color: C.muted,
-                      transition: "border-color 0.2s, color 0.2s",
-                      textDecoration: "none",
-                    }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLAnchorElement;
-                      el.style.borderColor = C.green;
-                      el.style.color = C.green;
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLAnchorElement;
-                      el.style.borderColor = C.border;
-                      el.style.color = C.muted;
-                    }}
+                    className="grid h-8 w-8 place-items-center border border-[#101010]/15 bg-[#fffdf3] text-[#4d4a3d] transition hover:border-[#80c738] hover:bg-[#e5f7c9] hover:text-[#4f8618]"
                   >
-                    <Icon style={{ width: 13, height: 13 }} />
+                    <Icon className="h-4 w-4" weight="bold" />
                   </a>
                 );
               })}
             </div>
-          </div>
+          </section>
         </div>
 
-        {/* ── BOTTOM BAR ── */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 12,
-            borderTop: `1px solid ${C.border}`,
-            padding: "12px 0",
-            flexWrap: "wrap",
-          }}
-        >
-          <p style={{ fontSize: 11, color: C.label, margin: 0 }}>
-            {data.copyright}
-          </p>
+        <div className="kcic-footer-bottom mt-4 border-t border-[#101010]/10 pt-3">
+          <p className="text-[12px] font-semibold leading-5 text-[#706b59]">{data.copyright}</p>
           <button
+            type="button"
             onClick={() => setIsWhistleblowerOpen(true)}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              border: `1px solid ${C.border}`,
-              background: "transparent",
-              padding: "6px 12px",
-              fontSize: 11,
-              fontWeight: 500,
-              color: C.muted,
-              cursor: "pointer",
-              transition: "border-color 0.2s, color 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLButtonElement;
-              el.style.borderColor = C.borderHover;
-              el.style.color = C.white;
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLButtonElement;
-              el.style.borderColor = C.border;
-              el.style.color = C.muted;
-            }}
+            className="inline-flex items-center gap-2 border border-[#101010]/15 bg-[#fffdf3] px-3 py-2 text-[12px] font-black uppercase text-[#4d4a3d] transition hover:border-[#80c738] hover:bg-[#e5f7c9] hover:text-[#4f8618]"
           >
-            <ShieldCheck style={{ width: 13, height: 13, color: C.green }} />
+            <ShieldCheck className="h-4 w-4" weight="bold" />
             Whistleblower
           </button>
         </div>
       </div>
 
-      <WhistleblowerModal
-        isOpen={isWhistleblowerOpen}
-        onClose={() => setIsWhistleblowerOpen(false)}
-      />
+      <WhistleblowerModal isOpen={isWhistleblowerOpen} onClose={() => setIsWhistleblowerOpen(false)} />
     </footer>
   );
 }

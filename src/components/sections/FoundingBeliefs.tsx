@@ -1,11 +1,14 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLayoutEffect, useRef, type ComponentType } from "react";
+import { Eye, Heart, Rocket } from "@phosphor-icons/react";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
-import { typography } from "@/lib/design-system";
-import { FocusCards } from "@/components/ui/focus-cards";
+import { cn } from "@/lib/utils";
+import {
+  gsap,
+  prefersReducedMotion,
+  registerGsapFoundation,
+} from "@/lib/gsap-foundation";
 
 interface BeliefCard {
   title: string;
@@ -20,100 +23,68 @@ interface FoundingBeliefsSectionProps {
 const beliefs: BeliefCard[] = [
   {
     title: "Vision",
-    description:
-      "Sustainable Enterprises and Climate Resilient Communities",
+    description: "Sustainable Enterprises and Climate Resilient Communities",
     supportingText:
       "We envision thriving enterprises driving inclusive growth while strengthening the resilience of communities.",
   },
   {
     title: "Mission",
-    description:
-      "Catalyzing Climate Entrepreneurship in Africa",
+    description: "Catalyzing Climate Entrepreneurship in Africa",
     supportingText:
       "We back entrepreneurs, partners, and market actors building practical climate solutions with long-term impact.",
   },
   {
     title: "Core Values",
-    description:
-      "The principles that shape how we serve, partner, and deliver impact.",
+    description: "The principles that shape how we serve, partner, and deliver impact.",
     supportingText:
       "People-centric, inclusivity, professionalism, integrity, innovation, and collaboration guide our decisions and relationships.",
   },
 ];
 
-/**
- * Founding Beliefs Section
- * Connects emotionally with visitors through core values and philosophy
- */
-export default function FoundingBeliefs({
-  className = "",
-}: FoundingBeliefsSectionProps) {
-  const { shouldDisableAnimations } = useAccessibilityClasses();
+const beliefIcons: ComponentType<{ className?: string; weight?: "bold" }>[] = [
+  Eye,
+  Rocket,
+  Heart,
+];
 
+export default function FoundingBeliefs({ className = "" }: FoundingBeliefsSectionProps) {
+  const { shouldDisableAnimations } = useAccessibilityClasses();
   const sectionRef = useRef<HTMLElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    if (shouldDisableAnimations()) return;
-    if (!sectionRef.current) return;
+    if (shouldDisableAnimations() || !sectionRef.current || prefersReducedMotion()) return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    registerGsapFoundation();
 
     const ctx = gsap.context(() => {
-      // Header animation
       if (headerRef.current) {
-        const heading = headerRef.current.querySelector("h2");
-        const subtitle = headerRef.current.querySelector("p");
-
-        const headerTimeline = gsap.timeline({
+        gsap.from(headerRef.current, {
+          y: 24,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: headerRef.current,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
           },
         });
-
-        if (heading) {
-          headerTimeline.fromTo(
-            heading,
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", force3D: true }
-          );
-        }
-        if (subtitle) {
-          headerTimeline.fromTo(
-            subtitle,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", force3D: true },
-            "-=0.35"
-          );
-        }
       }
 
       const cards = sectionRef.current?.querySelectorAll(".belief-card");
-
       if (cards && cards.length > 0) {
-        gsap.set(cards, {
-          opacity: 0,
+        gsap.from(cards, {
           y: 28,
-        });
-
-        gsap.to(cards, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
+          autoAlpha: 0,
+          duration: 0.75,
+          stagger: 0.1,
           ease: "power3.out",
-          force3D: true,
-          stagger: 0.12,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
-            toggleActions: "play none none reverse",
           },
         });
       }
-
-      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => ctx.revert();
@@ -123,119 +94,99 @@ export default function FoundingBeliefs({
     <section
       ref={sectionRef}
       aria-labelledby="founding-beliefs-heading"
-      className={`relative overflow-hidden bg-[#eef8fb] py-10 sm:py-12 ${className}`}
+      className={cn("relative isolate overflow-hidden border-y-[5px] border-[#101010]", className)}
+      style={{ backgroundColor: "#00addd" }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0,173,221,0.07) 0%, rgba(128,199,56,0.05) 100%)," +
-            "radial-gradient(55% 55% at 50% 0%, rgba(0,173,221,0.12) 0%, rgba(0,173,221,0) 72%)," +
-            "radial-gradient(36% 40% at 80% 85%, rgba(128,199,56,0.12) 0%, rgba(128,199,56,0) 75%)",
-        }}
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/24"
+        viewBox="0 0 1440 640"
+        fill="none"
+        preserveAspectRatio="none"
         aria-hidden
-      />
-      <div
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(15,23,42,0.25) 1px, transparent 1px)",
-          backgroundSize: "26px 26px",
-        }}
-        aria-hidden
-      />
+      >
+        <path
+          d="M-40 138C142 72 299 90 454 163C613 237 746 250 905 164C1072 74 1241 57 1490 104"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path
+          d="M-30 448C175 372 327 393 481 476C637 560 805 565 982 474C1158 384 1304 378 1488 431"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path d="M109 88V550M1330 62V578" stroke="currentColor" strokeWidth="2" strokeDasharray="12 16" />
+      </svg>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Section Header */}
-        <div ref={headerRef} className="text-center mb-8 sm:mb-10">
-          <h2
-            id="founding-beliefs-heading"
-            className="font-bold text-gray-900 mb-4"
-            style={{
-              fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
-              fontFamily: typography.fonts.heading,
-              lineHeight: 1.1,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Our Foundation
-          </h2>
-
-          <p
-            className="mx-auto max-w-3xl text-gray-600"
-            style={{
-              fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
-              fontFamily: typography.fonts.body,
-              lineHeight: typography.lineHeights.relaxed,
-            }}
-          >
-            The purpose and principles that shape how KCIC supports enterprises, ecosystems, and climate-resilient communities.
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div
+          ref={headerRef}
+          className="mb-7 grid items-end gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.9fr_1.1fr]"
+        >
+          <div>
+            <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+              KCIC charter
+            </p>
+            <h2
+              id="founding-beliefs-heading"
+              className="max-w-[9ch] text-5xl font-black leading-[0.92] text-[#fff7df] sm:text-6xl lg:text-7xl"
+              style={{
+                textShadow: "5px 5px 0 #101010",
+                WebkitTextStroke: "1.5px #101010",
+              }}
+            >
+              Our Foundation
+            </h2>
+          </div>
+          <p className="max-w-3xl text-lg font-black leading-8 text-[#101010] sm:text-xl">
+            The purpose and principles that shape how KCIC supports enterprises, ecosystems, and climate-resilient
+            communities.
           </p>
         </div>
 
-        <FocusCards
-          items={beliefs.map((belief, index) => ({
-            key: belief.title,
-            content: (
-              <article className="belief-card group relative h-full">
-                <div
-                  className="relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl border border-teal-200/45 p-7 sm:p-8 shadow-[0_1px_0_rgba(22,101,90,0.05),0_22px_44px_-18px_rgba(15,60,55,0.09)] ring-1 ring-teal-900/5 transition-[box-shadow,border-color] duration-300 hover:border-teal-300/55 hover:shadow-[0_1px_0_rgba(22,101,90,0.06),0_28px_56px_-20px_rgba(15,60,55,0.11)]"
-                  style={{
-                    background:
-                      "linear-gradient(165deg, #f3f9f6 0%, #eef6f7 42%, #ecf5f2 100%)",
-                  }}
-                >
-                  <div className="relative z-10 flex h-full flex-col">
-                    <div className="mb-6 border-b border-teal-200/35 pb-5">
-                      <span
-                        className="mb-3 block tabular-nums text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-teal-700/45"
-                        aria-hidden
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <h3
-                        className="font-bold text-slate-900"
-                        style={{
-                          fontSize: "clamp(1.12rem, 1.55vw, 1.35rem)",
-                          fontFamily: typography.fonts.heading,
-                          lineHeight: 1.12,
-                          letterSpacing: "-0.025em",
-                        }}
-                      >
-                        {belief.title}
-                      </h3>
-                    </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-5">
+          {beliefs.map((belief, index) => {
+            const Icon = beliefIcons[index];
 
-                    <p
-                      className="text-slate-800"
-                      style={{
-                        fontSize: "clamp(0.95rem, 1.02vw, 1.02rem)",
-                        fontFamily: typography.fonts.body,
-                        lineHeight: 1.52,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {belief.description}
-                    </p>
-
-                    {belief.supportingText ? (
-                      <p
-                        className="mt-auto pt-6 text-slate-600"
-                        style={{
-                          fontSize: "0.9375rem",
-                          fontFamily: typography.fonts.body,
-                          lineHeight: typography.lineHeights.relaxed,
-                        }}
-                      >
-                        {belief.supportingText}
-                      </p>
-                    ) : null}
+            return (
+              <article
+                key={belief.title}
+                className={cn(
+                  "belief-card group relative flex min-h-[310px] flex-col overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] shadow-[7px_7px_0_#101010] transition duration-200 hover:-translate-y-1 hover:shadow-[9px_9px_0_#101010]",
+                  index === 1 ? "md:mt-8" : "",
+                  index === 2 ? "md:mt-3" : ""
+                )}
+              >
+                <div className="flex items-center justify-between border-b-[3px] border-[#101010] bg-[#101010] p-3 text-[#fff7df]">
+                  <span className="text-xs font-black uppercase tracking-[0.24em]">Foundation {String(index + 1).padStart(2, "0")}</span>
+                  <div className="grid h-11 w-11 shrink-0 place-items-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#fff7df] transition group-hover:-translate-y-0.5">
+                    <Icon className="h-5 w-5 text-[#101010]" weight="bold" aria-hidden />
                   </div>
                 </div>
+
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <h3 className="text-3xl font-black uppercase leading-[0.95] text-[#101010] sm:text-4xl">
+                      {belief.title}
+                    </h3>
+                    <span className="h-16 w-16 shrink-0 border-2 border-[#101010] bg-[#80c738]" aria-hidden />
+                  </div>
+
+                  <div className="mb-5 h-[3px] w-full bg-[#101010]" aria-hidden />
+
+                  <p className="text-base font-black leading-7 text-[#101010]">
+                    {belief.description}
+                  </p>
+
+                  {belief.supportingText ? (
+                    <p className="mt-auto pt-6 text-sm font-semibold leading-6 text-[#4d4a3d]">
+                      {belief.supportingText}
+                    </p>
+                  ) : null}
+                </div>
               </article>
-            ),
-          }))}
-        />
+            );
+          })}
+        </div>
       </div>
     </section>
   );

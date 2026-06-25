@@ -1,18 +1,14 @@
 'use client';
 
 import { useLayoutEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { colors, typography } from '@/lib/design-system';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from "@phosphor-icons/react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
+import {
+  gsap,
+  prefersReducedMotion,
+  registerGsapFoundation,
+} from '@/lib/gsap-foundation';
 
 interface StatItem {
   value: string;
@@ -28,19 +24,23 @@ interface MinimalStatsSectionProps {
   variant?: 'light' | 'dark';
   title?: string;
   subtitle?: string;
-  /** Optional side image for layouts like KCIC 13 Years On */
   imageSrc?: string;
   imageAlt?: string;
   imageSide?: 'left' | 'right';
 }
 
-/** Parse a stat value string like "$63M", "57,517", "67%", "3,500+" into numeric parts */
-function parseStatValue(raw: string): { prefix: string; number: number; suffix: string; decimals: number; hasComma: boolean } {
+function parseStatValue(raw: string): {
+  prefix: string;
+  number: number;
+  suffix: string;
+  decimals: number;
+  hasComma: boolean;
+} {
   const match = raw.match(/^([^0-9]*?)([\d,.]+)(.*)$/);
   if (!match) return { prefix: '', number: 0, suffix: raw, decimals: 0, hasComma: false };
-  const prefix = match[1]; // e.g. "$"
-  const numStr = match[2].replace(/,/g, ''); // strip commas
-  const suffix = match[3]; // e.g. "M", "%", "+"
+  const prefix = match[1];
+  const numStr = match[2].replace(/,/g, '');
+  const suffix = match[3];
   const hasComma = match[2].includes(',');
   const dotIdx = numStr.indexOf('.');
   const decimals = dotIdx >= 0 ? numStr.length - dotIdx - 1 : 0;
@@ -55,10 +55,15 @@ function formatStatNumber(n: number, decimals: number, addComma: boolean): strin
   return decPart ? `${withCommas}.${decPart}` : withCommas;
 }
 
+const impactTabClass =
+  'min-w-[150px] sm:min-w-[190px] rounded-none border-2 border-transparent px-4 py-3 transition-colors data-[state=active]:border-[#101010] data-[state=active]:bg-[#101010] data-[state=active]:text-[#fff7df] text-[#101010] hover:bg-[#dff6bd]';
+
+const targetsTabClass =
+  'min-w-[150px] sm:min-w-[190px] rounded-none border-2 border-transparent px-4 py-3 transition-colors data-[state=active]:border-[#101010] data-[state=active]:bg-[#00addd] data-[state=active]:text-[#101010] text-[#101010] hover:bg-[#dff6bd]';
+
 export function MinimalStatsSection({
   stats,
   targets,
-  variant = 'light',
   title,
   subtitle,
   imageSrc,
@@ -70,8 +75,8 @@ export function MinimalStatsSection({
   const headerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
+  const { shouldDisableAnimations } = useAccessibilityClasses();
 
-  // Counter-up animation
   const animateCounters = useCallback((statData: StatItem[]) => {
     counterRefs.current.forEach((el, index) => {
       if (!el || !statData[index]) return;
@@ -92,298 +97,214 @@ export function MinimalStatsSection({
   }, []);
 
   useLayoutEffect(() => {
-    if (!sectionRef.current) return;
+    if (!sectionRef.current || prefersReducedMotion() || shouldDisableAnimations?.()) return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    registerGsapFoundation();
 
     const ctx = gsap.context(() => {
-      // Header reveal
       if (headerRef.current) {
-        gsap.fromTo(headerRef.current,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-            force3D: true,
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-              once: true,
-            },
-          }
-        );
+        gsap.from(headerRef.current, {
+          y: 24,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+          },
+        });
       }
 
-      // Image parallax
       if (imageRef.current) {
-        gsap.fromTo(imageRef.current,
-          { opacity: 0, scale: 0.92, y: 40 },
-          {
-            opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power3.out',
-            force3D: true,
-            scrollTrigger: {
-              trigger: imageRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-              once: true,
-            },
-          }
-        );
+        gsap.from(imageRef.current, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: imageRef.current,
+            start: 'top 85%',
+          },
+        });
       }
 
-      // Stat cards stagger + counter trigger
       const statCards = sectionRef.current?.querySelectorAll('.stat-card-item');
       if (statCards && statCards.length > 0) {
-        gsap.fromTo(statCards,
-          { opacity: 0, y: 50, scale: 0.95 },
-          {
-            opacity: 1, y: 0, scale: 1,
-            duration: 0.7,
-            stagger: 0.08,
-            ease: 'power3.out',
-            force3D: true,
-            scrollTrigger: {
-              trigger: statCards[0],
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-              once: true,
-              onEnter: () => {
-                if (!hasAnimated.current) {
-                  hasAnimated.current = true;
-                  animateCounters(stats);
-                }
-              },
+        gsap.from(statCards, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: statCards[0],
+            start: 'top 88%',
+            onEnter: () => {
+              if (!hasAnimated.current) {
+                hasAnimated.current = true;
+                animateCounters(stats);
+              }
             },
-          }
-        );
+          },
+        });
       }
-
-      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [stats, animateCounters]);
+  }, [stats, animateCounters, shouldDisableAnimations]);
 
-
-
-  const renderStats = (data: StatItem[], isTargets: boolean = false) => {
-    const isDark = variant === 'dark';
-
-    // Modern minimal layout for "dark" variant (KCIC 13 Years On)
-    // NOTE: This layout is used on a light background on the homepage,
-    // so we use dark text colors in light mode and switch to light text
-    // only when the overall page is in dark mode.
-    if (isDark) {
-      return (
+  const renderStats = (data: StatItem[], isTargets = false) => (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4" aria-live="polite">
+      {data.map((stat, index) => (
         <div
-          className="grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-7 sm:gap-y-10 lg:gap-x-8 lg:gap-y-10"
-          aria-live="polite"
+          key={`${stat.description}-${index}`}
+          className="stat-card-item group relative overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[5px_5px_0_#101010] transition hover:-translate-y-0.5 hover:shadow-[7px_7px_0_#101010] sm:p-5"
         >
-          {data.map((stat, index) => (
-            <div key={index} className="stat-card-item space-y-3">
-              <div className="flex items-baseline gap-2">
-                <span
-                  ref={(el) => {
-                    if (!isTargets) counterRefs.current[index] = el;
-                  }}
-                  className="font-bold block"
-                  style={{
-                    fontSize: 'clamp(1.875rem, 4vw, 3rem)',
-                    fontFamily: typography.fonts.heading,
-                    lineHeight: 1.1,
-                    color: '#80c738',
-                    textShadow: '0 1px 4px rgba(0,0,0,0.25)',
-                  }}
-                >
-                  {stat.value}
-                </span>
-              </div>
-              <p
-                className="font-medium"
-                style={{
-                    fontSize: 'clamp(0.8125rem, 1vw, 0.875rem)',
-                  fontFamily: typography.fonts.body,
-                  lineHeight: typography.lineHeights.snug,
-                  color: 'rgba(255,255,255,0.9)',
-                }}
-              >
-                {stat.description}
-              </p>
-              {stat.subdescription && (
-                <p
-                  style={{
-                    fontSize: 'clamp(0.75rem, 0.95vw, 0.8125rem)',
-                    fontFamily: typography.fonts.body,
-                    lineHeight: typography.lineHeights.relaxed,
-                    color: 'rgba(255,255,255,0.55)',
-                  }}
-                >
-                  {stat.subdescription}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    // Original card layout for light variant (impact page etc.)
-    return (
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
-        aria-live="polite"
-      >
-        {data.map((stat, index) => (
-          <div
-            key={index}
-            className="stat-card-item relative border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md"
-          >
-            <h3
-              ref={(el) => {
-                if (!isTargets) counterRefs.current[index] = el;
-              }}
-              className="font-bold mb-2"
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 2.6rem)',
-                fontFamily: typography.fonts.heading,
-                lineHeight: typography.lineHeights.tight,
-                color: colors.primary.green.DEFAULT,
-                textShadow: '0 1px 0 rgba(0,0,0,0.03)',
-              }}
+          <div className="mb-4 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
+            <span className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-[#4f8618]">
+              {isTargets ? 'Target' : 'Impact'} {String(index + 1).padStart(2, '0')}
+            </span>
+            <span
+              className="grid h-7 w-7 place-items-center border-2 border-[#101010] bg-[#80c738] text-xs font-black text-[#101010] shadow-[2px_2px_0_#101010]"
+              aria-hidden
             >
-              {stat.value}
-            </h3>
-            <div
-              className="h-1 w-10 rounded-full mb-3"
-              style={{ background: colors.primary.green.DEFAULT }}
-            />
-            <p
-              className="text-gray-700"
-              style={{
-                fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)',
-                fontFamily: typography.fonts.body,
-                lineHeight: typography.lineHeights.relaxed,
-              }}
-            >
-              {stat.description}
-            </p>
-            {stat.subdescription && (
-              <p
-                className="text-gray-500 mt-2"
-                style={{
-                  fontSize: '0.875rem',
-                  fontFamily: typography.fonts.body,
-                  lineHeight: typography.lineHeights.normal,
-                }}
-              >
-                {stat.subdescription}
-              </p>
-            )}
+              +
+            </span>
           </div>
-        ))}
+          <p
+            ref={(el) => {
+              if (!isTargets) counterRefs.current[index] = el;
+            }}
+            className="text-4xl font-black leading-none text-[#101010] sm:text-5xl"
+          >
+            {stat.value}
+          </p>
+          <p className="mt-3 text-sm font-black uppercase leading-5 text-[#101010]">{stat.description}</p>
+          {stat.subdescription ? (
+            <p className="mt-2 text-sm font-semibold leading-6 text-[#4d4a3d]">{stat.subdescription}</p>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderMapPanel = () => {
+    if (!imageSrc) return null;
+
+    return (
+      <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
+        <div
+          ref={imageRef}
+          className="mx-auto w-full max-w-xl border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[8px_8px_0_#101010]"
+        >
+          <div className="mb-3 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#101010]">Regional footprint</span>
+            <span className="border-2 border-[#101010] bg-[#00addd] px-2 py-1 text-xs font-black text-[#101010]">
+              KCIC map
+            </span>
+          </div>
+          <div className="relative aspect-4/5 w-full overflow-hidden border-2 border-[#101010] bg-[#fff7df]">
+            <Image
+              src={imageSrc}
+              alt={imageAlt || ''}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+              className="object-contain object-center"
+              priority
+            />
+          </div>
+        </div>
       </div>
     );
   };
 
-  const isDark = variant === 'dark';
+  const renderHeader = () => (
+    <div
+      ref={headerRef}
+      className="mb-8 grid items-end gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.9fr_1.1fr]"
+    >
+      <div>
+        <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#fff7df] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+          KCIC progress route
+        </p>
+        <h2
+          id="impact-section-heading"
+          className="max-w-[10ch] text-5xl font-black leading-[0.92] text-[#fff7df] sm:text-6xl lg:text-7xl"
+          style={{
+            textShadow: '5px 5px 0 #101010',
+            WebkitTextStroke: '1.5px #101010',
+          }}
+        >
+          {title || 'Our Impact'}
+        </h2>
+      </div>
+      {subtitle ? (
+        <p className="max-w-3xl text-lg font-black leading-8 text-[#101010] sm:text-xl">{subtitle}</p>
+      ) : null}
+    </div>
+  );
+
+  const renderTabs = () => (
+    <div className="mb-8 flex flex-col items-start">
+      <TabsList className="h-auto gap-1 rounded-none border-[3px] border-[#101010] bg-[#fff7df] p-1 shadow-[5px_5px_0_#101010]">
+        <TabsTrigger value="impact" className={impactTabClass}>
+          <span className="flex flex-col items-center gap-0.5">
+            <span className="text-base font-black tracking-tight sm:text-lg">2010 - Today</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wide sm:text-xs">13 Years of Impact</span>
+          </span>
+        </TabsTrigger>
+        <TabsTrigger value="targets" className={targetsTabClass}>
+          <span className="flex flex-col items-center gap-0.5">
+            <span className="text-base font-black tracking-tight sm:text-lg">2025 - 2030</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wide sm:text-xs">Our Targets</span>
+          </span>
+        </TabsTrigger>
+      </TabsList>
+    </div>
+  );
 
   return (
     <section
       id="impact-section"
       ref={sectionRef}
-      className={`relative py-8 sm:py-10`}
+      aria-labelledby="impact-section-heading"
+      className="relative isolate overflow-hidden border-y-[5px] border-[#101010] py-12 sm:py-14"
+      style={{ backgroundColor: '#80c738' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div ref={headerRef} className="mb-10 text-center">
-          <h2
-            className="font-bold mb-4"
-            style={{
-              fontSize: 'clamp(1.6rem, 3.2vw, 2.45rem)',
-              fontFamily: typography.fonts.heading,
-              color: isDark ? '#ffffff' : colors.secondary.gray[900],
-              lineHeight: typography.lineHeights.tight,
-            }}
-          >
-            {title || 'Our Impact'}
-          </h2>
-          {subtitle && (
-            <p
-              style={{
-                fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
-                fontFamily: typography.fonts.body,
-                lineHeight: typography.lineHeights.relaxed,
-                color: isDark ? 'rgba(255,255,255,0.75)' : '#4b5563',
-                marginTop: '0.75rem',
-              }}
-            >
-              {subtitle}
-            </p>
-          )}
-          <div
-            className="w-24 h-1 mx-auto rounded-full mt-4"
-            style={{ background: isDark ? '#80c738' : colors.primary.green.DEFAULT }}
-          />
-        </div>
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/24"
+        viewBox="0 0 1440 720"
+        fill="none"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          d="M-55 161C165 86 340 91 507 174C677 259 789 278 961 191C1152 96 1278 79 1493 132"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path
+          d="M-43 546C152 468 341 480 501 557C675 640 826 650 1002 551C1167 458 1312 445 1498 502"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path d="M141 91V650M1298 70V662" stroke="currentColor" strokeWidth="2" strokeDasharray="12 16" />
+      </svg>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {renderHeader()}
 
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
-            <div className="mb-10 flex flex-col items-center">
-              <TabsList className="relative h-auto border border-white/15 p-2 backdrop-blur-md" style={{ background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
-                <TabsTrigger
-                  value="impact"
-                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 transition-all duration-300
-                    data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
-                    ${isDark
-                      ? 'data-[state=active]:bg-climate-green data-[state=active]:text-white text-white/60 hover:text-white/90'
-                      : 'data-[state=active]:bg-white data-[state=active]:text-climate-green data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
-                    }`}
-                >
-                  <span className="flex flex-col items-center gap-1">
-                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2010 - Today</span>
-                    <span className="text-xs sm:text-sm font-medium opacity-80 whitespace-nowrap">13 Years of Impact</span>
-                  </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="targets"
-                  className={`relative z-10 min-w-[160px] sm:min-w-[200px] py-3 sm:py-4 transition-all duration-300
-                    data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
-                    ${isDark
-                      ? 'data-[state=active]:bg-[#FFA500] data-[state=active]:text-gray-900 text-white/60 hover:text-white/90'
-                      : 'data-[state=active]:bg-white data-[state=active]:text-[#FFA500] data-[state=active]:ring-1 data-[state=active]:ring-black/5 text-gray-500 hover:text-gray-900'
-                    }`}
-                >
-                  <span className="flex flex-col items-center gap-1">
-                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2025 - 2030</span>
-                    <span className="text-xs sm:text-sm font-medium opacity-80 whitespace-nowrap">Our Targets</span>
-                  </span>
-                </TabsTrigger>
-              </TabsList>
-            </div>
+            {renderTabs()}
 
             {imageSrc ? (
-              <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
-                {/* Image side - stays the same */}
-                <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div ref={imageRef} className="relative mx-auto max-w-xl w-full aspect-4/5 overflow-hidden border border-white/10 shadow-lg" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                    <Image
-                      src={imageSrc}
-                      alt={imageAlt || ''}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                      className="object-contain object-center mix-blend-luminosity"
-                      style={{ filter: isDark ? 'invert(1) hue-rotate(180deg) brightness(1.1)' : 'none' }}
-                      priority={variant === 'dark'}
-                    />
-                  </div>
-                </div>
-
-                {/* Stats side - switches between impact and targets */}
+              <div className="grid items-start gap-8 lg:grid-cols-[0.95fr_1.35fr] lg:gap-10">
+                {renderMapPanel()}
                 <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
                   <TabsContent value="impact" className="mt-0">
                     {renderStats(stats, false)}
                   </TabsContent>
-
                   <TabsContent value="targets" className="mt-0">
                     {renderStats(targets, true)}
                   </TabsContent>
@@ -394,105 +315,21 @@ export function MinimalStatsSection({
                 <TabsContent value="impact" className="mt-0">
                   {renderStats(stats, false)}
                 </TabsContent>
-
                 <TabsContent value="targets" className="mt-0">
                   {renderStats(targets, true)}
                 </TabsContent>
               </>
             )}
-
-            <div className={`mt-12 pt-8 ${isDark ? 'border-t border-white/10' : 'border-t border-gray-200'}`} style={{ marginBottom: 0 }}>
-
-            </div>
           </Tabs>
+        ) : imageSrc ? (
+          <div className="grid items-start gap-8 lg:grid-cols-[0.95fr_1.35fr] lg:gap-10">
+            {renderMapPanel()}
+            <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
+              {renderStats(stats, false)}
+            </div>
+          </div>
         ) : (
-          <>
-            {imageSrc ? (
-              <div className="grid gap-10 lg:grid-cols-[1.1fr_1.4fr] items-center">
-                {/* Image side */}
-                <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative mx-auto max-w-xl w-full aspect-4/5 overflow-hidden border border-white/10 bg-black/20 shadow-lg">
-                    <Image
-                      src={imageSrc}
-                      alt={imageAlt || ''}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                      className="object-contain object-center"
-                      priority={variant === 'dark'}
-                    />
-                  </div>
-                </div>
-
-                {/* Stats side */}
-                <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
-                  <div className="mb-10 text-center lg:text-left">
-                    <h2
-                      className="font-bold mb-4"
-                      style={{
-                        fontSize: 'clamp(1.6rem, 3vw, 2.35rem)',
-                        fontFamily: typography.fonts.heading,
-                        color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
-                        lineHeight: typography.lineHeights.tight,
-                      }}
-                    >
-                      {title || 'Our Impact'}
-                    </h2>
-                    {subtitle && (
-                      <p
-                        className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
-                        style={{
-                          fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
-                          fontFamily: typography.fonts.body,
-                          lineHeight: typography.lineHeights.relaxed,
-                        }}
-                      >
-                        {subtitle}
-                      </p>
-                    )}
-                    <div
-                      className={`w-24 h-1 mt-5 rounded-full ${isDark ? '' : ''} ${imageSide === 'right' ? 'lg:ml-0 mx-auto' : 'lg:ml-0 mx-auto'}`}
-                      style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
-                    />
-                  </div>
-
-                  {renderStats(stats, false)}
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="text-center mb-12">
-                  <h2
-                    className="font-bold mb-4"
-                    style={{
-                      fontSize: 'clamp(1.6rem, 3.2vw, 2.45rem)',
-                      fontFamily: typography.fonts.heading,
-                      color: isDark ? '#FFFFFF' : colors.secondary.gray[900],
-                      lineHeight: typography.lineHeights.tight,
-                    }}
-                  >
-                    {title || 'Our Impact'}
-                  </h2>
-                  {subtitle && (
-                    <p
-                      className={`mt-4 ${isDark ? 'text-white/80' : 'text-gray-600'}`}
-                      style={{
-                        fontSize: 'clamp(0.9rem, 1.05vw, 0.98rem)',
-                        fontFamily: typography.fonts.body,
-                        lineHeight: typography.lineHeights.relaxed,
-                      }}
-                    >
-                      {subtitle}
-                    </p>
-                  )}
-                  <div
-                    className="w-24 h-1 mx-auto rounded-full mt-4"
-                    style={{ background: isDark ? '#FFA500' : colors.primary.green.DEFAULT }}
-                  />
-                </div>
-                {renderStats(stats, false)}
-              </>
-            )}
-          </>
+          renderStats(stats, false)
         )}
       </div>
     </section>

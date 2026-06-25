@@ -6,9 +6,9 @@ import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
 import { AwardsSection } from "@/components/sections";
 import {
-  PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
+import { HomePartnersLogos } from "@/components/sections/HomePartnersLogos";
 import { HeroImageCarousel } from "@/components/sections/HeroImageCarousel";
 import { ScrollProgress } from "@/components/animations/SectionReveal";
 import { ScrollOrchestrator, AnimatedSection, ScrollProgressIndicator } from "@/components/animations/ScrollOrchestrator";
@@ -399,15 +399,15 @@ export default function HomePage({
                 <ClimateChallenge />
               </AnimatedSection>
             
-              <AnimatedSection direction="up" delay={0.1} className="border-t border-cyan-200/70 bg-[#eef8fb]">
+              <AnimatedSection direction="up" delay={0.1}>
                 <FoundingBeliefs />
               </AnimatedSection>
             </div>
 
             {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
             <div id="impact">
-              <SectionDivider variant="angle" fromColor="#eef8fb" toColor="#17351b" height={28} />
-              <div className="relative" style={{ background: "linear-gradient(180deg, #17351b 0%, #14311b 52%, #102717 100%)" }}>
+              <SectionDivider variant="angle" fromColor="#00addd" toColor="#80c738" height={28} />
+              <AnimatedSection direction="up">
                 <MinimalStatsSection
                   stats={thirteenYearsOnData}
                   targets={targetsData}
@@ -419,17 +419,15 @@ export default function HomePage({
                   imageSide="left"
                   showToggle={true}
                 />
-              </div>
+              </AnimatedSection>
             </div>
 
             {/* SECTION 2B: Awards & Recognition (Slide 5) */}
             <div id="awards">
-              <SectionDivider variant="wave" fromColor="#102717" toColor="#10243d" height={24} />
-              <div className="relative" style={{ background: "linear-gradient(180deg, #10243d 0%, #14311b 55%, #10243d 100%)" }}>
-                <AnimatedSection direction="up">
-                  <AwardsSection />
-                </AnimatedSection>
-              </div>
+              <SectionDivider variant="wave" fromColor="#80c738" toColor="#fff7df" height={24} />
+              <AnimatedSection direction="up" className="bg-[#fff7df]">
+                <AwardsSection />
+              </AnimatedSection>
             </div>
 
 
@@ -439,7 +437,7 @@ export default function HomePage({
 
             {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f7fbf8" height={24} />
+              <SectionDivider variant="curve" fromColor="#fff7df" toColor="#f7fbf8" height={24} />
               <AnimatedSection direction="up" className="bg-[#f7fbf8]">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
@@ -449,7 +447,7 @@ export default function HomePage({
             <div id="partners">
               <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#fff7df" height={20} />
               <AnimatedSection direction="up" className="bg-[#fff7df]">
-                <PartnersSection partners={partnersDataTransformed} />
+                <HomePartnersLogos partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>
           </div>
