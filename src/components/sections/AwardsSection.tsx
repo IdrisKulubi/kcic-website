@@ -75,26 +75,18 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
     <section
       ref={sectionRef}
       aria-labelledby="awards-heading"
-      className="relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-12 sm:py-14"
+      className="relative isolate overflow-hidden border-y-[5px] border-[#101010] py-12 sm:py-14"
+      style={{ backgroundColor: "#00addd" }}
     >
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #101010 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-        aria-hidden
-      />
-
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 text-center sm:mb-12" data-awards-title>
           <h2
             id="awards-heading"
-            className="mb-4 inline-block border-[3px] border-[#101010] bg-[#101010] px-4 py-2 text-sm font-black uppercase tracking-wide text-[#fff7df] shadow-[4px_4px_0_#80c738]"
+            className="mb-4 inline-block border-[3px] border-[#101010] bg-[#fff7df] px-4 py-2 text-sm font-black uppercase tracking-wide text-[#101010] shadow-[4px_4px_0_#80c738]"
           >
             Awards & Recognition
           </h2>
-          <p className="mx-auto max-w-2xl text-base font-medium leading-7 text-[#28261d]">
+          <p className="mx-auto max-w-2xl text-base font-black leading-7 text-[#101010] sm:text-lg">
             Celebrating milestones from our ecosystem partners and industry bodies
           </p>
         </div>

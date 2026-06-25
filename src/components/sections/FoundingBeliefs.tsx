@@ -104,11 +104,7 @@ export default function FoundingBeliefs({ className = "" }: FoundingBeliefsSecti
         preserveAspectRatio="none"
         aria-hidden
       >
-        <path
-          d="M-40 138C142 72 299 90 454 163C613 237 746 250 905 164C1072 74 1241 57 1490 104"
-          stroke="currentColor"
-          strokeWidth="3"
-        />
+       
         <path
           d="M-30 448C175 372 327 393 481 476C637 560 805 565 982 474C1158 384 1304 378 1488 431"
           stroke="currentColor"
