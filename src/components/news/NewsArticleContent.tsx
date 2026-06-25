@@ -274,8 +274,8 @@ export function NewsArticleContent({ article }: { article: NewsData }) {
         </div>
 
         {/* Desktop sticky action bar */}
-        <div className="sticky top-28 z-30 border-b-4 border-[#101010] bg-[#fff7df] shadow-[0_6px_0_#101010] sm:top-32 max-md:hidden">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="sticky top-28 z-30 border-b-[3px] border-[#101010] bg-[#fff7df] sm:top-32 max-md:hidden">
+          <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             <Link
               href="/impact/stories"
               className="inline-flex items-center gap-2 text-sm font-black uppercase transition hover:text-[#4f8618]"
@@ -283,18 +283,9 @@ export function NewsArticleContent({ article }: { article: NewsData }) {
               <CaretLeft className="h-4 w-4" weight="bold" />
               Back to stories
             </Link>
-            <div className="flex flex-col items-end gap-1">
-              <ActionButtons
-                onSavePdf={handleSavePdf}
-                onPrint={handlePrint}
-                showShareMenu={showShareMenu}
-                onToggleShare={() => setShowShareMenu((v) => !v)}
-                onShare={handleShare}
-              />
-              <p className="text-[10px] font-bold uppercase tracking-wide text-[#58523f]">
-                Choose &quot;Save as PDF&quot; in the print dialog
-              </p>
-            </div>
+            <span className="text-xs font-black uppercase text-[#4f8618]">
+              Article reader
+            </span>
           </div>
         </div>
 
@@ -309,7 +300,7 @@ export function NewsArticleContent({ article }: { article: NewsData }) {
           </Link>
         </div>
 
-        <main className="mx-auto max-w-3xl px-4 pb-28 pt-6 sm:px-6 sm:pb-16 md:pb-16">
+        <main className="mx-auto max-w-[1280px] px-4 pb-28 pt-6 sm:px-6 sm:pb-16 md:pb-16 lg:px-8">
         {/* Print header */}
         <div className="print-only mb-8 border-b-2 border-black pb-4">
           <h2 className="text-xl font-bold">Kenya Climate Innovation Center</h2>
@@ -317,42 +308,72 @@ export function NewsArticleContent({ article }: { article: NewsData }) {
         </div>
 
         <article ref={articleBodyRef}>
-          <span
-            data-news-meta
-            className="inline-block border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase shadow-[4px_4px_0_#101010]"
-          >
-            {article.category}
-          </span>
+          <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+            <div className="min-w-0">
+              <span
+                data-news-meta
+                className="inline-block border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase shadow-[4px_4px_0_#101010]"
+              >
+                {article.category}
+              </span>
 
-          <h1 className="mt-5 flex flex-wrap gap-x-[0.35em] gap-y-1 text-[clamp(1.75rem,4.5vw,3rem)] font-black uppercase leading-[0.95] tracking-tight">
-            {titleWords.map((word, index) => (
-              <span key={`${word}-${index}`} className="inline-block overflow-hidden align-top">
-                <span data-news-word className="inline-block">
-                  {word}
+              <h1 className="mt-5 flex max-w-[980px] flex-wrap gap-x-[0.35em] gap-y-1 text-[clamp(2.2rem,5vw,4.65rem)] font-black uppercase leading-[0.9] tracking-tight">
+                {titleWords.map((word, index) => (
+                  <span key={`${word}-${index}`} className="inline-block overflow-hidden align-top">
+                    <span data-news-word className="inline-block">
+                      {word}
+                    </span>
+                  </span>
+                ))}
+              </h1>
+
+              <p
+                data-news-dek
+                className="mt-6 max-w-[760px] text-lg font-medium leading-8 text-[#28261d] sm:text-xl"
+              >
+                {article.excerpt}
+              </p>
+
+              <div data-news-meta className="mt-6 flex flex-wrap items-center gap-3 lg:hidden">
+                <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#fff7df] px-3 py-1.5 text-xs font-bold uppercase shadow-[3px_3px_0_#101010]">
+                  <Calendar className="h-4 w-4" weight="bold" aria-hidden="true" />
+                  {publishedLabel}
                 </span>
-              </span>
-            ))}
-          </h1>
+                {article.readTime && (
+                  <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#fff7df] px-3 py-1.5 text-xs font-bold uppercase shadow-[3px_3px_0_#101010]">
+                    <Clock className="h-4 w-4" weight="bold" aria-hidden="true" />
+                    {article.readTime}
+                  </span>
+                )}
+              </div>
+            </div>
 
-          <p
-            data-news-dek
-            className="mt-6 text-lg font-medium leading-8 text-[#28261d] sm:text-xl"
-          >
-            {article.excerpt}
-          </p>
-
-          <div data-news-meta className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#fff7df] px-3 py-1.5 text-xs font-bold uppercase shadow-[3px_3px_0_#101010]">
-              <Calendar className="h-4 w-4" weight="bold" aria-hidden="true" />
-              {publishedLabel}
-            </span>
-            {article.readTime && (
-              <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#fff7df] px-3 py-1.5 text-xs font-bold uppercase shadow-[3px_3px_0_#101010]">
-                <Clock className="h-4 w-4" weight="bold" aria-hidden="true" />
-                {article.readTime}
-              </span>
-            )}
-          </div>
+            <aside
+              data-news-panel
+              className="no-print hidden border-[4px] border-[#101010] bg-[#101010] p-5 text-[#fff7df] shadow-[8px_8px_0_#80c738] lg:block"
+              aria-label="Article details"
+            >
+              <p className="text-xs font-black uppercase text-[#80c738]">Reader tools</p>
+              <dl className="mt-5 space-y-4 text-sm font-bold">
+                <div>
+                  <dt className="text-[10px] uppercase text-[#fff7df]/60">Published</dt>
+                  <dd className="mt-1 flex items-center gap-2">
+                    <Calendar className="h-4 w-4" weight="bold" aria-hidden="true" />
+                    {publishedLabel}
+                  </dd>
+                </div>
+                {article.readTime && (
+                  <div>
+                    <dt className="text-[10px] uppercase text-[#fff7df]/60">Reading time</dt>
+                    <dd className="mt-1 flex items-center gap-2">
+                      <Clock className="h-4 w-4" weight="bold" aria-hidden="true" />
+                      {article.readTime}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </aside>
+          </header>
 
           {article.thumbnail && (
             <div
@@ -365,27 +386,49 @@ export function NewsArticleContent({ article }: { article: NewsData }) {
                 fill
                 className="object-cover"
                 priority
-                sizes="(max-width: 768px) 100vw, 768px"
+                sizes="(max-width: 768px) 100vw, 1280px"
               />
             </div>
           )}
 
-          <div
-            data-news-panel
-            className="news-article-body-panel mt-10 border-[5px] border-[#101010] bg-[#fff7df] p-6 shadow-[10px_10px_0_#101010] sm:p-8"
-          >
-            {article.content ? (
-              <RichTextDisplay content={article.content} variant="article" />
-            ) : (
-              <p className="text-lg font-medium leading-8 text-[#28261d]">{article.excerpt}</p>
-            )}
+          <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,74ch)_320px] lg:items-start">
+            <div
+              data-news-panel
+              className="news-article-body-panel min-w-0 border-y-[4px] border-[#101010] bg-[#fffaf0] py-8 sm:py-10"
+            >
+              {article.content ? (
+                <RichTextDisplay content={article.content} variant="article" />
+              ) : (
+                <p className="text-lg font-medium leading-8 text-[#28261d]">{article.excerpt}</p>
+              )}
+            </div>
+
+            <aside
+              data-news-panel
+              className="no-print sticky top-44 hidden self-start border-[4px] border-[#101010] bg-[#fff7df] p-5 shadow-[8px_8px_0_#101010] lg:block"
+              aria-label="Article actions"
+            >
+              <p className="text-xs font-black uppercase text-[#4f8618]">Save or share</p>
+              <div className="mt-4">
+                <ActionButtons
+                  onSavePdf={handleSavePdf}
+                  onPrint={handlePrint}
+                  showShareMenu={showShareMenu}
+                  onToggleShare={() => setShowShareMenu((v) => !v)}
+                  onShare={handleShare}
+                />
+              </div>
+              <p className="mt-4 border-t-[3px] border-[#101010] pt-4 text-xs font-bold leading-5 text-[#58523f]">
+                For PDF, choose &quot;Save as PDF&quot; in your browser print dialog.
+              </p>
+            </aside>
           </div>
         </article>
 
         {/* Bottom share strip */}
         <section
           data-news-panel
-          className="no-print mt-12 border-[5px] border-[#101010] bg-[#101010] p-6 text-[#fff7df] shadow-[10px_10px_0_#80c738] sm:p-8"
+          className="no-print mt-12 max-w-[74ch] border-[5px] border-[#101010] bg-[#101010] p-6 text-[#fff7df] shadow-[10px_10px_0_#80c738] sm:p-8"
         >
           <h2 className="text-2xl font-black uppercase">Share this article</h2>
           <p className="mt-3 text-base font-medium leading-7 text-[#fff7df]/90">
