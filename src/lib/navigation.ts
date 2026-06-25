@@ -21,12 +21,12 @@ export const navData = {
           description: "Meet the Board and Staff behind KCIC",
           icon: "Users",
         },
-        {
-          label: "Policies & Disclosures",
-          href: "/about/policies-disclosures",
-          description: "Transparency in governance and operations",
-          icon: "Shield",
-        },
+        // {
+        //   label: "Policies & Disclosures",
+        //   href: "/about/policies-disclosures",
+        //   description: "Transparency in governance and operations",
+        //   icon: "Shield",
+        // },
         {
           label: "Procurement",
           href: "/about/procurement",

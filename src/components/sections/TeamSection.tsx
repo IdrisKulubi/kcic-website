@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import type { ReactNode } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail, Linkedin, Twitter, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { colors, typography } from "@/lib/design-system";
-import { motion, AnimatePresence } from "framer-motion";
-
-// Register GSAP plugins
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import Link from "next/link";
+import { Linkedin, Mail, Twitter } from "lucide-react";
+import { ArrowRight, Sparkle } from "@phosphor-icons/react";
+import {
+  drawSvgPaths,
+  gsap,
+  marqueeLoop,
+  prefersReducedMotion,
+  registerGsapFoundation,
+  ScrollTrigger,
+} from "@/lib/gsap-foundation";
 
 export interface TeamMember {
   id: string;
@@ -36,14 +37,60 @@ interface TeamSectionProps {
   viewAllHref?: string;
 }
 
-const DECORATION_COLORS = [
-  "from-sky-200 to-sky-300",
-  "from-emerald-200 to-emerald-300", 
-  "from-amber-200 to-amber-300",
-  "from-violet-200 to-violet-300",
-  "from-rose-200 to-rose-300",
-  "from-cyan-200 to-cyan-300",
-];
+const tickerItems = ["Board", "Management", "Enterprise support", "Finance readiness", "Market links", "Climate delivery"];
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function TeamPhoto({ member, priority = false }: { member: TeamMember; priority?: boolean }) {
+  if (!member.photo) {
+    return (
+      <div className="grid h-full w-full place-items-center bg-[#80c738] text-4xl font-black text-[#101010]">
+        {getInitials(member.name)}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={member.photo}
+      alt={member.name}
+      fill
+      priority={priority}
+      unoptimized
+      sizes="(min-width: 1280px) 25vw, (min-width: 768px) 40vw, 90vw"
+      className="object-cover object-top transition duration-700 ease-out group-hover:scale-105"
+    />
+  );
+}
+
+function ContactLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      aria-label={label}
+      className="grid h-10 w-10 place-items-center border-2 border-[#101010] bg-[#fff7df] text-[#101010] shadow-[3px_3px_0_#80c738] transition hover:-translate-y-0.5 hover:bg-[#80c738]"
+    >
+      {children}
+    </Link>
+  );
+}
 
 export function TeamSection({
   members,
@@ -53,14 +100,12 @@ export function TeamSection({
   showViewAll = false,
   viewAllHref = "/about/staff",
 }: TeamSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Group members by category
-  const { categories, groupedMembers } = useMemo(() => {
-    const groups = members.reduce<Record<string, TeamMember[]>>((acc, member) => {
+  const { categories, groupedMembers, orderedMembers } = useMemo(() => {
+    const sortedMembers = [...members].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    const groups = sortedMembers.reduce<Record<string, TeamMember[]>>((acc, member) => {
       const key = (member.category || "Team").trim() || "Team";
       if (!acc[key]) acc[key] = [];
       acc[key].push(member);
@@ -68,408 +113,289 @@ export function TeamSection({
     }, {});
 
     const sortedCategories = [
-      ...preferredOrder.filter((cat) => groups[cat]),
+      ...preferredOrder.filter((category) => groups[category]),
       ...Object.keys(groups)
-        .filter((cat) => !preferredOrder.includes(cat))
+        .filter((category) => !preferredOrder.includes(category))
         .sort((a, b) => a.localeCompare(b)),
     ];
 
-    return { categories: sortedCategories, groupedMembers: groups };
+    return { categories: sortedCategories, groupedMembers: groups, orderedMembers: sortedMembers };
   }, [members, preferredOrder]);
 
-  // GSAP Animations
-  useEffect(() => {
-    if (!sectionRef.current) return;
+  const selectedMember = orderedMembers.find((member) => member.id === selectedId) ?? null;
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current || orderedMembers.length === 0) return;
+
+    registerGsapFoundation();
+    if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      // Title animation with split text effect feel
-      const titleContainer = titleRef.current;
-      if (titleContainer) {
-        gsap.fromTo(
-          titleContainer,
-          { 
-            opacity: 0, 
-            y: 60,
-            scale: 0.95,
+      gsap.set("[data-team-word]", { yPercent: 110, rotate: 2 });
+
+      const intro = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+        },
+        defaults: { ease: "power4.out" },
+      });
+
+      intro
+        .add(drawSvgPaths("[data-team-line]", { dash: 620, duration: 0.9, stagger: 0.05 }))
+        .to("[data-team-word]", { yPercent: 0, rotate: 0, duration: 0.85, stagger: 0.08 }, "-=0.35")
+        .from("[data-team-copy]", { autoAlpha: 0, y: 18, duration: 0.55 }, "-=0.35");
+
+      marqueeLoop("[data-team-marquee]", { duration: 42 });
+
+      gsap.utils.toArray<HTMLElement>("[data-team-category]").forEach((category) => {
+        gsap.from(category, {
+          y: 24,
+          rotate: -0.5,
+          duration: 0.72,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: category,
+            start: "top 88%",
+            toggleActions: "play none none reverse",
           },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: titleContainer,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      // Enhanced stagger cards animation with 3D feel
-      cardsRef.current.forEach((card, index) => {
-        if (!card) return;
-
-        // Calculate row and column for stagger effect
-        const col = index % 4;
-        const row = Math.floor(index / 4);
-        
-        gsap.fromTo(
-          card,
-          { 
-            opacity: 0, 
-            y: 80,
-            scale: 0.9,
-            rotateX: 15,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            rotateX: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            delay: (row * 0.15) + (col * 0.08),
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-
-        // Parallax effect on scroll for decoration circles
-        const decoration = card.querySelector(".decoration-circle");
-        if (decoration) {
-          gsap.to(decoration, {
-            y: -20,
-            scrollTrigger: {
-              trigger: card,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.5,
-            },
-          });
-        }
-
-        // Hover animation setup
-        const image = card.querySelector(".team-image");
-        
-        card.addEventListener("mouseenter", () => {
-          gsap.to(card, {
-            y: -12,
-            scale: 1.02,
-            duration: 0.4,
-            ease: "power2.out",
-          });
-          gsap.to(image, {
-            scale: 1.08,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-          gsap.to(decoration, {
-            scale: 1.15,
-            rotate: 15,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        });
-
-        card.addEventListener("mouseleave", () => {
-          gsap.to(card, {
-            y: 0,
-            scale: 1,
-            duration: 0.4,
-            ease: "power2.out",
-          });
-          gsap.to(image, {
-            scale: 1,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-          gsap.to(decoration, {
-            scale: 1,
-            rotate: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          });
         });
       });
+
+      gsap.utils.toArray<HTMLElement>("[data-team-card]").forEach((card, index) => {
+        gsap.from(card, {
+          y: 34,
+          rotate: index % 2 === 0 ? -1.1 : 1.1,
+          duration: 0.74,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.to("[data-team-photo]", {
+        y: (index) => (index % 2 === 0 ? -16 : 14),
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      });
+
+      gsap.delayedCall(0.2, () => ScrollTrigger.refresh());
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [members]);
+  }, [orderedMembers.length, categories.length]);
 
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, [selectedId]);
+
+  if (members.length === 0) {
+    return (
+      <section className="border-y-[5px] border-[#101010] bg-[#fff7df] py-16 text-[#101010]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="border-[5px] border-[#101010] bg-[#fff7df] p-7 shadow-[10px_10px_0_#101010]">
+            <p className="inline-block bg-[#80c738] px-3 py-1 text-sm font-black uppercase">Team directory</p>
+            <h2 className="mt-6 font-black uppercase leading-tight" style={{ fontSize: "clamp(2.4rem, 6vw, 4rem)" }}>
+              Team profiles are loading.
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   let globalIndex = 0;
 
   return (
-    <>
-      <section
-        ref={sectionRef}
-        className="py-20 sm:py-28 bg-white overflow-hidden"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div ref={titleRef} className="text-center mb-16">
+    <section ref={sectionRef} className="relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-14 text-[#101010] sm:py-16">
+      <div className="absolute inset-x-0 top-0 -z-10 h-16 border-b-[5px] border-[#101010] bg-[#80c738]" aria-hidden="true" />
+      <svg className="absolute right-[-5rem] top-20 -z-10 hidden h-[360px] w-[560px] text-[#101010]/45 lg:block" viewBox="0 0 560 360" fill="none" aria-hidden="true">
+        <path data-team-line d="M28 286C112 126 228 190 310 96C392 1 464 80 536 28" stroke="currentColor" strokeWidth="3" strokeDasharray="10 12" />
+        <path data-team-line d="M37 328C149 274 213 342 310 269C416 190 475 285 540 214" stroke="currentColor" strokeWidth="2" strokeDasharray="8 10" />
+        <path data-team-line d="M84 62H480V318H84V62Z" stroke="currentColor" strokeWidth="2" />
+        <path data-team-line d="M84 190H480" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+        <path data-team-line d="M282 62V318" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+      </svg>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p className="inline-flex -rotate-1 items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-2 text-sm font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010]">
+              <Sparkle className="h-4 w-4" weight="fill" aria-hidden="true" />
+              Our team
+            </p>
             <h2
-              className="text-4xl sm:text-5xl font-bold mb-4"
-              style={{
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-              }}
+              aria-label={title}
+              className="mt-7 max-w-4xl overflow-hidden font-black uppercase leading-[0.9] tracking-normal text-[#101010]"
+              style={{ fontSize: "clamp(2.65rem, 6vw, 4.75rem)" }}
             >
-              {title}
+              <span className="block overflow-hidden pb-1">
+                <span data-team-word className="block">
+                  People behind
+                </span>
+              </span>
+              <span className="block overflow-hidden pb-2">
+                <span data-team-word className="inline-block bg-[#80c738] px-3 text-[#0b110d]">
+                  the work.
+                </span>
+              </span>
             </h2>
-            <p
-              className="text-lg text-gray-500 max-w-2xl mx-auto"
-              style={{ fontFamily: typography.fonts.body }}
-            >
-              {subtitle}
+          </div>
+          <div data-team-copy className="border-[3px] border-[#101010] bg-[#fff7df] p-5 shadow-[8px_8px_0_#101010]">
+            <p className="text-base font-medium leading-8 text-[#28261d]">{subtitle}</p>
+            <p className="mt-4 inline-block bg-[#101010] px-3 py-1.5 text-sm font-black uppercase text-[#fff7df]">
+              {orderedMembers.length} team members
             </p>
           </div>
-
-          {/* Team Categories */}
-          {categories.map((category) => {
-            const categoryMembers = groupedMembers[category] ?? [];
-            return (
-              <div key={category} className="mb-16 last:mb-0">
-                {/* Category Title */}
-                <div className="text-center mb-10">
-                  <span
-                    className="inline-block text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 border-b-2 border-gray-200 pb-2"
-                  >
-                    {category}
-                  </span>
-                </div>
-
-                {/* Team Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {categoryMembers.map((member) => {
-                    const cardIndex = globalIndex++;
-                    const colorClass = DECORATION_COLORS[cardIndex % DECORATION_COLORS.length];
-
-                    return (
-                      <div
-                        key={member.id}
-                        ref={(el) => { cardsRef.current[cardIndex] = el; }}
-                        className="group cursor-pointer"
-                        onClick={() => setSelectedMember(member)}
-                      >
-                        {/* Card */}
-                        <div className="relative bg-sky-50/70 rounded-3xl p-6 pb-8 transition-shadow duration-300 hover:shadow-xl h-full flex flex-col">
-                          {/* Image Container */}
-                          <div className="relative mx-auto w-52 h-52 sm:w-60 sm:h-60 mb-6">
-                            {/* Decorative Half Circle */}
-                            <div
-                              className={cn(
-                                "decoration-circle absolute bottom-0 right-0 w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-gradient-to-br opacity-60",
-                                colorClass
-                              )}
-                              style={{ transform: "translate(20%, 20%)" }}
-                            />
-                            
-                            {/* Profile Image */}
-                            <div className="team-image relative z-10 w-full h-full rounded-full overflow-hidden border-4 border-white shadow-lg">
-                              {member.photo ? (
-                                <Image
-                                  src={member.photo}
-                                  alt={member.name}
-                                  fill
-                                  className="object-cover object-top"
-                                  sizes="(max-width: 640px) 208px, 240px"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#80c738] to-[#00aeef]">
-                                  <span className="text-white text-4xl font-bold">
-                                    {getInitials(member.name)}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Name & Role */}
-                          <div className="text-left flex-1 flex flex-col min-h-[72px]">
-                            <h3
-                              className="text-xl font-bold text-gray-900 mb-1 line-clamp-1"
-                              style={{ fontFamily: typography.fonts.heading }}
-                              title={member.name}
-                            >
-                              {member.name}
-                            </h3>
-                            <p className="text-sm text-gray-500 font-medium line-clamp-2" title={member.role}>
-                              {member.role}
-                            </p>
-                          </div>
-
-                          {/* Hover Indicator */}
-                          <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <svg
-                              className="w-4 h-4 text-gray-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-
-          {/* View All Team Button */}
-          {showViewAll && (
-            <div className="text-center mt-12">
-              <a
-                href={viewAllHref}
-                className="group inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-[#80c738] to-[#6ab02e] rounded-full hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 hover:scale-105"
-              >
-                View Full Team
-                <svg
-                  className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </a>
-            </div>
-          )}
         </div>
-      </section>
+      </div>
 
-      {/* Member Detail Modal */}
-      <AnimatePresence>
+      <div className="mt-12 border-y-[5px] border-[#101010] bg-[#80c738] py-4">
+        <div className="flex w-max gap-3 whitespace-nowrap" data-team-marquee>
+          {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
+            <span key={`${item}-${index}`} className="inline-flex -rotate-1 items-center border-[3px] border-[#101010] bg-[#fff7df] px-5 py-2 text-lg font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010]">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         {selectedMember && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setSelectedMember(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedMember(null)}
-                className="absolute top-4 right-4 z-20 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Header with Image */}
-              <div className="relative bg-gradient-to-br from-sky-100 to-sky-50 pt-8 pb-16 px-6">
-                <div className="relative mx-auto w-32 h-32">
-                  <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    {selectedMember.photo ? (
-                      <Image
-                        src={selectedMember.photo}
-                        alt={selectedMember.name}
-                        fill
-                        className="object-cover object-top"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#80c738] to-[#00aeef]">
-                        <span className="text-white text-3xl font-bold">
-                          {getInitials(selectedMember.name)}
-                        </span>
-                      </div>
+          <section data-team-category className="mb-10 grid gap-7 border-[5px] border-[#101010] bg-[#101010] p-6 text-[#fff7df] shadow-[10px_10px_0_#80c738] sm:p-8 lg:grid-cols-[0.75fr_1.25fr]">
+            <div>
+              <p className="inline-block -rotate-1 border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#fff7df]">
+                Selected profile
+              </p>
+              <h3 className="mt-6 font-black uppercase leading-tight" style={{ fontSize: "clamp(2.25rem, 5vw, 3.8rem)" }}>
+                {selectedMember.name}
+              </h3>
+              <p className="mt-4 text-base font-black uppercase text-[#80c738]">{selectedMember.role}</p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-[220px_1fr]">
+              <div className="relative min-h-[260px] overflow-hidden border-[3px] border-[#fff7df] bg-[#fff7df] shadow-[6px_6px_0_#80c738]">
+                <TeamPhoto member={selectedMember} priority />
+              </div>
+              <div className="flex flex-col justify-end">
+                {selectedMember.bio ? (
+                  <p className="text-base font-medium leading-8 text-[#fff7df]/80">{selectedMember.bio}</p>
+                ) : (
+                  <p className="text-base font-medium leading-8 text-[#fff7df]/80">
+                    This profile is part of KCIC&apos;s team directory, bringing specialist leadership and delivery support to climate enterprises.
+                  </p>
+                )}
+                {(selectedMember.email || selectedMember.linkedin || selectedMember.twitter) && (
+                  <div className="mt-6 flex gap-3">
+                    {selectedMember.email && (
+                      <ContactLink href={`mailto:${selectedMember.email}`} label={`Email ${selectedMember.name}`}>
+                        <Mail className="h-4 w-4" aria-hidden="true" />
+                      </ContactLink>
+                    )}
+                    {selectedMember.linkedin && (
+                      <ContactLink href={selectedMember.linkedin} label={`${selectedMember.name} on LinkedIn`}>
+                        <Linkedin className="h-4 w-4" aria-hidden="true" />
+                      </ContactLink>
+                    )}
+                    {selectedMember.twitter && (
+                      <ContactLink href={selectedMember.twitter} label={`${selectedMember.name} on Twitter`}>
+                        <Twitter className="h-4 w-4" aria-hidden="true" />
+                      </ContactLink>
                     )}
                   </div>
-                </div>
+                )}
               </div>
-
-              {/* Content */}
-              <div className="px-6 pb-8 -mt-8 relative z-10">
-                <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                    {selectedMember.name}
-                  </h3>
-                  <p className="text-[#80c738] font-semibold mb-4">
-                    {selectedMember.role}
-                  </p>
-                  
-                  {selectedMember.bio && (
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6 text-left">
-                      {selectedMember.bio}
-                    </p>
-                  )}
-
-                  {/* Social Links */}
-                  {(selectedMember.email || selectedMember.linkedin || selectedMember.twitter) && (
-                    <div className="flex justify-center gap-3 pt-4 border-t border-gray-100">
-                      {selectedMember.email && (
-                        <a
-                          href={`mailto:${selectedMember.email}`}
-                          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#80c738] hover:text-white transition-all duration-300"
-                          aria-label={`Email ${selectedMember.name}`}
-                        >
-                          <Mail className="w-5 h-5" />
-                        </a>
-                      )}
-                      {selectedMember.linkedin && (
-                        <a
-                          href={selectedMember.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#0077b5] hover:text-white transition-all duration-300"
-                          aria-label={`${selectedMember.name}'s LinkedIn`}
-                        >
-                          <Linkedin className="w-5 h-5" />
-                        </a>
-                      )}
-                      {selectedMember.twitter && (
-                        <a
-                          href={selectedMember.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#1da1f2] hover:text-white transition-all duration-300"
-                          aria-label={`${selectedMember.name}'s Twitter`}
-                        >
-                          <Twitter className="w-5 h-5" />
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </section>
         )}
-      </AnimatePresence>
-    </>
+
+        {categories.map((category) => {
+          const categoryMembers = groupedMembers[category] ?? [];
+
+          return (
+            <section key={category} data-team-category className="mb-14 last:mb-0">
+              <div className="mb-8 flex flex-col gap-4 border-t-[5px] border-[#101010] pt-7 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="inline-block -rotate-1 border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010]">
+                    {category}
+                  </p>
+                  <h3 className="mt-5 max-w-3xl font-black uppercase leading-tight tracking-normal text-[#101010]" style={{ fontSize: "clamp(2rem, 4vw, 2.7rem)" }}>
+                    {categoryMembers.length} profile{categoryMembers.length === 1 ? "" : "s"} in this section.
+                  </h3>
+                </div>
+                <p className="max-w-md border-[3px] border-[#101010] bg-[#fff7df] p-4 text-sm font-medium leading-relaxed text-[#28261d] shadow-[5px_5px_0_#101010]">
+                  Select a profile to read more. Select it again to close the expanded view.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {categoryMembers.map((member) => {
+                  const index = globalIndex++;
+                  const isSelected = selectedMember?.id === member.id;
+
+                  return (
+                    <article
+                      key={member.id}
+                      data-team-card
+                      className={`group relative self-start overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] shadow-[9px_9px_0_#101010] transition duration-500 ease-out hover:-translate-y-1 hover:rotate-[-0.35deg] hover:shadow-[13px_13px_0_#80c738] ${
+                        isSelected ? "bg-[#f4ffd9] shadow-[13px_13px_0_#80c738]" : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setSelectedId(isSelected ? null : member.id)}
+                        className="block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#335016] focus-visible:ring-offset-4"
+                        aria-expanded={isSelected}
+                      >
+                        <div data-team-photo className="relative h-[310px] overflow-hidden border-b-[3px] border-[#101010] bg-[#80c738]">
+                          <TeamPhoto member={member} priority={index < 2} />
+                          <div className="absolute left-0 top-0 border-b-[3px] border-r-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase text-[#101010]">
+                            {category}
+                          </div>
+                          <div className="absolute bottom-4 left-4 bg-[#101010] px-3 py-1.5 text-xs font-black text-[#fff7df]">
+                            0{(index % 9) + 1}
+                          </div>
+                        </div>
+
+                        <div className="p-5">
+                          <h4 className="text-2xl font-black uppercase leading-tight text-[#101010]">{member.name}</h4>
+                          <p className="mt-3 min-h-[44px] text-sm font-black uppercase leading-snug text-[#4d7822]">{member.role}</p>
+                          <div className="mt-5 flex items-center justify-between gap-4 border-t-[3px] border-[#101010] pt-4">
+                            <span className="text-sm font-black uppercase text-[#101010]">{isSelected ? "Close profile" : "Open profile"}</span>
+                            <span className="grid h-10 w-10 place-items-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010] transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                              <ArrowRight className={`h-4 w-4 transition duration-300 ${isSelected ? "rotate-90" : ""}`} weight="bold" aria-hidden="true" />
+                            </span>
+                          </div>
+                        </div>
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+
+        {showViewAll && (
+          <div className="mt-12 text-center">
+            <Link
+              href={viewAllHref}
+              className="inline-flex -rotate-1 items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-6 py-3 text-sm font-black uppercase text-[#101010] shadow-[6px_6px_0_#101010] transition hover:-translate-y-1 hover:shadow-[9px_9px_0_#101010]"
+            >
+              View full team
+              <ArrowRight className="h-4 w-4" weight="bold" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 
