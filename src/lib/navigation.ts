@@ -51,24 +51,24 @@ export const navData = {
       label: "Our Work",
       href: "/how-we-work",
       subItems: [
-        {
-          label: "Our Approach",
-          href: "/how-we-work/our-approach",
-          description: "How we support climate innovation",
-          icon: "Lightbulb",
-        },
+        // {
+        //   label: "Our Approach",
+        //   href: "/how-we-work/our-approach",
+        //   description: "How we support climate innovation",
+        //   icon: "Lightbulb",
+        // },
         {
           label: "Key Sectors",
           href: "/how-we-work/focus-sectors",
           description: "Climate sectors we develop and support",
           icon: "Target",
         },
-        {
-          label: "Cross Cutting Issues",
-          href: "/how-we-work/cross-cutting",
-          description: "Gender, youth, and environmental themes",
-          icon: "Network",
-        },
+        // {
+        //   label: "Cross Cutting Issues",
+        //   href: "/how-we-work/cross-cutting",
+        //   description: "Gender, youth, and environmental themes",
+        //   icon: "Network",
+        // },
         {
           label: "Our Partners",
           href: "/how-we-work/partners",
