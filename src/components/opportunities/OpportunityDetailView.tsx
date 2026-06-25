@@ -53,7 +53,22 @@ const typeConfig: Record<
   tender: { label: 'Tender notice', detailLabel: 'Tender details', stamp: 'TENDER', Icon: FileText },
 };
 
-const tickerItems = ['Review brief', 'Download files', 'Check deadline', 'Submit response', 'KCIC opportunities'];
+const careersTicker = [
+  'Open roles',
+  'Apply now',
+  'Review requirements',
+  'Check deadline',
+  'Green jobs',
+  'Team KCIC',
+];
+
+const procurementTicker = [
+  'Review brief',
+  'Download files',
+  'Check deadline',
+  'Submit response',
+  'KCIC opportunities',
+];
 
 function isProcurementType(type: OpportunityType) {
   return type === 'consulting' || type === 'rfp' || type === 'tender';
@@ -256,11 +271,20 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
 
   const config = typeConfig[opportunity.type as OpportunityType] ?? typeConfig.job;
   const isProcurement = isProcurementType(opportunity.type);
+  const tickerItems = isProcurement ? procurementTicker : careersTicker;
   const backHref = isProcurement ? '/about/procurement' : '/about/careers';
   const backLabel = isProcurement ? 'Back to procurement' : 'Back to careers';
   const actionLabel = isProcurement ? 'Submit response' : 'Apply for this role';
   const emailLabel = isProcurement ? 'Email submission' : 'Email application';
-  const pageLabel = isProcurement ? 'Procurement notice' : 'Career opportunity';
+  const pageLabel = isProcurement ? 'Procurement notice' : 'Talent desk';
+  const sidebarBody = isProcurement
+    ? 'Review the notice, confirm the deadline, then submit using the published channel.'
+    : 'Review the role, confirm you meet the requirements, then apply before the deadline.';
+  const featuredLabel = isProcurement ? 'Priority notice' : 'Featured role';
+  const applyFallbackCopy = isProcurement
+    ? 'Check back for submission details or contact procurement@kenyacic.org.'
+    : 'Check back for application details or contact careers@kenyacic.org.';
+  const hasApplyChannel = Boolean(opportunity.applicationLink || opportunity.applicationEmail);
   const plainSummary = plainTextFromHtml(opportunity.description) || opportunity.summary;
 
   return (
@@ -290,6 +314,12 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
                   {opportunity.referenceNumber}
                 </span>
               )}
+              {opportunity.isFeatured && (
+                <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#101010] px-3 py-2 text-sm font-black uppercase text-[#fff7df] shadow-[4px_4px_0_#80c738]">
+                  <Sparkle className="h-4 w-4 text-[#80c738]" weight="bold" />
+                  {featuredLabel}
+                </span>
+              )}
               {opportunity.isActive && (
                 <span className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#101010] px-3 py-2 text-sm font-black uppercase text-[#fff7df] shadow-[4px_4px_0_#80c738]">
                   <span className="h-2.5 w-2.5 bg-[#80c738]" />
@@ -300,23 +330,15 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
 
             <h1
               aria-label={opportunity.title}
-              className="mt-7 max-w-4xl overflow-hidden font-black uppercase leading-[0.95] tracking-normal"
+              className="mt-7 max-w-4xl line-clamp-4 font-black uppercase leading-[0.95] tracking-normal"
               style={{ fontSize: 'clamp(1.75rem, 3.8vw, 3.25rem)' }}
+              title={opportunity.title}
             >
-              {opportunity.title.split(' ').slice(0, 10).map((word, index) => (
-                <span key={`${word}-${index}`} className="mr-2 inline-block overflow-hidden pb-1">
-                  <span data-opportunity-word className="inline-block">
-                    {word}
-                  </span>
+              <span className="block overflow-hidden pb-1">
+                <span data-opportunity-word className="inline-block">
+                  {opportunity.title}
                 </span>
-              ))}
-              {opportunity.title.split(' ').length > 10 && (
-                <span className="inline-block overflow-hidden pb-1">
-                  <span data-opportunity-word className="inline-block bg-[#80c738] px-2">
-                    ...
-                  </span>
-                </span>
-              )}
+              </span>
             </h1>
 
             <p className="mt-6 max-w-3xl text-lg font-medium leading-8 text-[#28261d]">{plainSummary}</p>
@@ -363,28 +385,28 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
           <div className="space-y-8">
             <section data-opportunity-panel className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {opportunity.location && (
-                <div className="border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010]">
+                <div className={`border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010] ${!isProcurement ? '-rotate-1' : ''}`}>
                   <MapPin className="h-6 w-6 text-[#5a8f1d]" weight="bold" />
                   <p className="mt-4 text-xs font-black uppercase text-[#58523f]">Location</p>
                   <p className="mt-1 text-lg font-black">{opportunity.location}</p>
                 </div>
               )}
               {opportunity.department && (
-                <div className="border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010]">
+                <div className={`border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010] ${!isProcurement ? 'rotate-1' : ''}`}>
                   <Buildings className="h-6 w-6 text-[#5a8f1d]" weight="bold" />
                   <p className="mt-4 text-xs font-black uppercase text-[#58523f]">Department</p>
                   <p className="mt-1 text-lg font-black">{opportunity.department}</p>
                 </div>
               )}
               {opportunity.employmentType && (
-                <div className="border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010]">
+                <div className={`border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010] ${!isProcurement ? '-rotate-1' : ''}`}>
                   <Briefcase className="h-6 w-6 text-[#5a8f1d]" weight="bold" />
                   <p className="mt-4 text-xs font-black uppercase text-[#58523f]">Type</p>
                   <p className="mt-1 text-lg font-black capitalize">{opportunity.employmentType.replace('-', ' ')}</p>
                 </div>
               )}
               {opportunity.issuedDate && (
-                <div className="border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010]">
+                <div className={`border-[4px] border-[#101010] bg-[#fff7df] p-4 shadow-[6px_6px_0_#101010] ${!isProcurement ? 'rotate-1' : ''}`}>
                   <Calendar className="h-6 w-6 text-[#5a8f1d]" weight="bold" />
                   <p className="mt-4 text-xs font-black uppercase text-[#58523f]">Posted</p>
                   <p className="mt-1 text-lg font-black">{formatDate(opportunity.issuedDate, 'MMM d, yyyy')}</p>
@@ -403,9 +425,7 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
                 Next step
               </p>
               <h2 className="mt-6 text-3xl font-black uppercase leading-none">{actionLabel}</h2>
-              <p className="mt-4 text-base font-medium leading-7 text-[#28261d]">
-                Review the notice, confirm the deadline, then submit using the published channel.
-              </p>
+              <p className="mt-4 text-base font-medium leading-7 text-[#28261d]">{sidebarBody}</p>
 
               <div className="mt-6 space-y-3">
                 {opportunity.applicationLink && (
@@ -430,6 +450,15 @@ export function OpportunityDetailView({ sectionHint = 'careers' }: { sectionHint
                     {emailLabel}
                     <EnvelopeSimple className="h-5 w-5" weight="bold" />
                   </a>
+                )}
+
+                {!hasApplyChannel && (
+                  <div
+                    data-opportunity-action
+                    className="border-[3px] border-[#101010] bg-[#fff7df] px-4 py-3 text-sm font-medium leading-7 text-[#28261d] shadow-[5px_5px_0_#101010]"
+                  >
+                    {applyFallbackCopy}
+                  </div>
                 )}
               </div>
 

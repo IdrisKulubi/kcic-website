@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRightIcon, CarIcon, CheckCircleIcon, DropIcon, PlantIcon, RecycleIcon, SunIcon, TreeIcon } from '@phosphor-icons/react/dist/ssr';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import {
   drawSvgPaths,
   gsap,

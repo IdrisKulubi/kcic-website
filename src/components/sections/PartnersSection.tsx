@@ -3,7 +3,7 @@
 import { useLayoutEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import {
   drawSvgPaths,
   gsap,
@@ -36,7 +36,7 @@ function PartnerLogoTile({ partner, index }: { partner: PartnerData; index: numb
         <span className="bg-[#101010] px-2 py-1 text-xs font-black text-[#fff7df]">0{(index % 9) + 1}</span>
         {partner.website ? (
           <span className="grid h-8 w-8 place-items-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010] transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowUpRight className="h-4 w-4" weight="bold" aria-hidden="true" />
           </span>
         ) : null}
       </div>
