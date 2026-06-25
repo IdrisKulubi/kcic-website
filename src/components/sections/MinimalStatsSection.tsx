@@ -324,11 +324,7 @@ export function MinimalStatsSection({
         preserveAspectRatio="none"
         aria-hidden
       >
-        <path
-          d="M-55 161C165 86 340 91 507 174C677 259 789 278 961 191C1152 96 1278 79 1493 132"
-          stroke="currentColor"
-          strokeWidth="3"
-        />
+       
         <path
           d="M-43 546C152 468 341 480 501 557C675 640 826 650 1002 551C1167 458 1312 445 1498 502"
           stroke="currentColor"

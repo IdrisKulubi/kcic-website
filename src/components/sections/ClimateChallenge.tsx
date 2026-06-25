@@ -303,24 +303,7 @@ export default function ClimateChallenge({
       aria-labelledby="climate-challenge-heading"
       className={`relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-12 text-[#101010] sm:py-14 ${className}`}
     >
-      <svg
-        className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/18"
-        viewBox="0 0 1440 760"
-        fill="none"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <path
-          d="M-47 167C137 87 310 101 492 196C662 285 807 300 1001 204C1172 119 1310 101 1495 151"
-          stroke="currentColor"
-          strokeWidth="3"
-        />
-        <path
-          d="M-52 608C126 526 304 536 478 616C652 696 800 704 982 609C1166 513 1320 496 1502 553"
-          stroke="currentColor"
-          strokeWidth="3"
-        />
-      </svg>
+      
 
       <div
         className="bg-image-layer pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] opacity-20 lg:block"
