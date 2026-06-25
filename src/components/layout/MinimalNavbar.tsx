@@ -5,32 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Article,
-  Archive,
-  BookOpen,
-  Briefcase,
-  Buildings,
-  Calendar,
   CaretDown,
-  Crosshair,
-  FileText,
-  Graph,
-  Handshake,
-  Lightbulb,
   List,
-  Megaphone,
-  Microphone,
-  Newspaper,
-  Phone,
-  Rocket,
-  Shield,
-  Star,
-  TreeStructure,
-  TrendUp,
-  Users,
   X,
   ArrowRight,
-  ClipboardText,
 } from '@phosphor-icons/react';
 import { gsap, prefersReducedMotion, registerGsapFoundation } from '@/lib/gsap-foundation';
 
@@ -59,36 +37,6 @@ interface MinimalNavbarProps {
   };
 }
 
-const iconMap = {
-  Building2: Buildings,
-  Buildings,
-  Users,
-  FileText,
-  Target: Crosshair,
-  Crosshair,
-  Phone,
-  Lightbulb,
-  Shield,
-  Briefcase,
-  Network: Graph,
-  Graph,
-  BookOpen,
-  TrendUp,
-  Calendar,
-  Megaphone,
-  ClipboardList: ClipboardText,
-  ClipboardText,
-  Star,
-  Rocket,
-  Archive,
-  Newspaper,
-  Article,
-  Microphone,
-  Handshake,
-  Diagram: TreeStructure,
-  TreeStructure,
-};
-
 function isActivePath(pathname: string, href: string) {
   const cleanHref = href.split('#')[0] || '/';
   if (cleanHref === '/') return pathname === '/';
@@ -107,8 +55,6 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const logoSrc = logo?.src || '/images/hero/KCIC logo.png';
-
-  const getIcon = (iconName: string) => iconMap[iconName as keyof typeof iconMap] || Buildings;
 
   useLayoutEffect(() => {
     if (!navRef.current) return;
@@ -228,23 +174,21 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
             isScrolled ? 'translate-y-0 shadow-[7px_7px_0_#80c738]' : ''
           }`}
         >
-          <div className="flex h-[74px] items-center justify-between gap-3 px-3 sm:px-5 lg:h-[82px] lg:px-6">
+          <div className="flex h-16 items-center justify-between gap-3 px-3 sm:px-5 lg:h-[72px] lg:px-6">
             <Link
               href="/"
               onClick={(event) => handleNavClick(event, '/')}
               className="group flex shrink-0 items-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
               aria-label="KCIC, go to homepage"
             >
-              <span className="grid h-14 w-20 place-items-center border-[3px] border-[#101010] bg-[#fff7df] shadow-[4px_4px_0_#80c738] sm:w-24">
-                <Image
-                  src={logoSrc}
-                  alt={logo?.alt || 'KCIC Logo'}
-                  width={130}
-                  height={70}
-                  className="max-h-11 w-auto object-contain"
-                  priority
-                />
-              </span>
+              <Image
+                src={logoSrc}
+                alt={logo?.alt || 'KCIC Logo'}
+                width={130}
+                height={70}
+                className="h-10 w-auto object-contain sm:h-11"
+                priority
+              />
               <span className="hidden leading-none xl:block">
                 <span className="block text-xs font-black uppercase text-[#58523f]">Kenya Climate</span>
                 <span className="block text-sm font-black uppercase">Innovation Centre</span>
@@ -266,7 +210,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                       {item.subItems ? (
                         <button
                           type="button"
-                          className={`flex items-center gap-1 border-[3px] border-transparent px-3 py-2 text-sm font-black uppercase transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] xl:px-4 ${
+                          className={`flex items-center gap-1 border-2 border-transparent px-3 py-2 text-sm font-medium transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
                             active || activeDropdown === item.label ? 'border-[#101010] bg-[#80c738]' : ''
                           }`}
                           aria-expanded={activeDropdown === item.label}
@@ -276,13 +220,13 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                           onKeyDown={(event) => handleKeyNavigation(event, item.href)}
                         >
                           {item.label}
-                          <CaretDown className={`h-4 w-4 transition ${activeDropdown === item.label ? 'rotate-180' : ''}`} weight="bold" />
+                          <CaretDown className={`h-3.5 w-3.5 transition ${activeDropdown === item.label ? 'rotate-180' : ''}`} weight="bold" />
                         </button>
                       ) : (
                         <Link
                           href={item.href}
                           onClick={(event) => handleNavClick(event, item.href)}
-                          className={`block border-[3px] border-transparent px-3 py-2 text-sm font-black uppercase transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] xl:px-4 ${
+                          className={`block border-2 border-transparent px-3 py-2 text-sm font-medium transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
                             active ? 'border-[#101010] bg-[#80c738]' : ''
                           }`}
                         >
@@ -294,49 +238,25 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                         <div
                           id={`nav-panel-${item.label}`}
                           role="menu"
-                          className="absolute left-1/2 top-[calc(100%+16px)] w-[min(760px,calc(100vw-3rem))] -translate-x-1/2 border-[4px] border-[#101010] bg-[#fff7df] p-3 shadow-[10px_10px_0_#101010]"
+                          className="absolute left-1/2 top-[calc(100%+8px)] min-w-[200px] -translate-x-1/2 rounded border border-[#101010]/15 bg-[#fff7df] py-1 shadow-md"
                         >
-                          <div className="mb-3 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
-                            <span className="bg-[#101010] px-3 py-1 text-xs font-black uppercase text-[#fff7df]">{item.label}</span>
-                            <Link
-                              href={item.href}
-                              onClick={(event) => handleNavClick(event, item.href)}
-                              className="inline-flex items-center gap-1 text-xs font-black uppercase hover:text-[#5a8f1d]"
-                            >
-                              Open section
-                              <ArrowRight className="h-3.5 w-3.5" weight="bold" />
-                            </Link>
-                          </div>
-                          <div className={`grid gap-2 ${item.subItems.length > 3 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-                            {item.subItems.map((subItem) => {
-                              const Icon = getIcon(subItem.icon);
-                              const subActive = isActivePath(pathname, subItem.href);
-                              return (
-                                <Link
-                                  key={subItem.label}
-                                  href={subItem.href}
-                                  role="menuitem"
-                                  onClick={(event) => handleNavClick(event, subItem.href)}
-                                  onKeyDown={(event) => handleKeyNavigation(event, subItem.href)}
-                                  className={`group flex gap-3 border-[3px] border-[#101010] p-3 shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
-                                    subActive ? 'bg-[#80c738]' : 'bg-[#fff7df]'
-                                  }`}
-                                >
-                                  <span className="grid h-11 w-11 shrink-0 place-items-center border-[3px] border-[#101010] bg-[#fff7df]">
-                                    <Icon className="h-5 w-5" weight="bold" />
-                                  </span>
-                                  <span className="min-w-0">
-                                    <span className="block text-sm font-black uppercase leading-tight">{subItem.label}</span>
-                                    {subItem.description && (
-                                      <span className="mt-1 line-clamp-2 block text-xs font-bold leading-5 text-[#58523f]">
-                                        {subItem.description}
-                                      </span>
-                                    )}
-                                  </span>
-                                </Link>
-                              );
-                            })}
-                          </div>
+                          {item.subItems.map((subItem) => {
+                            const subActive = isActivePath(pathname, subItem.href);
+                            return (
+                              <Link
+                                key={subItem.label}
+                                href={subItem.href}
+                                role="menuitem"
+                                onClick={(event) => handleNavClick(event, subItem.href)}
+                                onKeyDown={(event) => handleKeyNavigation(event, subItem.href)}
+                                className={`block px-3 py-2 text-sm font-medium transition hover:bg-[#80c738]/25 focus:outline-none focus-visible:bg-[#80c738]/30 ${
+                                  subActive ? 'bg-[#80c738]/35 text-[#101010]' : 'text-[#101010]'
+                                }`}
+                              >
+                                {subItem.label}
+                              </Link>
+                            );
+                          })}
                         </div>
                       )}
                     </div>
@@ -408,35 +328,19 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                             <CaretDown className={`h-5 w-5 transition ${expandedMobileItem === item.label ? 'rotate-180' : ''}`} weight="bold" />
                           </button>
                           {expandedMobileItem === item.label && (
-                            <div className="space-y-2 border-t-[3px] border-[#101010] p-3">
-                              <Link
-                                href={item.href}
-                                onClick={(event) => handleNavClick(event, item.href)}
-                                className="flex items-center justify-between bg-[#101010] px-3 py-3 text-sm font-black uppercase text-[#fff7df]"
-                              >
-                                Open section
-                                <ArrowRight className="h-4 w-4" weight="bold" />
-                              </Link>
+                            <div className="border-t border-[#101010]/10 py-1">
                               {item.subItems.map((subItem) => {
-                                const Icon = getIcon(subItem.icon);
+                                const subActive = isActivePath(pathname, subItem.href);
                                 return (
                                   <Link
                                     key={subItem.label}
                                     href={subItem.href}
                                     onClick={(event) => handleNavClick(event, subItem.href)}
-                                    className="flex gap-3 border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[4px_4px_0_#101010]"
+                                    className={`block px-4 py-2.5 text-sm font-medium ${
+                                      subActive ? 'bg-[#80c738]/35' : ''
+                                    }`}
                                   >
-                                    <span className="grid h-10 w-10 shrink-0 place-items-center border-[3px] border-[#101010] bg-[#80c738]">
-                                      <Icon className="h-5 w-5" weight="bold" />
-                                    </span>
-                                    <span>
-                                      <span className="block text-base font-black uppercase leading-tight">{subItem.label}</span>
-                                      {subItem.description && (
-                                        <span className="mt-1 line-clamp-2 block text-sm font-bold leading-5 text-[#58523f]">
-                                          {subItem.description}
-                                        </span>
-                                      )}
-                                    </span>
+                                    {subItem.label}
                                   </Link>
                                 );
                               })}

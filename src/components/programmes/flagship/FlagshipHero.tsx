@@ -13,83 +13,116 @@ export function FlagshipHero({
   heroRef,
 }: {
   programme: ProgrammeWithSponsors;
-  flagship: FlagshipProgrammeContent;
+  flagship?: FlagshipProgrammeContent | null;
   heroRef: RefObject<HTMLDivElement | null>;
 }) {
-  const lead = flagship.heroLead ?? programme.description;
+  const lead = flagship?.heroLead ?? programme.description;
+  const eyebrow =
+    flagship?.heroEyebrow ??
+    (programme.isActive ? "Applications open" : "Programme overview");
+
+  const imageSrc = programme.headerImage || programme.image;
 
   return (
-    <div ref={heroRef} className="relative min-h-[min(70vh,520px)] bg-gray-950 overflow-hidden lg:min-h-[min(78vh,640px)]">
-      {/* Background: slight scale + blur so edges stay covered; scrims for legible type */}
-      <div className="absolute inset-0 overflow-hidden" aria-hidden>
-        <Image
-          src={programme.headerImage || programme.image}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center scale-[1.12] blur-[2px] sm:blur-[3px] motion-reduce:blur-none motion-reduce:scale-100"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-950/92 via-gray-950/82 to-gray-900/78" />
-        <div className="absolute inset-0 bg-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
-      </div>
+    <section
+      ref={heroRef}
+      className="relative isolate overflow-hidden border-b-[5px] border-[#101010] bg-[#fff7df] pt-28 text-[#101010] sm:pt-32"
+    >
+      <div
+        className="absolute inset-x-0 top-20 -z-10 h-[44px] border-y-[5px] border-[#101010] bg-[#80c738]"
+        aria-hidden
+      />
 
-      {/* Clear fixed MinimalNavbar (h-16 sm:h-20) + safe area so copy is not covered */}
-      <div className="relative z-10 flex flex-col">
-        <div className="h-16 shrink-0 sm:h-20" aria-hidden />
-        <div className="max-w-7xl mx-auto w-full px-4 pb-20 pt-6 sm:px-6 sm:pb-24 sm:pt-8 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8 lg:pb-12">
         <Link
           href="/programmes"
-          className="inline-block text-white/80 hover:text-white text-sm font-medium tracking-wide mb-10 transition-colors drop-shadow-sm"
+          className="mb-5 inline-flex items-center gap-1 text-sm font-medium text-[#58523f] transition hover:text-[#101010]"
         >
-          ← Programmes
+          ← All programmes
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            {flagship.heroEyebrow ? (
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-black/35 text-white rounded-full text-[11px] font-semibold uppercase tracking-wider mb-5 border border-white/15 backdrop-blur-sm">
-                {flagship.heroEyebrow}
-              </span>
-            ) : programme.isActive ? (
-              <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-emerald-200/90 border border-emerald-400/30 rounded mb-6">
-                Applications open
-              </span>
-            ) : (
-              <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-white/60 border border-white/15 rounded mb-6">
-                Programme overview
-              </span>
-            )}
+        <div className="border-[3px] border-[#101010] bg-[#fff7df] p-5 shadow-[8px_8px_0_#101010] sm:p-6 lg:p-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8 lg:gap-10">
+            <div data-hero-copy className="min-w-0 flex-1">
+              <p className="mb-4 inline-flex -rotate-1 items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-3 py-1.5 text-xs font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010]">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: programme.color }}
+                  aria-hidden
+                />
+                {eyebrow}
+              </p>
 
-            <h1 className="text-3xl md:text-4xl lg:text-[2.65rem] font-semibold text-white mb-5 leading-[1.12] tracking-tight [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]">
-              {programme.title}
-            </h1>
+              <h1 className="text-[clamp(1.75rem,4vw,2.75rem)] font-black uppercase leading-[0.95] tracking-tight text-[#101010]">
+                {programme.title}
+              </h1>
 
-            <p className="text-base md:text-lg text-white/95 leading-relaxed mb-8 max-w-xl [text-shadow:0_1px_18px_rgba(0,0,0,0.5)]">
-              {lead}
-            </p>
+              <p className="mt-4 text-sm font-medium leading-6 text-[#28261d] sm:text-base sm:leading-7">
+                {lead}
+              </p>
 
-            <FlagshipCtaRow ctas={flagship.ctas} programme={programme} />
-          </div>
+              <FlagshipCtaRow ctas={flagship?.ctas} programme={programme} />
+            </div>
 
-          <div className="hidden lg:block">
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 shadow-2xl shadow-black/50 ring-1 ring-black/20">
-              <div className="aspect-4/3 relative">
-                <Image
-                  src={programme.image}
+            <div
+              data-hero-image
+              className="mx-auto w-full max-w-[200px] shrink-0 sm:mx-0 sm:w-40 md:w-48 lg:w-56 xl:w-64"
+            >
+              <div className="rotate-2 transition hover:-translate-y-0.5 hover:rotate-1">
+                <ProgrammeHeroImage
+                  src={imageSrc}
                   alt={programme.title}
-                  fill
-                  className="object-cover object-[center_30%]"
-                  sizes="(min-width: 1024px) 40vw, 0px"
+                  color={programme.color}
                 />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-1" style={{ backgroundColor: programme.color }} />
+
+              {programme.sponsors.length > 0 && !flagship?.fundedBy?.length && !flagship?.strategicPartners ? (
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-3 border-2 border-[#101010] bg-[#fff7df] px-3 py-2 shadow-[3px_3px_0_#101010] md:justify-start">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#58523f]">Funded by</span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {programme.sponsors.slice(0, 3).map((sponsor) => (
+                      <div key={sponsor.id} className="relative h-6 w-14">
+                        <Image
+                          src={sponsor.logo}
+                          alt={sponsor.name}
+                          fill
+                          className="object-contain object-left"
+                          sizes="56px"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
-        </div>
       </div>
+    </section>
+  );
+}
+
+function ProgrammeHeroImage({
+  src,
+  alt,
+  color,
+}: {
+  src: string;
+  alt: string;
+  color: string;
+}) {
+  return (
+    <div className="overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] shadow-[6px_6px_0_#101010]">
+      <Image
+        src={src}
+        alt={alt}
+        width={320}
+        height={400}
+        priority
+        className="aspect-[4/5] h-auto w-full object-cover"
+        sizes="(min-width: 1280px) 256px, (min-width: 768px) 192px, 220px"
+      />
+      <div className="h-1.5 border-t-2 border-[#101010]" style={{ backgroundColor: color }} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { FlagshipStoryLink } from "@/data/flagship-programmes";
+import { FlagshipSectionHeading } from "./FlagshipSectionHeading";
 
 function isExternal(href: string) {
   return href.startsWith("http://") || href.startsWith("https://");
@@ -17,16 +18,14 @@ export function FlagshipFeaturedStories({
   links: FlagshipStoryLink[];
 }) {
   return (
-    <section className="mb-20 border-t border-gray-200 pt-14" aria-labelledby="flagship-stories-heading">
-      <h2 id="flagship-stories-heading" className="text-lg font-semibold tracking-tight text-gray-900 mb-3">
-        {title}
-      </h2>
-      <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-6 max-w-3xl">{intro}</p>
-      <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3">
+    <section className="mb-16 sm:mb-20" aria-labelledby="flagship-stories-heading">
+      <FlagshipSectionHeading id="flagship-stories-heading">{title}</FlagshipSectionHeading>
+      <p className="mb-6 max-w-3xl text-base font-medium leading-7 text-[#28261d]">{intro}</p>
+      <ul className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         {links.map((link) => {
           const external = link.external ?? isExternal(link.href);
           const className =
-            "text-sm font-medium text-gray-900 underline underline-offset-4 decoration-gray-300 hover:decoration-gray-900 decoration-1 transition-colors";
+            "inline-flex border-[3px] border-[#101010] bg-[#fff7df] px-4 py-2.5 text-sm font-medium text-[#101010] shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#f5efd6]";
           if (external) {
             return (
               <li key={link.href + link.title}>

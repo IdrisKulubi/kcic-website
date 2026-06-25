@@ -1,7 +1,7 @@
 // Shared navigation data for all pages - Updated based on client feedback & new IA
 export const navData = {
   logo: {
-    src: "/images/kcic-logo.png",
+    src: "/images/hero/KCIC logo.png",
     alt: "KCIC Logo",
   },
   navigation: [

@@ -19,21 +19,28 @@ export function FlagshipCtaRow({
   ctas,
   programme,
 }: {
-  ctas: FlagshipCtaSpec[];
+  ctas?: FlagshipCtaSpec[];
   programme: ProgrammeData;
 }) {
+  const resolvedCtas: FlagshipCtaSpec[] =
+    ctas && ctas.length > 0
+      ? ctas
+      : programme.applicationLink
+        ? [{ key: "apply", label: "Apply", fallbackHref: programme.applicationLink, external: true }]
+        : [];
+
+  if (resolvedCtas.length === 0) return null;
+
   return (
-    <div className="flex flex-wrap gap-2 sm:gap-3 mt-6">
-      {ctas.map((cta) => {
+    <div className="mt-6 flex flex-wrap gap-2 sm:gap-3">
+      {resolvedCtas.map((cta) => {
         const href = resolveHref(cta, programme);
         if (!href) return null;
         const external = cta.external ?? isExternal(href);
-        const base =
-          "inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-900";
-        const primary = `${base} bg-white text-gray-900 hover:bg-gray-100`;
-        const secondary = `${base} bg-white/10 text-white border border-white/25 hover:bg-white/15`;
-
-        const className = cta.key === "apply" ? primary : secondary;
+        const isPrimary = cta.key === "apply";
+        const className = isPrimary
+          ? "inline-flex items-center justify-center border-[3px] border-[#101010] bg-[#80c738] px-5 py-2.5 text-sm font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010] transition hover:-translate-y-0.5 hover:shadow-[7px_7px_0_#101010] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
+          : "inline-flex items-center justify-center border-[3px] border-[#101010] bg-[#fff7df] px-5 py-2.5 text-sm font-medium text-[#101010] shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#f5efd6] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]";
 
         const label = (
           <>

@@ -8,21 +8,23 @@ import { FlagshipApproach } from "./FlagshipApproach";
 import { FlagshipFeaturedStories } from "./FlagshipFeaturedStories";
 import { FlagshipImpactGrid } from "./FlagshipImpactGrid";
 import { FlagshipOutcomes } from "./FlagshipOutcomes";
+import { FlagshipSectionHeading } from "./FlagshipSectionHeading";
 import { FlagshipStrategicPartners } from "./FlagshipStrategicPartners";
 
 function FundedByStrip({ items, id }: { items: FlagshipFunderLogo[]; id: string }) {
   return (
-    <section className="mb-20 border-t border-gray-200 pt-14" aria-labelledby={id}>
-      <h2 id={id} className="text-lg font-semibold tracking-tight text-gray-900 mb-6 text-center">
-        Funded by
-      </h2>
-      <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
+    <section className="mb-16 sm:mb-20" aria-labelledby={id}>
+      <FlagshipSectionHeading id={id}>Funded by</FlagshipSectionHeading>
+      <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
         {items.map((item) => (
-          <div key={item.name} className="flex flex-col items-center gap-2">
-            <div className="relative h-14 w-36">
-              <Image src={item.logoSrc} alt={item.name} fill className="object-contain" sizes="144px" />
+          <div
+            key={item.name}
+            className="flex flex-col items-center gap-3 border-[3px] border-[#101010] bg-[#fff7df] px-6 py-5 shadow-[5px_5px_0_#101010]"
+          >
+            <div className="relative h-12 w-32">
+              <Image src={item.logoSrc} alt={item.name} fill className="object-contain" sizes="128px" />
             </div>
-            <span className="text-xs text-gray-500 text-center max-w-40">{item.name}</span>
+            <span className="max-w-40 text-center text-xs font-medium text-[#58523f]">{item.name}</span>
           </div>
         ))}
       </div>
@@ -47,8 +49,7 @@ export function FlagshipProgrammeSections({
   }));
 
   return (
-    <div id="programme-details" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-      <div className="rounded-2xl border border-stone-200/90 bg-white px-5 py-10 shadow-sm sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+    <div id="programme-details" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <FlagshipApproach title={flagship.approachTitle} blocks={flagship.approachBlocks} accentColor={programme.color} />
 
       {flagship.showBihMap ? <AgriBizKenyaMap accentColor={programme.color} /> : null}
@@ -80,7 +81,6 @@ export function FlagshipProgrammeSections({
           partners={flagship.strategicPartners.partners}
         />
       ) : null}
-      </div>
     </div>
   );
 }
