@@ -192,7 +192,7 @@ export function MinimalStatsSection({
     if (!imageSrc) return null;
 
     return (
-      <div className={imageSide === 'right' ? 'lg:order-2' : 'lg:order-1'}>
+      <div className="impact-journey-map min-w-0">
         <div
           ref={imageRef}
           className="mx-auto w-full max-w-xl border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[8px_8px_0_#101010]"
@@ -271,6 +271,52 @@ export function MinimalStatsSection({
       className="relative isolate overflow-hidden border-y-[5px] border-[#101010] py-12 sm:py-14"
       style={{ backgroundColor: '#80c738' }}
     >
+      <style jsx>{`
+        .impact-journey-layout {
+          display: grid;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .impact-journey-map,
+        .impact-journey-stats {
+          min-width: 0;
+        }
+
+        @media (min-width: 1024px) {
+          .impact-journey-layout {
+            gap: 2.5rem;
+          }
+
+          .impact-journey-layout--map-left {
+            grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.35fr);
+          }
+
+          .impact-journey-layout--map-right {
+            grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+          }
+
+          .impact-journey-layout--map-left .impact-journey-map {
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-left .impact-journey-stats {
+            grid-column: 2;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-right .impact-journey-stats {
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-right .impact-journey-map {
+            grid-column: 2;
+            grid-row: 1;
+          }
+        }
+      `}</style>
       <svg
         className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/24"
         viewBox="0 0 1440 720"
@@ -299,9 +345,13 @@ export function MinimalStatsSection({
             {renderTabs()}
 
             {imageSrc ? (
-              <div className="grid items-start gap-8 lg:grid-cols-[0.95fr_1.35fr] lg:gap-10">
+              <div
+                className={`impact-journey-layout ${
+                  imageSide === 'right' ? 'impact-journey-layout--map-right' : 'impact-journey-layout--map-left'
+                }`}
+              >
                 {renderMapPanel()}
-                <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
+                <div className="impact-journey-stats">
                   <TabsContent value="impact" className="mt-0">
                     {renderStats(stats, false)}
                   </TabsContent>
@@ -322,9 +372,13 @@ export function MinimalStatsSection({
             )}
           </Tabs>
         ) : imageSrc ? (
-          <div className="grid items-start gap-8 lg:grid-cols-[0.95fr_1.35fr] lg:gap-10">
+          <div
+            className={`impact-journey-layout ${
+              imageSide === 'right' ? 'impact-journey-layout--map-right' : 'impact-journey-layout--map-left'
+            }`}
+          >
             {renderMapPanel()}
-            <div className={imageSide === 'right' ? 'lg:order-1' : 'lg:order-2'}>
+            <div className="impact-journey-stats">
               {renderStats(stats, false)}
             </div>
           </div>

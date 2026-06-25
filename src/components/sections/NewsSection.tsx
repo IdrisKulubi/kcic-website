@@ -9,7 +9,7 @@ import {
   CaretRight,
   Headphones,
 } from "@phosphor-icons/react";
-import { colors, typography } from "@/lib/design-system";
+import { typography } from "@/lib/design-system";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -367,50 +367,51 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className={cn("bg-[#f7fbf8] py-8 sm:py-10", className)}
+      className={cn("relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-12 sm:py-14", className)}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div ref={headerRef} className="mb-8 text-center sm:mb-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
+          ref={headerRef}
+          className="mb-8 grid items-end gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.9fr_1.1fr]"
+        >
           <div>
+            <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+              KCIC newsroom
+            </p>
             <h2
-              className="font-bold mb-4"
+              className="max-w-[10ch] font-black leading-[0.92] text-[#101010]"
               style={{
-                fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
+                fontSize: "clamp(3rem, 6vw, 5rem)",
                 fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-                lineHeight: typography.lineHeights.tight,
               }}
             >
               News & Insights
             </h2>
+          </div>
             <p
-              className="mx-auto max-w-3xl"
+              className="max-w-3xl font-black leading-8 text-[#101010]"
               style={{
-                fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
+                fontSize: "clamp(1rem, 1.55vw, 1.25rem)",
                 fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-                lineHeight: typography.lineHeights.relaxed,
               }}
             >
               A featured podcast preview on one side, with our latest stories
               stacked alongside it.
             </p>
-          </div>
         </div>
 
         <div
           ref={panelRef}
-          className="border border-[#d4e1d8] bg-white/92 p-0 shadow-[0_20px_50px_rgba(26,31,46,0.08)]"
+          className="border-[3px] border-[#101010] bg-[#fff7df] p-0 shadow-[8px_8px_0_#101010]"
         >
-          <div className="grid lg:grid-cols-[1.18fr_0.82fr] lg:divide-x-2 lg:divide-[#c7d5cb]">
+          <div className="grid lg:grid-cols-[1.18fr_0.82fr] lg:divide-x-[3px] lg:divide-[#101010]">
             <div ref={leftRef} className="p-5 sm:p-6 lg:p-7">
-              <div className="mb-5 flex items-center justify-between gap-4">
+              <div className="mb-5 flex items-center justify-between gap-4 border-b-[3px] border-[#101010] pb-4">
                 <div
-                  className="font-bold leading-tight"
+                  className="font-black uppercase leading-tight text-[#101010]"
                   style={{
                     fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
                     fontFamily: typography.fonts.heading,
-                    color: colors.secondary.gray[900],
                   }}
                 >
                   Podcasts
@@ -420,7 +421,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   <button
                     type="button"
                     onClick={showPreviousPodcast}
-                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
+                    className="h-10 w-10 border-2 border-[#101010] bg-[#fff7df] text-[#101010] shadow-[3px_3px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738]"
                     aria-label="Previous podcast"
                   >
                     <CaretLeft className="mx-auto h-4 w-4" />
@@ -428,7 +429,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   <button
                     type="button"
                     onClick={showNextPodcast}
-                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
+                    className="h-10 w-10 border-2 border-[#101010] bg-[#fff7df] text-[#101010] shadow-[3px_3px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738]"
                     aria-label="Next podcast"
                   >
                     <CaretRight className="mx-auto h-4 w-4" />
@@ -444,8 +445,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                   currentPodcast?.title || "Featured podcast"
                 }`}
               >
-                <div className="relative aspect-[16/11] overflow-hidden border border-[#d6e1d8] bg-linear-to-br from-[#0f2f3a] via-[#175f74] to-[#00addd] p-4 sm:p-5 shadow-md">
-                  <div className="relative h-full w-full overflow-hidden bg-black/35">
+                <div className="relative aspect-[16/11] overflow-hidden border-[3px] border-[#101010] bg-[#00addd] p-4 shadow-[6px_6px_0_#101010] sm:p-5">
+                  <div className="relative h-full w-full overflow-hidden border-2 border-[#101010] bg-[#101010]">
                     {currentPodcastThumbnail ? (
                       currentPodcastThumbnail.startsWith("http") ? (
                         <img
@@ -475,7 +476,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
                   <div className="absolute inset-4 bg-linear-to-t from-black/65 via-black/15 to-transparent sm:inset-5" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
+                    <span className="inline-flex h-16 w-16 items-center justify-center border-[3px] border-[#101010] bg-[#80c738] text-[#101010] shadow-[4px_4px_0_#101010] transition-transform duration-300 group-hover:scale-105">
                       <PlayCircle className="h-9 w-9" weight="fill" />
                     </span>
                   </div>
@@ -500,20 +501,20 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 </div>
               </button>
 
-              <div className="mt-4 space-y-2 border-t-2 border-[#d6e1d8] pt-4">
+              <div className="mt-5 space-y-2 border-t-[3px] border-[#101010] pt-4">
                 {featuredPodcasts.slice(0, 2).map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => handlePodcastOpen(item)}
-                    className="flex w-full items-start justify-between gap-3 border border-[#d6e1d8] px-4 py-3 text-left transition hover:border-[#80c738]"
+                    className="flex w-full items-start justify-between gap-3 border-2 border-[#101010] bg-[#fff7df] px-4 py-3 text-left transition hover:-translate-y-0.5 hover:bg-[#e5f7c9]"
                   >
                     <span className="min-w-0">
-                      <span className="block line-clamp-2 text-sm font-medium leading-5 text-slate-900">
+                      <span className="block line-clamp-2 text-sm font-black leading-5 text-[#101010]">
                         {item.title}
                       </span>
                       {item.publishedAt ? (
-                        <span className="mt-1 block text-xs leading-5 text-slate-500">
+                        <span className="mt-1 block text-xs font-semibold leading-5 text-[#4d4a3d]">
                           {formatDate(item.publishedAt)}
                         </span>
                       ) : null}
@@ -529,20 +530,19 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
 
             <div
               ref={rightRef}
-              className="border-t-2 border-[#c7d5cb] p-5 sm:p-6 lg:border-t-0 lg:p-7"
+              className="border-t-[3px] border-[#101010] p-5 sm:p-6 lg:border-t-0 lg:p-7"
             >
               <div
-                className="mb-4 font-bold leading-tight"
+                className="mb-5 border-b-[3px] border-[#101010] pb-4 font-black uppercase leading-tight text-[#101010]"
                 style={{
                   fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
                   fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
                 }}
               >
                 Latest Stories
               </div>
 
-              <div className="space-y-0 border-y-2 border-[#d6e1d8]">
+              <div className="space-y-0 border-y-[3px] border-[#101010]">
                 {latestArticles.map((item, index) => (
                   <Link
                     key={item.id}
@@ -550,7 +550,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                     ref={(el) => {
                       rowsRef.current[index] = el;
                     }}
-                    className="group block border-b border-[#d6e1d8] py-4 last:border-b-0"
+                    className="group block border-b-2 border-[#101010] py-4 transition hover:bg-[#e5f7c9] last:border-b-0 sm:px-3"
                   >
                     <div className="flex items-start gap-4">
                       <div className="min-w-0 flex-1">
@@ -560,19 +560,19 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                         >
                           <span
                             className={cn(
-                              "font-semibold uppercase tracking-wider",
+                              "font-black uppercase tracking-wider",
                               resolveCategoryTone(item.category || "News")
                             )}
                           >
                             {item.category || "News"}
                           </span>
                           <span className="text-gray-400">&middot;</span>
-                          <span className="text-gray-500">
+                          <span className="font-semibold text-[#4d4a3d]">
                             {formatDate(item.publishedAt)}
                           </span>
                         </div>
                         <div
-                          className="font-semibold leading-snug text-slate-900 group-hover:underline decoration-[#80c738] underline-offset-4"
+                          className="font-black leading-snug text-[#101010] group-hover:underline decoration-[#80c738] underline-offset-4"
                           style={{
                             fontSize: "clamp(0.98rem, 1.1vw, 1.08rem)",
                           }}
@@ -580,14 +580,14 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           {item.title}
                         </div>
                         {item.excerpt ? (
-                          <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
+                          <p className="mt-2 line-clamp-2 text-sm font-semibold leading-6 text-[#4d4a3d]">
                             {item.excerpt}
                           </p>
                         ) : null}
                       </div>
 
                       {item.imageUrl ? (
-                        <div className="relative h-24 w-24 shrink-0 overflow-hidden border border-[#d6e1d8] sm:h-28 sm:w-28">
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden border-2 border-[#101010] bg-[#fff7df] shadow-[3px_3px_0_#101010] sm:h-28 sm:w-28">
                           <Image
                             src={item.imageUrl}
                             alt={item.title}
@@ -597,7 +597,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                           />
                         </div>
                       ) : (
-                        <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-gray-300 text-gray-500 transition group-hover:border-[#80c738] group-hover:text-[#80c738]">
+                        <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border-2 border-[#101010] bg-[#80c738] text-[#101010] transition group-hover:-translate-y-0.5">
                           <ArrowUpRight className="h-4 w-4" />
                         </span>
                       )}
@@ -606,15 +606,15 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 ))}
 
                 {latestArticles.length === 0 && (
-                  <p className="border border-dashed border-gray-300 bg-[#f6f6f6] p-5 text-sm text-gray-600">
+                  <p className="border-2 border-dashed border-[#101010] bg-[#fff7df] p-5 text-sm font-semibold text-[#4d4a3d]">
                     No latest updates available yet.
                   </p>
                 )}
               </div>
 
               <Link href="/newsroom">
-                <Button className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-semibold text-gray-900 hover:bg-transparent">
-                  <span className="mr-3 inline-flex h-10 w-10 items-center justify-center bg-linear-to-b from-[#f8a23d] to-[#e97451] text-white shadow-sm">
+                <Button className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-black uppercase text-[#101010] hover:bg-transparent">
+                  <span className="mr-3 inline-flex h-10 w-10 items-center justify-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010]">
                     <ArrowUpRight className="h-4 w-4" />
                   </span>
                   Explore newsroom
@@ -647,8 +647,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               </div>
             )}
           </div>
-          <div className="px-4 pb-4 pt-3 bg-white">
-            <p className="text-sm font-medium text-gray-900 line-clamp-2">
+          <div className="bg-[#fff7df] px-4 pb-4 pt-3">
+            <p className="line-clamp-2 text-sm font-black text-[#101010]">
               {activePodcast?.title}
             </p>
           </div>

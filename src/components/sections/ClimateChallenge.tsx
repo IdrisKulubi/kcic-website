@@ -117,7 +117,7 @@ export default function ClimateChallenge({
             rotate: 0,
             duration: 0.75,
             stagger: 0.12,
-            ease: "back.out(1.4)",
+            ease: "power4.out",
             scrollTrigger: {
               trigger: visualContentRef.current,
               start: "top 80%",
@@ -301,79 +301,74 @@ export default function ClimateChallenge({
     <section
       ref={sectionRef}
       aria-labelledby="climate-challenge-heading"
-      className={`relative overflow-hidden bg-section-green py-9 sm:py-10 text-white ${className}`}
+      className={`relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-12 text-[#101010] sm:py-14 ${className}`}
     >
-      {/* Environmental image with dark branded overlay */}
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/18"
+        viewBox="0 0 1440 760"
+        fill="none"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          d="M-47 167C137 87 310 101 492 196C662 285 807 300 1001 204C1172 119 1310 101 1495 151"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path
+          d="M-52 608C126 526 304 536 478 616C652 696 800 704 982 609C1166 513 1320 496 1502 553"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+      </svg>
+
       <div
-        className="bg-image-layer pointer-events-none absolute inset-0"
+        className="bg-image-layer pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] opacity-20 lg:block"
         style={{
-          backgroundImage:
-            "linear-gradient(135deg, rgba(27,58,26,0.92) 0%, rgba(27,58,26,0.84) 45%, rgba(128,199,56,0.22) 100%), url('/images/sectors/nature.jpg')",
+          backgroundImage: "url('/images/sectors/nature.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
         aria-hidden
       />
-
-      {/* Subtle background gradient shift */}
       <div
-        className="bg-gradient pointer-events-none absolute inset-0"
+        className="bg-gradient pointer-events-none absolute left-0 top-0 h-full w-full"
         style={{
-          background:
-            "radial-gradient(52% 45% at 80% 20%, rgba(128,199,56,0.24) 0%, rgba(128,199,56,0) 70%), radial-gradient(45% 38% at 15% 85%, rgba(0,173,221,0.12) 0%, rgba(0,173,221,0) 70%)",
+          background: "linear-gradient(90deg, rgba(255,247,223,0) 0%, rgba(128,199,56,0.18) 100%)",
         }}
         aria-hidden
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[60%_40%] lg:gap-14">
-          {/* Left: Text Content */}
-          <div ref={textContentRef} className="space-y-7">
-            <h2
-              id="climate-challenge-heading"
-              className="font-bold text-white"
-              style={{
-                fontSize: "clamp(1.55rem, 3vw, 2.3rem)",
-                fontFamily: typography.fonts.heading,
-                lineHeight: typography.lineHeights.tight,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              The Climate Challenge
-            </h2>
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+          <div ref={textContentRef}>
+            <div className="mb-7 grid gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.8fr_1fr]">
+              <div>
+                <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+                  Climate brief
+                </p>
+                <h2
+                  id="climate-challenge-heading"
+                  className="max-w-[9ch] text-5xl font-black leading-[0.92] text-[#101010] sm:text-6xl"
+                  style={{ fontFamily: typography.fonts.heading }}
+                >
+                  The Climate Challenge
+                </h2>
+              </div>
 
-            <div
-              className="w-16 h-1 rounded-full"
-              style={{ background: colors.primary.green.DEFAULT }}
-              aria-hidden
-            />
+              <p
+                className="text-base font-black leading-7 text-[#101010] sm:text-lg"
+                style={{ fontFamily: typography.fonts.body }}
+              >
+                Africa bears a disproportionate burden despite contributing the least to global emissions. Rising
+                temperatures, unpredictable weather patterns, and environmental degradation threaten livelihoods,
+                economies, and communities.
+              </p>
+            </div>
 
-            <p
-              className="text-white/85"
-              style={{
-                fontSize: "clamp(0.9rem, 1.05vw, 0.98rem)",
-                fontFamily: typography.fonts.body,
-                lineHeight: typography.lineHeights.relaxed,
-              }}
-            >
-              Climate Change remains one of the world's greatest existential
-              threats, with Africa bearing a disproportionate burden despite
-              contributing the least to global emissions. Rising temperatures,
-              unpredictable weather patterns, and environmental degradation
-              threaten livelihoods, economies, and the very fabric of our
-              communities.
-            </p>
-
-            {/* Key Statistic Callout */}
-            <div
-              className="stat-callout relative border p-5 sm:p-6"
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                borderColor: "rgba(255, 255, 255, 0.24)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
+            <div className="grid gap-5 md:grid-cols-[0.85fr_1fr]">
+              <div className="stat-callout relative border-[3px] border-[#101010] bg-[#101010] p-5 text-[#fff7df] shadow-[6px_6px_0_#80c738] sm:p-6">
               <div className="pointer-events-none absolute inset-0" aria-hidden>
                 <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#80c738]/80" />
                 <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#00addd]/80" />
@@ -383,14 +378,15 @@ export default function ClimateChallenge({
                 <span className="counter-burst-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-[#00addd]/80" />
               </div>
 
-              <div className="flex items-baseline gap-2 mb-2">
+              <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#80c738]">Projected cost</p>
+              <div className="mb-3 flex items-baseline gap-2">
                 <span
                   ref={statNumberRef}
                   className="font-bold"
                   style={{
                     fontSize: "clamp(2rem, 5vw, 2.5rem)",
                     fontFamily: typography.fonts.heading,
-                    color: colors.primary.green.DEFAULT,
+                    color: "#80c738",
                     lineHeight: 1,
                   }}
                   aria-label="2.6 percent"
@@ -402,14 +398,14 @@ export default function ClimateChallenge({
                   style={{
                     fontSize: "clamp(1.5rem, 3vw, 2rem)",
                     fontFamily: typography.fonts.heading,
-                    color: colors.primary.green.DEFAULT,
+                    color: "#80c738",
                   }}
                 >
                   %
                 </span>
               </div>
               <p
-                className="text-white/80"
+                className="font-semibold text-[#fff7df]"
                 style={{
                   fontSize: "clamp(0.8125rem, 1vw, 0.875rem)",
                   fontFamily: typography.fonts.body,
@@ -418,20 +414,19 @@ export default function ClimateChallenge({
               >
                 of Kenya's GDP loss annually by 2030 due to climate impacts
               </p>
-            </div>
+              </div>
 
-            {/* Impact Areas */}
-            <div className="space-y-4">
+              <div className="border-[3px] border-[#101010] bg-[#fff7df] p-5 shadow-[6px_6px_0_#101010]">
               <h3
-                className="font-semibold text-white"
+                className="mb-4 font-black uppercase text-[#101010]"
                 style={{
                   fontSize: "clamp(1rem, 1.3vw, 1.1rem)",
                   fontFamily: typography.fonts.heading,
                 }}
               >
-                Key Impact Areas:
+                Key impact areas
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2">
                 {[
                   { label: "Environmental Degradation", icon: Warning },
                   { label: "Biodiversity Loss", icon: Plant },
@@ -439,34 +434,47 @@ export default function ClimateChallenge({
                 ].map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-center gap-3 text-white/80"
+                    className="flex items-center gap-3 border-t-2 border-[#101010] pt-2 text-[#101010]"
                     style={{
                       fontSize: "clamp(0.875rem, 1vw, 0.9375rem)",
                       fontFamily: typography.fonts.body,
                     }}
                   >
                     <div
-                      className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{
-                        background: `${colors.primary.green.DEFAULT}22`,
-                      }}
+                      className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-[#101010] bg-[#80c738]"
                     >
                       <item.icon
                         className="w-4 h-4"
-                        style={{ color: colors.primary.green.DEFAULT }}
+                        style={{ color: "#101010" }}
                         aria-hidden
                       />
                     </div>
-                    <span>{item.label}</span>
+                    <span className="font-black">{item.label}</span>
                   </li>
                 ))}
               </ul>
+              </div>
             </div>
           </div>
 
-          {/* Right: Visual Content - Icon Grid */}
           <div ref={visualContentRef} className="relative">
-            <div className="grid grid-cols-2 gap-4 sm:gap-5">
+            <div className="mb-5 border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[8px_8px_0_#101010]">
+              <div
+                className="relative min-h-[280px] overflow-hidden border-2 border-[#101010] sm:min-h-[360px]"
+                style={{
+                  backgroundImage: "url('/images/sectors/nature.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <div className="absolute inset-0 bg-[#101010]/20" aria-hidden />
+                <div className="absolute bottom-0 left-0 border-r-[3px] border-t-[3px] border-[#101010] bg-[#80c738] px-4 py-3">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-[#101010]">Risk landscape</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {[
                 {
                   icon: Wind,
@@ -491,29 +499,24 @@ export default function ClimateChallenge({
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="icon-card relative border p-6 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                  style={{
-                    background: "rgba(255, 255, 255, 0.1)",
-                    borderColor: "rgba(255, 255, 255, 0.22)",
-                  }}
+                  className="icon-card relative border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#101010]"
                 >
                   <div
-                    className="icon-card-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center border"
+                    className="icon-card-icon mb-3 flex h-11 w-11 items-center justify-center border-2 border-[#101010]"
                     style={{
-                      background: `${item.color}15`,
-                      borderColor: `${item.color}30`,
+                      background: index % 2 === 0 ? "#00addd" : "#80c738",
                     }}
                   >
                     <item.icon
-                      className="w-8 h-8"
-                      style={{ color: item.color }}
+                      className="h-6 w-6"
+                      style={{ color: "#101010" }}
                       aria-hidden
                     />
                   </div>
                   <p
-                    className="text-center text-white/90 font-medium"
+                    className="text-left font-black uppercase text-[#101010]"
                     style={{
-                      fontSize: "clamp(0.78rem, 0.9vw, 0.84rem)",
+                      fontSize: "clamp(0.78rem, 0.9vw, 0.88rem)",
                       fontFamily: typography.fonts.body,
                       lineHeight: typography.lineHeights.normal,
                     }}
@@ -524,21 +527,10 @@ export default function ClimateChallenge({
               ))}
             </div>
 
-            {/* Decorative element */}
-            <div
-              className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full opacity-20 blur-3xl"
-              style={{
-                background: `radial-gradient(circle, ${colors.primary.blue.DEFAULT}, transparent)`,
-              }}
-              aria-hidden
-            />
-
-            {/* Subtle green/cyan particles */}
             <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <span className="ambient-dot absolute top-8 right-8 h-2 w-2 rounded-full bg-[#80c738]/70" />
-              <span className="ambient-dot absolute top-1/3 right-1/4 h-1.5 w-1.5 rounded-full bg-[#00addd]/70" />
-              <span className="ambient-dot absolute bottom-10 right-6 h-2.5 w-2.5 rounded-full bg-[#00addd]/60" />
-              <span className="ambient-dot absolute bottom-1/4 left-6 h-1.5 w-1.5 rounded-full bg-[#80c738]/60" />
+              <span className="ambient-dot absolute right-6 top-8 h-4 w-4 border-2 border-[#101010] bg-[#80c738]" />
+              <span className="ambient-dot absolute bottom-10 right-10 h-4 w-4 border-2 border-[#101010] bg-[#00addd]" />
+              <span className="ambient-dot absolute left-6 top-1/3 h-3 w-3 border-2 border-[#101010] bg-[#fff7df]" />
             </div>
           </div>
         </div>

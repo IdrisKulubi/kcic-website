@@ -416,7 +416,7 @@ export default function HomePage({
                   subtitle="Thirteen years of measurable progress and the targets guiding our next phase of growth."
                   imageSrc="/images/KCIC-Map.png"
                   imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
-                  imageSide="left"
+                  imageSide="right"
                   showToggle={true}
                 />
               </AnimatedSection>
