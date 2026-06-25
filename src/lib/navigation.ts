@@ -111,24 +111,25 @@ export const navData = {
           description: "Our impact journey and achievements",
           icon: "TrendUp",
         },
-        {
-          label: "Theory of Change",
-          href: "/impact/theory-of-change",
-          description: "Our approach to creating lasting impact",
-          icon: "Diagram",
-        },
+        // {
+        //   label: "Theory of Change",
+        //   href: "/impact/theory-of-change",
+        //   description: "Our approach to creating lasting impact",
+        //   icon: "Diagram",
+        
+        // },
         {
           label: "Our Targets",
           href: "/impact/targets",
           description: "Key performance metrics and goals",
           icon: "Target",
         },
-        {
-          label: "Impact Reports",
-          href: "/impact/reports",
-          description: "Downloadable annual impact reports",
-          icon: "FileText",
-        },
+        // {
+        //   label: "Impact Reports",
+        //   href: "/impact/reports",
+        //   description: "Downloadable annual impact reports",
+        //   icon: "FileText",
+        // },
         {
           label: "Impact Stories",
           href: "/impact/stories",
