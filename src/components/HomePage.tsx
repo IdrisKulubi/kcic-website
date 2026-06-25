@@ -447,8 +447,8 @@ export default function HomePage({
 
             {/* SECTION 7: Partners */}
             <div id="partners">
-              <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#edf7fb" height={20} />
-              <AnimatedSection direction="up" className="bg-linear-to-b from-[#edf7fb] to-[#f5fbfd]">
+              <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#fff7df" height={20} />
+              <AnimatedSection direction="up" className="bg-[#fff7df]">
                 <PartnersSection partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>
