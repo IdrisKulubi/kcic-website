@@ -138,42 +138,42 @@ export const navData = {
         },
       ],
     },
-    {
-      label: "Newsroom",
-      href: "/newsroom",
-      subItems: [
-        {
-          label: "News",
-          href: "/newsroom/news",
-          description: "Latest news and announcements",
-          icon: "Newspaper",
-        },
-        {
-          label: "Blogs",
-          href: "/newsroom/blogs",
-          description: "Insights and thought leadership",
-          icon: "Article",
-        },
-        {
-          label: "Events",
-          href: "/newsroom/events",
-          description: "Upcoming and past events",
-          icon: "Calendar",
-        },
-        {
-          label: "Podcast",
-          href: "/newsroom/podcast",
-          description: "Listen to climate innovation stories",
-          icon: "Microphone",
-        },
-        {
-          label: "Media Coverage",
-          href: "/newsroom/media",
-          description: "Press mentions and features",
-          icon: "Megaphone",
-        },
-      ],
-    },
+    // {
+    //   label: "Newsroom",
+    //   href: "/newsroom",
+    //   subItems: [
+    //     {
+    //       label: "News",
+    //       href: "/newsroom/news",
+    //       description: "Latest news and announcements",
+    //       icon: "Newspaper",
+    //     },
+    //     {
+    //       label: "Blogs",
+    //       href: "/newsroom/blogs",
+    //       description: "Insights and thought leadership",
+    //       icon: "Article",
+    //     },
+    //     {
+    //       label: "Events",
+    //       href: "/newsroom/events",
+    //       description: "Upcoming and past events",
+    //       icon: "Calendar",
+    //     },
+    //     {
+    //       label: "Podcast",
+    //       href: "/newsroom/podcast",
+    //       description: "Listen to climate innovation stories",
+    //       icon: "Microphone",
+    //     },
+    //     {
+    //       label: "Media Coverage",
+    //       href: "/newsroom/media",
+    //       description: "Press mentions and features",
+    //       icon: "Megaphone",
+    //     },
+    //   ],
+    // },
    
   ],
 };

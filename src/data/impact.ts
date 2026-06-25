@@ -9,9 +9,9 @@ export const impactTicker = [
 
 export const impactNavItems = [
   { label: 'Overview', href: '/impact' },
-  // { label: 'Theory of Change', href: '/impact/theory-of-change' },
+  { label: 'Theory of Change', href: '/impact/theory-of-change' },
   { label: 'Our Targets', href: '/impact/targets' },
-  // { label: 'Impact Reports', href: '/impact/reports' },
+  { label: 'Impact Reports', href: '/impact/reports' },
   { label: 'Impact Stories', href: '/impact/stories' },
 ] as const;
 

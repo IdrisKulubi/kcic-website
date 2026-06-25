@@ -1,42 +1,38 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  List,
-  X,
-  CaretDown,
-  Users,
-  Buildings,
-  FileText,
-  Crosshair,
-  Phone,
-  Lightbulb,
-  Shield,
-  Briefcase,
-  Graph,
-  BookOpen,
-  TrendUp,
-  Calendar,
-  Megaphone,
-  ClipboardText,
-  Star,
-  Rocket,
-  Archive,
-  Newspaper,
-  Article,
-  Microphone,
-  Handshake,
-  TreeStructure
-} from '@phosphor-icons/react';
-import { colors, typography } from '@/lib/design-system';
-import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {
+  Article,
+  Archive,
+  BookOpen,
+  Briefcase,
+  Buildings,
+  Calendar,
+  CaretDown,
+  Crosshair,
+  FileText,
+  Graph,
+  Handshake,
+  Lightbulb,
+  List,
+  Megaphone,
+  Microphone,
+  Newspaper,
+  Phone,
+  Rocket,
+  Shield,
+  Star,
+  TreeStructure,
+  TrendUp,
+  Users,
+  X,
+  ArrowRight,
+  ClipboardText,
+} from '@phosphor-icons/react';
+import { gsap, prefersReducedMotion, registerGsapFoundation } from '@/lib/gsap-foundation';
 
 interface SubNavItem {
   label: string;
@@ -93,76 +89,56 @@ const iconMap = {
   TreeStructure,
 };
 
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+function isActivePath(pathname: string, href: string) {
+  const cleanHref = href.split('#')[0] || '/';
+  if (cleanHref === '/') return pathname === '/';
+  return pathname === cleanHref || pathname.startsWith(`${cleanHref}/`);
 }
 
-export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
+export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(navigation[0]?.label ?? null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const desktopNavRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const navRef = useRef<HTMLElement>(null);
-  const navItemsRef = useRef<HTMLDivElement>(null);
 
-  const getIcon = (iconName: string) => {
-    return iconMap[iconName as keyof typeof iconMap] || Buildings;
-  };
+  const logoSrc = logo?.src || '/images/hero/KCIC logo.png';
 
-  // GSAP entrance animation for nav items
+  const getIcon = (iconName: string) => iconMap[iconName as keyof typeof iconMap] || Buildings;
+
   useLayoutEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!navRef.current) return;
+
+    registerGsapFoundation();
+    if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      // Animate nav items on mount
-      const navItems = navItemsRef.current?.children;
-      if (navItems && navItems.length > 0) {
-        gsap.fromTo(
-          navItems,
-          { opacity: 0, y: -20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: 'power2.out',
-            delay: 0.3,
-          }
-        );
-      }
-
-      // Smooth navbar background transition on scroll
-      ScrollTrigger.create({
-        start: 'top top',
-        end: '+=100',
-        onUpdate: (self) => {
-          const progress = self.progress;
-          if (navRef.current) {
-            const navElement = navRef.current;
-            if (progress > 0.5) {
-              navElement.classList.add('nav-scrolled');
-              navElement.classList.remove('nav-top');
-            } else {
-              navElement.classList.remove('nav-scrolled');
-              navElement.classList.add('nav-top');
-            }
-          }
-        },
+      gsap.from('[data-nav-shell]', {
+        y: -22,
+        autoAlpha: 0,
+        duration: 0.65,
+        ease: 'power4.out',
       });
-    });
+
+      gsap.from('[data-nav-item]', {
+        y: -10,
+        autoAlpha: 0,
+        duration: 0.48,
+        stagger: 0.045,
+        delay: 0.12,
+        ease: 'power4.out',
+      });
+    }, navRef);
 
     return () => ctx.revert();
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 24);
 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -177,6 +153,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
       }
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
@@ -185,26 +162,27 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 
-  const handleMouseEnter = (label: string) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const openDropdown = (label: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveDropdown(label);
   };
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 150);
+  const queueCloseDropdown = () => {
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 140);
   };
 
-  /** When already on the target path, scroll to #id instead of full navigation (keeps SPA state, fixes hash on /programmes). */
   const scrollToInPageSection = React.useCallback(
     (href: string): boolean => {
       if (typeof window === 'undefined') return false;
@@ -212,8 +190,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
       if (hashIdx === -1) return false;
       const path = href.slice(0, hashIdx) || pathname;
       const hash = href.slice(hashIdx + 1);
-      if (!hash) return false;
-      if (pathname !== path) return false;
+      if (!hash || pathname !== path) return false;
       const el = document.getElementById(hash);
       if (!el) return false;
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -223,418 +200,277 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
     [pathname]
   );
 
-  const handleKeyNavigation = (event: React.KeyboardEvent, href: string) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+  const handleNavClick = (event: React.MouseEvent, href: string) => {
+    if (scrollToInPageSection(href)) {
       event.preventDefault();
-      if (scrollToInPageSection(href)) {
-        setActiveDropdown(null);
-        setIsMobileMenuOpen(false);
-      } else {
-        window.location.href = href;
-      }
     }
+    setActiveDropdown(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleKeyNavigation = (event: React.KeyboardEvent, href: string) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    if (scrollToInPageSection(href)) {
+      setActiveDropdown(null);
+      setIsMobileMenuOpen(false);
+      return;
+    }
+    window.location.href = href;
   };
 
   return (
     <>
-      {/* CSS for GSAP scroll states */}
-      <style jsx global>{`
-        .nav-scrolled {
-          background: rgba(26, 31, 46, 0.95) !important;
-          backdrop-filter: blur(12px) !important;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-        }
-        .nav-top {
-          background: rgba(0, 0, 0, 0.2) !important;
-          backdrop-filter: blur(8px) !important;
-        }
-      `}</style>
-      <nav
-        ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-          ? 'bg-[#1a1f2e]/95 backdrop-blur-md shadow-xl'
-          : 'bg-black/20 backdrop-blur-md'
+      <nav ref={navRef} className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
+        <div
+          data-nav-shell
+          className={`mx-auto max-w-[1500px] border-[4px] border-[#101010] bg-[#fff7df] text-[#101010] shadow-[7px_7px_0_#101010] transition duration-300 ${
+            isScrolled ? 'translate-y-0 shadow-[7px_7px_0_#80c738]' : ''
           }`}
-      >
-        <div className="w-full px-6 sm:px-10 lg:px-12">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link href="/" className="flex items-center">
+        >
+          <div className="flex h-[74px] items-center justify-between gap-3 px-3 sm:px-5 lg:h-[82px] lg:px-6">
+            <Link
+              href="/"
+              onClick={(event) => handleNavClick(event, '/')}
+              className="group flex shrink-0 items-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
+              aria-label="KCIC, go to homepage"
+            >
+              <span className="grid h-14 w-20 place-items-center border-[3px] border-[#101010] bg-[#fff7df] shadow-[4px_4px_0_#80c738] sm:w-24">
                 <Image
-                  src="/images/hero/KCIC logo.png"
-                  alt="logo"
-                  aria-label="KCIC - Kenya Climate Innovation Centre - Go to homepage"
-                  className="h-12 sm:h-14 w-auto"
-                  width={140}
-                  height={140}
+                  src={logoSrc}
+                  alt={logo?.alt || 'KCIC Logo'}
+                  width={130}
+                  height={70}
+                  className="max-h-11 w-auto object-contain"
+                  priority
                 />
-              </Link>
-            </div>
+              </span>
+              <span className="hidden leading-none xl:block">
+                <span className="block text-xs font-black uppercase text-[#58523f]">Kenya Climate</span>
+                <span className="block text-sm font-black uppercase">Innovation Centre</span>
+              </span>
+            </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1" ref={(el) => { dropdownRef.current = el; navItemsRef.current = el; }}>
-              {navigation.map((item) => (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => item.subItems && handleMouseEnter(item.label)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <button
-                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-offset-2 ${
-                      isScrolled
-                        ? `hover:bg-white/10 ${activeDropdown === item.label ? 'bg-white/15 text-[#80c738]' : 'text-white/90 hover:text-white'}`
-                        : `hover:bg-white/10 ${activeDropdown === item.label ? 'bg-white/20 text-white' : 'text-white hover:text-white'}`
-                      }`}
-                    style={{
-                      fontFamily: typography.fonts.body,
-                      fontSize: typography.sizes.body.base[0],
-                      textShadow: '0 1px 3px rgba(0,0,0,0.3)',
-                    }}
-                    aria-expanded={item.subItems ? activeDropdown === item.label : undefined}
-                    aria-controls={item.subItems ? `dropdown-${item.label}` : undefined}
-                    aria-haspopup={item.subItems ? 'menu' : undefined}
-                    onKeyDown={(e) => handleKeyNavigation(e, item.href)}
-                    onClick={() => !item.subItems && (window.location.href = item.href)}
-                  >
-                    {item.label}
-                    {item.subItems && (
-                      <CaretDown
-                        className={`ml-1 h-4 w-4 transition-transform duration-200 ${activeDropdown === item.label ? 'rotate-180' : ''
+            <div ref={dropdownRef} className="hidden min-w-0 flex-1 justify-center lg:flex">
+              <div ref={desktopNavRef} className="flex items-center gap-1">
+                {navigation.map((item) => {
+                  const active = isActivePath(pathname, item.href) || item.subItems?.some((subItem) => isActivePath(pathname, subItem.href));
+                  return (
+                    <div
+                      key={item.label}
+                      data-nav-item
+                      className="relative"
+                      onMouseEnter={() => item.subItems && openDropdown(item.label)}
+                      onMouseLeave={queueCloseDropdown}
+                    >
+                      {item.subItems ? (
+                        <button
+                          type="button"
+                          className={`flex items-center gap-1 border-[3px] border-transparent px-3 py-2 text-sm font-black uppercase transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] xl:px-4 ${
+                            active || activeDropdown === item.label ? 'border-[#101010] bg-[#80c738]' : ''
                           }`}
-                      />
-                    )}
-                  </button>
-
-                  {/* Desktop Mega Menu - Vimeo Style */}
-                  <AnimatePresence>
-                    {item.subItems && activeDropdown === item.label && (
-                      <motion.div
-                        id={`dropdown-${item.label}`}
-                        role="menu"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="fixed rounded-2xl overflow-hidden z-50"
-                        style={{ 
-                          // Keep dropdown close to navbar with tighter vertical spacing
-                          top: item.label === 'About Us' ? '64px' : '64px',
-                          left: item.label === 'About Us' ? '24px' : 'auto',
-                          right: item.label === 'About Us' ? '24px' : '40px',
-                          transform: 'none',
-                          marginTop: '0',
-                          width: 'auto',
-                          minWidth: item.subItems.length > 4 ? '580px' : '300px',
-                          maxWidth: 'calc(100vw - 80px)',
-                          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05)',
-                          background: '#ffffff',
-                        }}
-                      >
-                        {/* Header with category label */}
-                        <div className="px-4 py-1 border-b border-gray-100 bg-gray-50/80">
-                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                            {item.label}
-                          </span>
-                        </div>
-
-                        {/* Menu Items Grid */}
-                        <div 
-                          className="px-2 pb-2 pt-0"
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: item.subItems.length > 4 ? 'repeat(2, 1fr)' : '1fr',
-                            gap: '2px',
-                          }}
+                          aria-expanded={activeDropdown === item.label}
+                          aria-haspopup="menu"
+                          aria-controls={`nav-panel-${item.label}`}
+                          onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
+                          onKeyDown={(event) => handleKeyNavigation(event, item.href)}
                         >
-                          {item.subItems.map((subItem, index) => (
-                            <motion.a
-                              key={subItem.label}
-                              href={subItem.href}
-                              role="menuitem"
-                              tabIndex={0}
-                              initial={{ opacity: 0, y: 5 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.03 }}
-                              className="group flex items-center p-2 rounded-lg transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-inset"
-                              onKeyDown={(e) => handleKeyNavigation(e, subItem.href)}
-                              onClick={(e) => {
-                                if (scrollToInPageSection(subItem.href)) {
-                                  e.preventDefault();
-                                  setActiveDropdown(null);
-                                }
-                              }}
+                          {item.label}
+                          <CaretDown className={`h-4 w-4 transition ${activeDropdown === item.label ? 'rotate-180' : ''}`} weight="bold" />
+                        </button>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          onClick={(event) => handleNavClick(event, item.href)}
+                          className={`block border-[3px] border-transparent px-3 py-2 text-sm font-black uppercase transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] xl:px-4 ${
+                            active ? 'border-[#101010] bg-[#80c738]' : ''
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
+
+                      {item.subItems && activeDropdown === item.label && (
+                        <div
+                          id={`nav-panel-${item.label}`}
+                          role="menu"
+                          className="absolute left-1/2 top-[calc(100%+16px)] w-[min(760px,calc(100vw-3rem))] -translate-x-1/2 border-[4px] border-[#101010] bg-[#fff7df] p-3 shadow-[10px_10px_0_#101010]"
+                        >
+                          <div className="mb-3 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
+                            <span className="bg-[#101010] px-3 py-1 text-xs font-black uppercase text-[#fff7df]">{item.label}</span>
+                            <Link
+                              href={item.href}
+                              onClick={(event) => handleNavClick(event, item.href)}
+                              className="inline-flex items-center gap-1 text-xs font-black uppercase hover:text-[#5a8f1d]"
                             >
-                              <div className="shrink-0 w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-[#80c738]/10 transition-colors duration-200">
-                                {React.createElement(getIcon(subItem.icon), { className: "w-5 h-5 text-gray-600 group-hover:text-[#80c738] transition-colors" })}
-                              </div>
-                              <div className="ml-3 flex-1 min-w-0">
-                                <span
-                                  className={`text-sm font-semibold text-gray-900 group-hover:text-[#80c738] transition-colors duration-200 block ${
-                                    item.label === 'About Us' ? 'whitespace-normal wrap-break-word' : 'whitespace-nowrap'
+                              Open section
+                              <ArrowRight className="h-3.5 w-3.5" weight="bold" />
+                            </Link>
+                          </div>
+                          <div className={`grid gap-2 ${item.subItems.length > 3 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                            {item.subItems.map((subItem) => {
+                              const Icon = getIcon(subItem.icon);
+                              const subActive = isActivePath(pathname, subItem.href);
+                              return (
+                                <Link
+                                  key={subItem.label}
+                                  href={subItem.href}
+                                  role="menuitem"
+                                  onClick={(event) => handleNavClick(event, subItem.href)}
+                                  onKeyDown={(event) => handleKeyNavigation(event, subItem.href)}
+                                  className={`group flex gap-3 border-[3px] border-[#101010] p-3 shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
+                                    subActive ? 'bg-[#80c738]' : 'bg-[#fff7df]'
                                   }`}
-                                  style={{ fontFamily: typography.fonts.body }}
                                 >
-                                  {subItem.label}
-                                </span>
-                                {subItem.description && (
-                                  <span
-                                    className={`text-xs text-gray-500 group-hover:text-gray-600 mt-0.5 block leading-relaxed ${
-                                      item.label === 'About Us' ? 'whitespace-normal wrap-break-word' : 'whitespace-nowrap'
-                                    }`}
-                                  >
-                                    {subItem.description}
+                                  <span className="grid h-11 w-11 shrink-0 place-items-center border-[3px] border-[#101010] bg-[#fff7df]">
+                                    <Icon className="h-5 w-5" weight="bold" />
                                   </span>
-                                )}
-                              </div>
-                            </motion.a>
-                          ))}
+                                  <span className="min-w-0">
+                                    <span className="block text-sm font-black uppercase leading-tight">{subItem.label}</span>
+                                    {subItem.description && (
+                                      <span className="mt-1 line-clamp-2 block text-xs font-bold leading-5 text-[#58523f]">
+                                        {subItem.description}
+                                      </span>
+                                    )}
+                                  </span>
+                                </Link>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-
-
-
-            {/* Desktop CTA Button */}
-            {ctaButton && (
-              <div className="hidden md:block">
-                <Button
-                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${getMotionSafeClasses('hover:scale-105')}`}
-                  style={{
-                    background: colors.primary.green.DEFAULT,
-                    color: 'white',
-                    fontFamily: typography.fonts.body,
-                    border: 'none',
-                  }}
-                  asChild
-                >
-                  <a href={ctaButton.href}>
-                    {ctaButton.text}
-                  </a>
-                </Button>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            )}
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#80c738] focus:ring-offset-2 hover:bg-white/10"
-                style={{
-                  color: '#FFFFFF',
-                }}
-                aria-label="Toggle mobile menu"
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-              >
-                <motion.div
-                  animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isMobileMenuOpen ? (
-                    <X className="h-6 w-6" />
-                  ) : (
-                    <List className="h-6 w-6" />
-                  )}
-                </motion.div>
-              </button>
             </div>
+
+            <div className="hidden shrink-0 items-center gap-3 lg:flex">
+              {ctaButton && (
+                <Link
+                  href={ctaButton.href}
+                  onClick={(event) => handleNavClick(event, ctaButton.href)}
+                  className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-3 text-sm font-black uppercase shadow-[5px_5px_0_#101010] transition hover:-translate-y-1 hover:shadow-[7px_7px_0_#101010] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
+                >
+                  {ctaButton.text}
+                  <ArrowRight className="h-4 w-4" weight="bold" />
+                </Link>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              className="grid h-12 w-12 place-items-center border-[3px] border-[#101010] bg-[#80c738] shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] lg:hidden"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" weight="bold" /> : <List className="h-6 w-6" weight="bold" />}
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu - Dark Themed Full-Screen Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            className="fixed inset-0 z-40 md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {/* Backdrop */}
-            <motion.div
-              className="absolute inset-0 bg-[#1a1f2e]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            />
-
-            {/* Menu Content */}
-            <motion.div
-              className="relative h-full flex flex-col"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              {/* Header with Close Button */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Image
-                    src="/images/hero/KCIC logo.png"
-                    alt="KCIC Logo"
-                    className="h-8 w-auto"
-                    width={80}
-                    height={32}
-                  />
-                </Link>
+      {isMobileMenuOpen && (
+        <div id="mobile-menu" className="fixed inset-0 z-40 bg-[#fff7df] pt-28 text-[#101010] lg:hidden">
+          <div className="absolute inset-x-0 top-0 h-24 border-b-[5px] border-[#101010] bg-[#80c738]" aria-hidden="true" />
+          <div className="h-full overflow-y-auto px-4 pb-8">
+            <div className="border-[5px] border-[#101010] bg-[#fff7df] p-4 shadow-[9px_9px_0_#101010]">
+              <div className="mb-5 flex items-center justify-between border-b-[4px] border-[#101010] pb-4">
+                <span className="text-2xl font-black uppercase">Menu</span>
                 <button
+                  type="button"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  className="grid h-11 w-11 place-items-center border-[3px] border-[#101010] bg-[#80c738] shadow-[4px_4px_0_#101010]"
                   aria-label="Close menu"
                 >
-                  <X className="h-5 w-5 text-white" weight="bold" />
+                  <X className="h-5 w-5" weight="bold" />
                 </button>
               </div>
 
-              {/* Navigation Links - Scrollable */}
-              <div className="flex-1 overflow-y-auto px-6 py-6">
-                <nav className="space-y-1">
-                  {navigation.map((item, index) => (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
-                    >
+              <div className="space-y-3">
+                {navigation.map((item) => {
+                  const active = isActivePath(pathname, item.href) || item.subItems?.some((subItem) => isActivePath(pathname, subItem.href));
+                  return (
+                    <div key={item.label} className="border-[3px] border-[#101010] bg-[#fff7df]">
                       {item.subItems ? (
-                        <div className="mb-2">
-                          {/* Parent Item with Toggle */}
+                        <>
                           <button
-                            onClick={() => setExpandedMobileItem(
-                              expandedMobileItem === item.label ? null : item.label
-                            )}
-                            className="flex items-center justify-between w-full py-4 text-left transition-colors"
+                            type="button"
+                            onClick={() => setExpandedMobileItem(expandedMobileItem === item.label ? null : item.label)}
+                            className={`flex w-full items-center justify-between px-4 py-4 text-left text-xl font-black uppercase ${
+                              active || expandedMobileItem === item.label ? 'bg-[#80c738]' : 'bg-[#fff7df]'
+                            }`}
                             aria-expanded={expandedMobileItem === item.label}
                           >
-                            <span
-                              className="text-xl font-semibold"
-                              style={{
-                                color: expandedMobileItem === item.label
-                                  ? '#80c738'
-                                  : '#ffffff',
-                              }}
-                            >
-                              {item.label}
-                            </span>
-                            <motion.div
-                              animate={{ rotate: expandedMobileItem === item.label ? 180 : 0 }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <CaretDown
-                                className="h-5 w-5"
-                                style={{ color: expandedMobileItem === item.label ? '#80c738' : '#8b8d90' }}
-                              />
-                            </motion.div>
+                            {item.label}
+                            <CaretDown className={`h-5 w-5 transition ${expandedMobileItem === item.label ? 'rotate-180' : ''}`} weight="bold" />
                           </button>
-
-                          {/* Submenu Items */}
-                          <AnimatePresence>
-                            {expandedMobileItem === item.label && (
-                              <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.25 }}
-                                className="overflow-hidden"
+                          {expandedMobileItem === item.label && (
+                            <div className="space-y-2 border-t-[3px] border-[#101010] p-3">
+                              <Link
+                                href={item.href}
+                                onClick={(event) => handleNavClick(event, item.href)}
+                                className="flex items-center justify-between bg-[#101010] px-3 py-3 text-sm font-black uppercase text-[#fff7df]"
                               >
-                                <div className="pb-4 space-y-2">
-                                  {item.subItems.map((subItem, subIndex) => (
-                                    <motion.a
-                                      key={subItem.label}
-                                      href={subItem.href}
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: subIndex * 0.03 }}
-                                      className="flex items-center py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/10"
-                                      onClick={(e) => {
-                                        if (scrollToInPageSection(subItem.href)) {
-                                          e.preventDefault();
-                                        }
-                                        setIsMobileMenuOpen(false);
-                                      }}
-                                    >
-                                      <div className="w-10 h-10 rounded-xl bg-[#80c738]/10 flex items-center justify-center mr-4 border border-[#80c738]/20">
-                                        {React.createElement(getIcon(subItem.icon), {
-                                          className: "w-5 h-5",
-                                          style: { color: '#80c738' }
-                                        })}
-                                      </div>
-                                      <div className="flex-1">
-                                        <span className="text-base font-medium text-white block">
-                                          {subItem.label}
+                                Open section
+                                <ArrowRight className="h-4 w-4" weight="bold" />
+                              </Link>
+                              {item.subItems.map((subItem) => {
+                                const Icon = getIcon(subItem.icon);
+                                return (
+                                  <Link
+                                    key={subItem.label}
+                                    href={subItem.href}
+                                    onClick={(event) => handleNavClick(event, subItem.href)}
+                                    className="flex gap-3 border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[4px_4px_0_#101010]"
+                                  >
+                                    <span className="grid h-10 w-10 shrink-0 place-items-center border-[3px] border-[#101010] bg-[#80c738]">
+                                      <Icon className="h-5 w-5" weight="bold" />
+                                    </span>
+                                    <span>
+                                      <span className="block text-base font-black uppercase leading-tight">{subItem.label}</span>
+                                      {subItem.description && (
+                                        <span className="mt-1 line-clamp-2 block text-sm font-bold leading-5 text-[#58523f]">
+                                          {subItem.description}
                                         </span>
-                                        {subItem.description && (
-                                          <span className="text-sm text-gray-400 line-clamp-1">
-                                            {subItem.description}
-                                          </span>
-                                        )}
-                                      </div>
-                                    </motion.a>
-                                  ))}
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
+                                      )}
+                                    </span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </>
                       ) : (
-                        <a
+                        <Link
                           href={item.href}
-                          className="flex items-center py-4 text-xl font-semibold transition-colors text-white hover:text-[#80c738]"
-                          onClick={() => setIsMobileMenuOpen(false)}
+                          onClick={(event) => handleNavClick(event, item.href)}
+                          className={`block px-4 py-4 text-xl font-black uppercase ${active ? 'bg-[#80c738]' : ''}`}
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       )}
-                    </motion.div>
-                  ))}
-                </nav>
-
-                {/* Divider */}
-                <div className="my-6 border-t border-white/10" />
-
-
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Bottom CTA */}
               {ctaButton && (
-                <div className="px-6 py-6 border-t border-white/10 bg-white/5">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <Button
-                      className="w-full py-4 rounded-2xl font-semibold text-lg shadow-lg"
-                      style={{
-                        background: 'linear-gradient(135deg, #80c738, #5da628)',
-                        color: 'white',
-                        border: 'none',
-                      }}
-                      asChild
-                    >
-                      <a
-                        href={ctaButton.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {ctaButton.text}
-                      </a>
-                    </Button>
-                  </motion.div>
-                </div>
+                <Link
+                  href={ctaButton.href}
+                  onClick={(event) => handleNavClick(event, ctaButton.href)}
+                  className="mt-5 flex items-center justify-between border-[4px] border-[#101010] bg-[#80c738] px-5 py-4 text-lg font-black uppercase shadow-[6px_6px_0_#101010]"
+                >
+                  {ctaButton.text}
+                  <ArrowRight className="h-5 w-5" weight="bold" />
+                </Link>
               )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
