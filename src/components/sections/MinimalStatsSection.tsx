@@ -8,6 +8,7 @@ import {
   gsap,
   prefersReducedMotion,
   registerGsapFoundation,
+  ScrollTrigger,
 } from '@/lib/gsap-foundation';
 
 interface StatItem {
@@ -106,11 +107,13 @@ export function MinimalStatsSection({
         gsap.from(headerRef.current, {
           y: 24,
           autoAlpha: 0,
+          immediateRender: false,
           duration: 0.7,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: headerRef.current,
             start: 'top 85%',
+            invalidateOnRefresh: true,
           },
         });
       }
@@ -119,11 +122,13 @@ export function MinimalStatsSection({
         gsap.from(imageRef.current, {
           y: 28,
           autoAlpha: 0,
+          immediateRender: false,
           duration: 0.75,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: imageRef.current,
             start: 'top 85%',
+            invalidateOnRefresh: true,
           },
         });
       }
@@ -133,12 +138,14 @@ export function MinimalStatsSection({
         gsap.from(statCards, {
           y: 28,
           autoAlpha: 0,
+          immediateRender: false,
           duration: 0.7,
           stagger: 0.08,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: statCards[0],
             start: 'top 88%',
+            invalidateOnRefresh: true,
             onEnter: () => {
               if (!hasAnimated.current) {
                 hasAnimated.current = true;
@@ -150,7 +157,15 @@ export function MinimalStatsSection({
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    const refresh = () => ScrollTrigger.refresh();
+    const delayedRefresh = gsap.delayedCall(0.35, refresh);
+    window.addEventListener('load', refresh, { once: true });
+
+    return () => {
+      delayedRefresh.kill();
+      window.removeEventListener('load', refresh);
+      ctx.revert();
+    };
   }, [stats, animateCounters, shouldDisableAnimations]);
 
   const renderStats = (data: StatItem[], isTargets = false) => (

@@ -8,6 +8,7 @@ import {
   gsap,
   prefersReducedMotion,
   registerGsapFoundation,
+  ScrollTrigger,
 } from "@/lib/gsap-foundation";
 
 interface AwardItem {
@@ -47,28 +48,40 @@ export default function AwardsSection({ awards = DEFAULT_AWARDS }: { awards?: Aw
       gsap.from("[data-awards-title]", {
         y: 24,
         autoAlpha: 0,
+        immediateRender: false,
         duration: 0.7,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 82%",
+          invalidateOnRefresh: true,
         },
       });
 
       gsap.from("[data-award-card]", {
         y: 28,
         autoAlpha: 0,
+        immediateRender: false,
         duration: 0.75,
         stagger: 0.1,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 78%",
+          invalidateOnRefresh: true,
         },
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    const refresh = () => ScrollTrigger.refresh();
+    const delayedRefresh = gsap.delayedCall(0.35, refresh);
+    window.addEventListener("load", refresh, { once: true });
+
+    return () => {
+      delayedRefresh.kill();
+      window.removeEventListener("load", refresh);
+      ctx.revert();
+    };
   }, [shouldDisableAnimations]);
 
   return (

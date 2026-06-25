@@ -8,6 +8,7 @@ import {
   gsap,
   prefersReducedMotion,
   registerGsapFoundation,
+  ScrollTrigger,
 } from "@/lib/gsap-foundation";
 
 interface BeliefCard {
@@ -62,11 +63,13 @@ export default function FoundingBeliefs({ className = "" }: FoundingBeliefsSecti
         gsap.from(headerRef.current, {
           y: 24,
           autoAlpha: 0,
+          immediateRender: false,
           duration: 0.7,
           ease: "power3.out",
           scrollTrigger: {
             trigger: headerRef.current,
             start: "top 85%",
+            invalidateOnRefresh: true,
           },
         });
       }
@@ -76,18 +79,28 @@ export default function FoundingBeliefs({ className = "" }: FoundingBeliefsSecti
         gsap.from(cards, {
           y: 28,
           autoAlpha: 0,
+          immediateRender: false,
           duration: 0.75,
           stagger: 0.1,
           ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
+            invalidateOnRefresh: true,
           },
         });
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    const refresh = () => ScrollTrigger.refresh();
+    const delayedRefresh = gsap.delayedCall(0.35, refresh);
+    window.addEventListener("load", refresh, { once: true });
+
+    return () => {
+      delayedRefresh.kill();
+      window.removeEventListener("load", refresh);
+      ctx.revert();
+    };
   }, [shouldDisableAnimations]);
 
   return (
