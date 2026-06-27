@@ -485,9 +485,8 @@ export default function PressReleasePage() {
               <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">KCIC Communications</h3>
                 <div className="space-y-2 text-left">
-                  <p className="text-gray-700">Phone: +254-20-123-4567</p>
                   <p className="text-gray-700">Email: media@kenyacic.org</p>
-                  <p className="text-gray-700">Address: Strathmore University Campus, Ole Sangale Rd, Nairobi, Kenya</p>
+                  <p className="text-gray-700">Address: KCIC Head Office, Mokoyeti Road West, Off Langata Road, Karen, Nairobi, Kenya</p>
                 </div>
                 <button className="w-full mt-6 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200">
                   Send Media Inquiry

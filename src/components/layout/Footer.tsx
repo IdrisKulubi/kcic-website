@@ -127,9 +127,48 @@ export default function Footer({ data }: FooterProps) {
             </p>
           </section>
 
+<<<<<<< HEAD
           <nav data-footer-item aria-label="Footer links">
             <p className="text-[11px] font-black uppercase text-[#4f8618]">Pages</p>
             <div className="mt-2 grid gap-1">
+=======
+            <address className="space-y-3 text-gray-600 not-italic">
+              <div className="flex items-start space-x-3">
+                <MapPin className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+                <span className="text-sm leading-relaxed">
+                  {data.contact.address}
+                </span>
+              </div>
+              {data.contact.phone && (
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-5 w-5 text-blue-400 shrink-0" />
+                  <a
+                    href={`tel:${data.contact.phone}`}
+                    className="text-sm hover:text-blue-600 transition-colors"
+                  >
+                    {data.contact.phone}
+                  </a>
+                </div>
+              )}
+              <div className="flex items-center space-x-3">
+                <Envelope className="h-5 w-5 text-yellow-400 shrink-0" />
+                <a
+                  href={`mailto:${data.contact.email}`}
+                  className="text-sm hover:text-yellow-600 transition-colors"
+                >
+                  {data.contact.email}
+                </a>
+              </div>
+            </address>
+          </div>
+
+          {/* Quick Links */}
+          <nav className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-6 text-gray-900">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+>>>>>>> master
               {data.quickLinks.map((link) => (
                 <Link
                   key={link.href}

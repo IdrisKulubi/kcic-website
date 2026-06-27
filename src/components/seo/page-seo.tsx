@@ -86,13 +86,12 @@ export function generateOrganizationSchema() {
     "foundingDate": "2010",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Strathmore University Campus, Ole Sangale Rd",
+      "streetAddress": "KCIC Head Office, Mokoyeti Road West, Off Langata Road, Karen",
       "addressLocality": "Nairobi",
       "addressCountry": "Kenya"
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+254-20-123-4567",
       "contactType": "customer service",
       "email": "info@kenyacic.org"
     },

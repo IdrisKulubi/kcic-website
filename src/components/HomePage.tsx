@@ -398,6 +398,7 @@ export default function HomePage({
               <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
+<<<<<<< HEAD
             
               <AnimatedSection direction="up" delay={0.1}>
                 <FoundingBeliefs />
@@ -405,6 +406,18 @@ export default function HomePage({
             </div>
 
             {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
+=======
+              <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
+                <HistoryTimeline />
+              </AnimatedSection>
+             
+            </div>
+
+          
+
+           
+            {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+>>>>>>> master
             <div id="impact">
               <SectionDivider variant="angle" fromColor="#00addd" toColor="#80c738" height={28} />
               <AnimatedSection direction="up">
