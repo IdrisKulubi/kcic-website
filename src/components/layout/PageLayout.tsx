@@ -15,6 +15,12 @@ interface PageLayoutProps {
   description?: string;
   breadcrumb?: Array<{ label: string; href?: string }>;
   className?: string;
+  headerBackgroundImage?: string;
+  headerOverlayClassName?: string;
+  headerTitleClassName?: string;
+  headerSubtitleClassName?: string;
+  headerDescriptionClassName?: string;
+  headerBreadcrumbClassName?: string;
 }
 
 export function PageLayout({ 
@@ -23,28 +29,67 @@ export function PageLayout({
   subtitle, 
   description, 
   breadcrumb,
-  className = ""
+  className = "",
+  headerBackgroundImage,
+  headerOverlayClassName = "bg-black/50",
+  headerTitleClassName,
+  headerSubtitleClassName,
+  headerDescriptionClassName,
+  headerBreadcrumbClassName
 }: PageLayoutProps) {
+  const headerIsImage = Boolean(headerBackgroundImage);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <MinimalNavbar {...navData} />
       
       {/* Page Header */}
-      <div className="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 pt-20 sm:pt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className={`relative ${
+        headerIsImage
+          ? "mt-16 sm:mt-20 pt-8 sm:pt-10 overflow-hidden"
+          : "pt-20 sm:pt-24"
+      }`}>
+        {headerBackgroundImage ? (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url('${headerBackgroundImage}')` }}
+              aria-hidden="true"
+            />
+            <div className={`absolute inset-0 ${headerOverlayClassName}`} aria-hidden="true" />
+          </>
+        ) : (
+          <div
+            className="absolute inset-0 bg-linear-to-br from-green-50 via-blue-50 to-purple-50"
+            aria-hidden="true"
+          />
+        )}
+
+        <div
+          className={`relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
+            headerIsImage ? "py-16 sm:py-24" : "py-12 sm:py-16"
+          }`}
+        >
           {/* Breadcrumb */}
           {breadcrumb && (
             <motion.nav 
-              className="mb-8"
+              className={headerIsImage ? "mb-10 sm:mb-12" : "mb-8"}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               aria-label="Breadcrumb"
             >
-              <ol className="flex items-center space-x-2 text-sm text-gray-600">
+              <ol className={`flex items-center space-x-2 text-sm ${
+                headerBackgroundImage ? "text-white/80" : "text-gray-600"
+              } ${headerBreadcrumbClassName ?? ""}`}>
                 <li>
-                  <Link href="/" className="hover:text-green-600 transition-colors duration-200">
+                  <Link
+                    href="/"
+                    className={`transition-colors duration-200 ${
+                      headerBackgroundImage ? "hover:text-white" : "hover:text-green-600"
+                    }`}
+                  >
                     Home
                   </Link>
                 </li>
@@ -52,7 +97,7 @@ export function PageLayout({
                   <React.Fragment key={index}>
                     <li className="flex items-center">
                       <svg
-                        className="flex-shrink-0 w-4 h-4 text-gray-400 mx-2"
+                        className="shrink-0 w-4 h-4 text-gray-400 mx-2"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
@@ -66,12 +111,16 @@ export function PageLayout({
                       {item.href ? (
                         <Link 
                           href={item.href} 
-                          className="hover:text-green-600 transition-colors duration-200"
+                          className={`transition-colors duration-200 ${
+                            headerBackgroundImage ? "hover:text-white" : "hover:text-green-600"
+                          }`}
                         >
                           {item.label}
                         </Link>
                       ) : (
-                        <span className="text-gray-900 font-medium">{item.label}</span>
+                        <span className={`font-medium ${headerBackgroundImage ? "text-white" : "text-gray-900"}`}>
+                          {item.label}
+                        </span>
                       )}
                     </li>
                   </React.Fragment>
@@ -82,21 +131,27 @@ export function PageLayout({
 
           {/* Page Title */}
           <motion.div 
-            className="text-center max-w-4xl mx-auto"
+            className={`text-center max-w-4xl mx-auto ${headerIsImage ? "pb-4 sm:pb-6" : ""}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
+              headerBackgroundImage ? "text-white" : "text-gray-900"
+            } ${headerTitleClassName ?? ""}`}>
               {title}
             </h1>
             {subtitle && (
-              <h2 className="text-xl sm:text-2xl text-green-600 font-semibold mb-4">
+              <h2 className={`text-xl sm:text-2xl font-semibold mb-4 ${
+                headerBackgroundImage ? "text-green-200" : "text-green-600"
+              } ${headerSubtitleClassName ?? ""}`}>
                 {subtitle}
               </h2>
             )}
             {description && (
-              <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              <p className={`text-lg sm:text-xl leading-relaxed max-w-3xl mx-auto ${
+                headerBackgroundImage ? "text-white/90" : "text-gray-600"
+              } ${headerDescriptionClassName ?? ""}`}>
                 {description}
               </p>
             )}

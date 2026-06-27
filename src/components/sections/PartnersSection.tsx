@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { colors, typography } from "@/lib/design-system";
-import { Badge } from "@/components/ui/badge";
-import {
-  Sparkle as Sparkles,
-  ArrowRight,
-  X,
-} from "@phosphor-icons/react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import {
+  drawSvgPaths,
+  gsap,
+  marqueeLoop,
+  prefersReducedMotion,
+  registerGsapFoundation,
+  ScrollTrigger,
+} from "@/lib/gsap-foundation";
 
 export interface PartnerData {
   id: string;
@@ -27,217 +29,272 @@ interface PartnersSectionProps {
   subtitle?: string;
 }
 
+function PartnerLogoTile({ partner, index }: { partner: PartnerData; index: number }) {
+  const content = (
+    <div className="group relative flex h-full min-h-[150px] flex-col justify-between overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[7px_7px_0_#101010] transition duration-500 ease-out hover:-translate-y-1 hover:rotate-[-0.35deg] hover:shadow-[10px_10px_0_#80c738]">
+      <div className="flex items-start justify-between gap-3">
+        <span className="bg-[#101010] px-2 py-1 text-xs font-black text-[#fff7df]">0{(index % 9) + 1}</span>
+        {partner.website ? (
+          <span className="grid h-8 w-8 place-items-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010] transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+            <ArrowUpRight className="h-4 w-4" weight="bold" aria-hidden="true" />
+          </span>
+        ) : null}
+      </div>
+
+      <div className="relative mx-auto my-5 h-16 w-full max-w-[170px]">
+        <Image
+          src={partner.logo || "/images/placeholder-logo.png"}
+          alt={partner.name}
+          fill
+          unoptimized
+          sizes="(min-width: 1024px) 170px, (min-width: 640px) 150px, 45vw"
+          className="object-contain transition duration-500 group-hover:scale-105"
+        />
+      </div>
+
+      <p className="line-clamp-2 border-t-[3px] border-[#101010] pt-3 text-sm font-black uppercase leading-tight text-[#101010]">
+        {partner.name}
+      </p>
+    </div>
+  );
+
+  if (!partner.website) {
+    return (
+      <article data-partner-card className="h-full">
+        {content}
+      </article>
+    );
+  }
+
+  return (
+    <Link
+      href={partner.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-partner-card
+      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#335016] focus-visible:ring-offset-4"
+    >
+      {content}
+    </Link>
+  );
+}
+
+function PartnerTickerLogo({ partner }: { partner: PartnerData }) {
+  return (
+    <div className="mx-3 flex h-24 w-44 shrink-0 items-center justify-center border-[3px] border-[#101010] bg-[#fff7df] px-5 shadow-[5px_5px_0_#101010]">
+      <div className="relative h-14 w-full">
+        <Image
+          src={partner.logo || "/images/placeholder-logo.png"}
+          alt={partner.name}
+          fill
+          unoptimized
+          sizes="176px"
+          className="object-contain"
+        />
+      </div>
+    </div>
+  );
+}
+
 export function PartnersSection({
   partners,
   title = "Our Partners",
-  subtitle = "Collaborating with world-class organizations to accelerate climate innovation",
+  subtitle = "A delivery network behind climate enterprises, funders, public institutions, and ecosystem builders.",
 }: PartnersSectionProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
-  // Split partners into two rows for dual marquee
-  const { topRow, bottomRow } = useMemo(() => {
-    const mid = Math.ceil(partners.length / 2);
+  const { topRow, bottomRow, repeatedPartners } = useMemo(() => {
+    const safePartners = partners.filter((partner) => partner.id && partner.logo);
+    const midpoint = Math.ceil(safePartners.length / 2);
+    const first = safePartners.slice(0, midpoint);
+    const second = safePartners.slice(midpoint);
+    const fallbackSecond = second.length > 0 ? second : first;
+
     return {
-      topRow: [...partners.slice(0, mid), ...partners.slice(0, mid), ...partners.slice(0, mid)],
-      bottomRow: [...partners.slice(mid), ...partners.slice(mid), ...partners.slice(mid)],
+      topRow: [...first, ...first, ...first, ...first],
+      bottomRow: [...fallbackSecond, ...fallbackSecond, ...fallbackSecond, ...fallbackSecond],
+      repeatedPartners: safePartners,
     };
   }, [partners]);
 
-  const openModal = useCallback(() => setIsModalOpen(true), []);
-  const closeModal = useCallback(() => setIsModalOpen(false), []);
+  useLayoutEffect(() => {
+    if (!sectionRef.current || repeatedPartners.length === 0) return;
+
+    registerGsapFoundation();
+    if (prefersReducedMotion()) return;
+
+    let cleanupHoverPause: (() => void) | undefined;
+
+    const ctx = gsap.context(() => {
+      gsap.set("[data-partner-word]", { yPercent: 110, rotate: 2 });
+
+      const intro = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+        },
+        defaults: { ease: "power4.out" },
+      });
+
+      intro
+        .add(drawSvgPaths("[data-partner-line]", { dash: 560, duration: 0.9, stagger: 0.05 }))
+        .to("[data-partner-word]", { yPercent: 0, rotate: 0, duration: 0.78, stagger: 0.08 }, "-=0.35")
+        .from("[data-partner-copy]", { autoAlpha: 0, y: 18, duration: 0.55 }, "-=0.35");
+
+      const leftMarquee = marqueeLoop("[data-partner-marquee-left]", { duration: 100 });
+      const rightMarquee = gsap.to("[data-partner-marquee-right]", {
+        xPercent: 50,
+        duration: 100,
+        repeat: -1,
+        ease: "none",
+      });
+
+      const pauseMarquees = () => {
+        leftMarquee.pause();
+        rightMarquee.pause();
+      };
+      const resumeMarquees = () => {
+        leftMarquee.resume();
+        rightMarquee.resume();
+      };
+      const rails = gsap.utils.toArray<HTMLElement>("[data-partner-rail]");
+      rails.forEach((rail) => {
+        rail.addEventListener("pointerenter", pauseMarquees);
+        rail.addEventListener("pointerleave", resumeMarquees);
+        rail.addEventListener("focusin", pauseMarquees);
+        rail.addEventListener("focusout", resumeMarquees);
+      });
+      cleanupHoverPause = () => {
+        rails.forEach((rail) => {
+          rail.removeEventListener("pointerenter", pauseMarquees);
+          rail.removeEventListener("pointerleave", resumeMarquees);
+          rail.removeEventListener("focusin", pauseMarquees);
+          rail.removeEventListener("focusout", resumeMarquees);
+        });
+      };
+
+      gsap.utils.toArray<HTMLElement>("[data-partner-card]").forEach((card, index) => {
+        gsap.from(card, {
+          y: 32,
+          rotate: index % 2 === 0 ? -1.1 : 1.1,
+          duration: 0.72,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.to("[data-partner-rail]", {
+        x: (index) => (index % 2 === 0 ? -12 : 12),
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      });
+
+      gsap.delayedCall(0.2, () => ScrollTrigger.refresh());
+    }, sectionRef);
+
+    return () => {
+      cleanupHoverPause?.();
+      ctx.revert();
+    };
+  }, [repeatedPartners.length]);
+
+  if (repeatedPartners.length === 0) {
+    return null;
+  }
 
   return (
-    <>
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-gray-50/50 to-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <Badge
-              className="mb-4 px-4 py-1.5 border rounded-full inline-flex items-center gap-1.5"
-              style={{
-                backgroundColor: colors.primary.green[50],
-                borderColor: colors.primary.green[200],
-                color: colors.primary.green[700],
-              }}
-            >
-              <Sparkles className="h-3.5 w-3.5" weight="fill" />
-              Trusted by Industry Leaders
-            </Badge>
+    <section ref={sectionRef} className="relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-14 text-[#101010] sm:py-16">
+      <div className="absolute inset-x-0 top-0 -z-10 h-16 border-b-[5px] border-[#101010] bg-[#80c738]" aria-hidden="true" />
+      <svg className="absolute right-[-5rem] top-20 -z-10 hidden h-[360px] w-[560px] text-[#101010]/45 lg:block" viewBox="0 0 560 360" fill="none" aria-hidden="true">
+        <path data-partner-line d="M28 286C112 126 228 190 310 96C392 1 464 80 536 28" stroke="currentColor" strokeWidth="3" strokeDasharray="10 12" />
+        <path data-partner-line d="M37 328C149 274 213 342 310 269C416 190 475 285 540 214" stroke="currentColor" strokeWidth="2" strokeDasharray="8 10" />
+        <path data-partner-line d="M84 62H480V318H84V62Z" stroke="currentColor" strokeWidth="2" />
+        <path data-partner-line d="M84 190H480" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+        <path data-partner-line d="M282 62V318" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+      </svg>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p className="inline-flex -rotate-1 items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-2 text-sm font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010]">
+              Partner network
+            </p>
             <h2
-              className="font-bold mb-3"
-              style={{
-                fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-                lineHeight: typography.lineHeights.tight,
-              }}
+              aria-label={title}
+              className="mt-7 max-w-4xl overflow-hidden font-black uppercase leading-[0.9] tracking-normal text-[#101010]"
+              style={{ fontSize: "clamp(2.65rem, 6vw, 4.75rem)" }}
             >
-              {title}
+              <span className="block overflow-hidden pb-1">
+                <span data-partner-word className="block">
+                  Partners
+                </span>
+              </span>
+              <span className="block overflow-hidden pb-2">
+                <span data-partner-word className="inline-block bg-[#80c738] px-3 text-[#0b110d]">
+                  in motion.
+                </span>
+              </span>
             </h2>
-            <p
-              className="text-base sm:text-lg max-w-2xl mx-auto"
-              style={{
-                fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[500],
-                lineHeight: typography.lineHeights.relaxed,
-              }}
-            >
-              {subtitle}
+          </div>
+          <div data-partner-copy className="border-[3px] border-[#101010] bg-[#fff7df] p-5 shadow-[8px_8px_0_#101010]">
+            <p className="text-base font-medium leading-8 text-[#28261d]">{subtitle}</p>
+            <p className="mt-4 inline-block bg-[#101010] px-3 py-1.5 text-sm font-black uppercase text-[#fff7df]">
+              {repeatedPartners.length} organizations
             </p>
           </div>
+        </div>
+      </div>
 
-          {/* Dual Marquee Container */}
-          <div className="relative">
-            {/* Edge Gradients */}
-            <div className="absolute inset-y-0 left-0 w-20 sm:w-32 bg-gradient-to-r from-gray-50/80 via-gray-50/50 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-20 sm:w-32 bg-gradient-to-l from-gray-50/80 via-gray-50/50 to-transparent z-10 pointer-events-none" />
-
-            {/* Top Row - Scrolls Left */}
-            <div className="relative overflow-hidden py-4">
-              <div className="flex animate-marquee-left">
-                {topRow.map((partner, index) => (
-                  <div
-                    key={`top-${partner.id}-${index}`}
-                    className="flex-shrink-0 mx-6 sm:mx-8"
-                  >
-                    <div className="relative h-12 sm:h-14 w-24 sm:w-32 flex items-center justify-center transition-transform duration-300 hover:scale-110">
-                      <Image
-                        src={partner.logo || "/images/placeholder-logo.png"}
-                        alt={partner.name}
-                        className="max-h-full max-w-full object-contain"
-                        width={120}
-                        height={56}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Row - Scrolls Right */}
-            <div className="relative overflow-hidden py-4">
-              <div className="flex animate-marquee-right">
-                {bottomRow.map((partner, index) => (
-                  <div
-                    key={`bottom-${partner.id}-${index}`}
-                    className="flex-shrink-0 mx-6 sm:mx-8"
-                  >
-                    <div className="relative h-12 sm:h-14 w-24 sm:w-32 flex items-center justify-center transition-transform duration-300 hover:scale-110">
-                      <Image
-                        src={partner.logo || "/images/placeholder-logo.png"}
-                        alt={partner.name}
-                        className="max-h-full max-w-full object-contain"
-                        width={120}
-                        height={56}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* View All Button */}
-          <div className="text-center mt-10">
-            <button
-              onClick={openModal}
-              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full hover:border-[#80c738] hover:text-[#80c738] transition-all duration-300 hover:shadow-md"
-            >
-              View All {partners.length} Partners
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+      <div className="mt-12 space-y-4 border-y-[5px] border-[#101010] bg-[#80c738] py-5">
+        <div data-partner-rail className="overflow-hidden">
+          <div data-partner-marquee-left className="flex w-max">
+            {topRow.map((partner, index) => (
+              <PartnerTickerLogo key={`top-${partner.id}-${index}`} partner={partner} />
+            ))}
           </div>
         </div>
+        <div data-partner-rail className="overflow-hidden">
+          <div data-partner-marquee-right className="flex w-max -translate-x-1/2">
+            {bottomRow.map((partner, index) => (
+              <PartnerTickerLogo key={`bottom-${partner.id}-${index}`} partner={partner} />
+            ))}
+          </div>
+        </div>
+      </div>
 
-        {/* CSS Animations */}
-        <style jsx>{`
-          @keyframes marquee-left {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-33.333%);
-            }
-          }
-          @keyframes marquee-right {
-            0% {
-              transform: translateX(-33.333%);
-            }
-            100% {
-              transform: translateX(0);
-            }
-          }
-          .animate-marquee-left {
-            animation: marquee-left 35s linear infinite;
-          }
-          .animate-marquee-right {
-            animation: marquee-right 35s linear infinite;
-          }
-          .animate-marquee-left:hover,
-          .animate-marquee-right:hover {
-            animation-play-state: paused;
-          }
-        `}</style>
-      </section>
-
-      {/* Full Partners Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={closeModal}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-4xl max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
+      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-4 border-t-[5px] border-[#101010] pt-7 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="inline-block -rotate-1 border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010]">
+              Logo wall
+            </p>
+            <h3
+              className="mt-5 max-w-3xl font-black uppercase leading-tight tracking-normal text-[#101010]"
+              style={{ fontSize: "clamp(2rem, 4vw, 2.7rem)" }}
             >
-              {/* Modal Header */}
-              <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">All Partners</h3>
-                  <p className="text-sm text-gray-500">{partners.length} organizations</p>
-                </div>
-                <button
-                  onClick={closeModal}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+              A visible network of funders, institutions, and ecosystem allies.
+            </h3>
+          </div>
+          <p className="max-w-md border-[3px] border-[#101010] bg-[#fff7df] p-4 text-sm font-medium leading-relaxed text-[#28261d] shadow-[5px_5px_0_#101010]">
+            The network behind KCIC spans climate finance, public institutions, enterprise support, and implementation partners.
+          </p>
+        </div>
 
-              {/* Modal Content */}
-              <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
-                  {partners.map((partner) => (
-                    <a
-                      key={partner.id}
-                      href={partner.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-center p-4 bg-gray-50 hover:bg-white rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all duration-300 aspect-square"
-                    >
-                      <Image
-                        src={partner.logo || "/images/placeholder-logo.png"}
-                        alt={partner.name}
-                        className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-                        width={100}
-                        height={100}
-                      />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        <div className="grid grid-cols-2 items-start gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {repeatedPartners.map((partner, index) => (
+            <PartnerLogoTile key={partner.id} partner={partner} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

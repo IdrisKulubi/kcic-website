@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { MinimalStatsSection } from "@/components/sections/MinimalStatsSection";
 import { NewsSection } from "@/components/sections/NewsSection";
 import { AwardsSection } from "@/components/sections";
 import {
-  PartnersSection,
   PartnerData,
 } from "@/components/sections/PartnersSection";
+import { HomePartnersLogos } from "@/components/sections/HomePartnersLogos";
 import { HeroImageCarousel } from "@/components/sections/HeroImageCarousel";
 import { ScrollProgress } from "@/components/animations/SectionReveal";
 import { ScrollOrchestrator, AnimatedSection, ScrollProgressIndicator } from "@/components/animations/ScrollOrchestrator";
@@ -27,12 +27,7 @@ import type {
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
 import ClimateChallenge from "./sections/ClimateChallenge";
-import HistoryTimeline from "./sections/HistoryTimeline";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
-import WhatWeDo from "./sections/WhatWeDo";
-import HowWeDoIt from "./sections/HowWeDoIt";
-import KeySectorsParallax from "./sections/KeySectorsParallax";
-import ProgramsShowcase from "./sections/ProgramsShowcase";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -211,6 +206,7 @@ export default function HomePage({
       id: article.id!,
       title: article.title,
       excerpt: article.excerpt,
+      content: article.content,
       publishedAt:
         typeof article.publishedAt === "string"
           ? article.publishedAt
@@ -220,6 +216,8 @@ export default function HomePage({
       slug: article.slug!,
       readTime: article.readTime || "5 min",
       featured: article.featured,
+      type: (article.category?.toLowerCase().includes("podcast") ? "podcast" : "article") as "podcast" | "article",
+      youtubeUrl: article.content || "",
     }));
 
   // Transform partners data from database
@@ -378,7 +376,7 @@ export default function HomePage({
         </div>
 
         {/* Floating decorative elements for depth */}
-        <FloatingElements variant="mixed" color="#7FD134" count={8} />
+        <FloatingElements variant="mixed" color="#7FD134" count={5} />
 
         {/* Navigation */}
         <MinimalNavbar {...navData} />
@@ -396,10 +394,19 @@ export default function HomePage({
           <div className="space-y-0">
             {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
             <div id="about">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={60} />
-              <AnimatedSection direction="up" className="bg-white">
+              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={18} />
+              <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
+<<<<<<< HEAD
+            
+              <AnimatedSection direction="up" delay={0.1}>
+                <FoundingBeliefs />
+              </AnimatedSection>
+            </div>
+
+            {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
+=======
               <AnimatedSection direction="up" delay={0.1} className="border-t border-gray-100 bg-white">
                 <HistoryTimeline />
               </AnimatedSection>
@@ -410,39 +417,50 @@ export default function HomePage({
 
            
             {/* SECTION 4: Impact & Recognition - Combined (Stats + Awards) */}
+>>>>>>> master
             <div id="impact">
-              <SectionDivider variant="angle" fromColor="#ffffff" toColor="#0f172a" height={80} />
-              <div className="relative">
+              <SectionDivider variant="angle" fromColor="#00addd" toColor="#80c738" height={28} />
+              <AnimatedSection direction="up">
                 <MinimalStatsSection
                   stats={thirteenYearsOnData}
                   targets={targetsData}
                   variant="dark"
                   title="Our Impact Journey"
-                  subtitle="From 13 years of achievements to our ambitious 2030 vision"
+                  subtitle="Thirteen years of measurable progress and the targets guiding our next phase of growth."
                   imageSrc="/images/KCIC-Map.png"
                   imageAlt="Map of Africa highlighting countries where KCIC has supported climate enterprises"
-                  imageSide="left"
+                  imageSide="right"
                   showToggle={true}
                 />
-                <AnimatedSection direction="up" className="border-t border-white/10 relative">
-                  <AwardsSection />
-                </AnimatedSection>
-              </div>
+              </AnimatedSection>
             </div>
 
-            {/* SECTION 5: News */}
+            {/* SECTION 2B: Awards & Recognition (Slide 5) */}
+            <div id="awards">
+              <SectionDivider variant="wave" fromColor="#80c738" toColor="#fff7df" height={24} />
+              <AnimatedSection direction="up" className="bg-[#fff7df]">
+                <AwardsSection />
+              </AnimatedSection>
+            </div>
+
+
+           
+
+          
+
+            {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#0f172a" toColor="#f9fafb" height={70} />
-              <AnimatedSection direction="up" className="bg-gray-50 py-12 sm:py-16">
+              <SectionDivider variant="curve" fromColor="#fff7df" toColor="#f7fbf8" height={24} />
+              <AnimatedSection direction="up" className="bg-[#f7fbf8]">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
             </div>
 
-            {/* SECTION 6: Partners */}
+            {/* SECTION 7: Partners */}
             <div id="partners">
-              <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
-              <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white">
-                <PartnersSection partners={partnersDataTransformed} />
+              <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#fff7df" height={20} />
+              <AnimatedSection direction="up" className="bg-[#fff7df]">
+                <HomePartnersLogos partners={partnersDataTransformed} />
               </AnimatedSection>
             </div>
           </div>

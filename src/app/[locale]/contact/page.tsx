@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+import { Metadata } from 'next';
+import { ContactPageContent } from '@/components/contact/ContactPageContent';
+=======
 import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
 import { Metadata } from "next";
 import { colors, typography } from "@/lib/design-system";
@@ -5,13 +9,18 @@ import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
 import { FaLocationDot, FaEnvelope, FaClock } from "react-icons/fa6";
 import { homePageData } from "@/data/home";
+>>>>>>> master
 
 export const metadata: Metadata = {
-  title: "Contact KCIC - Get in Touch with Our Team",
+  title: 'Contact KCIC - Get in Touch with Our Team',
   description:
-    "Contact Kenya Climate Innovation Centre. Reach out to learn about our programs, partnerships, or climate innovation opportunities.",
+    'Contact Kenya Climate Innovation Centre. Reach out to learn about our programs, partnerships, or climate innovation opportunities.',
 };
 
+<<<<<<< HEAD
+export default function ContactPage() {
+  return <ContactPageContent />;
+=======
 const contactInfo = [
   {
   icon: FaLocationDot,
@@ -199,4 +208,5 @@ export default function ContactPage() {
       <Footer data={homePageData.footer} />
     </div>
   );
+>>>>>>> master
 }

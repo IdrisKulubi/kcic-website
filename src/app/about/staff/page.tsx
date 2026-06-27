@@ -26,7 +26,7 @@ export default function StaffPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fff7df]">
       <MinimalNavbar {...navData} />
 
       <main className="pt-20">

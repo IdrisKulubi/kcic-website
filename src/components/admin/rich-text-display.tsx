@@ -5,6 +5,7 @@ import { useMemo, useRef } from "react";
 interface RichTextDisplayProps {
   content: string;
   className?: string;
+  variant?: 'default' | 'article';
 }
 
 function sanitizeHtml(html: string): string {
@@ -44,34 +45,105 @@ function sanitizeHtml(html: string): string {
   }
 }
 
-export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProps) => {
+export const RichTextDisplay = ({ content, className = "", variant = 'default' }: RichTextDisplayProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const sanitized = useMemo(() => sanitizeHtml(content), [content]);
+  const variantClass = variant === 'article' ? 'article-content--article' : 'article-content--default';
 
   return (
     <>
       <div
         ref={contentRef}
-        className={`article-content ${className}`}
+        className={`article-content ${variantClass} ${className}`}
         dangerouslySetInnerHTML={{ __html: sanitized }}
       />
       <style jsx global>{`
-        .article-content {
+        .article-content--default {
           background: white !important;
         }
 
-        /* Make text readable regardless of imported CMS styles */
-        .article-content,
-        .article-content :where(*, *::before, *::after) {
-          color: #111827 !important; /* gray-900 for better contrast */
+        .article-content--article {
+          background: transparent !important;
+        }
+
+        .article-content--article,
+        .article-content--article :where(*, *::before, *::after) {
+          color: #28261d !important;
+          font-size: 1.125rem;
+          line-height: 2;
+          background: transparent !important;
+          opacity: 1 !important;
+        }
+
+        .article-content--article h1,
+        .article-content--article h2,
+        .article-content--article h3,
+        .article-content--article h4,
+        .article-content--article h5,
+        .article-content--article h6 {
+          color: #101010 !important;
+          font-weight: 900 !important;
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+        }
+
+        .article-content--article h1 { font-size: 1.75rem !important; }
+        .article-content--article h2 { font-size: 1.5rem !important; }
+        .article-content--article h3 { font-size: 1.25rem !important; }
+
+        .article-content--article p {
+          margin-bottom: 1.25rem !important;
+          color: #28261d !important;
+          font-size: 1.125rem !important;
+          line-height: 2 !important;
+        }
+
+        .article-content--article strong,
+        .article-content--article b {
+          font-weight: 900 !important;
+          color: #101010 !important;
+        }
+
+        .article-content--article a {
+          color: #4f8618 !important;
+          text-decoration: underline;
+          font-weight: 800;
+        }
+
+        .article-content--article a:hover {
+          color: #3d6a12 !important;
+        }
+
+        .article-content--article blockquote {
+          border-left: 4px solid #101010;
+          background: #f5edd4;
+          padding: 1rem 1.25rem;
+          margin: 1.5rem 0;
+          border-radius: 0;
+        }
+
+        .article-content--article ul,
+        .article-content--article ol,
+        .article-content--article li {
+          color: #28261d !important;
+        }
+
+        .article-content--article img {
+          border: 3px solid #101010;
+          border-radius: 0;
+        }
+
+        .article-content--default,
+        .article-content--default :where(*, *::before, *::after) {
+          color: #111827 !important;
           font-size: 1.125rem;
           line-height: 1.75;
           background: transparent !important;
           opacity: 1 !important;
         }
 
-        .article-content h1 {
+        .article-content--default h1 {
           font-size: 2.25rem !important;
           font-weight: 700 !important;
           margin-top: 2rem;
@@ -80,7 +152,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content h2 {
+        .article-content--default h2 {
           font-size: 1.875rem !important;
           font-weight: 700 !important;
           margin-top: 1.75rem;
@@ -89,7 +161,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content h3 {
+        .article-content--default h3 {
           font-size: 1.5rem !important;
           font-weight: 600 !important;
           margin-top: 1.5rem;
@@ -98,7 +170,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content h4 {
+        .article-content--default h4 {
           font-size: 1.25rem !important;
           font-weight: 600 !important;
           margin-top: 1.25rem;
@@ -106,7 +178,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content h5 {
+        .article-content--default h5 {
           font-size: 1.125rem !important;
           font-weight: 600 !important;
           margin-top: 1rem;
@@ -114,7 +186,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content h6 {
+        .article-content--default h6 {
           font-size: 1rem !important;
           font-weight: 600 !important;
           margin-top: 1rem;
@@ -122,7 +194,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           color: #000000 !important;
         }
 
-        .article-content p {
+        .article-content--default p {
           margin-bottom: 1rem !important;
           color: #111827 !important;
           font-size: 1.125rem !important;
@@ -131,26 +203,26 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           opacity: 1 !important;
         }
 
-        .article-content strong,
-        .article-content b {
+        .article-content--default strong,
+        .article-content--default b {
           font-weight: 700 !important;
           color: #000000 !important;
         }
 
-        .article-content em,
-        .article-content i {
+        .article-content--default em,
+        .article-content--default i {
           font-style: italic;
         }
 
-        .article-content u {
+        .article-content--default u {
           text-decoration: underline;
         }
 
-        .article-content s {
+        .article-content--default s {
           text-decoration: line-through;
         }
 
-        .article-content a {
+        .article-content--default a {
           color: #0891b2 !important;
           text-decoration: underline;
           transition: opacity 0.2s;
@@ -159,35 +231,35 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           opacity: 1 !important;
         }
 
-        .article-content a:hover {
+        .article-content--default a:hover {
           opacity: 1;
           color: #0e7490 !important;
         }
 
-        .article-content ul,
-        .article-content ol {
+        .article-content--default ul,
+        .article-content--default ol {
           margin-left: 1.5rem;
           margin-bottom: 1rem;
           color: #000000 !important;
           opacity: 1 !important;
         }
 
-        .article-content ul {
+        .article-content--default ul {
           list-style-type: disc;
         }
 
-        .article-content ol {
+        .article-content--default ol {
           list-style-type: decimal;
         }
 
-        .article-content li {
+        .article-content--default li {
           margin-bottom: 0.5rem !important;
           line-height: 1.75;
           color: #000000 !important;
           opacity: 1 !important;
         }
 
-        .article-content blockquote {
+        .article-content--default blockquote {
           border-left: 4px solid #059669;
           padding-left: 1rem;
           margin: 1.5rem 0;
@@ -198,7 +270,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           border-radius: 0.5rem;
         }
 
-        .article-content pre {
+        .article-content--default pre {
           background: #f3f4f6;
           padding: 1rem;
           border-radius: 0.5rem;
@@ -207,7 +279,7 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           border: 1px solid #e5e7eb;
         }
 
-        .article-content code {
+        .article-content--default code {
           background: #f3f4f6;
           color: #dc2626 !important;
           padding: 0.125rem 0.25rem;
@@ -216,50 +288,49 @@ export const RichTextDisplay = ({ content, className = "" }: RichTextDisplayProp
           font-size: 0.875em;
         }
 
-        .article-content pre code {
+        .article-content--default pre code {
           background: transparent;
           padding: 0;
           color: #111827 !important;
         }
 
-        .article-content img {
+        .article-content--default img {
           max-width: 100%;
           height: auto;
           border-radius: 0.5rem;
           margin: 1.5rem 0;
         }
 
-        .article-content video {
+        .article-content--default video {
           max-width: 100%;
           height: auto;
           border-radius: 0.5rem;
           margin: 1.5rem 0;
         }
 
-        .article-content table {
+        .article-content--default table {
           width: 100%;
           border-collapse: collapse;
           margin: 1.5rem 0;
         }
 
-        .article-content th,
-        .article-content td {
+        .article-content--default th,
+        .article-content--default td {
           border: 1px solid #d1d5db;
           padding: 0.75rem;
           text-align: left;
           color: #111827 !important;
         }
 
-        .article-content th {
+        .article-content--default th {
           background: #f3f4f6;
           font-weight: 600;
           color: #000000 !important;
         }
 
-        /* Keep article text readable in dark mode as well (black text on white background) */
         @media (prefers-color-scheme: dark) {
-          .article-content,
-          .article-content :where(*, *::before, *::after) {
+          .article-content--default,
+          .article-content--default :where(*, *::before, *::after) {
             color: #111827 !important;
             background: transparent !important;
             opacity: 1 !important;

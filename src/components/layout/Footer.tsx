@@ -1,25 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
-  XLogo,
-  LinkedinLogo,
+  Envelope,
   FacebookLogo,
   InstagramLogo,
-  YoutubeLogo,
-  Envelope,
-  Phone,
+  LinkedinLogo,
   MapPin,
   PaperPlaneTilt,
+  Phone,
   ShieldCheck,
+  XLogo,
+  YoutubeLogo,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { FooterData } from "@/data/home";
-import { colors } from "@/lib/design-system";
 import { WhistleblowerModal } from "@/components/whistleblower/WhistleblowerModal";
+import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
+import { gsap, prefersReducedMotion, registerGsapFoundation } from "@/lib/gsap-foundation";
 
 interface FooterProps {
   data: FooterData;
@@ -38,53 +36,102 @@ export default function Footer({ data }: FooterProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isWhistleblowerOpen, setIsWhistleblowerOpen] = useState(false);
+  const { shouldDisableAnimations } = useAccessibilityClasses();
+  const footerRef = useRef<HTMLElement | null>(null);
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  useLayoutEffect(() => {
+    if (!footerRef.current || prefersReducedMotion() || shouldDisableAnimations?.()) return;
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    registerGsapFoundation();
+    const ctx = gsap.context(() => {
+      gsap.from("[data-footer-item]", {
+        y: 14,
+        autoAlpha: 0,
+        duration: 0.55,
+        stagger: 0.04,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 92%",
+        },
+      });
+    }, footerRef);
 
-    if (!email) {
-      setSubmitMessage("Please enter your email address");
-      return;
-    }
+    return () => ctx.revert();
+  }, [shouldDisableAnimations]);
 
-    if (!validateEmail(email)) {
-      setSubmitMessage("Please enter a valid email address");
-      return;
-    }
+  const handleNewsletterSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
 
     setIsSubmitting(true);
-    setSubmitMessage("");
-
-    // Simulate API call
     setTimeout(() => {
-      setSubmitMessage("Thank you for subscribing!");
+      setSubmitMessage("Subscribed");
       setEmail("");
       setIsSubmitting(false);
-    }, 1000);
+      setTimeout(() => setSubmitMessage(""), 3000);
+    }, 700);
   };
 
   return (
-    <footer className="bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Brand and Contact Info */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="mb-6 inline-block" aria-label="Kenya Climate Innovation Centre home">
-              <Image
+    <footer ref={footerRef} className="border-t border-[#101010]/10 bg-[#fff7df] text-[#101010]">
+      <style jsx>{`
+        .kcic-footer-grid {
+          display: grid;
+          grid-template-columns: minmax(180px, 1fr) 128px minmax(280px, 1.25fr) 280px;
+          gap: 24px;
+          align-items: start;
+        }
+
+        .kcic-footer-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+
+        @media (max-width: 980px) {
+          .kcic-footer-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .kcic-footer-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+          }
+        }
+      `}</style>
+
+      <div className="h-[3px] bg-[#80c738]" aria-hidden="true" />
+      <div className="mx-auto max-w-[1320px] px-4 py-4 sm:px-5">
+        <div className="kcic-footer-grid">
+          <section data-footer-item aria-label="KCIC footer summary">
+            <Link
+              href="/"
+              aria-label="KCIC home"
+              className="inline-flex items-center overflow-hidden"
+              style={{ width: 96, height: 34 }}
+            >
+              <img
                 src="/images/hero/KCIC logo.png"
-                alt="Kenya Climate Innovation Centre logo"
-                width={160}
-                height={48}
-                className="h-12 w-auto"
-                priority
+                alt="KCIC"
+                className="block object-contain"
+                style={{ width: 96, maxWidth: 96, height: "auto", maxHeight: 34 }}
               />
             </Link>
+            <p className="mt-2 max-w-[260px] text-[13px] font-semibold leading-5 text-[#3d3a2f]">
+              Climate entrepreneurship and green growth across the world.
+            </p>
+          </section>
 
+<<<<<<< HEAD
+          <nav data-footer-item aria-label="Footer links">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Pages</p>
+            <div className="mt-2 grid gap-1">
+=======
             <address className="space-y-3 text-gray-600 not-italic">
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
@@ -121,111 +168,97 @@ export default function Footer({ data }: FooterProps) {
               Quick Links
             </h3>
             <ul className="space-y-3">
+>>>>>>> master
               {data.quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-600 hover:text-green-600 transition-colors duration-300 text-sm block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-[13px] font-bold leading-5 text-[#28261d] transition hover:text-[#4f8618]"
+                >
+                  {link.label}
+                </Link>
               ))}
-            </ul>
+            </div>
           </nav>
 
-          {/* Social Media */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-gray-900">Follow Us</h3>
-            <div className="flex flex-wrap gap-3">
+          <address data-footer-item className="not-italic">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Contact</p>
+            <div className="mt-2 grid gap-1.5 text-[13px] font-semibold leading-5 text-[#4d4a3d]">
+              <p className="flex gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span className="max-w-[52ch]">{data.contact.address}</span>
+              </p>
+              <a href={`tel:${data.contact.phone}`} className="flex gap-2 transition hover:text-[#4f8618]">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span>{data.contact.phone}</span>
+              </a>
+              <a href={`mailto:${data.contact.email}`} className="flex gap-2 transition hover:text-[#4f8618]">
+                <Envelope className="mt-0.5 h-4 w-4 shrink-0 text-[#4f8618]" weight="bold" />
+                <span>{data.contact.email}</span>
+              </a>
+            </div>
+          </address>
+
+          <section data-footer-item aria-label="Newsletter and social links">
+            <p className="text-[11px] font-black uppercase text-[#4f8618]">Stay Updated</p>
+            <form
+              onSubmit={handleNewsletterSubmit}
+              className="mt-2 flex h-9 max-w-[280px]"
+              aria-label="Newsletter signup"
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder={data.newsletter.placeholder}
+                disabled={isSubmitting}
+                className="min-w-0 flex-1 border border-[#101010]/15 bg-[#fffdf3] px-3 text-[13px] font-semibold text-[#101010] outline-none transition placeholder:text-[#706b59] focus:border-[#80c738]"
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="grid w-10 place-items-center bg-[#80c738] text-[#101010] transition hover:bg-[#6fb52d] disabled:opacity-60"
+                aria-label="Subscribe"
+              >
+                <PaperPlaneTilt className="h-4 w-4" weight="bold" />
+              </button>
+            </form>
+            {submitMessage && <p className="mt-2 text-[11px] font-black uppercase text-[#4f8618]">{submitMessage}</p>}
+
+            <div className="mt-3 flex flex-wrap gap-2">
               {data.socialMedia.map((social) => {
-                const IconComponent =
-                  socialIcons[social.icon as keyof typeof socialIcons];
+                const Icon = socialIcons[social.icon as keyof typeof socialIcons] || XLogo;
                 return (
                   <a
                     key={social.platform}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 group flex items-center justify-center"
-                    aria-label={`Follow KCIC on ${social.platform}`}
+                    aria-label={`KCIC on ${social.platform}`}
+                    className="grid h-8 w-8 place-items-center border border-[#101010]/15 bg-[#fffdf3] text-[#4d4a3d] transition hover:border-[#80c738] hover:bg-[#e5f7c9] hover:text-[#4f8618]"
                   >
-                    <IconComponent className="h-5 w-5 text-gray-600 group-hover:text-green-600 transition-colors duration-300" />
+                    <Icon className="h-4 w-4" weight="bold" />
                   </a>
                 );
               })}
             </div>
-          </div>
-
-          {/* Newsletter Signup */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6 text-gray-900">
-              {data.newsletter.title}
-            </h3>
-            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-              {data.newsletter.description}
-            </p>
-
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-              <div className="relative">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={data.newsletter.placeholder}
-                  className="bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-green-500 focus:ring-green-500 pr-12"
-                  disabled={isSubmitting}
-                />
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={isSubmitting}
-                  className="absolute right-1 top-1/2 h-10 w-10 -translate-y-1/2 p-0 text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200"
-                  style={{ backgroundColor: colors.primary.green.DEFAULT }}
-                >
-                  <PaperPlaneTilt className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {submitMessage && (
-                <div
-                  className={`text-xs ${submitMessage.includes("Thank you")
-                    ? "text-green-400"
-                    : "text-red-400"
-                    }`}
-                >
-                  {submitMessage}
-                </div>
-              )}
-            </form>
-          </div>
+          </section>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-500 text-sm text-center sm:text-left">
-              {data.copyright}
-            </p>
-
-            {/* Whistleblower Button */}
-            <button
-              onClick={() => setIsWhistleblowerOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-200 rounded-lg transition-all duration-200"
-              style={{ backgroundColor: colors.primary.green.DEFAULT }}
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Whistleblower
-            </button>
-          </div>
+        <div className="kcic-footer-bottom mt-4 border-t border-[#101010]/10 pt-3">
+          <p className="text-[12px] font-semibold leading-5 text-[#706b59]">{data.copyright}</p>
+          <button
+            type="button"
+            onClick={() => setIsWhistleblowerOpen(true)}
+            className="inline-flex items-center gap-2 border border-[#101010]/15 bg-[#fffdf3] px-3 py-2 text-[12px] font-black uppercase text-[#4d4a3d] transition hover:border-[#80c738] hover:bg-[#e5f7c9] hover:text-[#4f8618]"
+          >
+            <ShieldCheck className="h-4 w-4" weight="bold" />
+            Whistleblower
+          </button>
         </div>
       </div>
 
-      {/* Whistleblower Modal */}
-      <WhistleblowerModal
-        isOpen={isWhistleblowerOpen}
-        onClose={() => setIsWhistleblowerOpen(false)}
-      />
+      <WhistleblowerModal isOpen={isWhistleblowerOpen} onClose={() => setIsWhistleblowerOpen(false)} />
     </footer>
   );
 }
