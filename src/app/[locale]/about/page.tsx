@@ -1,0 +1,185 @@
+import React from "react";
+import { MinimalNavbar } from "@/components/layout/MinimalNavbar";
+import { Metadata } from "next";
+import { colors, typography } from "@/lib/design-system";
+import { Button } from "@/components/ui/button";
+import { navData } from "@/lib/navigation";
+import { ArrowRight, Target, UsersThree, Planet } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About KCIC - Leading Climate Innovation in Kenya",
+  description:
+    "Learn about Kenya Climate Innovation Centre's mission to accelerate green growth and support climate entrepreneurs across Africa.",
+};
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen bg-white">
+      <MinimalNavbar {...navData} />
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1
+            className="font-bold mb-8"
+            style={{
+              fontSize: "clamp(2.5rem, 8vw, 5rem)",
+              fontFamily: typography.fonts.heading,
+              color: colors.secondary.gray[900],
+              lineHeight: typography.lineHeights.tight,
+            }}
+          >
+            Accelerating Climate Innovation
+          </h1>
+          <p
+            className="text-xl mb-12 max-w-3xl mx-auto"
+            style={{
+              fontFamily: typography.fonts.body,
+              color: colors.secondary.gray[600],
+              lineHeight: typography.lineHeights.relaxed,
+            }}
+          >
+            We are Kenya&apos;s leading climate innovation center, empowering
+            entrepreneurs to build sustainable solutions that drive green growth
+            across Africa.
+          </p>
+        </div>
+      </section>
+
+      {/* Mission Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Mission Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+                <Target
+                  className="h-10 w-10 text-climate-green"
+                  weight="duotone"
+                />
+              </div>
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
+                Our Mission
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                To accelerate green growth by supporting climate entrepreneurs
+                and innovative solutions that create lasting environmental
+                impact.
+              </p>
+            </div>
+
+            {/* Approach Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+                <UsersThree
+                  className="h-10 w-10 text-climate-blue"
+                  weight="duotone"
+                />
+              </div>
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
+                Our Approach
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                We provide comprehensive support including funding, mentorship,
+                and market access to help climate innovations scale
+                successfully.
+              </p>
+            </div>
+
+            {/* Impact Card */}
+            <div className="bg-gray-50 rounded-3xl p-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50">
+              <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+                <Planet
+                  className="h-10 w-10 text-climate-green-dark"
+                  weight="duotone"
+                />
+              </div>
+              <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 mb-4 tracking-tight">
+                Our Impact
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Supporting 450+ SMEs, mobilizing $25M+ in investment, and
+                creating 2,500+ jobs across the climate sector.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Story Section */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2
+            className="font-bold mb-12"
+            style={{
+              fontSize: typography.sizes.heading.h2[0],
+              fontFamily: typography.fonts.heading,
+              color: colors.secondary.gray[900],
+            }}
+          >
+            Building Africa&apos;s Climate Future
+          </h2>
+          <div className="space-y-8 text-left">
+            <p
+              className="text-lg"
+              style={{
+                fontFamily: typography.fonts.body,
+                color: colors.secondary.gray[700],
+                lineHeight: typography.lineHeights.relaxed,
+              }}
+            >
+              Founded as Kenya&apos;s premier climate innovation hub, KCIC has
+              become the catalyst for transformative environmental solutions
+              across East Africa. We believe that innovation is the key to
+              addressing climate challenges while creating economic
+              opportunities.
+            </p>
+            <p
+              className="text-lg"
+              style={{
+                fontFamily: typography.fonts.body,
+                color: colors.secondary.gray[700],
+                lineHeight: typography.lineHeights.relaxed,
+              }}
+            >
+              Our comprehensive ecosystem supports entrepreneurs at every stage,
+              from early-stage ideation to market-ready solutions. Through
+              strategic partnerships and targeted investments, we&apos;re
+              building a sustainable future for Africa.
+            </p>
+          </div>
+
+          <div className="mt-12">
+            <Button
+              className="px-8 py-4 rounded-full font-semibold"
+              style={{
+                background: colors.primary.green.DEFAULT,
+                color: "white",
+                fontFamily: typography.fonts.body,
+                border: "none",
+              }}
+              asChild
+            >
+              <Link href="/programs" className="flex items-center space-x-2">
+                <span>Explore Our Programs</span>
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-gray-600 text-sm">
+              © 2024 Kenya Climate Innovation Centre. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

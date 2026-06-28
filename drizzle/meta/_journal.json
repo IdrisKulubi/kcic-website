@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1761215684921,
+      "tag": "0000_late_lady_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1761220718606,
+      "tag": "0001_old_human_fly",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762852327883,
+      "tag": "0002_rare_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765910387729,
+      "tag": "0003_natural_magneto",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770675649248,
+      "tag": "0004_clumsy_mach_iv",
+      "breakpoints": true
+    }
+  ]
+}

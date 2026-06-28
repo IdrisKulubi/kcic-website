@@ -42,15 +42,28 @@
 .accessibility-text-right { --accessibility-text-align: right; }
 .accessibility-text-justify { --accessibility-text-align: justify; }
 
-/* Apply accessibility enhancements to all text elements */
-body,
-h1, h2, h3, h4, h5, h6,
-p, span, div, a, button,
-input, textarea, select,
-label, li, td, th {
-  font-size: calc(1em * var(--accessibility-font-scale));
+/* Apply global accessibility settings without compounding nested font sizes */
+body {
+  font-size: calc(1rem * var(--accessibility-font-scale));
   line-height: var(--accessibility-line-height);
   letter-spacing: var(--accessibility-letter-spacing);
+}
+
+p,
+span,
+div,
+a,
+button,
+label,
+li,
+td,
+th,
+input,
+textarea,
+select {
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 
 /* Preserve heading hierarchy while scaling */

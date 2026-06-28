@@ -7,6 +7,10 @@ import { skipLinkUtils, landmarkUtils } from "@/lib/accessibility";
 import { PerformanceMonitor } from "@/components/performance-monitor";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
 import { AccessibilityProvider } from "@/contexts/accessibility-context";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,8 +97,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://kenyacic.org",
     languages: {
-      'en-US': 'https://kenyacic.org',
-      'sw-KE': 'https://kenyacic.org/sw',
+      'en': 'https://kenyacic.org',
+      'fr': 'https://kenyacic.org/fr',
     },
   },
   category: 'Climate Innovation',
@@ -106,7 +110,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#10B981" />
@@ -130,13 +134,12 @@ export default function RootLayout({
               "foundingDate": "2010",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "University of Nairobi",
+                "streetAddress": "KCIC Head Office, Mokoyeti Road West, Off Langata Road, Karen",
                 "addressLocality": "Nairobi",
                 "addressCountry": "Kenya"
               },
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+254-20-123-4567",
                 "contactType": "customer service",
                 "email": "info@kenyacic.org"
               },
@@ -189,6 +192,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased accessibility-enhanced`}
       >
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <AccessibilityProvider>
           <ThemeProvider
             attribute="class"
@@ -208,7 +212,8 @@ export default function RootLayout({
               {children}
             </main>
             
-           
+            {/* Toast notifications */}
+            <Toaster position="top-right" richColors closeButton />
             
             {/* Performance monitoring (development only) */}
             <PerformanceMonitor />

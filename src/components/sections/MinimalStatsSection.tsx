@@ -1,140 +1,400 @@
 'use client';
 
-import React from 'react';
-import { colors, typography } from '@/lib/design-system';
+import { useLayoutEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  gsap,
+  prefersReducedMotion,
+  registerGsapFoundation,
+  ScrollTrigger,
+} from '@/lib/gsap-foundation';
 
 interface StatItem {
   value: string;
   description: string;
   suffix?: string;
+  subdescription?: string;
 }
 
 interface MinimalStatsSectionProps {
   stats: StatItem[];
   targets?: StatItem[];
   showToggle?: boolean;
+  variant?: 'light' | 'dark';
+  title?: string;
+  subtitle?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageSide?: 'left' | 'right';
 }
 
-export function MinimalStatsSection({ stats, targets }: MinimalStatsSectionProps) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
+function parseStatValue(raw: string): {
+  prefix: string;
+  number: number;
+  suffix: string;
+  decimals: number;
+  hasComma: boolean;
+} {
+  const match = raw.match(/^([^0-9]*?)([\d,.]+)(.*)$/);
+  if (!match) return { prefix: '', number: 0, suffix: raw, decimals: 0, hasComma: false };
+  const prefix = match[1];
+  const numStr = match[2].replace(/,/g, '');
+  const suffix = match[3];
+  const hasComma = match[2].includes(',');
+  const dotIdx = numStr.indexOf('.');
+  const decimals = dotIdx >= 0 ? numStr.length - dotIdx - 1 : 0;
+  return { prefix, number: parseFloat(numStr), suffix, decimals, hasComma };
+}
 
-  const renderStats = (data: StatItem[]) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+function formatStatNumber(n: number, decimals: number, addComma: boolean): string {
+  const fixed = n.toFixed(decimals);
+  if (!addComma) return fixed;
+  const [intPart, decPart] = fixed.split('.');
+  const withCommas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart ? `${withCommas}.${decPart}` : withCommas;
+}
+
+const impactTabClass =
+  'min-w-[150px] sm:min-w-[190px] rounded-none border-2 border-transparent px-4 py-3 transition-colors data-[state=active]:border-[#101010] data-[state=active]:bg-[#101010] data-[state=active]:text-[#fff7df] text-[#101010] hover:bg-[#dff6bd]';
+
+const targetsTabClass =
+  'min-w-[150px] sm:min-w-[190px] rounded-none border-2 border-transparent px-4 py-3 transition-colors data-[state=active]:border-[#101010] data-[state=active]:bg-[#00addd] data-[state=active]:text-[#101010] text-[#101010] hover:bg-[#dff6bd]';
+
+export function MinimalStatsSection({
+  stats,
+  targets,
+  title,
+  subtitle,
+  imageSrc,
+  imageAlt,
+  imageSide = 'left',
+}: MinimalStatsSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const counterRefs = useRef<(HTMLElement | null)[]>([]);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+  const { shouldDisableAnimations } = useAccessibilityClasses();
+
+  const animateCounters = useCallback((statData: StatItem[]) => {
+    counterRefs.current.forEach((el, index) => {
+      if (!el || !statData[index]) return;
+      const parsed = parseStatValue(statData[index].value);
+      if (parsed.number === 0) return;
+
+      const proxy = { val: 0 };
+      gsap.to(proxy, {
+        val: parsed.number,
+        duration: 1.8,
+        delay: index * 0.1,
+        ease: 'power2.out',
+        onUpdate: () => {
+          el.textContent = `${parsed.prefix}${formatStatNumber(proxy.val, parsed.decimals, parsed.hasComma)}${parsed.suffix}`;
+        },
+      });
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current || prefersReducedMotion() || shouldDisableAnimations?.()) return;
+
+    registerGsapFoundation();
+
+    const ctx = gsap.context(() => {
+      if (headerRef.current) {
+        gsap.from(headerRef.current, {
+          y: 24,
+          autoAlpha: 0,
+          immediateRender: false,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+
+      if (imageRef.current) {
+        gsap.from(imageRef.current, {
+          y: 28,
+          autoAlpha: 0,
+          immediateRender: false,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: imageRef.current,
+            start: 'top 85%',
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+
+      const statCards = sectionRef.current?.querySelectorAll('.stat-card-item');
+      if (statCards && statCards.length > 0) {
+        gsap.from(statCards, {
+          y: 28,
+          autoAlpha: 0,
+          immediateRender: false,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: statCards[0],
+            start: 'top 88%',
+            invalidateOnRefresh: true,
+            onEnter: () => {
+              if (!hasAnimated.current) {
+                hasAnimated.current = true;
+                animateCounters(stats);
+              }
+            },
+          },
+        });
+      }
+    }, sectionRef);
+
+    const refresh = () => ScrollTrigger.refresh();
+    const delayedRefresh = gsap.delayedCall(0.35, refresh);
+    window.addEventListener('load', refresh, { once: true });
+
+    return () => {
+      delayedRefresh.kill();
+      window.removeEventListener('load', refresh);
+      ctx.revert();
+    };
+  }, [stats, animateCounters, shouldDisableAnimations]);
+
+  const renderStats = (data: StatItem[], isTargets = false) => (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4" aria-live="polite">
       {data.map((stat, index) => (
-        <div 
-          key={index}
-          className={`relative ${getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 150}`)}`}
+        <div
+          key={`${stat.description}-${index}`}
+          className="stat-card-item group relative overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[5px_5px_0_#101010] transition hover:-translate-y-0.5 hover:shadow-[7px_7px_0_#101010] sm:p-5"
         >
-          <h3 
-            className="font-bold mb-3"
-            style={{
-              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
-              fontFamily: typography.fonts.heading,
-              lineHeight: typography.lineHeights.tight,
-              background: colors.gradients.primary,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+          <div className="mb-4 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
+            <span className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-[#4f8618]">
+              {isTargets ? 'Target' : 'Impact'} {String(index + 1).padStart(2, '0')}
+            </span>
+            <span
+              className="grid h-7 w-7 place-items-center border-2 border-[#101010] bg-[#80c738] text-xs font-black text-[#101010] shadow-[2px_2px_0_#101010]"
+              aria-hidden
+            >
+              +
+            </span>
+          </div>
+          <p
+            ref={(el) => {
+              if (!isTargets) counterRefs.current[index] = el;
             }}
+            className="text-4xl font-black leading-none text-[#101010] sm:text-5xl"
           >
             {stat.value}
-          </h3>
-          <p 
-            className="text-gray-600"
-            style={{
-              fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
-              fontFamily: typography.fonts.body,
-              lineHeight: typography.lineHeights.relaxed,
-            }}
-          >
-            {stat.description}
           </p>
+          <p className="mt-3 text-sm font-black uppercase leading-5 text-[#101010]">{stat.description}</p>
+          {stat.subdescription ? (
+            <p className="mt-2 text-sm font-semibold leading-6 text-[#4d4a3d]">{stat.subdescription}</p>
+          ) : null}
         </div>
       ))}
     </div>
   );
 
-  return (
-    <section 
-      id="impact-section"
-      className="py-20 sm:py-32 bg-gray-50"
+  const renderMapPanel = () => {
+    if (!imageSrc) return null;
+
+    return (
+      <div className="impact-journey-map min-w-0">
+        <div
+          ref={imageRef}
+          className="mx-auto w-full max-w-xl border-[3px] border-[#101010] bg-[#fff7df] p-3 shadow-[8px_8px_0_#101010]"
+        >
+          <div className="mb-3 flex items-center justify-between border-b-[3px] border-[#101010] pb-3">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#101010]">Regional footprint</span>
+            <span className="border-2 border-[#101010] bg-[#00addd] px-2 py-1 text-xs font-black text-[#101010]">
+              KCIC map
+            </span>
+          </div>
+          <div className="relative aspect-4/5 w-full overflow-hidden border-2 border-[#101010] bg-[#fff7df]">
+            <Image
+              src={imageSrc}
+              alt={imageAlt || ''}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+              className="object-contain object-center"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderHeader = () => (
+    <div
+      ref={headerRef}
+      className="mb-8 grid items-end gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.9fr_1.1fr]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div>
+        <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#fff7df] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+          KCIC progress route
+        </p>
+        <h2
+          id="impact-section-heading"
+          className="max-w-[10ch] text-5xl font-black leading-[0.92] text-[#fff7df] sm:text-6xl lg:text-7xl"
+          style={{
+            textShadow: '5px 5px 0 #101010',
+            WebkitTextStroke: '1.5px #101010',
+          }}
+        >
+          {title || 'Our Impact'}
+        </h2>
+      </div>
+      {subtitle ? (
+        <p className="max-w-3xl text-lg font-black leading-8 text-[#101010] sm:text-xl">{subtitle}</p>
+      ) : null}
+    </div>
+  );
+
+  const renderTabs = () => (
+    <div className="mb-8 flex flex-col items-start">
+      <TabsList className="h-auto gap-1 rounded-none border-[3px] border-[#101010] bg-[#fff7df] p-1 shadow-[5px_5px_0_#101010]">
+        <TabsTrigger value="impact" className={impactTabClass}>
+          <span className="flex flex-col items-center gap-0.5">
+            <span className="text-base font-black tracking-tight sm:text-lg">2010 - Today</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wide sm:text-xs">13 Years of Impact</span>
+          </span>
+        </TabsTrigger>
+        <TabsTrigger value="targets" className={targetsTabClass}>
+          <span className="flex flex-col items-center gap-0.5">
+            <span className="text-base font-black tracking-tight sm:text-lg">2025 - 2030</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wide sm:text-xs">Our Targets</span>
+          </span>
+        </TabsTrigger>
+      </TabsList>
+    </div>
+  );
+
+  return (
+    <section
+      id="impact-section"
+      ref={sectionRef}
+      aria-labelledby="impact-section-heading"
+      className="relative isolate overflow-hidden border-y-[5px] border-[#101010] py-12 sm:py-14"
+      style={{ backgroundColor: '#80c738' }}
+    >
+      <style jsx>{`
+        .impact-journey-layout {
+          display: grid;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .impact-journey-map,
+        .impact-journey-stats {
+          min-width: 0;
+        }
+
+        @media (min-width: 1024px) {
+          .impact-journey-layout {
+            gap: 2.5rem;
+          }
+
+          .impact-journey-layout--map-left {
+            grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.35fr);
+          }
+
+          .impact-journey-layout--map-right {
+            grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+          }
+
+          .impact-journey-layout--map-left .impact-journey-map {
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-left .impact-journey-stats {
+            grid-column: 2;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-right .impact-journey-stats {
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .impact-journey-layout--map-right .impact-journey-map {
+            grid-column: 2;
+            grid-row: 1;
+          }
+        }
+      `}</style>
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-0 h-full w-full text-[#101010]/24"
+        viewBox="0 0 1440 720"
+        fill="none"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+       
+        <path
+          d="M-43 546C152 468 341 480 501 557C675 640 826 650 1002 551C1167 458 1312 445 1498 502"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <path d="M141 91V650M1298 70V662" stroke="currentColor" strokeWidth="2" strokeDasharray="12 16" />
+      </svg>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {renderHeader()}
+
         {targets ? (
           <Tabs defaultValue="impact" className="w-full">
-            <div className="flex flex-col items-center mb-16">
-              <TabsList className="bg-white shadow-sm rounded-full p-1">
-                <TabsTrigger 
-                  value="impact"
-                  className="text-lg font-semibold px-6 py-2 rounded-full data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm transition-all"
-                  style={{ fontFamily: typography.fonts.heading }}
-                >
-                  Impact
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="targets"
-                  className="text-lg font-semibold px-6 py-2 rounded-full data-[state=active]:bg-gray-100 data-[state=active]:shadow-sm transition-all"
-                  style={{ fontFamily: typography.fonts.heading }}
-                >
-                  Our Targets
-                </TabsTrigger>
-              </TabsList>
-              <div className="mt-4 text-sm text-gray-500" style={{ fontFamily: typography.fonts.body }}>
-                (2025-2030)
-              </div>
-            </div>
+            {renderTabs()}
 
-            <TabsContent value="impact" className="mt-0">
-              {renderStats(stats)}
-            </TabsContent>
-            
-            <TabsContent value="targets" className="mt-0">
-              {renderStats(targets)}
-            </TabsContent>
-
-            <div className="mt-16 pt-12 border-t border-gray-200">
-              <div className="flex justify-center">
-                <Button 
-                  variant="outline"
-                  className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-full px-8 py-3 transition-all duration-300"
-                  style={{ fontFamily: typography.fonts.body }}
-                  asChild
-                >
-                  <a href="/impact">
-                    Learn More
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </Tabs>
-        ) : (
-          <>
-            <div className="text-center mb-12">
-              <h2 
-                className="font-bold mb-4"
-                style={{
-                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                  fontFamily: typography.fonts.heading,
-                  color: colors.secondary.gray[900],
-                  lineHeight: typography.lineHeights.tight,
-                }}
+            {imageSrc ? (
+              <div
+                className={`impact-journey-layout ${
+                  imageSide === 'right' ? 'impact-journey-layout--map-right' : 'impact-journey-layout--map-left'
+                }`}
               >
-                Our Impact
-              </h2>
-              <div 
-                className="w-24 h-1 mx-auto"
-                style={{
-                  background: colors.gradients.primary,
-                }}
-              />
+                {renderMapPanel()}
+                <div className="impact-journey-stats">
+                  <TabsContent value="impact" className="mt-0">
+                    {renderStats(stats, false)}
+                  </TabsContent>
+                  <TabsContent value="targets" className="mt-0">
+                    {renderStats(targets, true)}
+                  </TabsContent>
+                </div>
+              </div>
+            ) : (
+              <>
+                <TabsContent value="impact" className="mt-0">
+                  {renderStats(stats, false)}
+                </TabsContent>
+                <TabsContent value="targets" className="mt-0">
+                  {renderStats(targets, true)}
+                </TabsContent>
+              </>
+            )}
+          </Tabs>
+        ) : imageSrc ? (
+          <div
+            className={`impact-journey-layout ${
+              imageSide === 'right' ? 'impact-journey-layout--map-right' : 'impact-journey-layout--map-left'
+            }`}
+          >
+            {renderMapPanel()}
+            <div className="impact-journey-stats">
+              {renderStats(stats, false)}
             </div>
-            {renderStats(stats)}
-          </>
+          </div>
+        ) : (
+          renderStats(stats, false)
         )}
       </div>
     </section>

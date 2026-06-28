@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { ImageProps } from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { BLUR_DATA_URL, IMAGE_SIZES, IMAGE_QUALITY } from '@/lib/image-utils';
 
@@ -17,7 +17,7 @@ interface OptimizedImageProps extends Omit<ImageProps, 'alt'> {
 export function OptimizedImage({
   src,
   alt,
-  fallbackSrc = '/images/placeholder.jpg',
+  fallbackSrc = '/images/placeholder-logo.svg',
   className,
   priority = false,
   sizeVariant = 'card',
@@ -27,6 +27,14 @@ export function OptimizedImage({
   const [imgSrc, setImgSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  // Reset internal state when the src changes so each award renders its own image
+  useEffect(() => {
+    setImgSrc(src);
+    setIsLoading(true);
+    setHasError(false);
+  }, [src]);
 
   // Preload critical images
   useEffect(() => {
@@ -51,19 +59,36 @@ export function OptimizedImage({
     setIsLoading(false);
   };
 
+  // Hide skeleton immediately if the browser already cached the image
+  useEffect(() => {
+    const img = imageRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setIsLoading(false);
+    }
+  }, [imgSrc]);
+
+  // Ensure wrapper has dimensions when using fill layout
+  const wrapperClass = cn(
+    "relative overflow-hidden",
+    (props as any).fill ? "h-full w-full" : "",
+    className
+  );
+
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={wrapperClass}>
       {isLoading && (
-        <div 
-          className="absolute inset-0 bg-gradient-to-br from-climate-green/20 to-climate-blue/20 animate-pulse"
+        <div
+          className="absolute inset-0 bg-linear-to-br from-climate-green/20 to-climate-blue/20 animate-pulse"
           aria-hidden="true"
         />
       )}
       <Image
+        ref={imageRef}
         src={imgSrc}
         alt={alt}
         onError={handleError}
         onLoad={handleLoad}
+        onLoadingComplete={() => setIsLoading(false)}
         priority={priority}
         quality={IMAGE_QUALITY[qualityVariant]}
         placeholder="blur"
@@ -71,8 +96,10 @@ export function OptimizedImage({
         sizes={IMAGE_SIZES[sizeVariant]}
         className={cn(
           "transition-all duration-500 ease-out",
+          (props as any).fill ? "object-cover h-full w-full" : "",
           isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
-          hasError && "filter grayscale opacity-75"
+          hasError && "filter grayscale opacity-75",
+          className
         )}
         {...props}
       />

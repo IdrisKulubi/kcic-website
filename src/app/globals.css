@@ -5,50 +5,139 @@
 @import "../styles/accessibility.css";
 
 @custom-variant dark (&:is(.dark *));
-
+/* #8cc 745 */
 @theme inline {
+  /* Colors - Primitives */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  /* Sidebar Colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Climate Brand Colors */
+  --color-climate-green: var(--climate-green);
+  --color-climate-green-light: var(--climate-green-light);
+  --color-climate-green-dark: var(--climate-green-dark);
+  --color-climate-blue: var(--climate-blue);
+  --color-climate-blue-light: var(--climate-blue-light);
+  --color-climate-blue-dark: var(--climate-blue-dark);
+  --color-climate-yellow: var(--climate-yellow);
+  --color-climate-yellow-light: var(--climate-yellow-light);
+  --color-climate-yellow-dark: var(--climate-yellow-dark);
+
+  /* Brand Orange */
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-light: var(--brand-orange-light);
+  --color-brand-orange-dark: var(--brand-orange-dark);
+
+  /* Section Backgrounds */
+  --color-section-dark: var(--section-bg-dark);
+  --color-section-green: var(--section-bg-green);
+  --color-section-teal: var(--section-bg-teal);
+  --color-section-warm: var(--section-bg-warm);
+  --color-section-green-tint: var(--section-bg-green-tint);
+  --color-section-cyan-tint: var(--section-bg-cyan-tint);
+  --color-section-cream: var(--section-bg-cream);
+  
+  /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Font Sizes */
+  --text-display-2xl: clamp(2.5rem, 8vw, 6rem);
+  --text-display-2xl--line-height: 1.1;
+  --text-display-2xl--letter-spacing: -0.02em;
+  
+  --text-display-xl: clamp(2.25rem, 6vw, 4.5rem);
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -0.02em;
+  
+  --text-display-lg: clamp(1.875rem, 5vw, 3.5rem);
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--letter-spacing: -0.02em;
+  
+  --text-display-md: clamp(1.5rem, 4vw, 2.25rem);
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: -0.02em;
+  
+  --text-display-sm: clamp(1.25rem, 3vw, 1.875rem);
+  --text-display-sm--line-height: 1.3;
+  --text-display-sm--letter-spacing: -0.02em;
+
+  /* Animations */
+  --animate-fade-in: fadeIn var(--animation-duration-normal) var(--animation-easing) forwards;
+  --animate-fade-in-up: fadeInUp var(--animation-duration-normal) var(--animation-easing) forwards;
+  --animate-fade-in-down: fadeInDown var(--animation-duration-normal) var(--animation-easing) forwards;
+  --animate-scale-in: scaleIn var(--animation-duration-normal) var(--animation-easing-bounce) forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  /* Warm cream page background instead of pure white */
+  --background: #faf8f5;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -80,13 +169,31 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Climate-inspired color palette - Enhanced */
-  --climate-green: oklch(0.647 0.176 162.4);
-  --climate-green-light: oklch(0.747 0.156 162.4);
-  --climate-green-dark: oklch(0.547 0.196 162.4);
-  --climate-blue: oklch(0.647 0.176 230.4);
-  --climate-blue-light: oklch(0.747 0.156 230.4);
-  --climate-blue-dark: oklch(0.547 0.196 230.4);
+  /* Official KCIC Brand Colors */
+  --brand-green: #80c738;
+  --brand-blue: #00addd;
+  --brand-gray: #8b8d90;
+  --brand-white: #ffffff;
+  --brand-orange: #E97451;
+  --brand-orange-light: #F0906F;
+  --brand-orange-dark: #D05A35;
+
+  /* Section Background Tokens */
+  --section-bg-dark: #1a1f2e;
+  --section-bg-green: #1b3a1a;
+  --section-bg-teal: #0a2a33;
+  --section-bg-warm: #faf6f0;
+  --section-bg-green-tint: #f0f9e8;
+  --section-bg-cyan-tint: #e8f8fd;
+  --section-bg-cream: #faf8f5;
+  
+  /* Climate-inspired color palette - Brand aligned */
+  --climate-green: #80c738;
+  --climate-green-light: #9ddf4b;
+  --climate-green-dark: #66a02d;
+  --climate-blue: #00addd;
+  --climate-blue-light: #33c7ef;
+  --climate-blue-dark: #008ab1;
   --climate-yellow: oklch(0.747 0.176 85.4);
   --climate-yellow-light: oklch(0.847 0.156 85.4);
   --climate-yellow-dark: oklch(0.647 0.196 85.4);
@@ -174,13 +281,13 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* Dark mode climate colors - Enhanced */
-  --climate-green: oklch(0.697 0.156 162.4);
-  --climate-green-light: oklch(0.797 0.136 162.4);
-  --climate-green-dark: oklch(0.597 0.176 162.4);
-  --climate-blue: oklch(0.697 0.156 230.4);
-  --climate-blue-light: oklch(0.797 0.136 230.4);
-  --climate-blue-dark: oklch(0.597 0.176 230.4);
+  /* Dark mode climate colors - Brand aligned */
+  --climate-green: #9ddf4b;
+  --climate-green-light: #b5e778;
+  --climate-green-dark: #80c738;
+  --climate-blue: #33c7ef;
+  --climate-blue-light: #66d5f3;
+  --climate-blue-dark: #00addd;
   --climate-yellow: oklch(0.797 0.156 85.4);
   --climate-yellow-light: oklch(0.897 0.136 85.4);
   --climate-yellow-dark: oklch(0.697 0.176 85.4);
@@ -238,6 +345,11 @@
     backdrop-filter: blur(15px) saturate(150%);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   }
+
+  /* Brand utilities */
+  .text-brand { color: var(--climate-blue); }
+  .bg-brand { background-color: var(--climate-blue); }
+  .border-brand { border-color: var(--climate-blue); }
 
   /* Enhanced gradient utilities */
   .bg-hero-gradient {
@@ -580,7 +692,168 @@
     background: var(--climate-green-dark);
   }
 
+  /* ========================================================================
+     TYPOGRAPHY UTILITIES (Requirements 4.1-4.7)
+     ======================================================================== */
+
+  /* Display text utilities - For hero sections */
+  .text-display-2xl {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-xl {
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-lg {
+    font-size: clamp(1.875rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-md {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-display-sm {
+    font-size: clamp(1.25rem, 3vw, 1.875rem);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Heading utilities - Consistent with h1-h6 */
+  .text-h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .text-h3 {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .text-h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .text-h5 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .text-h6 {
+    font-size: clamp(0.9375rem, 1.5vw, 1.25rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  /* Body text utilities */
+  .text-body-xl {
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-lg {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-base {
+    font-size: clamp(0.9375rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .text-body-sm {
+    font-size: clamp(0.8125rem, 1vw, 0.875rem);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text-body-xs {
+    font-size: clamp(0.6875rem, 0.8vw, 0.75rem);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* Stats text utilities */
+  .text-stat-value {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-stat-label {
+    font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .text-stat-suffix {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  /* Font weight utilities */
+  .font-light { font-weight: 300; }
+  .font-normal { font-weight: 400; }
+  .font-medium { font-weight: 500; }
+  .font-semibold { font-weight: 600; }
+  .font-bold { font-weight: 700; }
+  .font-extrabold { font-weight: 800; }
+
+  /* Line height utilities */
+  .leading-tight { line-height: 1.1; }
+  .leading-snug { line-height: 1.2; }
+  .leading-normal { line-height: 1.5; }
+  .leading-relaxed { line-height: 1.6; }
+  .leading-loose { line-height: 1.7; }
+
+  /* Letter spacing utilities */
+  .tracking-tighter { letter-spacing: -0.02em; }
+  .tracking-tight { letter-spacing: -0.01em; }
+  .tracking-normal { letter-spacing: 0; }
+  .tracking-wide { letter-spacing: 0.025em; }
+  .tracking-wider { letter-spacing: 0.05em; }
+  .tracking-widest { letter-spacing: 0.1em; }
+
   /* Line clamp utilities */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -593,6 +866,22 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Text balance for better readability */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
   }
 
   /* Horizontal scroll snap */
@@ -826,10 +1115,52 @@
     font-weight: 600;
   }
 
-  /* Ensure headings have proper hierarchy */
+  /* Typography System - Consistent heading hierarchy (Requirement 4.2, 4.3) */
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-family: var(--font-geist-sans);
+    font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.2;
+  }
+
+  h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+    line-height: 1.3;
+  }
+
+  h5 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.3;
+  }
+
+  h6 {
+    font-size: clamp(0.9375rem, 1.5vw, 1.25rem);
+    line-height: 1.3;
+  }
+
+  /* Body text defaults (Requirement 4.3) */
+  body {
+    font-family: var(--font-geist-sans);
+    font-size: clamp(0.9375rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    letter-spacing: 0;
   }
 
   /* Improve list accessibility */

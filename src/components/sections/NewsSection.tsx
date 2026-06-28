@@ -1,26 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
-import { Calendar, Clock, ArrowUpRight, TrendingUp, Newspaper, BookOpen, Mic, PlayCircle } from "lucide-react";
-import { colors, typography } from '@/lib/design-system';
-import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
-import { Badge } from "@/components/ui/badge";
+import { useRef, useLayoutEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  PlayCircle,
+  CaretLeft,
+  CaretRight,
+  Headphones,
+} from "@phosphor-icons/react";
+import { typography } from "@/lib/design-system";
+import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export interface NewsItem {
   id: string;
   title: string;
   excerpt: string;
+  content?: string;
   publishedAt: string;
   category: string;
   imageUrl?: string;
   slug: string;
   readTime?: string;
   featured?: boolean;
-  type?: 'article' | 'video' | 'podcast' | 'report';
+  type?: "article" | "video" | "podcast" | "report";
+  youtubeUrl?: string;
   author?: {
     name: string;
     avatar?: string;
@@ -33,336 +47,613 @@ interface NewsSectionProps {
 }
 
 export function NewsSection({ news, className = "" }: NewsSectionProps) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  
-  // Categorize news
-  const categories = ['all', ...new Set(news.map(item => item.category))];
-  const filteredNews = selectedCategory === 'all' 
-    ? news 
-    : news.filter(item => item.category === selectedCategory);
-  
-  const featuredNews = filteredNews.filter(item => item.featured)[0];
-  const latestNews = filteredNews.filter(item => !item.featured).slice(0, 6);
+  const { shouldDisableAnimations } = useAccessibilityClasses();
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+  const rowsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [activePodcast, setActivePodcast] = useState<NewsItem | null>(null);
+  const [podcastEmbedUrl, setPodcastEmbedUrl] = useState<string>("");
+  const [activePodcastIndex, setActivePodcastIndex] = useState(0);
+
+  const isPodcastItem = (item: NewsItem) =>
+    item.type === "podcast" || item.category.toLowerCase().includes("podcast");
+
+  const extractYouTubeVideoId = (rawUrl?: string | null) => {
+    if (!rawUrl) return null;
+
+    try {
+      const normalized = rawUrl.trim().replace(/[),.;]+$/, "");
+      const url = new URL(normalized);
+      const host = url.hostname.replace("www.", "").toLowerCase();
+
+      if (host === "youtu.be") {
+        const id = url.pathname.split("/").filter(Boolean)[0];
+        return id?.slice(0, 11) || null;
+      }
+
+      if (host === "youtube.com" || host === "m.youtube.com") {
+        if (url.pathname.startsWith("/watch")) {
+          const id = url.searchParams.get("v");
+          return id?.slice(0, 11) || null;
+        }
+
+        if (url.pathname.startsWith("/embed/")) {
+          const id = url.pathname.split("/embed/")[1]?.split("/")[0];
+          return id?.slice(0, 11) || null;
+        }
+
+        if (url.pathname.startsWith("/shorts/")) {
+          const id = url.pathname.split("/shorts/")[1]?.split("/")[0];
+          return id?.slice(0, 11) || null;
+        }
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const extractYouTubeUrl = (rawText?: string) => {
+    if (!rawText) return null;
+
+    const matched = rawText.match(
+      /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)[\w-]{11}[^\s]*|youtu\.be\/[\w-]{11}[^\s]*))/i
+    );
+
+    return matched?.[1] ?? null;
+  };
+
+  const toEmbedUrl = (rawUrl?: string | null) => {
+    const videoId = extractYouTubeVideoId(rawUrl);
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+      : null;
+  };
+
+  const resolvePodcastEmbed = (item: NewsItem) => {
+    const parsedFromYoutubeField = toEmbedUrl(item.youtubeUrl);
+    const parsedFromContent = toEmbedUrl(extractYouTubeUrl(item.content));
+    const parsedFromExcerpt = toEmbedUrl(extractYouTubeUrl(item.excerpt));
+    return parsedFromYoutubeField || parsedFromContent || parsedFromExcerpt;
+  };
+
+  const resolvePodcastThumbnail = (item: NewsItem) => {
+    if (item.imageUrl) return item.imageUrl;
+
+    const fromYoutubeField = extractYouTubeVideoId(item.youtubeUrl);
+    const fromContent = extractYouTubeVideoId(extractYouTubeUrl(item.content));
+    const fromExcerpt = extractYouTubeVideoId(extractYouTubeUrl(item.excerpt));
+    const videoId = fromYoutubeField || fromContent || fromExcerpt;
+
+    return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
+  };
+
+  const sortedNews = useMemo(
+    () =>
+      [...news].sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      ),
+    [news]
+  );
+
+  const fallbackPodcasts = useMemo<NewsItem[]>(() => {
+    const today = new Date().toISOString().split("T")[0];
+
+    return [
+      {
+        id: "fallback-podcast-1",
+        title: "Climate Innovation Conversations - Episode 01",
+        excerpt: "A deep-dive on financing climate-smart enterprises in Africa.",
+        publishedAt: today,
+        category: "Podcast",
+        slug: "podcast-episode-1",
+        type: "podcast",
+        youtubeUrl: "https://youtu.be/wA7P2Y3ZOao?si=RSomYM59Wx2vioyb",
+      },
+      {
+        id: "fallback-podcast-2",
+        title: "Green Growth Dialogues - Episode 02",
+        excerpt: "How founders scale clean technology from pilot to market.",
+        publishedAt: today,
+        category: "Podcast",
+        slug: "podcast-episode-2",
+        type: "podcast",
+        youtubeUrl: "https://youtu.be/yeBGRz16lkM?si=L4CUlwZ2SGctZU6u",
+      },
+    ];
+  }, []);
+
+  const featuredPodcasts = useMemo(() => {
+    const podcasts = sortedNews.filter(
+      (item) => isPodcastItem(item) && Boolean(resolvePodcastEmbed(item))
+    );
+    const ensured = [...podcasts];
+
+    if (ensured.length < 2) {
+      ensured.push(...fallbackPodcasts.slice(0, 2 - ensured.length));
+    }
+
+    return ensured.slice(0, 2);
+  }, [sortedNews, fallbackPodcasts]);
+
+  const latestArticles = useMemo(() => {
+    const nonPodcasts = sortedNews.filter((item) => !isPodcastItem(item));
+    return nonPodcasts.slice(0, 3);
+  }, [sortedNews]);
+
+  const podcastEmbedMap = useMemo(() => {
+    const map = new Map<string, string>();
+
+    featuredPodcasts.forEach((item) => {
+      if (!isPodcastItem(item)) return;
+
+      const embed = resolvePodcastEmbed(item);
+      if (embed) {
+        map.set(item.id, embed);
+      }
+    });
+
+    return map;
+  }, [featuredPodcasts]);
+
+  const currentPodcast =
+    featuredPodcasts[activePodcastIndex] ?? featuredPodcasts[0] ?? null;
+  const currentPodcastThumbnail = currentPodcast
+    ? resolvePodcastThumbnail(currentPodcast)
+    : null;
+
+  const handlePodcastOpen = (item?: NewsItem | null) => {
+    if (!item) return;
+    const embed = podcastEmbedMap.get(item.id);
+    if (!embed) return;
+    setActivePodcast(item);
+    setPodcastEmbedUrl(embed);
+  };
+
+  const closePodcastModal = () => {
+    setActivePodcast(null);
+    setPodcastEmbedUrl("");
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays < 7) {
-      return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
-    }
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    return date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   };
 
-  const getTypeIcon = (type?: string) => {
-    switch (type) {
-      case 'video': return <PlayCircle className="h-4 w-4" />;
-      case 'podcast': return <Mic className="h-4 w-4" />;
-      case 'report': return <BookOpen className="h-4 w-4" />;
-      default: return <Newspaper className="h-4 w-4" />;
-    }
+  useLayoutEffect(() => {
+    if (shouldDisableAnimations?.() || !sectionRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            force3D: true,
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      if (panelRef.current) {
+        gsap.fromTo(
+          panelRef.current,
+          { opacity: 0, y: 30, scale: 0.98 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            force3D: true,
+            scrollTrigger: {
+              trigger: panelRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      if (leftRef.current) {
+        gsap.fromTo(
+          leftRef.current,
+          { opacity: 0, x: -30 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: leftRef.current,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      if (rightRef.current) {
+        gsap.fromTo(
+          rightRef.current,
+          { opacity: 0, x: 30 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: rightRef.current,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      rowsRef.current.forEach((row, index) => {
+        if (!row) return;
+        gsap.fromTo(
+          row,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: "power2.out",
+            delay: index * 0.1,
+            scrollTrigger: {
+              trigger: row,
+              start: "top 92%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+      ScrollTrigger.refresh();
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [shouldDisableAnimations]);
+
+  const showPreviousPodcast = () => {
+    if (featuredPodcasts.length <= 1) return;
+    setActivePodcastIndex((current) =>
+      current === 0 ? featuredPodcasts.length - 1 : current - 1
+    );
   };
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      'Innovation': 'from-blue-500 to-indigo-500',
-      'Sustainability': 'from-green-500 to-emerald-500',
-      'Technology': 'from-purple-500 to-pink-500',
-      'Impact': 'from-orange-500 to-red-500',
-      'Events': 'from-cyan-500 to-blue-500',
-    };
-    return colors[category as keyof typeof colors] || 'from-gray-500 to-gray-600';
+  const showNextPodcast = () => {
+    if (featuredPodcasts.length <= 1) return;
+    setActivePodcastIndex((current) =>
+      current === featuredPodcasts.length - 1 ? 0 : current + 1
+    );
+  };
+
+  const resolveCategoryTone = (category: string) => {
+    const normalized = category.toLowerCase();
+    if (normalized.includes("blog")) {
+      return "text-[#0b6f8b]";
+    }
+    if (normalized.includes("feature")) {
+      return "text-[#1f7a3f]";
+    }
+    if (normalized.includes("event")) {
+      return "text-[#c35b3f]";
+    }
+    return "text-[#3c7f1c]";
   };
 
   return (
-    <section className={cn("py-20 sm:py-32 bg-white", className)}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className={getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000')}>
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-gray-200">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              Latest Updates
-            </Badge>
-            <h2 
-              className="font-bold mb-4"
+    <section
+      ref={sectionRef}
+      className={cn("relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-12 sm:py-14", className)}
+    >
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
+          ref={headerRef}
+          className="mb-8 grid items-end gap-5 border-b-[3px] border-[#101010] pb-6 lg:grid-cols-[0.9fr_1.1fr]"
+        >
+          <div>
+            <p className="mb-3 inline-flex border-2 border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[3px_3px_0_#101010]">
+              KCIC newsroom
+            </p>
+            <h2
+              className="max-w-[10ch] font-black leading-[0.92] text-[#101010]"
               style={{
-                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                fontSize: "clamp(3rem, 6vw, 5rem)",
                 fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-                lineHeight: typography.lineHeights.tight,
               }}
             >
               News & Insights
             </h2>
-            <p 
-              className="text-lg max-w-3xl mx-auto"
+          </div>
+            <p
+              className="max-w-3xl font-black leading-8 text-[#101010]"
               style={{
+                fontSize: "clamp(1rem, 1.55vw, 1.25rem)",
                 fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-                lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              Discover the latest stories, research, and updates from our climate innovation ecosystem
+              A featured podcast preview on one side, with our latest stories
+              stacked alongside it.
             </p>
-          </div>
         </div>
 
-        {/* Category Tabs */}
-        <Tabs defaultValue="all" className="w-full mb-12">
-          <TabsList className="flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0 mb-12">
-            {categories.map((category) => (
-              <TabsTrigger 
-                key={category}
-                value={category}
-                onClick={() => setSelectedCategory(category)}
-                className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white capitalize"
+        <div
+          ref={panelRef}
+          className="border-[3px] border-[#101010] bg-[#fff7df] p-0 shadow-[8px_8px_0_#101010]"
+        >
+          <div className="grid lg:grid-cols-[1.18fr_0.82fr] lg:divide-x-[3px] lg:divide-[#101010]">
+            <div ref={leftRef} className="p-5 sm:p-6 lg:p-7">
+              <div className="mb-5 flex items-center justify-between gap-4 border-b-[3px] border-[#101010] pb-4">
+                <div
+                  className="font-black uppercase leading-tight text-[#101010]"
+                  style={{
+                    fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
+                    fontFamily: typography.fonts.heading,
+                  }}
+                >
+                  Podcasts
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={showPreviousPodcast}
+                    className="h-10 w-10 border-2 border-[#101010] bg-[#fff7df] text-[#101010] shadow-[3px_3px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738]"
+                    aria-label="Previous podcast"
+                  >
+                    <CaretLeft className="mx-auto h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={showNextPodcast}
+                    className="h-10 w-10 border-2 border-[#101010] bg-[#fff7df] text-[#101010] shadow-[3px_3px_0_#101010] transition hover:-translate-y-0.5 hover:bg-[#80c738]"
+                    aria-label="Next podcast"
+                  >
+                    <CaretRight className="mx-auto h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handlePodcastOpen(currentPodcast)}
+                className="group block w-full text-left"
+                aria-label={`Play podcast: ${
+                  currentPodcast?.title || "Featured podcast"
+                }`}
               >
-                {category}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          <TabsContent value={selectedCategory} className="mt-0">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* Featured Article */}
-              {featuredNews && (
-                <div className={cn(
-                  "lg:col-span-7",
-                  getMotionSafeClasses('animate-in fade-in slide-in-from-left duration-1000')
-                )}>
-                  <Card className="h-full group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500">
-                    {featuredNews.imageUrl && (
-                      <div className="relative h-96 overflow-hidden">
+                <div className="relative aspect-[16/11] overflow-hidden border-[3px] border-[#101010] bg-[#00addd] p-4 shadow-[6px_6px_0_#101010] sm:p-5">
+                  <div className="relative h-full w-full overflow-hidden border-2 border-[#101010] bg-[#101010]">
+                    {currentPodcastThumbnail ? (
+                      currentPodcastThumbnail.startsWith("http") ? (
                         <img
-                          src={featuredNews.imageUrl}
-                          alt={featuredNews.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          src={currentPodcastThumbnail}
+                          alt={currentPodcast?.title || "Podcast preview"}
+                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                          loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                        <div className="absolute bottom-6 left-6 right-6">
-                          <Badge className={cn(
-                            "mb-3 text-white border-0 bg-gradient-to-r",
-                            getCategoryColor(featuredNews.category)
-                          )}>
-                            {featuredNews.category}
-                          </Badge>
-                          <h3 className="text-white font-bold text-3xl mb-2" style={{ fontFamily: typography.fonts.heading }}>
-                            {featuredNews.title}
-                          </h3>
-                          <p className="text-white/90 line-clamp-2">
-                            {featuredNews.excerpt}
-                          </p>
-                        </div>
-                        <Badge className="absolute top-6 right-6 bg-yellow-500 text-white border-0">
-                          Featured
-                        </Badge>
+                      ) : (
+                        <Image
+                          src={currentPodcastThumbnail}
+                          alt={currentPodcast?.title || "Podcast preview"}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 60vw"
+                          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+                      )
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/95">
+                        <Headphones className="h-14 w-14" weight="duotone" />
+                        <span className="text-sm font-semibold tracking-wide uppercase">
+                          Podcast Episode
+                        </span>
                       </div>
                     )}
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                        <div className="flex items-center gap-4">
-                          {featuredNews.author && (
-                            <div className="flex items-center gap-2">
-                              {featuredNews.author.avatar && (
-                                <img 
-                                  src={featuredNews.author.avatar} 
-                                  alt={featuredNews.author.name}
-                                  className="w-6 h-6 rounded-full"
-                                />
-                              )}
-                              <span className="font-medium">{featuredNews.author.name}</span>
-                            </div>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {formatDate(featuredNews.publishedAt)}
-                          </span>
-                        </div>
-                        {featuredNews.readTime && (
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {featuredNews.readTime}
-                          </span>
-                        )}
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        className="p-0 h-auto font-semibold text-green-600 hover:text-green-700 group"
-                      >
-                        Read Full Story
-                        <ArrowUpRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
+                  </div>
 
-              {/* Latest Articles Grid */}
-              <div className={cn(
-                "lg:col-span-5 space-y-4",
-                getMotionSafeClasses('animate-in fade-in slide-in-from-right duration-1000 delay-200')
-              )}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-lg" style={{ fontFamily: typography.fonts.heading }}>
-                    Latest Articles
-                  </h3>
-                  <Button variant="ghost" size="sm" className="text-gray-500">
-                    View All
-                    <ArrowUpRight className="ml-1 h-3 w-3" />
-                  </Button>
+                  <div className="absolute inset-4 bg-linear-to-t from-black/65 via-black/15 to-transparent sm:inset-5" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="inline-flex h-16 w-16 items-center justify-center border-[3px] border-[#101010] bg-[#80c738] text-[#101010] shadow-[4px_4px_0_#101010] transition-transform duration-300 group-hover:scale-105">
+                      <PlayCircle className="h-9 w-9" weight="fill" />
+                    </span>
+                  </div>
+                  <div className="absolute bottom-6 left-6 right-6 text-white sm:bottom-8 sm:left-8 sm:right-8">
+                    <span
+                      className="mb-1 block uppercase tracking-wider text-white/80"
+                      style={{ fontSize: "11px", lineHeight: "14px" }}
+                    >
+                      Podcast
+                    </span>
+                    <div
+                      className="line-clamp-2 font-semibold leading-tight"
+                      style={{
+                        fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
+                        lineHeight: "1.2",
+                        margin: 0,
+                      }}
+                    >
+                      {currentPodcast?.title || "Podcast Episode"}
+                    </div>
+                  </div>
                 </div>
-                
-                {latestNews.slice(0, 3).map((article, index) => (
-                  <Card 
-                    key={article.id} 
-                    className={cn(
-                      "group hover:shadow-lg transition-all duration-300 border-gray-100",
-                      getMotionSafeClasses(`animate-in fade-in slide-in-from-right duration-1000 delay-${(index + 1) * 100}`)
-                    )}
+              </button>
+
+              <div className="mt-5 space-y-2 border-t-[3px] border-[#101010] pt-4">
+                {featuredPodcasts.slice(0, 2).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handlePodcastOpen(item)}
+                    className="flex w-full items-start justify-between gap-3 border-2 border-[#101010] bg-[#fff7df] px-4 py-3 text-left transition hover:-translate-y-0.5 hover:bg-[#e5f7c9]"
                   >
-                    <CardContent className="p-4">
-                      <div className="flex gap-4">
-                        {article.imageUrl && (
-                          <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
-                            <img
-                              src={article.imageUrl}
-                              alt={article.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="secondary" className="text-xs">
-                              {getTypeIcon(article.type)}
-                              <span className="ml-1">{article.category}</span>
-                            </Badge>
-                            <span className="text-xs text-gray-500">
-                              {formatDate(article.publishedAt)}
-                            </span>
-                          </div>
-                          <h4 className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-green-600 transition-colors">
-                            {article.title}
-                          </h4>
-                          <p className="text-sm text-gray-600 line-clamp-1">
-                            {article.excerpt}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    <span className="min-w-0">
+                      <span className="block line-clamp-2 text-sm font-black leading-5 text-[#101010]">
+                        {item.title}
+                      </span>
+                      {item.publishedAt ? (
+                        <span className="mt-1 block text-xs font-semibold leading-5 text-[#4d4a3d]">
+                          {formatDate(item.publishedAt)}
+                        </span>
+                      ) : null}
+                    </span>
+                    <PlayCircle
+                      className="mt-1 h-5 w-5 shrink-0 text-[#80c738]"
+                      weight="fill"
+                    />
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Bottom Grid - More Articles */}
-            <div className="mt-12">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-semibold text-xl" style={{ fontFamily: typography.fonts.heading }}>
-                  More Stories
-                </h3>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="rounded-full">
-                    <PlayCircle className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" className="rounded-full">
-                    <Mic className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" className="rounded-full">
-                    <BookOpen className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {latestNews.slice(3, 6).map((article, index) => (
-                  <Card 
-                    key={article.id}
-                    className={cn(
-                      "group hover:shadow-xl transition-all duration-300 overflow-hidden",
-                      getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 100}`)
-                    )}
-                  >
-                    {article.imageUrl && (
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={article.imageUrl}
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        <Badge className={cn(
-                          "absolute top-3 left-3 text-white border-0 bg-gradient-to-r text-xs",
-                          getCategoryColor(article.category)
-                        )}>
-                          {article.category}
-                        </Badge>
-                      </div>
-                    )}
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-                        <span>{formatDate(article.publishedAt)}</span>
-                        {article.readTime && <span>{article.readTime}</span>}
-                      </div>
-                      <CardTitle className="text-lg line-clamp-2 group-hover:text-green-600 transition-colors">
-                        {article.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="line-clamp-2">
-                        {article.excerpt}
-                      </CardDescription>
-                    </CardContent>
-                    <CardFooter className="pt-0">
-                      <Button variant="link" className="p-0 h-auto text-green-600 group">
-                        Read More
-                        <ArrowUpRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Newsletter CTA */}
-        <div className="mt-20">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 text-center text-white">
-            <h3 
-              className="font-bold mb-4"
-              style={{
-                fontSize: typography.sizes.heading.h3,
-                fontFamily: typography.fonts.heading,
-              }}
+            <div
+              ref={rightRef}
+              className="border-t-[3px] border-[#101010] p-5 sm:p-6 lg:border-t-0 lg:p-7"
             >
-              Never Miss an Update
-            </h3>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-              Subscribe to our newsletter and get the latest climate innovation news delivered to your inbox
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input 
-                type="email" 
-                placeholder="Enter your email"
-                className="flex-1 px-6 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-gray-400 focus:outline-none focus:border-white/40"
-              />
-              <Button 
-                className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-600 hover:to-cyan-600 text-white font-semibold"
+              <div
+                className="mb-5 border-b-[3px] border-[#101010] pb-4 font-black uppercase leading-tight text-[#101010]"
+                style={{
+                  fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
+                  fontFamily: typography.fonts.heading,
+                }}
               >
-                Subscribe
-              </Button>
+                Latest Stories
+              </div>
+
+              <div className="space-y-0 border-y-[3px] border-[#101010]">
+                {latestArticles.map((item, index) => (
+                  <Link
+                    key={item.id}
+                    href={`/news/${item.slug}`}
+                    ref={(el) => {
+                      rowsRef.current[index] = el;
+                    }}
+                    className="group block border-b-2 border-[#101010] py-4 transition hover:bg-[#e5f7c9] last:border-b-0 sm:px-3"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div
+                          className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1"
+                          style={{ fontSize: "11px", lineHeight: "14px" }}
+                        >
+                          <span
+                            className={cn(
+                              "font-black uppercase tracking-wider",
+                              resolveCategoryTone(item.category || "News")
+                            )}
+                          >
+                            {item.category || "News"}
+                          </span>
+                          <span className="text-gray-400">&middot;</span>
+                          <span className="font-semibold text-[#4d4a3d]">
+                            {formatDate(item.publishedAt)}
+                          </span>
+                        </div>
+                        <div
+                          className="font-black leading-snug text-[#101010] group-hover:underline decoration-[#80c738] underline-offset-4"
+                          style={{
+                            fontSize: "clamp(0.98rem, 1.1vw, 1.08rem)",
+                          }}
+                        >
+                          {item.title}
+                        </div>
+                        {item.excerpt ? (
+                          <p className="mt-2 line-clamp-2 text-sm font-semibold leading-6 text-[#4d4a3d]">
+                            {item.excerpt}
+                          </p>
+                        ) : null}
+                      </div>
+
+                      {item.imageUrl ? (
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden border-2 border-[#101010] bg-[#fff7df] shadow-[3px_3px_0_#101010] sm:h-28 sm:w-28">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.title}
+                            fill
+                            sizes="112px"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      ) : (
+                        <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center border-2 border-[#101010] bg-[#80c738] text-[#101010] transition group-hover:-translate-y-0.5">
+                          <ArrowUpRight className="h-4 w-4" />
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+
+                {latestArticles.length === 0 && (
+                  <p className="border-2 border-dashed border-[#101010] bg-[#fff7df] p-5 text-sm font-semibold text-[#4d4a3d]">
+                    No latest updates available yet.
+                  </p>
+                )}
+              </div>
+
+              <Link href="/newsroom">
+                <Button className="mt-5 h-auto bg-transparent py-2 pl-0 pr-0 text-sm font-black uppercase text-[#101010] hover:bg-transparent">
+                  <span className="mr-3 inline-flex h-10 w-10 items-center justify-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010]">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                  Explore newsroom
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={Boolean(activePodcast)}
+        onOpenChange={(open) => !open && closePodcastModal()}
+      >
+        <DialogContent
+          className="sm:max-w-4xl p-0 overflow-hidden"
+          showCloseButton
+        >
+          <DialogTitle className="sr-only">Podcast Player</DialogTitle>
+          <div className="bg-black">
+            {podcastEmbedUrl && (
+              <div className="relative w-full pt-[56.25%]">
+                <iframe
+                  title={activePodcast?.title || "Podcast"}
+                  src={podcastEmbedUrl}
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
+          <div className="bg-[#fff7df] px-4 pb-4 pt-3">
+            <p className="line-clamp-2 text-sm font-black text-[#101010]">
+              {activePodcast?.title}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

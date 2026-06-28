@@ -1,20 +1,23 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import { colors, typography } from '@/lib/design-system';
-import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Globe2, Users, Award, Building2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { useLayoutEffect, useMemo, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import {
+  drawSvgPaths,
+  gsap,
+  marqueeLoop,
+  prefersReducedMotion,
+  registerGsapFoundation,
+  ScrollTrigger,
+} from "@/lib/gsap-foundation";
 
 export interface PartnerData {
   id: string;
   name: string;
   logo: string;
-  category?: 'donor' | 'partner' | 'supporter' | 'collaborator';
+  category?: "donor" | "partner" | "supporter" | "collaborator";
   description?: string;
   website?: string;
   featured?: boolean;
@@ -26,246 +29,272 @@ interface PartnersSectionProps {
   subtitle?: string;
 }
 
-export function PartnersSection({ 
-  partners, 
-  title = "Partners & Donors",
-  subtitle = "Collaborating with world-class organizations to accelerate climate innovation"
-}: PartnersSectionProps) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-  const [selectedCategory, setSelectedCategory] = useState<'all' | string>('all');
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+function PartnerLogoTile({ partner, index }: { partner: PartnerData; index: number }) {
+  const content = (
+    <div className="group relative flex h-full min-h-[150px] flex-col justify-between overflow-hidden border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[7px_7px_0_#101010] transition duration-500 ease-out hover:-translate-y-1 hover:rotate-[-0.35deg] hover:shadow-[10px_10px_0_#80c738]">
+      <div className="flex items-start justify-between gap-3">
+        <span className="bg-[#101010] px-2 py-1 text-xs font-black text-[#fff7df]">0{(index % 9) + 1}</span>
+        {partner.website ? (
+          <span className="grid h-8 w-8 place-items-center border-2 border-[#101010] bg-[#80c738] text-[#101010] shadow-[3px_3px_0_#101010] transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+            <ArrowUpRight className="h-4 w-4" weight="bold" aria-hidden="true" />
+          </span>
+        ) : null}
+      </div>
 
-  // Categorize partners
-  const categorizedPartners = partners.reduce((acc, partner) => {
-    const category = partner.category || 'supporter';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(partner);
-    return acc;
-  }, {} as Record<string, PartnerData[]>);
+      <div className="relative mx-auto my-5 h-16 w-full max-w-[170px]">
+        <Image
+          src={partner.logo || "/images/placeholder-logo.png"}
+          alt={partner.name}
+          fill
+          unoptimized
+          sizes="(min-width: 1024px) 170px, (min-width: 640px) 150px, 45vw"
+          className="object-contain transition duration-500 group-hover:scale-105"
+        />
+      </div>
 
-  
-  // Filter partners by category
-  const displayPartners = selectedCategory === 'all' 
-    ? partners 
-    : categorizedPartners[selectedCategory] || [];
+      <p className="line-clamp-2 border-t-[3px] border-[#101010] pt-3 text-sm font-black uppercase leading-tight text-[#101010]">
+        {partner.name}
+      </p>
+    </div>
+  );
 
-  // Duplicate for infinite scroll
-  const scrollPartners = [...partners, ...partners, ...partners];
-
-  const categoryIcons = {
-    donor: <Award className="h-4 w-4" />,
-    partner: <Users className="h-4 w-4" />,
-    supporter: <Globe2 className="h-4 w-4" />,
-    collaborator: <Building2 className="h-4 w-4" />
-  };
+  if (!partner.website) {
+    return (
+      <article data-partner-card className="h-full">
+        {content}
+      </article>
+    );
+  }
 
   return (
-    <section className="py-20 sm:py-32 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className={getMotionSafeClasses('animate-in fade-in slide-in-from-bottom-8 duration-1000')}>
-            <Badge className="mb-4 px-4 py-1.5 bg-gradient-to-r from-green-50 to-cyan-50 text-green-700 border-green-200">
-              <Sparkles className="h-3 w-3 mr-1" />
-              Trusted by Industry Leaders
-            </Badge>
-            <h2 
-              className="font-bold mb-4"
-              style={{
-                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-                lineHeight: typography.lineHeights.tight,
-              }}
+    <Link
+      href={partner.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-partner-card
+      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#335016] focus-visible:ring-offset-4"
+    >
+      {content}
+    </Link>
+  );
+}
+
+function PartnerTickerLogo({ partner }: { partner: PartnerData }) {
+  return (
+    <div className="mx-3 flex h-24 w-44 shrink-0 items-center justify-center border-[3px] border-[#101010] bg-[#fff7df] px-5 shadow-[5px_5px_0_#101010]">
+      <div className="relative h-14 w-full">
+        <Image
+          src={partner.logo || "/images/placeholder-logo.png"}
+          alt={partner.name}
+          fill
+          unoptimized
+          sizes="176px"
+          className="object-contain"
+        />
+      </div>
+    </div>
+  );
+}
+
+export function PartnersSection({
+  partners,
+  title = "Our Partners",
+  subtitle = "A delivery network behind climate enterprises, funders, public institutions, and ecosystem builders.",
+}: PartnersSectionProps) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { topRow, bottomRow, repeatedPartners } = useMemo(() => {
+    const safePartners = partners.filter((partner) => partner.id && partner.logo);
+    const midpoint = Math.ceil(safePartners.length / 2);
+    const first = safePartners.slice(0, midpoint);
+    const second = safePartners.slice(midpoint);
+    const fallbackSecond = second.length > 0 ? second : first;
+
+    return {
+      topRow: [...first, ...first, ...first, ...first],
+      bottomRow: [...fallbackSecond, ...fallbackSecond, ...fallbackSecond, ...fallbackSecond],
+      repeatedPartners: safePartners,
+    };
+  }, [partners]);
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current || repeatedPartners.length === 0) return;
+
+    registerGsapFoundation();
+    if (prefersReducedMotion()) return;
+
+    let cleanupHoverPause: (() => void) | undefined;
+
+    const ctx = gsap.context(() => {
+      gsap.set("[data-partner-word]", { yPercent: 110, rotate: 2 });
+
+      const intro = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+        },
+        defaults: { ease: "power4.out" },
+      });
+
+      intro
+        .add(drawSvgPaths("[data-partner-line]", { dash: 560, duration: 0.9, stagger: 0.05 }))
+        .to("[data-partner-word]", { yPercent: 0, rotate: 0, duration: 0.78, stagger: 0.08 }, "-=0.35")
+        .from("[data-partner-copy]", { autoAlpha: 0, y: 18, duration: 0.55 }, "-=0.35");
+
+      const leftMarquee = marqueeLoop("[data-partner-marquee-left]", { duration: 100 });
+      const rightMarquee = gsap.to("[data-partner-marquee-right]", {
+        xPercent: 50,
+        duration: 100,
+        repeat: -1,
+        ease: "none",
+      });
+
+      const pauseMarquees = () => {
+        leftMarquee.pause();
+        rightMarquee.pause();
+      };
+      const resumeMarquees = () => {
+        leftMarquee.resume();
+        rightMarquee.resume();
+      };
+      const rails = gsap.utils.toArray<HTMLElement>("[data-partner-rail]");
+      rails.forEach((rail) => {
+        rail.addEventListener("pointerenter", pauseMarquees);
+        rail.addEventListener("pointerleave", resumeMarquees);
+        rail.addEventListener("focusin", pauseMarquees);
+        rail.addEventListener("focusout", resumeMarquees);
+      });
+      cleanupHoverPause = () => {
+        rails.forEach((rail) => {
+          rail.removeEventListener("pointerenter", pauseMarquees);
+          rail.removeEventListener("pointerleave", resumeMarquees);
+          rail.removeEventListener("focusin", pauseMarquees);
+          rail.removeEventListener("focusout", resumeMarquees);
+        });
+      };
+
+      gsap.utils.toArray<HTMLElement>("[data-partner-card]").forEach((card, index) => {
+        gsap.from(card, {
+          y: 32,
+          rotate: index % 2 === 0 ? -1.1 : 1.1,
+          duration: 0.72,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.to("[data-partner-rail]", {
+        x: (index) => (index % 2 === 0 ? -12 : 12),
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      });
+
+      gsap.delayedCall(0.2, () => ScrollTrigger.refresh());
+    }, sectionRef);
+
+    return () => {
+      cleanupHoverPause?.();
+      ctx.revert();
+    };
+  }, [repeatedPartners.length]);
+
+  if (repeatedPartners.length === 0) {
+    return null;
+  }
+
+  return (
+    <section ref={sectionRef} className="relative isolate overflow-hidden border-y-[5px] border-[#101010] bg-[#fff7df] py-14 text-[#101010] sm:py-16">
+      <div className="absolute inset-x-0 top-0 -z-10 h-16 border-b-[5px] border-[#101010] bg-[#80c738]" aria-hidden="true" />
+      <svg className="absolute right-[-5rem] top-20 -z-10 hidden h-[360px] w-[560px] text-[#101010]/45 lg:block" viewBox="0 0 560 360" fill="none" aria-hidden="true">
+        <path data-partner-line d="M28 286C112 126 228 190 310 96C392 1 464 80 536 28" stroke="currentColor" strokeWidth="3" strokeDasharray="10 12" />
+        <path data-partner-line d="M37 328C149 274 213 342 310 269C416 190 475 285 540 214" stroke="currentColor" strokeWidth="2" strokeDasharray="8 10" />
+        <path data-partner-line d="M84 62H480V318H84V62Z" stroke="currentColor" strokeWidth="2" />
+        <path data-partner-line d="M84 190H480" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+        <path data-partner-line d="M282 62V318" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+      </svg>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p className="inline-flex -rotate-1 items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-2 text-sm font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010]">
+              Partner network
+            </p>
+            <h2
+              aria-label={title}
+              className="mt-7 max-w-4xl overflow-hidden font-black uppercase leading-[0.9] tracking-normal text-[#101010]"
+              style={{ fontSize: "clamp(2.65rem, 6vw, 4.75rem)" }}
             >
-              {title}
+              <span className="block overflow-hidden pb-1">
+                <span data-partner-word className="block">
+                  Partners
+                </span>
+              </span>
+              <span className="block overflow-hidden pb-2">
+                <span data-partner-word className="inline-block bg-[#80c738] px-3 text-[#0b110d]">
+                  in motion.
+                </span>
+              </span>
             </h2>
-            <p 
-              className="text-lg max-w-3xl mx-auto"
-              style={{
-                fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-                lineHeight: typography.lineHeights.relaxed,
-              }}
-            >
-              {subtitle}
+          </div>
+          <div data-partner-copy className="border-[3px] border-[#101010] bg-[#fff7df] p-5 shadow-[8px_8px_0_#101010]">
+            <p className="text-base font-medium leading-8 text-[#28261d]">{subtitle}</p>
+            <p className="mt-4 inline-block bg-[#101010] px-3 py-1.5 text-sm font-black uppercase text-[#fff7df]">
+              {repeatedPartners.length} organizations
             </p>
-          </div>
-        </div>
-
-      
-
-        {/* Category Tabs */}
-        <div className="mb-12">
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0">
-              <TabsTrigger 
-                value="all"
-                onClick={() => setSelectedCategory('all')}
-                className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
-              >
-                All ({partners.length})
-              </TabsTrigger>
-              {Object.entries(categorizedPartners).map(([category, items]) => (
-                <TabsTrigger 
-                  key={category}
-                  value={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className="px-6 py-2 rounded-full bg-gray-100 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white"
-                >
-                  <span className="flex items-center gap-2">
-                    {categoryIcons[category as keyof typeof categoryIcons]}
-                    {category.charAt(0).toUpperCase() + category.slice(1)}s ({items.length})
-                  </span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            <TabsContent value="all" className="mt-8">
-              <PartnerGrid partners={displayPartners} />
-            </TabsContent>
-            {Object.keys(categorizedPartners).map(category => (
-              <TabsContent key={category} value={category} className="mt-8">
-                <PartnerGrid partners={categorizedPartners[category]} />
-              </TabsContent>
-            ))}
-          </Tabs>
-        </div>
-
-        {/* Infinite Scroll Marquee */}
-        <div className="relative mt-20 py-12 border-y border-gray-100">
-          <div className="text-center mb-8">
-            <p className="text-sm text-gray-500 uppercase tracking-wider">All Partners</p>
-          </div>
-          
-          <div className="relative overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
-            
-            <div 
-              ref={scrollRef}
-              className="flex gap-12"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              <div 
-                className={cn(
-                  "flex gap-12 animate-scroll",
-                  isPaused && "animation-paused"
-                )}
-                style={{
-                  animation: 'scroll 40s linear infinite',
-                }}
-              >
-                {scrollPartners.map((partner, index) => (
-                  <div key={`scroll-${index}`} className="flex-shrink-0">
-                    <Image
-                      src={partner.logo || '/images/placeholder-logo.png'}
-                      alt={partner.name}
-                      className="h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="mt-20">
-          <div className="bg-gradient-to-br from-green-50 via-cyan-50 to-green-50 rounded-3xl p-12 text-center">
-            <h3 
-              className="font-bold mb-4"
-              style={{
-                fontSize: typography.sizes.heading.h3,
-                fontFamily: typography.fonts.heading,
-                color: colors.secondary.gray[900],
-              }}
-            >
-              Join Our Network
-            </h3>
-            <p 
-              className="text-lg mb-8 max-w-2xl mx-auto"
-              style={{
-                fontFamily: typography.fonts.body,
-                color: colors.secondary.gray[600],
-              }}
-            >
-              Partner with us to accelerate climate innovation and create lasting impact across Africa.
-            </p>
-            <Button
-              className="px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
-              style={{
-                background: colors.gradients.primary,
-                color: 'white',
-                fontFamily: typography.fonts.body,
-              }}
-              asChild
-            >
-              <a href="/contact">
-                Become a Partner
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-33.333%);
-          }
-        }
-        .animate-scroll {
-          animation: scroll 40s linear infinite;
-        }
-        .animation-paused {
-          animation-play-state: paused;
-        }
-      `}</style>
-    </section>
-  );
-}
-
-// Partner Grid Component
-function PartnerGrid({ partners }: { partners: PartnerData[] }) {
-  const { getMotionSafeClasses } = useAccessibilityClasses();
-  
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-      {partners.map((partner, index) => (
-        <a
-          key={partner.id}
-          href={partner.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "group relative bg-white rounded-xl p-6 border border-gray-100",
-            "hover:border-gray-200 hover:shadow-lg transition-all duration-300",
-            "hover:-translate-y-1",
-            getMotionSafeClasses(`animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-${index * 50}`)
-          )}
-        >
-          <div className="relative h-16 flex items-center justify-center">
-            <Image
-              src={partner.logo || '/images/placeholder-logo.png'}
-              alt={partner.name}
-              className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-              priority
-              width={100}
-              height={100}
-            />
+      <div className="mt-12 space-y-4 border-y-[5px] border-[#101010] bg-[#80c738] py-5">
+        <div data-partner-rail className="overflow-hidden">
+          <div data-partner-marquee-left className="flex w-max">
+            {topRow.map((partner, index) => (
+              <PartnerTickerLogo key={`top-${partner.id}-${index}`} partner={partner} />
+            ))}
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-        </a>
-      ))}
-    </div>
+        </div>
+        <div data-partner-rail className="overflow-hidden">
+          <div data-partner-marquee-right className="flex w-max -translate-x-1/2">
+            {bottomRow.map((partner, index) => (
+              <PartnerTickerLogo key={`bottom-${partner.id}-${index}`} partner={partner} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-4 border-t-[5px] border-[#101010] pt-7 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="inline-block -rotate-1 border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010]">
+              Logo wall
+            </p>
+            <h3
+              className="mt-5 max-w-3xl font-black uppercase leading-tight tracking-normal text-[#101010]"
+              style={{ fontSize: "clamp(2rem, 4vw, 2.7rem)" }}
+            >
+              A visible network of funders, institutions, and ecosystem allies.
+            </h3>
+          </div>
+          <p className="max-w-md border-[3px] border-[#101010] bg-[#fff7df] p-4 text-sm font-medium leading-relaxed text-[#28261d] shadow-[5px_5px_0_#101010]">
+            The network behind KCIC spans climate finance, public institutions, enterprise support, and implementation partners.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 items-start gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {repeatedPartners.map((partner, index) => (
+            <PartnerLogoTile key={partner.id} partner={partner} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
