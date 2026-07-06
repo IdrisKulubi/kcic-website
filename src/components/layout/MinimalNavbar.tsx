@@ -170,15 +170,15 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
       <nav ref={navRef} className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
         <div
           data-nav-shell
-          className={`mx-auto max-w-[1500px] border-[4px] border-[#101010] bg-[#fff7df] text-[#101010] shadow-[7px_7px_0_#101010] transition duration-300 ${
-            isScrolled ? 'translate-y-0 shadow-[7px_7px_0_#80c738]' : ''
+          className={`mx-auto max-w-[1500px] border border-[#dce5d7]/80 bg-[#fbf7e8]/95 text-[#102016] shadow-[0_18px_45px_rgba(16,32,22,0.16)] backdrop-blur-md transition duration-300 ${
+            isScrolled ? 'bg-[#fbf7e8]/98 shadow-[0_12px_34px_rgba(16,32,22,0.18)]' : ''
           }`}
         >
           <div className="flex h-16 items-center justify-between gap-3 px-3 sm:px-5 lg:h-[72px] lg:px-6">
             <Link
               href="/"
               onClick={(event) => handleNavClick(event, '/')}
-              className="group flex shrink-0 items-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
+              className="group flex shrink-0 items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80c738]"
               aria-label="KCIC, go to homepage"
             >
               <Image
@@ -190,8 +190,8 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                 priority
               />
               <span className="hidden leading-none xl:block">
-                <span className="block text-xs font-black uppercase text-[#58523f]">Kenya Climate</span>
-                <span className="block text-sm font-black uppercase">Innovation Centre</span>
+                <span className="block text-xs font-semibold uppercase tracking-[0.04em] text-[#55624f]">Kenya Climate</span>
+                <span className="block text-sm font-bold uppercase tracking-[0.02em]">Innovation Centre</span>
               </span>
             </Link>
 
@@ -210,8 +210,8 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                       {item.subItems ? (
                         <button
                           type="button"
-                          className={`flex items-center gap-1 border-2 border-transparent px-3 py-2 text-sm font-medium transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
-                            active || activeDropdown === item.label ? 'border-[#101010] bg-[#80c738]' : ''
+                          className={`flex items-center gap-1 border-b-2 border-transparent px-3 py-2 text-sm font-semibold transition hover:border-[#80c738] hover:text-[#335016] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80c738] ${
+                            active || activeDropdown === item.label ? 'border-[#80c738] text-[#335016]' : ''
                           }`}
                           aria-expanded={activeDropdown === item.label}
                           aria-haspopup="menu"
@@ -226,8 +226,8 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                         <Link
                           href={item.href}
                           onClick={(event) => handleNavClick(event, item.href)}
-                          className={`block border-2 border-transparent px-3 py-2 text-sm font-medium transition hover:border-[#101010] hover:bg-[#80c738] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] ${
-                            active ? 'border-[#101010] bg-[#80c738]' : ''
+                          className={`block border-b-2 border-transparent px-3 py-2 text-sm font-semibold transition hover:border-[#80c738] hover:text-[#335016] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80c738] ${
+                            active ? 'border-[#80c738] text-[#335016]' : ''
                           }`}
                         >
                           {item.label}
@@ -238,7 +238,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                         <div
                           id={`nav-panel-${item.label}`}
                           role="menu"
-                          className="absolute left-1/2 top-[calc(100%+8px)] min-w-[200px] -translate-x-1/2 rounded border border-[#101010]/15 bg-[#fff7df] py-1 shadow-md"
+                          className="absolute left-1/2 top-[calc(100%+12px)] min-w-[220px] -translate-x-1/2 border border-[#dce5d7] bg-[#fbf7e8] py-2 shadow-[0_18px_38px_rgba(16,32,22,0.16)]"
                         >
                           {item.subItems.map((subItem) => {
                             const subActive = isActivePath(pathname, subItem.href);
@@ -249,8 +249,8 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                                 role="menuitem"
                                 onClick={(event) => handleNavClick(event, subItem.href)}
                                 onKeyDown={(event) => handleKeyNavigation(event, subItem.href)}
-                                className={`block px-3 py-2 text-sm font-medium transition hover:bg-[#80c738]/25 focus:outline-none focus-visible:bg-[#80c738]/30 ${
-                                  subActive ? 'bg-[#80c738]/35 text-[#101010]' : 'text-[#101010]'
+                                className={`block px-4 py-2.5 text-sm font-medium transition hover:bg-[#e8f4dc] focus:outline-none focus-visible:bg-[#e8f4dc] ${
+                                  subActive ? 'bg-[#e8f4dc] text-[#335016]' : 'text-[#102016]'
                                 }`}
                               >
                                 {subItem.label}
@@ -270,7 +270,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                 <Link
                   href={ctaButton.href}
                   onClick={(event) => handleNavClick(event, ctaButton.href)}
-                  className="inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-3 text-sm font-black uppercase shadow-[5px_5px_0_#101010] transition hover:-translate-y-1 hover:shadow-[7px_7px_0_#101010] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738]"
+                  className="inline-flex items-center gap-2 bg-[#80c738] px-4 py-3 text-sm font-semibold text-[#102016] transition hover:bg-[#9ddf4b] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80c738]"
                 >
                   {ctaButton.text}
                   <ArrowRight className="h-4 w-4" weight="bold" />
@@ -281,7 +281,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
-              className="grid h-12 w-12 place-items-center border-[3px] border-[#101010] bg-[#80c738] shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#80c738] lg:hidden"
+              className="grid h-12 w-12 place-items-center bg-[#80c738] text-[#102016] transition hover:bg-[#9ddf4b] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#80c738] lg:hidden"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
@@ -293,16 +293,15 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
       </nav>
 
       {isMobileMenuOpen && (
-        <div id="mobile-menu" className="fixed inset-0 z-40 bg-[#fff7df] pt-28 text-[#101010] lg:hidden">
-          <div className="absolute inset-x-0 top-0 h-24 border-b-[5px] border-[#101010] bg-[#80c738]" aria-hidden="true" />
+        <div id="mobile-menu" className="fixed inset-0 z-40 bg-[#102016]/45 pt-24 text-[#102016] backdrop-blur-sm lg:hidden">
           <div className="h-full overflow-y-auto px-4 pb-8">
-            <div className="border-[5px] border-[#101010] bg-[#fff7df] p-4 shadow-[9px_9px_0_#101010]">
-              <div className="mb-5 flex items-center justify-between border-b-[4px] border-[#101010] pb-4">
-                <span className="text-2xl font-black uppercase">Menu</span>
+            <div className="border border-[#dce5d7] bg-[#fbf7e8] p-4 shadow-[0_24px_55px_rgba(16,32,22,0.24)]">
+              <div className="mb-5 flex items-center justify-between border-b border-[#dce5d7] pb-4">
+                <span className="text-lg font-bold uppercase tracking-[0.04em]">Menu</span>
                 <button
                   type="button"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="grid h-11 w-11 place-items-center border-[3px] border-[#101010] bg-[#80c738] shadow-[4px_4px_0_#101010]"
+                  className="grid h-11 w-11 place-items-center bg-[#80c738] text-[#102016] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#335016]"
                   aria-label="Close menu"
                 >
                   <X className="h-5 w-5" weight="bold" />
@@ -313,14 +312,14 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                 {navigation.map((item) => {
                   const active = isActivePath(pathname, item.href) || item.subItems?.some((subItem) => isActivePath(pathname, subItem.href));
                   return (
-                    <div key={item.label} className="border-[3px] border-[#101010] bg-[#fff7df]">
+                    <div key={item.label} className="border border-[#dce5d7] bg-[#fffdf5]">
                       {item.subItems ? (
                         <>
                           <button
                             type="button"
                             onClick={() => setExpandedMobileItem(expandedMobileItem === item.label ? null : item.label)}
-                            className={`flex w-full items-center justify-between px-4 py-4 text-left text-xl font-black uppercase ${
-                              active || expandedMobileItem === item.label ? 'bg-[#80c738]' : 'bg-[#fff7df]'
+                            className={`flex w-full items-center justify-between px-4 py-4 text-left text-base font-bold ${
+                              active || expandedMobileItem === item.label ? 'bg-[#e8f4dc] text-[#335016]' : 'bg-[#fffdf5]'
                             }`}
                             aria-expanded={expandedMobileItem === item.label}
                           >
@@ -328,7 +327,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                             <CaretDown className={`h-5 w-5 transition ${expandedMobileItem === item.label ? 'rotate-180' : ''}`} weight="bold" />
                           </button>
                           {expandedMobileItem === item.label && (
-                            <div className="border-t border-[#101010]/10 py-1">
+                            <div className="border-t border-[#dce5d7] py-1">
                               {item.subItems.map((subItem) => {
                                 const subActive = isActivePath(pathname, subItem.href);
                                 return (
@@ -337,7 +336,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                                     href={subItem.href}
                                     onClick={(event) => handleNavClick(event, subItem.href)}
                                     className={`block px-4 py-2.5 text-sm font-medium ${
-                                      subActive ? 'bg-[#80c738]/35' : ''
+                                      subActive ? 'bg-[#e8f4dc] text-[#335016]' : ''
                                     }`}
                                   >
                                     {subItem.label}
@@ -351,7 +350,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                         <Link
                           href={item.href}
                           onClick={(event) => handleNavClick(event, item.href)}
-                          className={`block px-4 py-4 text-xl font-black uppercase ${active ? 'bg-[#80c738]' : ''}`}
+                          className={`block px-4 py-4 text-base font-bold ${active ? 'bg-[#e8f4dc] text-[#335016]' : ''}`}
                         >
                           {item.label}
                         </Link>
@@ -365,7 +364,7 @@ export function MinimalNavbar({ logo, navigation, ctaButton }: MinimalNavbarProp
                 <Link
                   href={ctaButton.href}
                   onClick={(event) => handleNavClick(event, ctaButton.href)}
-                  className="mt-5 flex items-center justify-between border-[4px] border-[#101010] bg-[#80c738] px-5 py-4 text-lg font-black uppercase shadow-[6px_6px_0_#101010]"
+                  className="mt-5 flex items-center justify-between bg-[#80c738] px-5 py-4 text-base font-bold text-[#102016]"
                 >
                   {ctaButton.text}
                   <ArrowRight className="h-5 w-5" weight="bold" />

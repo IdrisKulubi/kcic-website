@@ -10,9 +10,10 @@ import {
 } from "@/components/sections/PartnersSection";
 import { HomePartnersLogos } from "@/components/sections/HomePartnersLogos";
 import { HeroImageCarousel } from "@/components/sections/HeroImageCarousel";
+import WhatKcicDoes from "@/components/sections/WhatKcicDoes";
 import { ScrollProgress } from "@/components/animations/SectionReveal";
-import { ScrollOrchestrator, AnimatedSection, ScrollProgressIndicator } from "@/components/animations/ScrollOrchestrator";
-import { SectionDivider, FloatingElements } from "@/components/animations/SectionDivider";
+import { ScrollOrchestrator, AnimatedSection } from "@/components/animations/ScrollOrchestrator";
+import { SectionDivider } from "@/components/animations/SectionDivider";
 
 import Footer from "@/components/layout/Footer";
 import { navData } from "@/lib/navigation";
@@ -166,11 +167,21 @@ export default function HomePage({
   }, []);
 
 
-  // Hero data — single centered message
+  // Phase 1 hero content, grounded in the corporate redesign brief.
   const translatedHeroData = {
-    title: "Catalyzing Climate Entrepreneurship in Africa",
-    description: "",
-    ctaButtons: [] as Array<{ text: string; href: string; variant: "primary" | "secondary" }>,
+    title: "Catalysing climate entrepreneurship in Africa",
+    description:
+      "KCIC supports climate-smart enterprises with incubation, financing readiness, market access, and partnerships that build resilient communities.",
+    metrics: [
+      { value: "3,500+", label: "SMEs supported" },
+      { value: "$63M", label: "Leveraged for enterprises" },
+      { value: "57,517", label: "Jobs created" },
+      { value: "507,149", label: "Tonnes CO2 mitigated" },
+    ],
+    ctaButtons: [
+      { text: "Explore Our Programmes", href: "/programmes", variant: "primary" },
+      { text: "See Our Impact", href: "/impact", variant: "secondary" },
+    ] as Array<{ text: string; href: string; variant: "primary" | "secondary" }>,
   };
 
   // Transform stats data from database or use translations as fallback
@@ -375,9 +386,6 @@ export default function HomePage({
           />
         </div>
 
-        {/* Floating decorative elements for depth */}
-        <FloatingElements variant="mixed" color="#7FD134" count={5} />
-
         {/* Navigation */}
         <MinimalNavbar {...navData} />
 
@@ -392,9 +400,17 @@ export default function HomePage({
 
           {/* Main Content Sections with smooth transitions */}
           <div className="space-y-0">
+            {/* SECTION 1: What KCIC Does */}
+            <div id="what-kcic-does-section">
+              <SectionDivider variant="gradient" fromColor="#102016" toColor="#f7fbf8" height={14} parallax={false} />
+              <AnimatedSection direction="up" className="bg-[#f7fbf8]">
+                <WhatKcicDoes />
+              </AnimatedSection>
+            </div>
+
             {/* SECTION 1: About Us - Combined (Climate Challenge + History + Beliefs) */}
             <div id="about">
-              <SectionDivider variant="wave" fromColor="#ffffff" toColor="#ffffff" height={18} />
+              <SectionDivider variant="gradient" fromColor="#f7fbf8" toColor="#ffffff" height={14} parallax={false} />
               <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
@@ -405,7 +421,7 @@ export default function HomePage({
 
             {/* SECTION 2: Impact Journey (Slide 4) — green bg */}
             <div id="impact">
-              <SectionDivider variant="angle" fromColor="#00addd" toColor="#80c738" height={28} />
+              <SectionDivider variant="gradient" fromColor="#ffffff" toColor="#102016" height={16} parallax={false} />
               <AnimatedSection direction="up">
                 <MinimalStatsSection
                   stats={thirteenYearsOnData}
@@ -423,7 +439,7 @@ export default function HomePage({
 
             {/* SECTION 2B: Awards & Recognition (Slide 5) */}
             <div id="awards">
-              <SectionDivider variant="wave" fromColor="#80c738" toColor="#fff7df" height={24} />
+              <SectionDivider variant="gradient" fromColor="#102016" toColor="#fff7df" height={16} parallax={false} />
               <AnimatedSection direction="up" className="bg-[#fff7df]">
                 <AwardsSection />
               </AnimatedSection>
@@ -436,7 +452,7 @@ export default function HomePage({
 
             {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#fff7df" toColor="#f7fbf8" height={24} />
+              <SectionDivider variant="gradient" fromColor="#fff7df" toColor="#f7fbf8" height={14} parallax={false} />
               <AnimatedSection direction="up" className="bg-[#f7fbf8]">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
@@ -444,7 +460,7 @@ export default function HomePage({
 
             {/* SECTION 7: Partners */}
             <div id="partners">
-              <SectionDivider variant="dots" fromColor="#f7fbf8" toColor="#fff7df" height={20} />
+              <SectionDivider variant="gradient" fromColor="#f7fbf8" toColor="#fff7df" height={14} parallax={false} />
               <AnimatedSection direction="up" className="bg-[#fff7df]">
                 <HomePartnersLogos partners={partnersDataTransformed} />
               </AnimatedSection>

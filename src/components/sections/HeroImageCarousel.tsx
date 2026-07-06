@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react";
-import { typography } from "@/lib/design-system";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                      */
@@ -19,6 +18,10 @@ interface HeroImageCarouselProps {
   data: {
     title: string;
     description: string;
+    metrics?: Array<{
+      value: string;
+      label: string;
+    }>;
     ctaButtons: Array<{
       text: string;
       href: string;
@@ -75,27 +78,67 @@ export function HeroImageCarousel({
   return (
     <section
       ref={containerRef}
-      className="relative h-screen min-h-[720px] w-full overflow-hidden border-b-[5px] border-[#101010]"
+      className="relative min-h-screen w-full overflow-hidden bg-[#102016]"
       aria-label="Hero section"
     >
       <style jsx>{`
         .hero-frame {
           display: grid;
-          min-height: 100%;
-          align-items: end;
-          padding: clamp(7rem, 13vh, 10rem) clamp(1rem, 5vw, 5rem) clamp(2rem, 7vh, 4.5rem);
+          min-height: 100vh;
+          align-items: start;
+          padding: 11.5rem 1.25rem 2rem;
         }
 
         .hero-layout {
           display: grid;
           grid-template-columns: minmax(0, 1fr);
-          gap: 1.25rem;
-          align-items: end;
+          gap: 2rem;
+          align-items: start;
+          max-width: 68rem;
+        }
+
+        .hero-title {
+          font-size: 2.35rem;
+        }
+
+        .hero-metrics {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1px;
+        }
+
+        @media (min-width: 640px) {
+          .hero-frame {
+            align-items: center;
+            padding: 8rem 2rem 2.5rem;
+          }
+
+          .hero-title {
+            font-size: 3.75rem;
+          }
+
+          .hero-metrics {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
         }
 
         @media (min-width: 1024px) {
+          .hero-frame {
+            padding: 8rem 5rem 3rem;
+          }
+
           .hero-layout {
-            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.42fr);
+            gap: 2.5rem;
+          }
+
+          .hero-title {
+            font-size: 4.35rem;
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .hero-title {
+            font-size: 4.75rem;
           }
         }
       `}</style>
@@ -117,19 +160,33 @@ export function HeroImageCarousel({
               priority={index === 0}
               className="object-cover"
               style={{
-                transform: index === currentSlide ? "scale(1.05)" : "scale(1)",
-                transition: "transform 6s ease-out",
+                transform: index === currentSlide ? "scale(1.025)" : "scale(1)",
+                transition: "transform 8s ease-out",
               }}
               sizes="100vw"
-              quality={90}
             />
           </div>
         ))}
 
-        <div className="absolute inset-0 bg-[#101010]/34" style={{ zIndex: 2 }} aria-hidden />
-        <div className="absolute inset-y-0 left-0 w-full bg-[#101010]/28 lg:w-[58%]" style={{ zIndex: 3 }} aria-hidden />
-        <div className="absolute bottom-0 right-0 h-[28vh] w-[52vw] bg-[#00addd]/88" style={{ zIndex: 4 }} aria-hidden />
-        <div className="absolute bottom-[8vh] right-[8vw] h-24 w-24 border-[3px] border-[#101010] bg-[#80c738]" style={{ zIndex: 5 }} aria-hidden />
+        <div className="absolute inset-0 bg-[#102016]/58" style={{ zIndex: 2 }} aria-hidden />
+        <div
+          className="absolute inset-0"
+          style={{
+            zIndex: 3,
+            background:
+              "linear-gradient(90deg, rgba(16,32,22,0.96) 0%, rgba(16,32,22,0.82) 42%, rgba(16,32,22,0.34) 100%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-28"
+          style={{
+            zIndex: 4,
+            background:
+              "linear-gradient(180deg, rgba(16,32,22,0) 0%, rgba(16,32,22,0.92) 100%)",
+          }}
+          aria-hidden
+        />
       </div>
 
       <div className="hero-frame relative" style={{ zIndex: 10 }}>
@@ -141,73 +198,67 @@ export function HeroImageCarousel({
             transition: "all 1s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          <div className="max-w-5xl">
-            <p className="mb-4 inline-flex border-[3px] border-[#101010] bg-[#80c738] px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[#101010] shadow-[4px_4px_0_#101010]">
-              Kenya Climate Innovation Center
+          <div className="max-w-4xl">
+            <p className="mb-5 inline-flex items-center gap-3 text-sm font-semibold text-[#dbe7d7]">
+              <span className="h-px w-10 bg-[#80c738]" aria-hidden />
+              Kenya Climate Innovation Centre
             </p>
 
             <h1
-              className="max-w-[12ch] text-[#fff7df]"
+              className="hero-title max-w-[14ch] text-[#f6faf2]"
               style={{
-                fontFamily: typography.fonts.heading,
-                fontSize: "clamp(3.5rem, 8vw, 8rem)",
-                fontWeight: 900,
-                lineHeight: 0.9,
+                fontFamily:
+                  "Montserrat, 'Century Gothic', Aptos, Arial, Helvetica, sans-serif",
+                fontWeight: 700,
+                lineHeight: 1.05,
                 letterSpacing: "0",
-                textShadow: "6px 6px 0 #101010",
-                WebkitTextStroke: "1.5px #101010",
               }}
             >
               {data.title}
             </h1>
 
             {data.description ? (
-              <p className="mt-5 max-w-3xl text-lg font-black leading-8 text-[#fff7df] sm:text-xl">
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#dce8db] sm:text-lg sm:leading-8">
                 {data.description}
               </p>
             ) : null}
 
             {data.ctaButtons?.length ? (
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 {data.ctaButtons.map((button) => (
                   <Link
                     key={`${button.text}-${button.href}`}
                     href={button.href}
                     className={
                       button.variant === "primary"
-                        ? "inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#80c738] px-4 py-3 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#101010]"
-                        : "inline-flex items-center gap-2 border-[3px] border-[#fff7df] bg-[#101010] px-4 py-3 text-sm font-black uppercase text-[#fff7df] shadow-[4px_4px_0_#80c738] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#80c738]"
+                        ? "inline-flex min-h-12 items-center gap-2 rounded-sm bg-[#80c738] px-5 py-3 text-sm font-semibold text-[#102016] transition hover:bg-[#9ddf4b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6faf2]"
+                        : "inline-flex min-h-12 items-center gap-2 rounded-sm border border-[#c8d8c4]/70 bg-[#f6faf2]/8 px-5 py-3 text-sm font-semibold text-[#f6faf2] transition hover:border-[#80c738] hover:bg-[#f6faf2]/14 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#80c738]"
                     }
                   >
                     {button.text}
-                    <ArrowUpRight className="h-4 w-4" weight="bold" />
+                    <ArrowUpRight className="h-4 w-4" weight="bold" aria-hidden />
                   </Link>
                 ))}
               </div>
             ) : null}
           </div>
 
-          <div className="hidden justify-self-end border-[3px] border-[#101010] bg-[#fff7df] p-4 shadow-[7px_7px_0_#101010] lg:block">
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-[#101010]">
-              Live focus
-            </p>
-            <div className="grid gap-2">
-              {slides.map((slide, index) => (
-                <button
-                  key={slide.src}
-                  type="button"
-                  onClick={() => setCurrentSlide(index)}
-                  className={`flex items-center justify-between gap-5 border-2 border-[#101010] px-3 py-2 text-left text-xs font-black uppercase transition ${
-                    index === currentSlide ? "bg-[#00addd] text-[#101010]" : "bg-[#fff7df] text-[#101010] hover:bg-[#e5f7c9]"
-                  }`}
-                  aria-label={`Show hero image ${index + 1}`}
-                >
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <span className="h-3 w-3 border-2 border-[#101010] bg-[#80c738]" aria-hidden />
-                </button>
-              ))}
+          {data.metrics?.length ? (
+            <div className="max-w-5xl border-y border-[#dce8db]/18 bg-[#102016]/48 p-0 backdrop-blur-[2px]">
+              <div className="hero-metrics">
+                {data.metrics.map((metric) => (
+                  <div key={`${metric.value}-${metric.label}`} className="px-4 py-4">
+                    <p className="text-2xl font-semibold leading-none text-[#9ddf4b]">
+                      {metric.value}
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-[#dce8db]">
+                      {metric.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </section>

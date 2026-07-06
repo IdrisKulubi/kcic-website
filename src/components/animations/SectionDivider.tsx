@@ -4,6 +4,17 @@ import { useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const DOT_PATTERN = [
+  { width: 7, height: 7, left: "10%", top: "20%", opacity: 0.34 },
+  { width: 10, height: 6, left: "22%", top: "64%", opacity: 0.44 },
+  { width: 6, height: 9, left: "34%", top: "36%", opacity: 0.28 },
+  { width: 11, height: 11, left: "48%", top: "78%", opacity: 0.38 },
+  { width: 8, height: 5, left: "61%", top: "18%", opacity: 0.5 },
+  { width: 6, height: 6, left: "73%", top: "54%", opacity: 0.32 },
+  { width: 10, height: 8, left: "86%", top: "30%", opacity: 0.42 },
+  { width: 5, height: 10, left: "94%", top: "82%", opacity: 0.26 },
+];
+
 interface SectionDividerProps {
   /** Divider style variant */
   variant?: "wave" | "angle" | "curve" | "gradient" | "dots";
@@ -135,17 +146,17 @@ export function SectionDivider({
             />
             {/* Decorative dots */}
             <div className="absolute inset-0 opacity-20">
-              {[...Array(20)].map((_, i) => (
+              {DOT_PATTERN.map((dot, i) => (
                 <div
                   key={i}
                   className="absolute rounded-full bg-current"
                   style={{
-                    width: Math.random() * 8 + 4,
-                    height: Math.random() * 8 + 4,
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
+                    width: dot.width,
+                    height: dot.height,
+                    left: dot.left,
+                    top: dot.top,
                     color: toColor,
-                    opacity: Math.random() * 0.5 + 0.2,
+                    opacity: dot.opacity,
                   }}
                 />
               ))}
