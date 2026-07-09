@@ -334,7 +334,7 @@ function ProgrammeEditor({
 
         <TabsContent value="content" className="space-y-4 mt-4">
           <p className="text-sm text-muted-foreground mb-4">
-            Add content for each section. HTML formatting is supported.
+            Paste content as normal text. Line breaks, bullets, numbered lists, and a) / b) lists will be preserved on the public page. HTML is still supported when needed.
           </p>
 
           <div className="space-y-6 max-h-[50vh] overflow-y-auto pr-2">
@@ -344,9 +344,9 @@ function ProgrammeEditor({
                 <p className="text-xs text-muted-foreground">{section.description}</p>
                 <Textarea
                   {...register(section.key as keyof ProgrammeFormData)}
-                  placeholder={`Enter ${section.label.toLowerCase()} content (HTML supported)...`}
-                  rows={4}
-                  className="font-mono text-sm"
+                  placeholder={`Enter ${section.label.toLowerCase()} content. Use separate lines for points.`}
+                  rows={6}
+                  className="text-sm leading-relaxed"
                 />
               </div>
             ))}

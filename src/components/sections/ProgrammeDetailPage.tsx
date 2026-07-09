@@ -94,6 +94,107 @@ const sectionConfig = {
 
 type SectionKey = keyof typeof sectionConfig;
 
+const htmlTagPattern = /<\/?[a-z][\s\S]*>/i;
+const listMarkerPattern = /^((?:[a-zA-Z]|\d+)[.)]|[-*•◦▪▫●○■□–—]|\uF0A7|\uF0B7)\s+/;
+const orderedMarkerPattern = /^((?:[a-zA-Z]|\d+)[.)])\s+/;
+
+function escapeHtml(value: string) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function normalizePlainTextContent(content: string) {
+    return content
+        .replace(/\r\n?/g, '\n')
+        .replace(/[\uF0A7\uF0B7]/g, '\n- ')
+        .replace(/\s+([a-zA-Z]\))\s+(?=[A-Z0-9])/g, '\n$1 ')
+        .replace(/\s+(\d+[.)])\s+(?=[A-Z0-9])/g, '\n$1 ');
+}
+
+function buildListHtml(lines: string[]) {
+    const isOrdered = lines.some(line => orderedMarkerPattern.test(line));
+    const tag = isOrdered ? 'ol' : 'ul';
+    const typeAttribute = isOrdered && lines.some(line => /^[a-zA-Z][.)]\s+/.test(line)) ? ' type="a"' : '';
+    const items: string[] = [];
+
+    lines.forEach((line) => {
+        const markerMatch = line.match(listMarkerPattern);
+        if (markerMatch) {
+            items.push(escapeHtml(line.slice(markerMatch[0].length).trim()));
+            return;
+        }
+
+        if (items.length === 0) {
+            items.push(escapeHtml(line.trim()));
+            return;
+        }
+
+        items[items.length - 1] = `${items[items.length - 1]} ${escapeHtml(line.trim())}`;
+    });
+
+    return `<${tag}${typeAttribute}>${items.map(item => `<li>${item}</li>`).join('')}</${tag}>`;
+}
+
+function formatPlainTextBlock(block: string) {
+    const lines = block
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean);
+    const html: string[] = [];
+    let paragraphLines: string[] = [];
+    let listLines: string[] = [];
+
+    const flushParagraph = () => {
+        if (paragraphLines.length === 0) return;
+        html.push(`<p>${escapeHtml(paragraphLines.join(' '))}</p>`);
+        paragraphLines = [];
+    };
+
+    const flushList = () => {
+        if (listLines.length === 0) return;
+        html.push(buildListHtml(listLines));
+        listLines = [];
+    };
+
+    lines.forEach((line) => {
+        if (listMarkerPattern.test(line)) {
+            flushParagraph();
+            listLines.push(line);
+            return;
+        }
+
+        if (listLines.length > 0) {
+            listLines.push(line);
+            return;
+        }
+
+        paragraphLines.push(line);
+    });
+
+    flushParagraph();
+    flushList();
+
+    return html.join('');
+}
+
+function formatProgrammeContent(content: string) {
+    if (htmlTagPattern.test(content)) {
+        return content;
+    }
+
+    const normalized = normalizePlainTextContent(content);
+    const blocks = normalized
+        .split(/\n{2,}/)
+        .map(block => block.trim())
+        .filter(Boolean);
+
+    return blocks.map(formatPlainTextBlock).join('');
+}
+
 // Collapsible Section Component
 function CollapsibleSection({ 
     id,
@@ -114,6 +215,8 @@ function CollapsibleSection({
     onToggle: () => void;
     accentColor: string;
 }) {
+    const formattedContent = useMemo(() => formatProgrammeContent(content), [content]);
+
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -160,9 +263,10 @@ function CollapsibleSection({
                             <div
                                 className="max-w-none text-gray-600 text-sm leading-relaxed
                                     [&_p]:mb-3 [&_p]:text-sm [&_p]:leading-relaxed
-                                    [&_ul]:my-3 [&_ul]:pl-5 [&_ul]:list-disc [&_ul]:text-sm
-                                    [&_ol]:my-3 [&_ol]:pl-5 [&_ol]:list-decimal [&_ol]:text-sm
-                                    [&_li]:mb-1.5 [&_li]:leading-relaxed [&_li]:text-sm
+                                    [&_ul]:my-3 [&_ul]:pl-5 [&_ul]:list-disc [&_ul]:text-sm [&_ul]:space-y-2
+                                    [&_ol]:my-3 [&_ol]:pl-5 [&_ol]:list-decimal [&_ol]:text-sm [&_ol]:space-y-2
+                                    [&_ol[type='a']]:list-[lower-alpha]
+                                    [&_li]:pl-1 [&_li]:leading-relaxed [&_li]:text-sm
                                     [&_strong]:text-gray-800 [&_strong]:font-semibold
                                     [&_a]:text-green-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:hover:text-green-700
                                     [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-4 [&_h3]:mb-2
@@ -170,7 +274,7 @@ function CollapsibleSection({
                                     [&_table]:w-full [&_table]:my-4 [&_table]:text-xs
                                     [&_th]:text-left [&_th]:py-1.5 [&_th]:px-2 [&_th]:bg-gray-50 [&_th]:font-semibold [&_th]:text-gray-700 [&_th]:text-xs
                                     [&_td]:py-1.5 [&_td]:px-2 [&_td]:border-b [&_td]:border-gray-100 [&_td]:text-xs"
-                                dangerouslySetInnerHTML={{ __html: content }}
+                                dangerouslySetInnerHTML={{ __html: formattedContent }}
                             />
                         </div>
                     </motion.div>
