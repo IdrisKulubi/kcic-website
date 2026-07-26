@@ -33,6 +33,7 @@ import WhatWeDo from "./sections/WhatWeDo";
 import HowWeDoIt from "./sections/HowWeDoIt";
 import KeySectorsParallax from "./sections/KeySectorsParallax";
 import ProgramsShowcase from "./sections/ProgramsShowcase";
+import { FoundersCollectiveSection } from "./sections/FoundersCollectiveSection";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -430,15 +431,23 @@ export default function HomePage({
               </div>
             </div>
 
-            {/* SECTION 5: News */}
+            {/* SECTION 5: Founders Collective */}
+            <div id="founders-collective">
+              <SectionDivider variant="curve" fromColor="#0f172a" toColor="#ffffff" height={70} />
+              <AnimatedSection direction="up" className="bg-white">
+                <FoundersCollectiveSection />
+              </AnimatedSection>
+            </div>
+
+            {/* SECTION 6: News */}
             <div id="news">
-              <SectionDivider variant="curve" fromColor="#0f172a" toColor="#f9fafb" height={70} />
+              <SectionDivider variant="curve" fromColor="#ffffff" toColor="#f9fafb" height={70} />
               <AnimatedSection direction="up" className="bg-gray-50 py-12 sm:py-16">
                 <NewsSection news={newsItems} />
               </AnimatedSection>
             </div>
 
-            {/* SECTION 6: Partners */}
+            {/* SECTION 7: Partners */}
             <div id="partners">
               <SectionDivider variant="dots" fromColor="#ffffff" toColor="#f9fafb" height={60} />
               <AnimatedSection direction="up" className="bg-gradient-to-b from-gray-50 to-white">

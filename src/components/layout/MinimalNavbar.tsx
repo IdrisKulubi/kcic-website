@@ -26,6 +26,7 @@ import { useAccessibilityClasses } from '@/hooks/use-accessibility-classes';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { isExternalUrl } from '@/lib/founders-collective';
 
 interface SubNavItem {
   label: string;
@@ -75,6 +76,10 @@ const iconMap = {
 
 export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const ctaExternalProps =
+    ctaButton && isExternalUrl(ctaButton.href)
+      ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+      : {};
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
@@ -262,7 +267,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   }}
                   asChild
                 >
-                  <a href={ctaButton.href}>
+                  <a href={ctaButton.href} {...ctaExternalProps}>
                     {ctaButton.text}
                   </a>
                 </Button>
@@ -470,6 +475,7 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                     >
                       <a
                         href={ctaButton.href}
+                        {...ctaExternalProps}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {ctaButton.text}

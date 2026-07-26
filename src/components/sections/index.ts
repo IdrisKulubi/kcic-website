@@ -10,6 +10,7 @@ export { default as ProgrammesSection } from "./ProgrammesSection";
 export { LatestNewsSection } from "./LatestNewsSection";
 export { PartnersSection } from "./PartnersSection";
 export { CTABanner } from "./CTABanner";
+export { FoundersCollectiveSection } from "./FoundersCollectiveSection";
 export { default as AwardsSection } from "./AwardsSection";
 export { default as FoundingBeliefs } from "./FoundingBeliefs";
 export { default as KeySectors } from "./KeySectors";

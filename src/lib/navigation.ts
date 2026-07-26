@@ -1,3 +1,5 @@
+import { FOUNDERS_COLLECTIVE_REGISTRATION_URL } from "./founders-collective";
+
 // Shared navigation data for all pages - Updated based on client feedback
 export const navData = {
   logo: {
@@ -102,4 +104,8 @@ export const navData = {
       href: "/faqs",
     },
   ],
+  ctaButton: {
+    text: "Founders Collective",
+    href: FOUNDERS_COLLECTIVE_REGISTRATION_URL,
+  },
 };
