@@ -36,6 +36,13 @@
       "when": 1770675649248,
       "tag": "0004_clumsy_mach_iv",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785444132106,
+      "tag": "0005_lonely_jack_power",
+      "breakpoints": true
     }
   ]
 }

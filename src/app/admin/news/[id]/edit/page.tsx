@@ -54,6 +54,11 @@ const newsFormSchema = z.object({
     .optional()
     .or(z.literal("")),
   thumbnail: z.string().url("Please upload a thumbnail image"),
+  imageCaption: z
+    .string()
+    .max(300, "Image caption must be at most 300 characters")
+    .optional()
+    .or(z.literal("")),
   category: z.string().min(1, "Please select a category"),
   slug: z.string(),
   readTime: z.string().optional(),
@@ -86,6 +91,7 @@ export default function EditNewsPage() {
       excerpt: "",
       content: "",
       thumbnail: "",
+      imageCaption: "",
       category: "",
       slug: "",
       readTime: "",
@@ -109,6 +115,7 @@ export default function EditNewsPage() {
           excerpt: article.excerpt,
           content: article.content || "",
           thumbnail: article.thumbnail,
+          imageCaption: article.imageCaption || "",
           category: article.category,
           slug: article.slug || "",
           readTime: article.readTime || "",
@@ -344,6 +351,24 @@ export default function EditNewsPage() {
                 {errors.thumbnail.message}
               </p>
             )}
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="imageCaption">Image caption</Label>
+              <Textarea
+                id="imageCaption"
+                {...register("imageCaption")}
+                placeholder="Optional caption displayed below the featured image"
+                rows={2}
+                className={errors.imageCaption ? "border-red-500" : ""}
+              />
+              {errors.imageCaption && (
+                <p className="text-sm text-red-500">
+                  {errors.imageCaption.message}
+                </p>
+              )}
+              <p className="text-sm text-muted-foreground">
+                Leave blank if no caption is needed for this article.
+              </p>
+            </div>
           </CardContent>
         </Card>
 

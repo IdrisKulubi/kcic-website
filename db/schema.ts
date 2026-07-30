@@ -111,6 +111,7 @@ export const news = pgTable("news", {
   excerpt: text("excerpt").notNull(),
   content: text("content"),
   thumbnail: text("thumbnail").notNull(),
+  imageCaption: text("image_caption"),
   category: text("category").notNull(),
   slug: text("slug").notNull().unique(),
   readTime: text("read_time"),

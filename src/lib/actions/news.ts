@@ -49,9 +49,22 @@ async function ensureUniqueSlug(baseSlug: string, excludeId?: string): Promise<s
   }
 }
 
-/**
- * List all news articles with optional filtering
- */
+function mapNewsArticle(article: typeof news.$inferSelect): NewsData {
+  return {
+    id: article.id,
+    title: article.title,
+    excerpt: article.excerpt,
+    content: article.content || '',
+    thumbnail: article.thumbnail,
+    imageCaption: article.imageCaption || '',
+    category: article.category,
+    slug: article.slug,
+    readTime: article.readTime || '',
+    featured: article.featured,
+    publishedAt: article.publishedAt,
+  };
+}
+
 export async function listNews(options?: {
   category?: string;
   search?: string;
@@ -93,18 +106,7 @@ export async function listNews(options?: {
       ? allArticles.slice(options.offset || 0, (options.offset || 0) + options.limit)
       : allArticles;
     
-    const data: NewsData[] = articles.map(article => ({
-      id: article.id,
-      title: article.title,
-      excerpt: article.excerpt,
-      content: article.content || '',
-      thumbnail: article.thumbnail,
-      category: article.category,
-      slug: article.slug,
-      readTime: article.readTime || '',
-      featured: article.featured,
-      publishedAt: article.publishedAt
-    }));
+    const data: NewsData[] = articles.map(mapNewsArticle);
 
     return {
       success: true,
@@ -135,18 +137,7 @@ export async function getNewsArticle(id: string): Promise<ActionResponse<NewsDat
       };
     }
 
-    const data: NewsData = {
-      id: article.id,
-      title: article.title,
-      excerpt: article.excerpt,
-      content: article.content || '',
-      thumbnail: article.thumbnail,
-      category: article.category,
-      slug: article.slug,
-      readTime: article.readTime || '',
-      featured: article.featured,
-      publishedAt: article.publishedAt
-    };
+    const data: NewsData = mapNewsArticle(article);
 
     return {
       success: true,
@@ -177,18 +168,7 @@ export async function getNewsArticleBySlug(slug: string): Promise<ActionResponse
       };
     }
 
-    const data: NewsData = {
-      id: article.id,
-      title: article.title,
-      excerpt: article.excerpt,
-      content: article.content || '',
-      thumbnail: article.thumbnail,
-      category: article.category,
-      slug: article.slug,
-      readTime: article.readTime || '',
-      featured: article.featured,
-      publishedAt: article.publishedAt
-    };
+    const data: NewsData = mapNewsArticle(article);
 
     return {
       success: true,
@@ -230,6 +210,7 @@ export async function createNewsArticle(data: Omit<NewsData, 'id' | 'slug'>): Pr
       excerpt: validated.excerpt,
       content: validated.content || null,
       thumbnail: validated.thumbnail,
+      imageCaption: validated.imageCaption || null,
       category: validated.category,
       slug: uniqueSlug,
       readTime: validated.readTime || null,
@@ -304,6 +285,7 @@ export async function updateNewsArticle(id: string, data: Omit<NewsData, 'id'>):
         excerpt: validated.excerpt,
         content: validated.content || null,
         thumbnail: validated.thumbnail,
+        imageCaption: validated.imageCaption || null,
         category: validated.category,
         slug,
         readTime: validated.readTime || null,

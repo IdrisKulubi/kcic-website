@@ -41,6 +41,7 @@ export const newsSchema = z.object({
   excerpt: z.string().min(20, 'Excerpt must be at least 20 characters').max(500, 'Excerpt must be at most 500 characters'),
   content: z.string().min(50, 'Content must be at least 50 characters').optional().or(z.literal('')),
   thumbnail: z.string().url('Thumbnail must be a valid URL'),
+  imageCaption: z.string().max(300, 'Image caption must be at most 300 characters').optional().or(z.literal('')),
   category: z.string().min(2, 'Category is required'),
   slug: z.string().optional(),
   readTime: z.string().optional().or(z.literal('')),

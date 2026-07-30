@@ -294,15 +294,22 @@ export default function NewsArticlePage() {
 
           {/* Featured Image */}
           {article.thumbnail && (
-            <div className="relative w-full h-96 mb-12 rounded-xl overflow-hidden">
-              <Image
-                src={article.thumbnail}
-                alt={article.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+            <figure className="mb-12">
+              <div className="relative w-full h-96 rounded-xl overflow-hidden">
+                <Image
+                  src={article.thumbnail}
+                  alt={article.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              {article.imageCaption && (
+                <figcaption className="mt-3 text-sm text-muted-foreground text-center italic">
+                  {article.imageCaption}
+                </figcaption>
+              )}
+            </figure>
           )}
 
           {/* Article Content */}
