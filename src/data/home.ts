@@ -256,6 +256,6 @@ export const homePageData: HomePageData = {
       description: "Get the latest news on climate innovation and our programmes delivered to your inbox.",
       placeholder: "Enter your email address"
     },
-    copyright: "© 2025 Kenya Climate Innovation Centre. All rights reserved."
+    copyright: "© 2026 Kenya Climate Innovation Centre. All rights reserved."
   }
 };

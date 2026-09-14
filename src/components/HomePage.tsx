@@ -27,6 +27,7 @@ import type {
   FooterSocialMediaData,
 } from "@/lib/actions/footer";
 import ClimateChallenge from "./sections/ClimateChallenge";
+import FoundersCollective from "./sections/FoundersCollective";
 import FoundingBeliefs from "./sections/FoundingBeliefs";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -287,7 +288,7 @@ export default function HomePage({
         placeholder: "Enter your email address",
       },
       copyright:
-        "© 2024 Kenya Climate Innovation Centre. All rights reserved.",
+        "© 2026 Kenya Climate Innovation Centre. All rights reserved.",
     };
 
   // Hero video configuration
@@ -398,7 +399,23 @@ export default function HomePage({
               <AnimatedSection direction="up" className="bg-section-green">
                 <ClimateChallenge />
               </AnimatedSection>
-            
+
+              <div id="founders-collective">
+                <SectionDivider
+                  variant="curve"
+                  fromColor="#1b3a1a"
+                  toColor="#f0f9e8"
+                  height={22}
+                />
+                <AnimatedSection
+                  direction="up"
+                  delay={0.1}
+                  className="bg-section-green-tint"
+                >
+                  <FoundersCollective />
+                </AnimatedSection>
+              </div>
+
               <AnimatedSection direction="up" delay={0.1} className="border-t border-cyan-200/70 bg-[#eef8fb]">
                 <FoundingBeliefs />
               </AnimatedSection>

@@ -2,13 +2,7 @@
 
 import { useRef, useLayoutEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  PlayCircle,
-  CaretLeft,
-  CaretRight,
-  Headphones,
-} from "@phosphor-icons/react";
+import { ArrowUpRight, PlayCircle, Headphones } from "@phosphor-icons/react";
 import { colors, typography } from "@/lib/design-system";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { Button } from "@/components/ui/button";
@@ -17,6 +11,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { PODCAST_SITE_URL, podcastEpisodes } from "@/data/podcasts";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -56,7 +51,6 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
   const rowsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const [activePodcast, setActivePodcast] = useState<NewsItem | null>(null);
   const [podcastEmbedUrl, setPodcastEmbedUrl] = useState<string>("");
-  const [activePodcastIndex, setActivePodcastIndex] = useState(0);
 
   const isPodcastItem = (item: NewsItem) =>
     item.type === "podcast" || item.category.toLowerCase().includes("podcast");
@@ -141,45 +135,47 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     [news]
   );
 
-  const fallbackPodcasts = useMemo<NewsItem[]>(() => {
-    const today = new Date().toISOString().split("T")[0];
-
-    return [
-      {
-        id: "fallback-podcast-1",
-        title: "Climate Innovation Conversations - Episode 01",
-        excerpt: "A deep-dive on financing climate-smart enterprises in Africa.",
-        publishedAt: today,
+  const catalogPodcasts = useMemo<NewsItem[]>(
+    () =>
+      podcastEpisodes.map((episode) => ({
+        id: episode.id,
+        title: episode.title,
+        excerpt: episode.excerpt,
+        publishedAt: episode.publishedAt,
         category: "Podcast",
-        slug: "podcast-episode-1",
-        type: "podcast",
-        youtubeUrl: "https://youtu.be/wA7P2Y3ZOao?si=RSomYM59Wx2vioyb",
-      },
-      {
-        id: "fallback-podcast-2",
-        title: "Green Growth Dialogues - Episode 02",
-        excerpt: "How founders scale clean technology from pilot to market.",
-        publishedAt: today,
-        category: "Podcast",
-        slug: "podcast-episode-2",
-        type: "podcast",
-        youtubeUrl: "https://youtu.be/yeBGRz16lkM?si=L4CUlwZ2SGctZU6u",
-      },
-    ];
-  }, []);
+        slug: episode.id,
+        type: "podcast" as const,
+        youtubeUrl: episode.youtubeUrl,
+      })),
+    []
+  );
 
   const featuredPodcasts = useMemo(() => {
-    const podcasts = sortedNews.filter(
+    const cmsPodcasts = sortedNews.filter(
       (item) => isPodcastItem(item) && Boolean(resolvePodcastEmbed(item))
     );
-    const ensured = [...podcasts];
+    const seenVideoIds = new Set<string>();
+    const merged: NewsItem[] = [];
 
-    if (ensured.length < 2) {
-      ensured.push(...fallbackPodcasts.slice(0, 2 - ensured.length));
-    }
+    const remember = (item: NewsItem) => {
+      const videoId =
+        extractYouTubeVideoId(item.youtubeUrl) ||
+        extractYouTubeVideoId(extractYouTubeUrl(item.content)) ||
+        extractYouTubeVideoId(extractYouTubeUrl(item.excerpt));
+      const key = videoId || item.id;
+      if (seenVideoIds.has(key)) return;
+      seenVideoIds.add(key);
+      merged.push(item);
+    };
 
-    return ensured.slice(0, 2);
-  }, [sortedNews, fallbackPodcasts]);
+    cmsPodcasts.forEach(remember);
+    catalogPodcasts.forEach(remember);
+
+    return merged.sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
+  }, [sortedNews, catalogPodcasts]);
 
   const latestArticles = useMemo(() => {
     const nonPodcasts = sortedNews.filter((item) => !isPodcastItem(item));
@@ -201,8 +197,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return map;
   }, [featuredPodcasts]);
 
-  const currentPodcast =
-    featuredPodcasts[activePodcastIndex] ?? featuredPodcasts[0] ?? null;
+  const currentPodcast = featuredPodcasts[0] ?? null;
+  const morePodcasts = featuredPodcasts.slice(1, 4);
   const currentPodcastThumbnail = currentPodcast
     ? resolvePodcastThumbnail(currentPodcast)
     : null;
@@ -336,20 +332,6 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
     return () => ctx.revert();
   }, [shouldDisableAnimations]);
 
-  const showPreviousPodcast = () => {
-    if (featuredPodcasts.length <= 1) return;
-    setActivePodcastIndex((current) =>
-      current === 0 ? featuredPodcasts.length - 1 : current - 1
-    );
-  };
-
-  const showNextPodcast = () => {
-    if (featuredPodcasts.length <= 1) return;
-    setActivePodcastIndex((current) =>
-      current === featuredPodcasts.length - 1 ? 0 : current + 1
-    );
-  };
-
   const resolveCategoryTone = (category: string) => {
     const normalized = category.toLowerCase();
     if (normalized.includes("blog")) {
@@ -392,8 +374,8 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              A featured podcast preview on one side, with our latest stories
-              stacked alongside it.
+              Latest episode of Sustainably Speaking Africa, with more
+              conversations and newsroom stories alongside it.
             </p>
           </div>
         </div>
@@ -404,36 +386,30 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
         >
           <div className="grid lg:grid-cols-[1.18fr_0.82fr] lg:divide-x-2 lg:divide-[#c7d5cb]">
             <div ref={leftRef} className="p-5 sm:p-6 lg:p-7">
-              <div className="mb-5 flex items-center justify-between gap-4">
-                <div
-                  className="font-bold leading-tight"
-                  style={{
-                    fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
-                    fontFamily: typography.fonts.heading,
-                    color: colors.secondary.gray[900],
-                  }}
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div>
+                  <div
+                    className="font-bold leading-tight"
+                    style={{
+                      fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
+                      fontFamily: typography.fonts.heading,
+                      color: colors.secondary.gray[900],
+                    }}
+                  >
+                    Latest podcast
+                  </div>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Sustainably Speaking Africa
+                  </p>
+                </div>
+                <Link
+                  href={PODCAST_SITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 text-sm font-semibold text-[#3c7f1c] underline-offset-4 hover:underline"
                 >
-                  Podcasts
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={showPreviousPodcast}
-                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
-                    aria-label="Previous podcast"
-                  >
-                    <CaretLeft className="mx-auto h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={showNextPodcast}
-                    className="h-10 w-10 border border-gray-300 bg-white text-gray-700 transition hover:border-gray-400 hover:text-black"
-                    aria-label="Next podcast"
-                  >
-                    <CaretRight className="mx-auto h-4 w-4" />
-                  </button>
-                </div>
+                  All episodes
+                </Link>
               </div>
 
               <button
@@ -484,7 +460,7 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                       className="mb-1 block uppercase tracking-wider text-white/80"
                       style={{ fontSize: "11px", lineHeight: "14px" }}
                     >
-                      Podcast
+                      Latest episode
                     </span>
                     <div
                       className="line-clamp-2 font-semibold leading-tight"
@@ -501,7 +477,10 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
               </button>
 
               <div className="mt-4 space-y-2 border-t-2 border-[#d6e1d8] pt-4">
-                {featuredPodcasts.slice(0, 2).map((item) => (
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  More episodes
+                </p>
+                {morePodcasts.map((item) => (
                   <button
                     key={item.id}
                     type="button"
@@ -524,6 +503,15 @@ export function NewsSection({ news, className = "" }: NewsSectionProps) {
                     />
                   </button>
                 ))}
+                <Link
+                  href={PODCAST_SITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 pt-1 text-sm font-semibold text-slate-900 hover:text-[#3c7f1c]"
+                >
+                  Browse all episodes
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
 

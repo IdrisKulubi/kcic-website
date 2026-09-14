@@ -394,7 +394,7 @@ export default function ApplyPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600 text-sm">
-              © 2025 Kenya Climate Innovation Centre. All rights reserved.
+              © 2026 Kenya Climate Innovation Centre. All rights reserved.
             </p>
           </div>
         </div>

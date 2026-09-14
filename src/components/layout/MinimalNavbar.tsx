@@ -59,7 +59,9 @@ interface MinimalNavbarProps {
   navigation: NavItem[];
   ctaButton?: {
     text: string;
+    shortText?: string;
     href: string;
+    external?: boolean;
   };
 }
 
@@ -223,10 +225,16 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
     [pathname]
   );
 
+  const isExternalHref = (href: string) => href.startsWith('http');
+
   const handleKeyNavigation = (event: React.KeyboardEvent, href: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       if (scrollToInPageSection(href)) {
+        setActiveDropdown(null);
+        setIsMobileMenuOpen(false);
+      } else if (isExternalHref(href)) {
+        window.open(href, '_blank', 'noopener,noreferrer');
         setActiveDropdown(null);
         setIsMobileMenuOpen(false);
       } else {
@@ -352,6 +360,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                             <motion.a
                               key={subItem.label}
                               href={subItem.href}
+                              {...(isExternalHref(subItem.href) && {
+                                target: '_blank',
+                                rel: 'noopener noreferrer',
+                              })}
                               role="menuitem"
                               tabIndex={0}
                               initial={{ opacity: 0, y: 5 }}
@@ -413,8 +425,17 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                   }}
                   asChild
                 >
-                  <a href={ctaButton.href}>
-                    {ctaButton.text}
+                  <a
+                    href={ctaButton.href}
+                    {...(ctaButton.external && {
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    })}
+                  >
+                    <span className="lg:hidden">
+                      {ctaButton.shortText ?? ctaButton.text}
+                    </span>
+                    <span className="hidden lg:inline">{ctaButton.text}</span>
                   </a>
                 </Button>
               </div>
@@ -551,6 +572,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                                     <motion.a
                                       key={subItem.label}
                                       href={subItem.href}
+                                      {...(isExternalHref(subItem.href) && {
+                                        target: '_blank',
+                                        rel: 'noopener noreferrer',
+                                      })}
                                       initial={{ opacity: 0, x: -10 }}
                                       animate={{ opacity: 1, x: 0 }}
                                       transition={{ delay: subIndex * 0.03 }}
@@ -624,6 +649,10 @@ export function MinimalNavbar({ navigation, ctaButton }: MinimalNavbarProps) {
                       <a
                         href={ctaButton.href}
                         onClick={() => setIsMobileMenuOpen(false)}
+                        {...(ctaButton.external && {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        })}
                       >
                         {ctaButton.text}
                       </a>

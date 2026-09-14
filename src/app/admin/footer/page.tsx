@@ -209,7 +209,7 @@ function ContactInfoForm({
             <Input
               id="copyright"
               {...register("copyright")}
-              placeholder="© 2024 Company Name. All rights reserved."
+              placeholder="© 2026 Kenya Climate Innovation Centre. All rights reserved."
               className={errors.copyright ? "border-red-500" : ""}
             />
             {errors.copyright && (

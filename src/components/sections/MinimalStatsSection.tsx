@@ -340,7 +340,7 @@ export function MinimalStatsSection({
                     }`}
                 >
                   <span className="flex flex-col items-center gap-1">
-                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2010 - Today</span>
+                    <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: typography.fonts.heading }}>2012 - Today</span>
                     <span className="text-xs sm:text-sm font-medium opacity-80 whitespace-nowrap">13 Years of Impact</span>
                   </span>
                 </TabsTrigger>

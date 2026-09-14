@@ -161,7 +161,7 @@ export const navData = {
         },
         {
           label: "Podcast",
-          href: "/newsroom/podcast",
+          href: "https://sustainablyspeaking.africa",
           description: "Listen to climate innovation stories",
           icon: "Microphone",
         },
@@ -175,4 +175,11 @@ export const navData = {
     },
    
   ],
+  ctaButton: {
+    text: "Join the Founders Collective",
+    shortText: "Founders Collective",
+    href:
+      "https://docs.google.com/forms/d/e/1FAIpQLSe8wKNLBdcahDcs691-KN0K7gqsEJsREIJlfZTwlCo05HDEDA/viewform",
+    external: true,
+  },
 };
