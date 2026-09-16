@@ -180,16 +180,15 @@ export default function ContactPage() {
                 lineHeight: typography.lineHeights.relaxed,
               }}
             >
-              We&apos;re located within Strathmore University&apos;s campus—easily
-              accessible and surrounded by a community of innovators,
-              investors, and sustainability leaders.
+              Visit us at the KCIC Head Office on Mokoyeti Road West, off
+              Langata Road in Nairobi.
             </p>
           </div>
 
           <div className="rounded-3xl overflow-hidden shadow-xl border border-gray-200">
             <div className="aspect-video">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7752656026228!2d36.81002607569015!3d-1.3101592356541791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10f7bbc30573%3A0xb822a84e63d8c610!2sKenya%20Climate%20Innovation%20Center!5e0!3m2!1sen!2ske!4v1762525310440!5m2!1sen!2ske"
+                src="https://www.google.com/maps?q=Kenya+Climate+Innovation+Centre,+Mokoyeti+Road+West,+Off+Langata+Road,+Nairobi,+Kenya&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

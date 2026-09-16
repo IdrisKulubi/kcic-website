@@ -278,7 +278,7 @@ export default function HomePage({
         },
       ],
       contact: {
-        address: "Kenya Climate Innovation Centre, Nairobi, Kenya",
+        address: "Kenya Climate Innovation Centre, KCIC Head Office, Mokoyeti Road West, Off Langata Road, Nairobi, Kenya",
         phone: "+254 20 123 4567",
         email: "info@kenyacic.org",
       },

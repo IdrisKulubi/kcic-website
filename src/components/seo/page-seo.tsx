@@ -86,7 +86,7 @@ export function generateOrganizationSchema() {
     "foundingDate": "2010",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Strathmore University Campus, Ole Sangale Rd",
+      "streetAddress": "Mokoyeti Road West, Off Langata Road",
       "addressLocality": "Nairobi",
       "addressCountry": "Kenya"
     },
