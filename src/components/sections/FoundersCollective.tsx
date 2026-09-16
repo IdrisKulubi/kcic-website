@@ -11,12 +11,11 @@ import {
   Megaphone,
   Gift,
 } from "@phosphor-icons/react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAccessibilityClasses } from "@/hooks/use-accessibility-classes";
 import { colors, typography } from "@/lib/design-system";
-
-const FOUNDERS_FORM_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSe8wKNLBdcahDcs691-KN0K7gqsEJsREIJlfZTwlCo05HDEDA/viewform";
+import { FOUNDERS_COLLECTIVE_PATH } from "@/data/founders-collective";
 
 const benefits = [
   {
@@ -248,14 +247,12 @@ export default function FoundersCollective({
             }}
             asChild
           >
-            <a
-              href={FOUNDERS_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Register for the Founders Collective, opens in a new tab"
+            <Link
+              href={FOUNDERS_COLLECTIVE_PATH}
+              aria-label="View more about the Founders Collective"
             >
-              Register today
-            </a>
+              View more
+            </Link>
           </Button>
         </div>
       </div>
