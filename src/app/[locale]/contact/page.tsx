@@ -18,8 +18,8 @@ const contactInfo = [
     title: "Visit Us",
     details: [
       "Kenya Climate Innovation Centre",
-      "Strathmore University Campus",
-      "Ole Sangale Road, Madaraka",
+      "KCIC Head Office",
+      "Mokoyeti Road West, Off Langata Road",
       "Nairobi, Kenya",
     ],
     color: colors.primary.green.DEFAULT,
